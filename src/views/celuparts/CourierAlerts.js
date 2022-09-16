@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import getRequestNotification from '../../services/getRequestNotification';
 import getSingleRequestNotification from '../../services/getSingleRequestNotification';
@@ -59,7 +60,7 @@ export default function CourierAlerts() {
                 </CardTitle>
                 <CardBody>
                     {
-                        alerts?.map((tdata, index) => (
+                        alerts.map((tdata, index) => (
                             tdata.notificationType === "to_courier" && tdata.hideNotification === false ?
                                 <div key={index}>
                                     {/* <Alert

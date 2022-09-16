@@ -1,5 +1,6 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import getRequestNotification from '../../services/getRequestNotification';
+// import getRequestNotification from '../../services/getRequestNotification';
 import {
     Alert,
     // UncontrolledAlert,
@@ -32,7 +33,7 @@ export default function TechnicianAlerts() {
                 </CardTitle>
                 <CardBody>
                     {
-                        alerts?.map((tdata, index) => (
+                        alerts.map((tdata, index) => (
                             tdata.notificationType === "to_technician" && tdata.hideNotification === false ?
                                 <div key={index}>
                                     {/* <Alert

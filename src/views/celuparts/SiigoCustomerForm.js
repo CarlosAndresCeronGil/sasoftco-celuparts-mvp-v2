@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react'
 import {
     Card,
@@ -12,7 +13,7 @@ import {
     Label,
     Input,
 } from "reactstrap";
-import postSiigoCustomer from '../../services/postSiigoCustomer';
+// import postSiigoCustomer from '../../services/postSiigoCustomer';
 
 export default function SiigoCustomerForm() {
     const [loadingPost, setLoadingPost] = useState(false)

@@ -1,5 +1,5 @@
+// import Swal from 'sweetalert2'
 import { API_URL } from "./settings";
-import Swal from 'sweetalert2'
 
 export default function authLogin(data) {
     const apiURL = `${API_URL}/Auth/login`;

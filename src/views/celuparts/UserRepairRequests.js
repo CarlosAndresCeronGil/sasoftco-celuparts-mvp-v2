@@ -1,11 +1,12 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import Swal from 'sweetalert2'
 import getSingleRequest from '../../services/getSingleRequest';
 import getSingleUser from '../../services/getSingleUser';
 import putRequest from '../../services/putRequest';
 import postRetoma from '../../services/postRetoma';
 import postRetomaPayment from '../../services/postRetomaPayment';
-import Swal from 'sweetalert2'
 import putRequestNotification from '../../services/putRequestNotification';
 import getSingleEquipment from '../../services/getSingleEquipment'
 import putRequestStatus from '../../services/putRequestStatus';
@@ -61,7 +62,7 @@ export default function UserRepairRequests() {
                     .then(response => {
                         /*El cliente acepta la cuota, por lo tanto se envia una notificacion al tecnico
                         para que empiece con la reparacion */
-                        notifications?.map(tdata => (
+                        notifications.map(tdata => (
                             tdata.idRequest === id ? (
                                 putRequestNotification({
                                     idRequestNotification: tdata.idRequestNotification,
@@ -123,7 +124,7 @@ export default function UserRepairRequests() {
                                         postRetomaPayment({
                                             idRetoma: data.idRetoma
                                         })
-                                            .then(data => {
+                                            .then(dataRetomaPayment => {
                                                 setShowButtons(false);
                                             }).catch(error => {
                                                 console.log(error);
@@ -155,7 +156,7 @@ export default function UserRepairRequests() {
                             .then(responseE => {
                                 /*Notificación al mensajero para decirle que debe devolver el producto
                                 a una determinada direccion*/
-                                notifications?.map(tdata => (
+                                notifications.map(tdata => (
                                     tdata.idRequest === id ? (
                                         putRequestNotification({
                                             idRequestNotification: tdata.idRequestNotification,
@@ -201,7 +202,7 @@ export default function UserRepairRequests() {
                                         console.log("get single equipment response", responseE)
                                         /*Notificación al mensajero para decirle que debe devolver el producto
                                         a una determinada direccion*/
-                                        notifications?.map(tdata => (
+                                        notifications.map(tdata => (
                                             tdata.idRequest === id ? (
                                                 putRequestNotification({
                                                     idRequestNotification: tdata.idRequestNotification,
@@ -235,8 +236,8 @@ export default function UserRepairRequests() {
                             productReturned: response[0].requestStatus[0].productReturned,
                             productSold: response[0].requestStatus[0].productSold
                         })
-                            .then(response => {
-                                console.log(response)
+                            .then(responseRequestStatus => {
+                                console.log(responseRequestStatus)
                             })
                             .catch(error => {
                                 console.log(error)
@@ -268,7 +269,7 @@ export default function UserRepairRequests() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {userInfo[0]?.requests.map((tdata, index) => (
+                                {userInfo[0].requests.map((tdata, index) => (
                                     tdata.requestType === "Reparacion" ? (
                                         <tr key={index} className="border-top">
                                             <td>
@@ -282,8 +283,8 @@ export default function UserRepairRequests() {
                                                 {
                                                     tdata.statusQuote === 'Pendiente' && tdata.repairs[0].repairQuote !== "0" && showButtons ? (
                                                         <div className="text-danger">
-                                                            <button onClick={() => handleAcceptClick(tdata.idRequest)} className="btn btn-primary">Aceptar</button>
-                                                            <button onClick={() => handleRejectClick(tdata.idRequest)} className="btn btn-danger">Rechazar</button>
+                                                            <button type='button' onClick={() => handleAcceptClick(tdata.idRequest)} className="btn btn-primary">Aceptar</button>
+                                                            <button type='button' onClick={() => handleRejectClick(tdata.idRequest)} className="btn btn-danger">Rechazar</button>
                                                         </div>
                                                     ) : (
                                                         <i>{tdata.statusQuote}</i>

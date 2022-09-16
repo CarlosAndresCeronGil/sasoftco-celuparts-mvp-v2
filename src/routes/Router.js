@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loadable from '../layouts/loader/Loadable';
@@ -100,6 +101,52 @@ const LoginFormik = Loadable(lazy(() => import('../views/auth/LoginFormik')));
 const Maintanance = Loadable(lazy(() => import('../views/auth/Maintanance')));
 const LockScreen = Loadable(lazy(() => import('../views/auth/LockScreen')));
 const RecoverPassword = Loadable(lazy(() => import('../views/auth/RecoverPassword')));
+
+/***** Celuparts Pages ****/
+const SignIn = lazy(() => import("../views/celuparts/SignIn"));
+const SignUp = lazy(() => import("../views/celuparts/SignUp"))
+const UsersTable = lazy(() => import("../views/celuparts/UsersTable"));
+const RepairRequestsTable = lazy(() => import("../views/celuparts/RepairRequestsTable"));
+const RetomaRequestsTable = lazy(() => import("../views/celuparts/RetomaRequestsTable"));
+const EquipmentsTable = lazy(() => import("../views/celuparts/EquipmentsTable"));
+const RequestStatusTable = lazy(() => import("../views/celuparts/RequestStatusTable"));
+const TechniciansTable = lazy(() => import("../views/celuparts/TechniciansTable"));
+const RepairTable = lazy(() => import("../views/celuparts/RepairTable"));
+const RequestForm = lazy(() => import("../views/celuparts/RequestForm"));
+const UpdateRepairForm = lazy(() => import("../views/celuparts/UpdateRepairForm"));
+const UpdateRetomaForm = lazy(() => import("../views/celuparts/UpdateRetomaForm"));
+const RequestStatusForm = lazy(() => import("../views/celuparts/RequestStatusForm"));
+const UserRepairRequests = lazy(() => import("../views/celuparts/UserRepairRequests"));
+const UserRetomaRequests = lazy(() => import("../views/celuparts/UserRetomaRequests"));
+const RepairPaymentForm = lazy(() => import("../views/celuparts/RepairPaymentForm"));
+const RetomaPaymentForm = lazy(() => import("../views/celuparts/RetomaPaymentForm"));
+const SiigoProductsTable = lazy(() => import("../views/celuparts/SiigoProductsTable"));
+const SiigoProductForm = lazy(() => import("../views/celuparts/SiigoProductForm"));
+const SiigoCustomersTable = lazy(() => import("../views/celuparts/SiigoCustomersTable"));
+const SiigoCustomerForm = lazy(() => import("../views/celuparts/SiigoCustomerForm"));
+const SiigoInvoicesTables = lazy(() => import("../views/celuparts/SiigoInvoicesTables"));
+const SiigoInvoiceForm = lazy(() => import("../views/celuparts/SiigoInvoiceForm"));
+const SiigoCreditNotesTable = lazy(() => import("../views/celuparts/SiigoCreditNotesTable"));
+const SiigoCreditNotesForm = lazy(() => import("../views/celuparts/SiigoCreditNotesForm"));
+const SiigoVouchersTable = lazy(() => import("../views/celuparts/SiigoVouchersTable"));
+const SiigoVoucherForm = lazy(() => import("../views/celuparts/SiigoVoucherForm"));
+const SiigoJournalsTable = lazy(() => import("../views/celuparts/SiigoJournalsTable"));
+const SiigoJournalsForm = lazy(() => import("../views/celuparts/SiigoJournalsForm"));
+const SiigoAccountGroupsTable = lazy(() => import("../views/celuparts/SiigoAccountGroupsTable"));
+const SiigoTaxesTable = lazy(() => import("../views/celuparts/SiigoTaxesTable"));
+const SiigoPriceListsTable = lazy(() => import("../views/celuparts/SiigoPriceListsTable"));
+const SiigoWareHousesTable = lazy(() => import("../views/celuparts/SiigoWareHousesTable"));
+const SiigoUsersTable = lazy(() => import("../views/celuparts/SiigoUsersTable"));
+const SiigoCostCentersTable = lazy(() => import("../views/celuparts/SiigoCostCentersTable"));
+const SiigoFixedAssetsTable = lazy(() => import("../views/celuparts/SiigoFixedAssetsTable"));
+const CourierAlerts = lazy(() => import("../views/celuparts/CourierAlerts"));
+const CustomerAlerts = lazy(() => import("../views/celuparts/CustomerAlerts"));
+const TechnicianAlerts = lazy(() => import("../views/celuparts/TechnicianAlerts"));
+const AdminAlerts = lazy(() => import("../views/celuparts/AdminAlerts"));
+const Home = lazy(() => import("../views/celuparts/Home"));
+const RequestRepairForm = lazy(() => import("../views/celuparts/RequestRepairForm"));
+const RequestRetomaForm = lazy(() => import("../views/celuparts/RequestRetomaForm"));
+const EquipmentDetail = lazy(() => import("../views/celuparts/EquipmentDetail"));
 
 /*****Routes******/
 

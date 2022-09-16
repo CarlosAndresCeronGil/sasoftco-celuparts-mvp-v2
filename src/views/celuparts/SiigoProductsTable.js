@@ -1,7 +1,8 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
 import getSiigoProducts from '../../services/getSiigoProducts';
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 export default function SiigoProductsTable() {
     const [loading, setLoading] = useState(false);

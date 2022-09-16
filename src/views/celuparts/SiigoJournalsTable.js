@@ -1,7 +1,8 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import getSiigoJournals from '../../services/getSiigoJournals'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
-import { Link } from "react-router-dom";
+import getSiigoJournals from '../../services/getSiigoJournals'
+// import { Link } from "react-router-dom";
 
 export default function SiigoJournalsTable() {
     const [siigoJournals, setSiigoJournals] = useState([])

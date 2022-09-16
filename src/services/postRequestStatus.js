@@ -11,8 +11,8 @@ export default function postRequestStatus(data) {
         body: JSON.stringify(data)
     })
         .then(res => res.json())
-        .then(data => {
-            return data;
+        .then(data2 => {
+            return data2;
         }
         )
         .catch(error => {

@@ -11,8 +11,8 @@ export default function postHomeService(data) {
         body: JSON.stringify(data)
     })
         .then(response => response.json())
-        .then(data => {
-            return data;
+        .then(data2 => {
+            return data2;
         })
         .catch(error => {
             console.log(error);

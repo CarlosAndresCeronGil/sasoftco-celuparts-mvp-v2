@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -58,7 +59,7 @@ export default function RequestStatusForm() {
                 /*Aqui se mira el estado de la solicitud, para asi, enviar un mensaje en la 
                 notificacion a quien corresponda*/
                 status.status === "En proceso de recogida" ? (
-                    notifications?.map((tdata) => (
+                    notifications.map((tdata) => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,
@@ -76,7 +77,7 @@ export default function RequestStatusForm() {
                         ) : null
                     ))
                 ) : status.status === "Recibida tecnico" ? (
-                    notifications?.map((tdata) => (
+                    notifications.map((tdata) => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,
@@ -94,7 +95,7 @@ export default function RequestStatusForm() {
                         ) : null
                     ))
                 ) : status.status === "Revisado" ? (
-                    notifications?.map((tdata) => (
+                    notifications.map((tdata) => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,
@@ -112,7 +113,7 @@ export default function RequestStatusForm() {
                         ) : null
                     ))
                 ) : status.status === "En reparacion" ? (
-                    notifications?.map((tdata) => (
+                    notifications.map((tdata) => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,
@@ -130,7 +131,7 @@ export default function RequestStatusForm() {
                         ) : null
                     ))
                 ) : status.status === "Reparado pendiente de pago" ? (
-                    notifications?.map((tdata) => (
+                    notifications.map((tdata) => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,
@@ -148,7 +149,7 @@ export default function RequestStatusForm() {
                         ) : null
                     ))
                 ) : status.status === "En camino" ? (
-                    notifications?.map((tdata) => (
+                    notifications.map((tdata) => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,
@@ -166,7 +167,7 @@ export default function RequestStatusForm() {
                         ) : null
                     ))
                 ) : status.status === "Terminada" ? (
-                    notifications?.map((tdata) => (
+                    notifications.map((tdata) => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,
@@ -184,7 +185,7 @@ export default function RequestStatusForm() {
                         ) : null
                     ))
                 ) : status.status === "Devuelto sin reparacion" ? (
-                    notifications?.map((tdata) => (
+                    notifications.map((tdata) => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,
@@ -202,7 +203,7 @@ export default function RequestStatusForm() {
                         ) : null
                     ))
                 ) : status.status === "Retoma" ? (
-                    notifications?.map((tdata) => (
+                    notifications.map((tdata) => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,

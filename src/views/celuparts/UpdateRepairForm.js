@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import {
     Card,
@@ -53,7 +54,7 @@ export default function UpdateRepairForm() {
             })
                 .then(data => {
                     console.log(data)
-                    notifications?.map(tdata => (
+                    notifications.map(tdata => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,

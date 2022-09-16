@@ -1,6 +1,7 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import getSiigoPriceLists from '../../services/getSiigoPriceLists'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import getSiigoPriceLists from '../../services/getSiigoPriceLists'
 
 export default function SiigoPriceListsTable() {
     const [siigoPriceLists, setSiigoPriceLists] = useState([])

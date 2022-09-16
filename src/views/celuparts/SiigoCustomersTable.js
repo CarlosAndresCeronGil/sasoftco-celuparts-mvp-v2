@@ -1,7 +1,8 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import getSiigoCustomers from '../../services/getSiigoCustomers'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
-import { Link } from "react-router-dom";
+import getSiigoCustomers from '../../services/getSiigoCustomers'
+// import { Link } from "react-router-dom";
 
 export default function SiigoCustomersTable() {
     const [siigoCustomers, setSiigoCustomers] = useState([])

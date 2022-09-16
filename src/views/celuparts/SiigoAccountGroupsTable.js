@@ -1,6 +1,7 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import getSiigoAccountGroups from '../../services/getSiigoAccountGroups'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import getSiigoAccountGroups from '../../services/getSiigoAccountGroups'
 
 export default function SiigoAccountGroupsTable() {
     const [siigoAccountGroups, setSiigoAccountGroups] = useState([])
@@ -36,7 +37,7 @@ export default function SiigoAccountGroupsTable() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {siigoAccountGroups?.map((tdata, index) => (
+                                {siigoAccountGroups.map((tdata, index) => (
                                     <tr key={index} className="border-top">
                                         <td>{tdata.id}</td>
                                         <td>{tdata.name}</td>

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useContext } from 'react'
 import {
     Card,
@@ -11,12 +12,12 @@ import {
     Label,
     Input,
 } from "reactstrap";
-import authRegister from '../../services/authRegister';
 import Swal from 'sweetalert2'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-
-import authLogin from '../../services/authLogin';
 import jwtDecode from 'jwt-decode';
+
+import authRegister from '../../services/authRegister';
+import authLogin from '../../services/authLogin';
 import AuthContext from '../../context/AuthProvider';
 
 
@@ -60,7 +61,7 @@ export default function SignUp() {
                                     icon: 'success',
                                     text: 'Registro exitoso!' 
                                 })
-                                .then(response => {
+                                .then(() => {
                                     // console.log("respuesta del ok del alert", response)
                                     // Una vez el registro sea exitoso, ingresar al usuario dentro del
                                     // sistema
@@ -68,17 +69,17 @@ export default function SignUp() {
                                         email,
                                         password
                                     })
-                                        .then(response => {
-                                            console.log("Response from sign in:", response);
-                                            if (response !== undefined) {
-                                                if (response === "Account disabled") {
+                                        .then(response2 => {
+                                            console.log("Response from sign in:", response2);
+                                            if (response2 !== undefined) {
+                                                if (response2 === "Account disabled") {
                                                     Swal.fire({
                                                         icon: 'error',
                                                         title: 'Oops...',
                                                         text: 'Cuenta inhabilitada, contacte con el número 3xx-xxx-xxxx para soporte técnico'
                                                     })
                                                 } else {
-                                                    const user = jwtDecode(response)
+                                                    const user = jwtDecode(response2)
                                                     console.log("user", user);
                                                     localStorage.setItem('user', JSON.stringify(user));
                                                     setAuth(true);

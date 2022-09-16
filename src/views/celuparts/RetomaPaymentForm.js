@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import {
@@ -15,11 +16,11 @@ import {
 } from "reactstrap";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import putRepairPayment from '../../services/putRepairPayment';
+// import putRepairPayment from '../../services/putRepairPayment';
 import putRetomaPayment from '../../services/putRetomaPayment';
 import getSingleRetomaPayment from '../../services/getSingleRetomaPayment';
 import getSingleRetoma from '../../services/getSingleRetoma';
-import getSingleRequest from '../../services/getSingleRequest';
+// import getSingleRequest from '../../services/getSingleRequest';
 import getRequestNotification from '../../services/getRequestNotification';
 import putRequestNotification from '../../services/putRequestNotification';
 
@@ -85,7 +86,7 @@ export default function RetomaPaymentForm() {
                 console.log(response)
                 console.log(notifications)
                 console.log(idRequest.idRequest)
-                notifications?.map(tdata => (
+                notifications.map(tdata => (
                     tdata.idRequest === idRequest.idRequest ? (
                         putRequestNotification({
                             idRequestNotification: tdata.idRequestNotification,
@@ -94,8 +95,8 @@ export default function RetomaPaymentForm() {
                             hideNotification: false,
                             notificationType: "to_none"
                         })
-                            .then(response => {
-                                console.log("Exito!", response)
+                            .then(response2 => {
+                                console.log("Exito!", response2)
                             })
                             .catch(error => {
                                 console.log(error)

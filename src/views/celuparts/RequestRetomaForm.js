@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react'
 import {
     Card,
@@ -18,6 +19,7 @@ import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import Swal from 'sweetalert2'
 
+import { useNavigate } from 'react-router-dom';
 import postRequest from '../../services/postRequest';
 import postEquipment from '../../services/postEquipment';
 import postRequestStatus from '../../services/postRequestStatus';
@@ -25,7 +27,6 @@ import postHomeService from '../../services/postHomeService';
 import postRetoma from '../../services/postRetoma';
 import postRetomaPayment from '../../services/postRetomaPayment';
 import postRequestNotification from '../../services/postRequestNotification'
-import { useNavigate } from 'react-router-dom';
 import getRequestWithUserInfo from '../../services/getRequestWithUserInfo';
 import getVerifyImei from '../../services/getVerifyImei';
 

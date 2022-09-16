@@ -1,7 +1,8 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import getSiigoCreditNotes from '../../services/getSiigoCreditNotes'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
 import { Link } from "react-router-dom";
+import getSiigoCreditNotes from '../../services/getSiigoCreditNotes'
 
 export default function SiigoCreditNotesTable() {
     const [siigoCreditNotes, setSiigoCreditNotes] = useState([])

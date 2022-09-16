@@ -1,6 +1,7 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import getSingleRepairPayment from '../../services/getSingleRepairPayment'
+
 import {
     Card,
     Row,
@@ -17,6 +18,7 @@ import {
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import putRepairPayment from '../../services/putRepairPayment';
+import getSingleRepairPayment from '../../services/getSingleRepairPayment'
 
 export default function RepairPaymentForm() {
     const [paymentMethod, setPaymentMethod] = useState({ paymentMethod: '' })

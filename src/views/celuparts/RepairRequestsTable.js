@@ -1,10 +1,11 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Button, Card, CardBody, CardTitle, Table, Form } from "reactstrap";
 // import getRequests from '../../services/getRequests';
-import getRequestRepairs from '../../services/getRequestRepairs';
 import { Link } from "react-router-dom";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import getRequestRepairs from '../../services/getRequestRepairs';
 
 export default function RepairRequestsTable() {
     const [requests, setRequests] = useState({})
@@ -157,7 +158,7 @@ export default function RepairRequestsTable() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {requests?.requests.map((tdata, index) => (
+                                {requests.requests.map((tdata, index) => (
                                     tdata.requestType === "Reparacion" ? (
                                         <tr key={index} className="border-top">
                                             <td>{tdata.userDto.names} {tdata.userDto.surnames}</td>
@@ -169,7 +170,7 @@ export default function RepairRequestsTable() {
                                             <td>{tdata.requestStatus[0].status}</td>
                                             <td>
                                                 <Link to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}>
-                                                    <button className="btn btn-celuparts-dark-blue">Actualizar</button>
+                                                    <button type='button' className="btn btn-celuparts-dark-blue">Actualizar</button>
                                                 </Link>
                                             </td>
                                             {
@@ -186,10 +187,10 @@ export default function RepairRequestsTable() {
                                                                 tdata.requestStatus[0].status === 'Abandonada' ||
                                                                 tdata.requestStatus[0].status === 'Terminada' ||
                                                                 tdata.requestStatus[0].status === 'En camino' ? (
-                                                                <button className="btn btn-secondary" disabled>Actualizar</button>
+                                                                <button type='button' className="btn btn-secondary" disabled>Actualizar</button>
                                                             ) : (
                                                                 <Link to={`/home/update-repair-form/${tdata.repairs[0].idRepair}`}>
-                                                                    <button className="btn btn-celuparts-black">Actualizar</button>
+                                                                    <button type='button' className="btn btn-celuparts-black">Actualizar</button>
                                                                 </Link>
                                                             )
                                                         }
@@ -245,12 +246,12 @@ export default function RepairRequestsTable() {
                         }
                         <div className='d-flex justify-content-between'>
                             {
-                                requests?.currentPage === 1 ?
+                                requests.currentPage === 1 ?
                                     <button className="btn btn-celuparts-dark-blue" disabled>Anterior</button>
                                     : <button className="btn btn-celuparts-dark-blue" onClick={handlePrevious}>Anterior</button>
                             }
                             {
-                                requests?.currentPage === requests.pages ?
+                                requests.currentPage === requests.pages ?
                                     <button className="btn btn-celuparts-dark-blue" disabled>Siguiente</button>
                                     : <button className="btn btn-celuparts-dark-blue" onClick={handleNext}>Siguiente</button>
                             }

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import {
     Card,
@@ -70,8 +71,8 @@ export default function UpdateRetomaForm() {
             deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
             retomaQuote: retomaQuote.retomaQuote,
         })
-            .then(data => {
-                notifications?.map(tdata => (
+            .then(() => {
+                notifications.map(tdata => (
                     tdata.idRequest === idRequest.idRequest ? (
                         putRequestNotification({
                             idRequestNotification: tdata.idRequestNotification,

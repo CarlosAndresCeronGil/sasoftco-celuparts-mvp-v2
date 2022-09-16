@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import getSingleUser from '../../services/getSingleUser';
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
@@ -57,7 +58,7 @@ export default function UserRetomaRequests() {
                     .then(response => {
                         /*El cliente acepta el precio de venta, por lo tanto se envia una notificacion 
                         al tecnico para que empiece con la reparacion */
-                        notifications?.map(tdata => (
+                        notifications.map(tdata => (
                             tdata.idRequest === id ? (
                                 putRequestNotification({
                                     idRequestNotification: tdata.idRequestNotification,
@@ -103,7 +104,7 @@ export default function UserRetomaRequests() {
                             .then(responseE => {
                                 /*Notificación al mensajero para decirle que debe devolver el producto
                                 a una determinada direccion*/
-                                notifications?.map(tdata => (
+                                notifications.map(tdata => (
                                     tdata.idRequest === id ? (
                                         putRequestNotification({
                                             idRequestNotification: tdata.idRequestNotification,
@@ -154,7 +155,7 @@ export default function UserRetomaRequests() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {userInfo[0]?.requests.map((tdata, index) => (
+                                {userInfo[0].requests.map((tdata, index) => (
                                     tdata.requestType === "Retoma" ? (
                                         <tr key={index} className="border-top">
                                             <td>
@@ -168,8 +169,8 @@ export default function UserRetomaRequests() {
                                                 {
                                                     tdata.statusQuote === 'Pendiente' && tdata.retoma[0].retomaQuote !== "0" && showButtons ? (
                                                         <div className="text-danger">
-                                                            <button onClick={() => handleAcceptClick(tdata.idRequest)} className="btn btn-primary">Aceptar</button>
-                                                            <button onClick={() => handleRejectClick(tdata.idRequest)} className="btn btn-danger">Rechazar</button>
+                                                            <button type='button' onClick={() => handleAcceptClick(tdata.idRequest)} className="btn btn-primary">Aceptar</button>
+                                                            <button type='button' onClick={() => handleRejectClick(tdata.idRequest)} className="btn btn-danger">Rechazar</button>
                                                         </div>
                                                     ) : (
                                                         <i>{tdata.statusQuote}</i>

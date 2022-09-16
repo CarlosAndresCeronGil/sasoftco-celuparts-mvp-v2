@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { useSelector } from 'react-redux';

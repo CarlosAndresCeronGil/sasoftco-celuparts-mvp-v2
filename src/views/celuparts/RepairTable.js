@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
 import getRepairs from '../../services/getRepairs';
@@ -38,7 +39,7 @@ export default function RepairTable() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {repairs?.map((tdata, index) => (
+                                {repairs.map((tdata, index) => (
                                     <tr key={index} className="border-top">
                                         <td>
                                             <span className="text-muted">{tdata.idRepair}</span>

@@ -1,5 +1,5 @@
-import { API_URL } from "./settings";
 import Swal from 'sweetalert2'
+import { API_URL } from "./settings";
 
 export default function postEquipment(data) {
     const apiURL = `${API_URL}/Equipment`;
@@ -14,8 +14,8 @@ export default function postEquipment(data) {
         body: (data)
     })
         .then(response => response.json())
-        .then(data => {
-            return data;
+        .then(data2 => {
+            return data2;
         })
         .catch(error => {
             Swal.fire({

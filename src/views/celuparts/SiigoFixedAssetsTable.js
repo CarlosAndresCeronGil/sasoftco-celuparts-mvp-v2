@@ -1,6 +1,7 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import getSiigoFixedAssets from '../../services/getSiigoFixedAssets'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import getSiigoFixedAssets from '../../services/getSiigoFixedAssets'
 
 export default function SiigoFixedAssetsTable() {
     const [siigoFixedAssets, setSiigoFixedAssets] = useState([])

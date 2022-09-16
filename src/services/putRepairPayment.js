@@ -1,5 +1,5 @@
-import { API_URL } from "./settings";
 import Swal from 'sweetalert2'
+import { API_URL } from "./settings";
 
 export default function putRepairPayment(data) {
     const apiURL = `${API_URL}/RepairPayment`;
@@ -13,13 +13,13 @@ export default function putRepairPayment(data) {
         body: JSON.stringify(data)
     })
         .then(response => response.json())
-        .then(data => {
+        .then(data2 => {
             Swal.fire({
                 icon: 'success',
                 title: 'Exito!',
                 text: 'Pago de reparación actualizado!',
             })
-            return data
+            return data2
         })
         .catch(error => {
             Swal.fire({

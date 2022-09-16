@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 import jwtDecode from 'jwt-decode'
 import { Link, useNavigate } from 'react-router-dom';
-import AuthContext from '../../context/AuthProvider';
 import {
     Card,
     Row,
@@ -14,8 +13,9 @@ import {
     Label,
     Input,
 } from "reactstrap";
-import authLogin from '../../services/authLogin';
 import Swal from 'sweetalert2'
+import AuthContext from '../../context/AuthProvider';
+import authLogin from '../../services/authLogin';
 
 export default function SignIn() {
     const { setAuth } = useContext(AuthContext);
