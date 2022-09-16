@@ -1,0 +1,130 @@
+/*******************/
+// Theme Fonts
+/********************/
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
+$font-family-sans-serif: 'Poppins', sans-serif;
+/*******************/
+// Theme Colors
+/********************/
+$primary: #1e88e5;
+$info: #7460ee;
+$danger: #fc4b6c;
+$success: #21c1d6;
+$warning: #ffb22b;
+$dark: #2f3d4a;
+$light: #eaf2fb;
+$secondary: #2f3d4a;
+
+$theme-colors: (
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'light': $light,
+  'dark': $dark,
+  'light-primary': #d6ecff,
+  'light-success': #c8f9ff,
+  'light-info': #dedaf9,
+  'light-warning': #f8ecdc,
+  'light-danger': #f9e7eb,
+  'light-secondary': #dde1e4,
+);
+// scss-docs-start gray-color-variables
+$white: #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #eef5f9 !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #66788a !default;
+$gray-600: #8898aa !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #67757c !default;
+$black: #000 !default;
+
+/*******************/
+// Theme Text Contrast
+/********************/
+$min-contrast-ratio: 1.6 !default;
+//$enable-shadows: true !default;
+
+/*******************/
+// Theme body bg & text color
+/********************/
+$body-bg: $gray-200 !default;
+$body-color: $gray-900 !default;
+$font-size-base: 0.9375rem !default;
+
+// heading fonts setting
+$h1-font-size: 36px !default;
+$h2-font-size: 24px !default;
+$h3-font-size: 21px !default;
+$h4-font-size: 18px !default;
+$h5-font-size: 16px !default;
+$h6-font-size: 14px !default;
+
+// Font size
+$font-sizes: (
+  1: 36px,
+  2: 24px,
+  3: 21px,
+  4: 18px,
+  5: 16px,
+  6: 14px,
+  7: 12px,
+);
+
+/*******************/
+// Theme common variable
+/********************/
+$border-radius: 0.3rem !default;
+$box-shadow: 0 0.5rem 1rem rgba($black, 0.05);
+$headings-font-weight: 400 !default;
+$font-size-base: 1rem !default; // Assumes the browser default, typically `16px`
+$font-weight-bold: 500 !default;
+$h5-font-size: $font-size-base * 1.1 !default;
+$card-border-width: 0 !default;
+$card-box-shadow: $box-shadow !default;
+$card-spacer-y: 1.25rem !default;
+$card-spacer-x: 1.25rem !default;
+$card-border-radius: 4px !default;
+$grid-gutter-width: 1.85rem !default;
+$headings-color: #455a64 !default;
+
+$input-bg: $white !default;
+$badge-font-weight: 400 !default;
+$badge-padding-y: 4px !default;
+$badge-padding-x: 10px !default;
+
+// Progress bars
+$progress-height: 6px !default;
+
+/*******************/
+// Theme btn
+/********************/
+$btn-focus-width: 0px;
+$btn-box-shadow: 0 !default;
+$btn-focus-box-shadow: 0;
+
+/*******************/
+// Theme sidebar width
+/********************/
+$sidebarWidth: 260px;
+$sidebartext: $gray-900;
+$sidebartextlight: rgba(30, 42, 53, 0.5);
+$miniSidebarWidth: 77px;
+
+$topbarHeight: 55px;
+
+$dropdown-border-width: 0 !default;
+$dropdown-box-shadow: $box-shadow !default;
+$dropdown-link-hover-bg: $gray-100 !default;
+
+$enable-negative-margins: true;
+
+$table-cell-padding-y: 0.75rem !default;
+$table-cell-padding-x: 0.75rem !default;
+
+$min-contrast-ratio: 10 !default;

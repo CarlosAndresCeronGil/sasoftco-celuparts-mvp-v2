@@ -1,0 +1,41 @@
+.react-bs-container-header {
+    margin-top: 15px;
+}
+
+.ReactModal__Overlay {
+    z-index: 1055;
+}
+
+.sr-only {
+    display: none;
+}
+
+.close {
+    border: 0;
+    background: transparent;
+    font-size: 24px;
+}
+
+.modal-header > span {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    .close {
+        float: right;
+    }
+}
+
+.form-group {
+    margin-bottom: 15px;
+    > label {
+        margin-bottom: 8px;
+    }
+}
+
+.react-bootstrap-table-page-btns-ul {
+    &.pagination {
+        justify-content: flex-end;
+    }
+}

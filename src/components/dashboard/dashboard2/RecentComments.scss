@@ -1,0 +1,23 @@
+.bordered-list {
+    .list-group-item {
+        border-left: 3px solid transparent;
+        &:hover,
+        &.active {
+            border-left: 3px solid #009efb;
+        }
+    }
+}
+
+.rtl {
+    .bordered-list {
+        .list-group-item {
+            border-left: 0 !important;
+            border-right: 3px solid transparent !important;
+            &:hover,
+            &.active {
+                border-left: 0 !important;
+                border-right: 3px solid #009efb !important;
+            }
+        }
+    }
+}

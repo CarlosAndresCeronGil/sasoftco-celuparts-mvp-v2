@@ -1,0 +1,11 @@
+@import 'darkvariables';
+
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-icons/font/bootstrap-icons.scss';
+@import './layout/dark.scss';
+@import './layout/sidebar';
+@import './layout/container';
+@import './layout/customizer';
+@import './layout/horizontal';
+@import './layout/topbar';
+@import './layout/rtl/rtl';

@@ -1,0 +1,61 @@
+.rbc-event.event-info {
+  background-color: #3699ff;
+}
+
+.rbc-event.event-primary {
+  background-color: #2962ff;
+}
+.rbc-event.event-danger {
+  background-color: #f64e60;
+}
+.rbc-event.event-success {
+  background-color: #0bb7af;
+}
+.rbc-event.event-warning {
+  background-color: #ee9d01;
+}
+.rbc-off-range-bg {
+  background-color: #001e3c0d;
+}
+.dark .rbc-today {
+  background-color: #8fbece;
+}
+.dark .rbc-month-row + .rbc-month-row,
+.dark .rbc-day-bg + .rbc-day-bg,
+.dark .rbc-header,
+.dark .rbc-month-view,
+.dark .rbc-toolbar button,
+.dark .rbc-time-content > * + * > * {
+  border-color: #eaeaea57;
+}
+.rbc-event:focus,
+.rbc-day-slot .rbc-background-event:focus {
+  outline: none;
+}
+.dark .rbc-toolbar button {
+  color: rgba(255, 255, 255, 0.5);
+}
+.dark .rbc-toolbar button:active,
+.dark .rbc-toolbar button.rbc-active {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-color: #d2d2d20d;
+}
+
+@media (max-width: 767px) {
+  .rbc-btn-group {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  .rbc-toolbar .rbc-toolbar-label {
+    margin-bottom: 15px;
+    display: block;
+  }
+  .rbc-calendar {
+    height: 100vh !important;
+  }
+}
+
+.rbc-calendar {
+  min-height: 600px;
+}

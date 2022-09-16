@@ -1,0 +1,27 @@
+@include media-breakpoint-up(lg) {
+  .horizontalNav {
+    > .container {
+      position: relative;
+    }
+    .mega-dropdown {
+      position: static;
+      .firstDD {
+        width: 100%;
+        left: 0;
+        .nav-item {
+          width: 25%;
+          float: left;
+        }
+      }
+    }
+    .two-column {
+      .firstDD {
+        width: 400px;
+        .nav-item {
+          width: 50%;
+          float: left;
+        }
+      }
+    }
+  }
+}

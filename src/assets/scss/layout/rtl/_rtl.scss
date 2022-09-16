@@ -1,0 +1,58 @@
+.rtl {
+  @import "./rtl-components";
+  @import "./rtl-spacing";
+  text-align: right;
+  direction: rtl;
+  ol,
+  ul {
+    padding: 0px;
+  }
+
+  .ms-n3 {
+    margin-left: 0 !important;
+    margin-right: -1rem !important;
+  }
+
+  // dashboard
+  .custom-table tbody {
+    tr {
+      border-right: 5px solid transparent;
+      border-left: 0 !important;
+      &:hover,
+      &.active {
+        border-right: 5px solid $primary;
+        border-left: 0 !important;
+      }
+    }
+  }
+
+  .topbar {
+    .mega-dropdown.dropdown-menu {
+      transform: translate(0, 47px) !important;
+    }
+  }
+
+  .customizerSidebar {
+    left: 0px;
+    right: auto;
+    margin-right: 0px;
+    margin-left: -260px;
+    .custombtn {
+      margin-left: 0px;
+      margin-right: -58px;
+      border-radius: 0px 5px 5px 0px;
+    }
+    &.showCustomizer {
+      margin-left: 0px;
+    }
+  }
+  .sidebarArea .nav-link {
+    padding: 12px 12px 12px 5px;
+  }
+
+  // form editor
+  .rdw-embedded-modal {
+    left: 5px !important;
+    right: unset !important;
+  }
+}

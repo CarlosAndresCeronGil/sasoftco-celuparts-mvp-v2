@@ -1,0 +1,186 @@
+.pageWrapper {
+  min-height: 100vh;
+}
+.contentArea {
+  flex-grow: 1;
+}
+.boxContainer {
+  max-width: 1320px;
+}
+.card {
+  margin-bottom: 30px;
+  box-shadow: $box-shadow;
+}
+.dropdown-menu {
+  box-shadow: $box-shadow;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.circle-box {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 100%;
+  &.lg-box {
+    width: 60px;
+    height: 60px;
+    font-size: 21px;
+    line-height: 60px;
+  }
+  &.md-box {
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    line-height: 50px;
+  }
+}
+.button-group .btn {
+  margin: 3px;
+}
+.btn-white {
+  border: 1px solid $border-color;
+}
+.simplebar-scrollbar:before {
+  background: #a0a0a0;
+}
+.apexcharts-toolbar {
+  z-index: 0 !important;
+}
+.leftRightBox {
+  overflow: hidden;
+}
+
+.op-3 {
+  opacity: 0.3;
+}
+
+/*************Left right two column ***************/
+.leftPart {
+  width: 300px;
+  min-height: calc(100vh - 200px);
+  position: relative;
+  transition: 0.1s ease-in;
+  .openCloseBtn {
+    position: absolute;
+    right: -42px;
+    top: 13px;
+  }
+}
+.threeColumn {
+  .leftPart {
+    width: 250px;
+  }
+}
+.rightPart {
+  flex-grow: 1;
+  min-height: calc(100vh - 200px);
+  transition: 0.1s ease-in;
+}
+.closeRbtn {
+  right: 15px;
+  top: 15px;
+  z-index: 2;
+}
+.contentOverlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  top: 0;
+  left: 0;
+}
+@include media-breakpoint-down(lg) {
+  .leftPart {
+    position: absolute;
+    left: -300px;
+    z-index: 1;
+    box-shadow: $box-shadow;
+    &.showLeftPart {
+      left: 0;
+    }
+  }
+  .threeColumn {
+    .rightPart {
+      position: absolute;
+      right: -100%;
+      top: 0;
+      width: 100%;
+      z-index: 1;
+
+      &.showRightPart {
+        right: 0;
+      }
+    }
+  }
+}
+@include media-breakpoint-down(xl) {
+  .threeColumn {
+    .leftPart {
+      left: -250px;
+      position: absolute;
+      z-index: 1;
+      box-shadow: $box-shadow;
+      &.showLeftPart {
+        left: 0;
+      }
+    }
+  }
+}
+@include media-breakpoint-up(xl) {
+  .threeColumn {
+    .leftPart {
+      width: 250px;
+    }
+  }
+}
+@include media-breakpoint-up(lg) {
+  .middlePart {
+    width: 300px;
+    border-right: 1px solid $border-color;
+    min-height: calc(100vh - 200px);
+    position: relative;
+    transition: 0.1s ease-in;
+  }
+}
+
+.loginBox {
+  height: 100vh;
+  .loginContainer {
+    max-width: 390px;
+  }
+}
+
+.table > :not(:first-child) {
+  border-width: 0;
+}
+
+table th {
+  font-weight: 500;
+}
+
+.text-dark-white {
+  color: #fff !important;
+}
+
+.custom-table tbody {
+  tr {
+    border-left: 3px solid transparent;
+    &:hover,
+    &.active {
+      border-left: 3px solid $primary;
+    }
+  }
+}
+
+// for editor
+.rdw-embedded-modal {
+  left: unset !important;
+  right: 5px !important;
+  height: auto !important;
+}
+
+.rdw-embedded-modal-header-option {
+  width: 100% !important;
+}

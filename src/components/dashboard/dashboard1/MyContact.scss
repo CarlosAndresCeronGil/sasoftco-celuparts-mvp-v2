@@ -1,0 +1,14 @@
+.add-btn {
+    position: absolute;
+    z-index: 1;
+    right: 30px;
+}
+
+.rtl {
+    .add-btn {
+        position: absolute;
+        z-index: 1;
+        left: 30px;
+        right: auto;
+    } 
+}

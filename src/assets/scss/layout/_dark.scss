@@ -1,0 +1,33 @@
+.dark {
+  .ReactTable .rt-thead.-filters input,
+  .ReactTable .rt-thead.-filters select,
+  .ReactTable .-pagination input,
+  .ReactTable .-pagination select {
+    background: $light;
+    color: #fff;
+  }
+  .ReactTable .-pagination .-btn {
+    color: #fff;
+  }
+  .text-white {
+    color: #fff !important;
+  }
+  .text-dark,
+  .link-dark {
+    color: $black !important;
+  }
+  .sidebarArea {
+    .sidebarBox {
+      .nav-link,
+      .navCaption {
+        color: #fff;
+      }
+    }
+  }
+  .horizontalNav {
+    .nav-link,
+    .navCaption {
+      color: #fff;
+    }
+  }
+}
