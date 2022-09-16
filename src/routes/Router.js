@@ -139,6 +139,7 @@ const SiigoWareHousesTable = lazy(() => import("../views/celuparts/SiigoWareHous
 const SiigoUsersTable = lazy(() => import("../views/celuparts/SiigoUsersTable"));
 const SiigoCostCentersTable = lazy(() => import("../views/celuparts/SiigoCostCentersTable"));
 const SiigoFixedAssetsTable = lazy(() => import("../views/celuparts/SiigoFixedAssetsTable"));
+
 const CourierAlerts = lazy(() => import("../views/celuparts/CourierAlerts"));
 const CustomerAlerts = lazy(() => import("../views/celuparts/CustomerAlerts"));
 const TechnicianAlerts = lazy(() => import("../views/celuparts/TechnicianAlerts"));
@@ -156,6 +157,8 @@ const ThemeRoutes = [
     element: <FullLayout />,
     children: [
       { path: '/', name: 'Home', element: <Navigate to="/dashboards/dashboard1" /> },
+      { path: '/login', name: 'login', exact: true, element: <SignIn /> },
+      { path: '/equipment/detail', name: 'detail', exact: true, element: <EquipmentDetail /> },
       { path: '/dashboards/dashboard1', name: 'Dashboard 1', exact: true, element: <Dashboard1 /> },
       { path: '/dashboards/dashboard2', name: 'Dashboard 2', exact: true, element: <Dashboard2 /> },
       { path: '/dashboards/dashboard3', name: 'Dashboard 3', exact: true, element: <Dashboard3 /> },

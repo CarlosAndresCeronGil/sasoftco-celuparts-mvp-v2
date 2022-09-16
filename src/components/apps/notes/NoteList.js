@@ -6,6 +6,7 @@ import { fetchNotes, SelectNote, DeleteNote } from '../../../store/apps/notes/No
 
 const NoteList = () => {
   const dispatch = useDispatch();
+  
   useEffect(() => {
     dispatch(fetchNotes());
   }, [dispatch]);
