@@ -157,7 +157,6 @@ const ThemeRoutes = [
     element: <FullLayout />,
     children: [
       { path: '/', name: 'Home', element: <Navigate to="/dashboards/dashboard1" /> },
-      { path: '/login', name: 'login', exact: true, element: <SignIn /> },
       { path: '/equipment/detail', name: 'detail', exact: true, element: <EquipmentDetail /> },
       { path: '/dashboards/dashboard1', name: 'Dashboard 1', exact: true, element: <Dashboard1 /> },
       { path: '/dashboards/dashboard2', name: 'Dashboard 2', exact: true, element: <Dashboard2 /> },
@@ -265,7 +264,7 @@ const ThemeRoutes = [
       { path: '404', element: <Error /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
       { path: 'registerformik', element: <RegisterFormik /> },
-      { path: 'loginformik', element: <LoginFormik /> },
+      
       { path: 'maintanance', element: <Maintanance /> },
       { path: 'lockscreen', element: <LockScreen /> },
       { path: 'recoverpwd', element: <RecoverPassword /> },

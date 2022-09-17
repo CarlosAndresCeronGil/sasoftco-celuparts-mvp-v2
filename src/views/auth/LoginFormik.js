@@ -2,25 +2,28 @@
 import React, { useState, useContext } from 'react';
 import jwtDecode from 'jwt-decode';
 import AuthContext from '../../context/AuthProvider';
+import authLogin from '../../services/authLogin';
 import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody, Input } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'
 
 const LoginFormik = () => {
 
   const navigate = useNavigate();
 
   const initialValues = {
-    email: '',
+    emailData: '',
     password: '',
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Email is invalid').required('Email is required'),
+    emailData: Yup.string().email('Email is invalid').required('Email requerido'),
     password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
+      .min(5, 'La contraseña debe tener al menos 6 caracteres')
+      .max(10, 'La contraseña debe tener menos de 10 caracteres')
+      .required('Contraseña requerida'),
   });
 
 
@@ -77,7 +80,7 @@ const LoginFormik = () => {
         <Row className="justify-content-center align-items-center h-100">
           <Col lg="12" className="loginContainer">
           <div className='mb-3 d-flex justify-content-center '>
-              <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image w-50"></img>
+              <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image w-75"></img>
           </div>
             <Card>
               <CardBody className="p-4 m-1">
@@ -86,33 +89,39 @@ const LoginFormik = () => {
                 ¿No tienes cuenta? <Link to="/auth/registerformik">!Registrate!</Link>
                 </small>
                 <Formik
-                  initialValues={initialValues}
-                  validationSchema={validationSchema}
+                  // initialValues={initialValues}
+                  // validationSchema={validationSchema}
                   onSubmit={(fields) => {
                     // eslint-disable-next-line no-alert
                     alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
                     navigate('/');
                   }}
                   render={({ errors, touched }) => (
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                       <FormGroup>
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="emailData">Email</Label>
                         <Field
-                          name="email"
-                          type="text"
+                          id="emailData"
+                          name="emailData"
+                          type="email"
+                          onChange={(e) => setEmail(e.target.value)}
+                          value={ email }
                           placeholder="Ingrese su email"
                           className={`form-control${
-                            errors.email && touched.email ? ' is-invalid' : ''
+                            errors.emailData && touched.emailData ? ' is-invalid' : ''
                           }`}
                         />
-                        <ErrorMessage name="email" component="div" className="invalid-feedback" />
+                        <ErrorMessage name="emailData" component="div" className="invalid-feedback" />
                       </FormGroup>
                       <FormGroup>
                         <Label htmlFor="password">Contraseña</Label>
                         <Field
+                          id="examplePassword"
                           name="password"
                           type="password"
                           placeholder="Ingrese su contraseña"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                           className={`form-control${
                             errors.password && touched.password ? ' is-invalid' : ''
                           }`}
@@ -128,9 +137,9 @@ const LoginFormik = () => {
                           <Input type="checkbox" />
                           Recordarme
                         </Label>
-                        <Link className="ms-auto text-decoration-none" to="/auth/forgotPwd">
+                        {/* <Link className="ms-auto text-decoration-none" to="/auth/forgotPwd">
                           <small>Forgot Pwd?</small>
-                        </Link>
+                        </Link> */}
                       </FormGroup>
                       <FormGroup>
                         <Button type="submit" color="primary" className="me-2 center">
