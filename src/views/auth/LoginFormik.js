@@ -1,13 +1,14 @@
-import React from 'react';
+/* eslint-disable */
+import React, { useState, useContext } from 'react';
+import jwtDecode from 'jwt-decode';
+import AuthContext from '../../context/AuthProvider';
 import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody, Input } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthLogo from "../../layouts/logo/AuthLogo";
-import { ReactComponent as LeftBg } from '../../assets/images/bg/login-bgleft.svg';
-import { ReactComponent as RightBg } from '../../assets/images/bg/login-bg-right.svg';
 
 const LoginFormik = () => {
+
   const navigate = useNavigate();
 
   const initialValues = {
@@ -22,19 +23,67 @@ const LoginFormik = () => {
       .required('Password is required'),
   });
 
+
+  const { setAuth } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+      e.preventDefault();
+      try {
+          authLogin({
+              email,
+              password
+          })
+              .then(response => {
+                  console.log("Response from sign in:", response);
+                  if (response !== undefined) {
+                      if (response === "Account disabled") {
+                          Swal.fire({
+                              icon: 'error',
+                              title: 'Oops...',
+                              text: 'Cuenta inhabilitada, contacte con el número 3xx-xxx-xxxx para soporte técnico'
+                          })
+                      } else {
+                          const user = jwtDecode(response)
+                          console.log("user", user);
+                          localStorage.setItem('user', JSON.stringify(user));
+                          setAuth(true);
+                          navigate('/home');
+                      }
+                  }
+              })
+              .catch(error => {
+                  console.log("error:", error);
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: 'Usuario o contraseña incorrecto!'
+                  })
+              });
+
+      } catch (error) {
+          console.log(error);
+      }
+  }
+
+  
+
+
+
   return (
     <div className="loginBox">
-      <LeftBg className="position-absolute left bottom-0" />
-      <RightBg className="position-absolute end-0 top" />
       <Container fluid className="h-100">
         <Row className="justify-content-center align-items-center h-100">
           <Col lg="12" className="loginContainer">
-            <AuthLogo />
+          <div className='mb-3 d-flex justify-content-center '>
+              <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image w-50"></img>
+          </div>
             <Card>
               <CardBody className="p-4 m-1">
-                <h4 className="mb-0 fw-bold">Login</h4>
+                <h4 className="mb-0 fw-bold">Ingresar</h4>
                 <small className="pb-4 d-block">
-                  Do not have an account? <Link to="/auth/registerformik">Sign Up</Link>
+                ¿No tienes cuenta? <Link to="/auth/registerformik">!Registrate!</Link>
                 </small>
                 <Formik
                   initialValues={initialValues}
@@ -51,6 +100,7 @@ const LoginFormik = () => {
                         <Field
                           name="email"
                           type="text"
+                          placeholder="Ingrese su email"
                           className={`form-control${
                             errors.email && touched.email ? ' is-invalid' : ''
                           }`}
@@ -58,10 +108,11 @@ const LoginFormik = () => {
                         <ErrorMessage name="email" component="div" className="invalid-feedback" />
                       </FormGroup>
                       <FormGroup>
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password">Contraseña</Label>
                         <Field
                           name="password"
                           type="password"
+                          placeholder="Ingrese su contraseña"
                           className={`form-control${
                             errors.password && touched.password ? ' is-invalid' : ''
                           }`}
@@ -75,15 +126,15 @@ const LoginFormik = () => {
                       <FormGroup className="form-check d-flex" inline>
                         <Label check>
                           <Input type="checkbox" />
-                          Remember me
+                          Recordarme
                         </Label>
                         <Link className="ms-auto text-decoration-none" to="/auth/forgotPwd">
                           <small>Forgot Pwd?</small>
                         </Link>
                       </FormGroup>
                       <FormGroup>
-                        <Button type="submit" color="primary" className="me-2">
-                          Login
+                        <Button type="submit" color="primary" className="me-2 center">
+                          Iniciar
                         </Button>
                       </FormGroup>
                     </Form>

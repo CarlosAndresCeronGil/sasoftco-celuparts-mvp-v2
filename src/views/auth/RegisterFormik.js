@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
@@ -10,6 +11,7 @@ import { ReactComponent as RightBg } from '../../assets/images/bg/login-bg-right
 const RegisterFormik = () => {
   const initialValues = {
     UserName: '',
+    LastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -18,6 +20,7 @@ const RegisterFormik = () => {
 
   const validationSchema = Yup.object().shape({
     UserName: Yup.string().required('UserName is required'),
+    UserName: Yup.string().required('LastName is required'),
     email: Yup.string().email('Email is invalid').required('Email is required'),
     password: Yup.string()
       .min(6, 'Password must be at least 6 characters')
@@ -35,12 +38,14 @@ const RegisterFormik = () => {
       <Container fluid className="h-100">
         <Row className="justify-content-center align-items-center h-100">
           <Col lg="12" className="loginContainer">
-            <AuthLogo />
+          <div className='mb-3 d-flex justify-content-center '>
+              <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image w-50"></img>
+          </div>
             <Card>
               <CardBody className="p-4 m-1">
-                <h4 className="mb-0 fw-bold">Register</h4>
+                <h4 className="mb-0 fw-bold">Regístrate</h4>
                 <small className="pb-4 d-block">
-                  Already have an account? <Link to="/auth/loginformik">Login</Link>
+                ¿Ya tienes una cuenta? <Link to="/auth/loginformik">Iniciar</Link>
                 </small>
                 <Formik
                   initialValues={initialValues}
@@ -52,7 +57,7 @@ const RegisterFormik = () => {
                   render={({ errors, touched }) => (
                     <Form>
                       <FormGroup>
-                        <Label htmlFor="firstName">User Name</Label>
+                        <Label htmlFor="firstName">Nombres*</Label>
                         <Field
                           name="UserName"
                           type="text"
@@ -62,6 +67,22 @@ const RegisterFormik = () => {
                         />
                         <ErrorMessage
                           name="UserName"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </FormGroup>
+
+                      <FormGroup>
+                        <Label htmlFor="lastName">Apellidos*</Label>
+                        <Field
+                          name="LastName"
+                          type="text"
+                          className={`form-control ${
+                            errors.UserName && touched.UserName ? ' is-invalid' : ''
+                          }`}
+                        />
+                        <ErrorMessage
+                          name="apellidos"
                           component="div"
                           className="invalid-feedback"
                         />
@@ -118,7 +139,7 @@ const RegisterFormik = () => {
                           }`}
                         />
                         <Label htmlFor="acceptTerms" className="form-check-label">
-                          Accept Terms & Conditions
+                          Aceptar Términos y Condiciones
                         </Label>
                         <ErrorMessage
                           name="acceptTerms"

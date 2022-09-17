@@ -86,7 +86,7 @@ const HorizontalHeader = () => {
             </DropdownToggle>
             <DropdownMenu className="ddWidth" end>
               <DropdownItem header>
-                <span className="mb-0 fs-5">Notifications</span>
+                <span className="mb-0 fs-5">Notificaciones servicio a domicilio</span>
               </DropdownItem>
               <DropdownItem divider />
               <SimpleBar style={{ maxHeight: '350px' }}>

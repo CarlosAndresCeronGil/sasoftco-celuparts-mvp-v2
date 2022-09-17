@@ -6,7 +6,7 @@ const messages = [
     id: 1,
     iconclass: <Link />,
     iconbg: 'warning',
-    title: 'Launch Admin',
+    title: 'Usuario Nuevo',
     desc: 'Just see my new admin!',
     time: '9:30 AM',
   },
@@ -36,7 +36,26 @@ const messages = [
   },
 ];
 
+
+
+
+
 const NotificationDD = () => {
+
+  // const [alerts, setAlerts] = useState([])
+  // const [visible, setVisible] = useState(true);
+
+  // useEffect(function () {
+  //     getRequestNotification()
+  //         .then(response => {
+  //             console.log(response)
+  //             setAlerts(response)
+  //         })
+  //         .catch(error => {
+  //             console.log(error)
+  //         })
+  // }, [])
+
   return (
     <div>
       <ListGroup flush>

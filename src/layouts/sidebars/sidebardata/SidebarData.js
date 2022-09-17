@@ -350,34 +350,34 @@ const SidebarData = [
   },
   { caption: 'Extra' },
   {
-    title: 'Sample Pages',
+    title: 'Listas',
     href: '/sample-pages',
     icon: <MaterialIcon icon="copy_all" />,
     id: 6.1,
     collapisble: true,
     children: [
       {
-        title: 'Starterkit',
+        title: 'Lista de Usuarios',
         href: '/sample-pages/starterkit',
         icon: <MaterialIcon icon="radio_button_checked" />,
       },
       {
-        title: 'Profile',
+        title: 'Lista de Reparaciones',
         href: '/sample-pages/profile',
         icon: <MaterialIcon icon="radio_button_checked" />,
       },
       {
-        title: 'Search Result',
+        title: 'Lista de Retomas',
         href: '/sample-pages/search-result',
         icon: <MaterialIcon icon="radio_button_checked" />,
       },
       {
-        title: 'Gallery',
+        title: 'Lista de Equipos',
         href: '/sample-pages/gallery',
         icon: <MaterialIcon icon="radio_button_checked" />,
       },
       {
-        title: 'Helper Class',
+        title: 'Lista de Técnicos',
         href: '/sample-pages/helper-class',
         icon: <MaterialIcon icon="radio_button_checked" />,
       },
