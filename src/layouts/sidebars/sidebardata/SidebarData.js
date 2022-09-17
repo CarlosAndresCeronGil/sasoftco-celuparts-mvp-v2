@@ -41,6 +41,13 @@ const SidebarData = [
   },
   { caption: 'Apps' },
   {
+    title: 'Notificaciones servicio domicilio',
+    href: '/domicilio/notificaciones',
+    icon: <MaterialIcon icon="notifications" />,
+    id: 10,
+    collapisble: false,
+  },
+  {
     title: 'Notes',
     href: '/apps/notes',
     icon: <MaterialIcon icon="description" />,

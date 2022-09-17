@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -38,8 +39,10 @@ const Header = () => {
         className="topbar"
       >
         {/********Logo*******/}
+          
+          
         <div className="d-none d-lg-flex align-items-center logo-space">
-          <Logo />
+          <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image" width="200" ></img>
           <Button
             close
             size="sm"
@@ -59,7 +62,8 @@ const Header = () => {
             <Icon.Menu size={18} />
           </Button>
           <NavbarBrand href="/" className="d-sm-block d-lg-none">
-            <LogoWhite />
+            {/* <LogoWhite /> */}
+            <img src="/celuparts-logo.png" alt="celuparts-logo" width='40' className="border right-card-image" ></img>
           </NavbarBrand>
           <Button
             color={topbarColor}

@@ -1,16 +1,32 @@
+/* eslint-disable */
 import React from 'react';
 import { DropdownItem } from 'reactstrap';
 import { User, FileText, Star, Settings, Droplet } from 'react-feather';
 import user1 from '../../assets/images/users/user4.jpg';
+import { Row, Col } from 'reactstrap';
 
 const ProfileDD = () => {
+
+  console.log( JSON.parse(localStorage.getItem('user')) );
+
   return (
     <div>
       <div className="d-flex gap-3 p-3 border-bottom pt-2 align-items-center">
         <img src={user1} alt="user" className="rounded-circle" width="60" />
         <span>
-          <h5 className="mb-0">John Deo</h5>
-          <small className='fs-6 text-muted'>info@wrappixel.com</small>
+          <Row>
+            <Col xs="auto">
+              <p className="mb-0 text-muted text-capitalize">{JSON.parse(localStorage.getItem('user')).role}</p>
+            </Col>
+            <Col xs="auto">
+              <p className="mb-0 text-muted">|</p>
+            </Col>
+            <Col xs="auto">
+              <p className="mb-0 text-muted">Activo</p>
+            </Col>
+          </Row>
+          <h5 className="mb-0">{JSON.parse(localStorage.getItem('user')).name}</h5>
+          {/* <small className='fs-6 text-muted fw-lighter'>{JSON.parse(localStorage.getItem('user')).email}</small> */}
         </span>
       </div>
       <DropdownItem className="px-4 py-3">
