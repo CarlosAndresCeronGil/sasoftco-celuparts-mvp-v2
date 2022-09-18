@@ -76,9 +76,70 @@ const LoginFormik = () => {
 
   return (
     <div className="loginBox">
-      <Container fluid className="h-100">
-        <Row className="justify-content-center align-items-center h-100">
-          <Col lg="12" className="loginContainer">
+      <Container fluid className="h-100 border">
+
+      <section className="h-100 gradient-form">
+        <div className="container py-5 h-100">
+          <div className="row d-flex justify-content-center align-items-center h-100">
+            <div className="col-xl-8">
+              <div className="card rounded-3 text-black">
+                <div className="row g-0">
+                  <div className="col-lg-6">
+                    <div className="card-body p-md-5 mx-md-4">
+
+                      <div className="text-center">
+                        <img src="/celuparts-transparent-2.png"
+                           width="200" alt="logo" />
+                        <h4 className="mt-1 mb-5 pb-1">Tu móvil en nuestras manos</h4>
+                      </div>
+
+                      <form>
+                        <p>Inicia sesión con tu cuenta</p>
+
+                        <div className="form-outline mb-4">
+                          <label className="form-label" htmlFor="form2Example11">Email</label>
+                          <input type="email" id="form2Example11" className="form-control"
+                            placeholder="ejemplo@celuparts.com" />
+                        </div>
+
+                        <div className="form-outline mb-4">
+                          <label className="form-label" htmlFor="form2Example22" >Contraseña</label>
+                          <input type="password" id="form2Example22" placeholder='********' className="form-control" />
+                        </div>
+
+                        <div className="text-center pt-1 mb-5 pb-1">
+                          <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button">Iniciar</button>
+                          {/* <a className="text-muted" href="#!">Forgot password?</a> */}
+                        </div>
+
+                        <div className="d-flex align-items-center justify-content-center pb-4">
+                          <p className="mb-0 me-2">¿No tienes cuenta?</p>
+                          <button type="button" className="btn btn-outline-danger">Crear nueva</button>
+                        </div>
+
+                      </form>
+
+                    </div>
+                  </div>
+                  <div className="col-lg-6 d-flex align-items-center gradient-custom-2">
+                    <div className="px-3 mx-md-4">
+                      <img className='d-none d-lg-block' src="https://images.pexels.com/photos/8490071/pexels-photo-8490071.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" height="650" alt="logo" />
+                      {/* <h4 className="mb-4">We are more than just a company</h4>
+                      <p className="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+        {/* <Row className="justify-content-center align-items-center h-100">
+          <Col lg="6" className="loginContainer">
           <div className='mb-3 d-flex justify-content-center '>
               <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image w-75"></img>
           </div>
@@ -137,9 +198,6 @@ const LoginFormik = () => {
                           <Input type="checkbox" />
                           Recordarme
                         </Label>
-                        {/* <Link className="ms-auto text-decoration-none" to="/auth/forgotPwd">
-                          <small>Forgot Pwd?</small>
-                        </Link> */}
                       </FormGroup>
                       <FormGroup>
                         <Button type="submit" color="primary" className="me-2 center">
@@ -152,7 +210,25 @@ const LoginFormik = () => {
               </CardBody>
             </Card>
           </Col>
-        </Row>
+          <Col lg="6" className="loginContainer">
+            <Card>
+              <CardBody className="p-4 m-1">
+                <h4 className="mb-0 fw-bold">Ingresar con</h4>
+                <small className="pb-4 d-block">Otras opciones</small>
+                <FormGroup>
+                  <Button type="submit" color="primary" className="me-2 center">
+                    Google
+                  </Button>
+                </FormGroup>
+                <FormGroup>
+                  <Button type="submit" color="primary" className="me-2 center">
+                    Facebook
+                  </Button>
+                </FormGroup>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row> */}
       </Container>
     </div>
   );
