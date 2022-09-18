@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useState } from 'react';
 import jwtDecode from 'jwt-decode';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody } from 'reactstrap';
@@ -9,6 +9,7 @@ import { ReactComponent as LeftBg } from '../../assets/images/bg/login-bgleft.sv
 import { ReactComponent as RightBg } from '../../assets/images/bg/login-bg-right.svg';
 
 const RegisterFormik = () => {
+
   const initialValues = {
     idNumber: '',
     UserName: '',
@@ -50,21 +51,22 @@ const RegisterFormik = () => {
       <Container fluid className="h-100">
         <Row className="justify-content-center align-items-center h-100">
           <Col sm="12" md="6" className="">
-          <div className='mb-2 mt-4 mt-lg-2  d-flex justify-content-center' style={{position: 'relative',zIndex:'2'}}>
+            <div className='mb-2 mt-4 mt-lg-2  d-flex justify-content-center' style={{ position: 'relative', zIndex: '2' }}>
               <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image w w-50"></img>
-          </div>
+            </div>
             <Card>
               <CardBody className="p-3 m-1">
                 <h4 className="mb-0 fw-bold">Regístrate</h4>
                 <small className="pb-4 d-block">
-                ¿Ya tienes una cuenta? <Link to="/auth/loginformik">Iniciar</Link>
+                  ¿Ya tienes una cuenta? <Link to="/">Iniciar</Link>
                 </small>
                 <Formik
                   initialValues={initialValues}
                   validationSchema={validationSchema}
                   onSubmit={(fields) => {
                     // eslint-disable-next-line no-alert
-                    alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
+                    // alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
+                    console.log(userInfo.idNumber)
                   }}
                   render={({ errors, touched }) => (
                     <Form>
@@ -83,37 +85,34 @@ const RegisterFormik = () => {
                         </Col>
 
                         <Col lg="6">
-                        <FormGroup>
-                          <Label htmlFor="idNumber">Número de identificación*</Label>
-                          <Field
-                            id="numberId"
-                            name="idNumber"
-                            type="number"
-                            className={`form-control ${
-                              errors.idNumber && touched.idNumber ? ' is-invalid' : ''
-                            }`}
-                          />
-                          <ErrorMessage
-                            name="UserName"
-                            component="div"
-                            className="invalid-feedback"
-                          />
-                        </FormGroup>
+                          <FormGroup>
+                            <Label htmlFor="idNumber">Número de identificación*</Label>
+                            <Field
+                              id="numberId"
+                              name="idNumber"
+                              type="number"
+                              className={`form-control ${errors.idNumber && touched.idNumber ? ' is-invalid' : ''
+                                }`}
+                            />
+                            <ErrorMessage
+                              name="UserName"
+                              component="div"
+                              className="invalid-feedback"
+                            />
+                          </FormGroup>
                         </Col>
                       </Row>
 
-                      
                       <Row>
-                        
+
                         <Col md="6">
                           <FormGroup>
                             <Label htmlFor="firstName">Nombres*</Label>
                             <Field
                               name="UserName"
                               type="text"
-                              className={`form-control ${
-                                errors.UserName && touched.UserName ? ' is-invalid' : ''
-                              }`}
+                              className={`form-control ${errors.UserName && touched.UserName ? ' is-invalid' : ''
+                                }`}
                             />
                             <ErrorMessage
                               name="UserName"
@@ -124,22 +123,21 @@ const RegisterFormik = () => {
                         </Col>
                         <Col md="6">
                           <FormGroup>
-                          <Label htmlFor="LastName">Apellidos*</Label>
-                          <Field
-                            name="LastName"
-                            type="text"
-                            className={`form-control ${
-                              errors.LastName && touched.LastName ? ' is-invalid' : ''
-                            }`}
-                          />
-                          <ErrorMessage
-                            name="LastName"
-                            component="div"
-                            className="invalid-feedback"
-                          />
+                            <Label htmlFor="LastName">Apellidos*</Label>
+                            <Field
+                              name="LastName"
+                              type="text"
+                              className={`form-control ${errors.LastName && touched.LastName ? ' is-invalid' : ''
+                                }`}
+                            />
+                            <ErrorMessage
+                              name="LastName"
+                              component="div"
+                              className="invalid-feedback"
+                            />
                           </FormGroup>
                         </Col>
-                    </Row>
+                      </Row>
 
                       <FormGroup>
                         <Label htmlFor="email">Email*</Label>
@@ -147,9 +145,8 @@ const RegisterFormik = () => {
                           name="email"
                           type="text"
                           placeholder="example@celuparts.com"
-                          className={`form-control ${
-                            errors.email && touched.email ? ' is-invalid' : ''
-                          }`}
+                          className={`form-control ${errors.email && touched.email ? ' is-invalid' : ''
+                            }`}
                         />
                         <ErrorMessage name="email" component="div" className="invalid-feedback" />
                       </FormGroup>
@@ -157,67 +154,64 @@ const RegisterFormik = () => {
 
                       <Row>
                         <Col md="6">
-                        <FormGroup>
-                          <Label htmlFor="number">Número de teléfono*</Label>
-                          <Field
-                            name="phone"
-                            type="tel"
-                            className={`form-control ${
-                              errors.phone && touched.phone ? ' is-invalid' : ''
-                            }`}
-                          />
-                          <ErrorMessage name="phone" component="div" className="invalid-feedback" />
-                        </FormGroup>
+                          <FormGroup>
+                            <Label htmlFor="number">Número de teléfono*</Label>
+                            <Field
+                              name="phone"
+                              type="number"
+                              className={`form-control ${errors.phone && touched.phone ? ' is-invalid' : ''
+                                }`}
+                            />
+                            <ErrorMessage name="phone" component="div" className="invalid-feedback" />
+                          </FormGroup>
                         </Col>
                         <Col md="6">
-                        <FormGroup>
-                          <Label htmlFor="numberAlternative">Número de teléfono</Label>
-                          <Field
-                            name="numberAlternative"
-                            type="tel"
-                            placeholder="Alternativo opcional"
-                            className="form-control"
-                          />
-                        </FormGroup>
+                          <FormGroup>
+                            <Label htmlFor="numberAlternative">Número de teléfono</Label>
+                            <Field
+                              name="numberAlternative"
+                              type="number"
+                              placeholder="Alternativo opcional"
+                              className="form-control"
+                            />
+                          </FormGroup>
                         </Col>
                       </Row>
 
                       <Row>
                         <Col md="6">
-                        <FormGroup>
-                          <Label htmlFor="password">Contraseña*</Label>
-                          <Field
-                            name="password"
-                            type="password"
-                            placeholder="********"
-                            className={`form-control${
-                              errors.password && touched.password ? ' is-invalid' : ''
-                            }`}
-                          />
-                          <ErrorMessage
-                            name="password"
-                            component="div"
-                            className="invalid-feedback"
-                          />
-                        </FormGroup>
+                          <FormGroup>
+                            <Label htmlFor="password">Contraseña*</Label>
+                            <Field
+                              name="password"
+                              type="password"
+                              placeholder="********"
+                              className={`form-control${errors.password && touched.password ? ' is-invalid' : ''
+                                }`}
+                            />
+                            <ErrorMessage
+                              name="password"
+                              component="div"
+                              className="invalid-feedback"
+                            />
+                          </FormGroup>
                         </Col>
                         <Col md="6">
-                        <FormGroup>
-                          <Label htmlFor="confirmPassword">confirmar contraseña*</Label>
-                          <Field
-                            name="confirmPassword"
-                            type="password"
-                            placeholder="********"
-                            className={`form-control${
-                              errors.confirmPassword && touched.confirmPassword ? ' is-invalid' : ''
-                            }`}
-                          />
-                          <ErrorMessage
-                            name="confirmPassword"
-                            component="div"
-                            className="invalid-feedback"
-                          />
-                        </FormGroup>
+                          <FormGroup>
+                            <Label htmlFor="confirmPassword">confirmar contraseña*</Label>
+                            <Field
+                              name="confirmPassword"
+                              type="password"
+                              placeholder="********"
+                              className={`form-control${errors.confirmPassword && touched.confirmPassword ? ' is-invalid' : ''
+                                }`}
+                            />
+                            <ErrorMessage
+                              name="confirmPassword"
+                              component="div"
+                              className="invalid-feedback"
+                            />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <FormGroup inline className="form-check">
@@ -225,9 +219,8 @@ const RegisterFormik = () => {
                           type="checkbox"
                           name="acceptTerms"
                           id="acceptTerms"
-                          className={`form-check-input ${
-                            errors.acceptTerms && touched.acceptTerms ? ' is-invalid' : ''
-                          }`}
+                          className={`form-check-input ${errors.acceptTerms && touched.acceptTerms ? ' is-invalid' : ''
+                            }`}
                         />
                         <Label htmlFor="acceptTerms" className="form-check-label">
                           Aceptar Términos y Condiciones

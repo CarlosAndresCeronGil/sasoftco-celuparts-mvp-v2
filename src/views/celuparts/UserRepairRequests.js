@@ -269,7 +269,7 @@ export default function UserRepairRequests() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {userInfo[0].requests.map((tdata, index) => (
+                                {userInfo[0]?.requests.map((tdata, index) => (
                                     tdata.requestType === "Reparacion" ? (
                                         <tr key={index} className="border-top">
                                             <td>

@@ -2,14 +2,17 @@
 import React, { Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import Themeroutes from './routes/Router';
+import Themeroutes, { Router } from './routes/Router';
 import ThemeSelector from './layouts/theme/ThemeSelector';
 import Loader from './layouts/loader/Loader';
 
 const App = () => {
-  const routing = useRoutes(Themeroutes);
+  // const routing = useRoutes(Themeroutes);
   const direction = useSelector((state) => state.customizer.isRTL);
   const isMode = useSelector((state) => state.customizer.isDark);
+
+  const { ThemeRoutes } = Router()
+  const routing = useRoutes(ThemeRoutes)
   return (
     <Suspense fallback={<Loader />}>
       <div

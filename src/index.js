@@ -8,15 +8,18 @@ import reportWebVitals from './reportWebVitals';
 import { store } from './store/Store';
 import App from './App';
 import './data';
+import { AuthProvider } from './context/AuthProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 
 root.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AuthProvider>
   </Provider>,
 );
 

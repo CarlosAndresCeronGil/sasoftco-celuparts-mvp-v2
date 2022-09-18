@@ -170,7 +170,7 @@ export default function RepairRequestsTable() {
                                             <td>{tdata.requestStatus[0].status}</td>
                                             <td>
                                                 <Link to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}>
-                                                    <button type='button' className="btn btn-celuparts-dark-blue">Actualizar</button>
+                                                    <Button type='button' className="btn" color='primary'>Actualizar</Button>
                                                 </Link>
                                             </td>
                                             {
@@ -190,7 +190,7 @@ export default function RepairRequestsTable() {
                                                                 <button type='button' className="btn btn-secondary" disabled>Actualizar</button>
                                                             ) : (
                                                                 <Link to={`/home/update-repair-form/${tdata.repairs[0].idRepair}`}>
-                                                                    <button type='button' className="btn btn-celuparts-black">Actualizar</button>
+                                                                    <Button type='button' className="btn btn-celuparts-black">Actualizar</Button>
                                                                 </Link>
                                                             )
                                                         }
@@ -214,9 +214,9 @@ export default function RepairRequestsTable() {
                                                                 </button>
                                                             ) : (
                                                                 <Link to={`/home/repair-payment-form/${tdata.repairs[0].repairPayments[0].idRepairPayment}`}>
-                                                                    <button className='btn btn-celuparts-black' type='button'>
+                                                                    <Button className='btn' color='secondary' type='button'>
                                                                         Actualizar
-                                                                    </button>
+                                                                    </Button>
                                                                 </Link>
                                                             )
                                                         }
@@ -227,9 +227,9 @@ export default function RepairRequestsTable() {
                                             }
                                             <td>
                                                 <Link to={`/home/equipment-detail/${tdata.idRequest}`}>
-                                                    <button className='btn btn-celuparts-black' type='button'>
+                                                    <Button className='btn' color='info' type='button'>
                                                         Ver
-                                                    </button>
+                                                    </Button>
                                                 </Link>
                                             </td>
                                         </tr>
@@ -248,12 +248,12 @@ export default function RepairRequestsTable() {
                             {
                                 requests.currentPage === 1 ?
                                     <button className="btn btn-celuparts-dark-blue" disabled>Anterior</button>
-                                    : <button className="btn btn-celuparts-dark-blue" onClick={handlePrevious}>Anterior</button>
+                                    : <Button className="btn" color='primary' onClick={handlePrevious}>Anterior</Button>
                             }
                             {
                                 requests.currentPage === requests.pages ?
                                     <button className="btn btn-celuparts-dark-blue" disabled>Siguiente</button>
-                                    : <button className="btn btn-celuparts-dark-blue" onClick={handleNext}>Siguiente</button>
+                                    : <Button className="btn" color='primary' onClick={handleNext}>Siguiente</Button>
                             }
                         </div>
                     </CardBody>

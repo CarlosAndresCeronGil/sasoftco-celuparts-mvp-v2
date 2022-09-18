@@ -66,6 +66,16 @@ export default function UpdateRepairForm() {
                             .then(response=> {
                                 console.log("Exito!", response)
                             })
+                            .then(finalResponse => {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Exito!',
+                                    text: 'Estado de reparación actualizadisimo!',
+                                })
+                                    .then(response => {
+                                        navigate(-1)
+                                    })
+                            })
                             .catch(error => {
                                 console.log(error)
                             })
@@ -92,6 +102,16 @@ export default function UpdateRepairForm() {
                     setLoadingPut(false);
                     console.log(data)
                     console.log("se envio con fecha")
+                })
+                .then(finalResponse => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Exito!',
+                        text: 'Estado de reparación actualizadisimo!',
+                    })
+                        .then(response => {
+                            navigate(-1)
+                        })
                 })
                 .catch(error => {
                     console.log(error);

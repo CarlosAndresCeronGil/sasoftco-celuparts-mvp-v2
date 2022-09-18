@@ -52,7 +52,7 @@ const LoginFormik = () => {
                           console.log("user", user);
                           localStorage.setItem('user', JSON.stringify(user));
                           setAuth(true);
-                          navigate('/home');
+                          navigate('/home/dashboards/dashboard1');
                       }
                   }
               })
@@ -86,7 +86,7 @@ const LoginFormik = () => {
               <CardBody className="p-4 m-1">
                 <h4 className="mb-0 fw-bold">Ingresar</h4>
                 <small className="pb-4 d-block">
-                ¿No tienes cuenta? <Link to="/auth/registerformik">!Registrate!</Link>
+                ¿No tienes cuenta? <Link to="/registerformik">!Registrate!</Link>
                 </small>
                 <Formik
                   // initialValues={initialValues}
@@ -132,15 +132,15 @@ const LoginFormik = () => {
                           className="invalid-feedback"
                         />
                       </FormGroup>
-                      <FormGroup className="form-check d-flex" inline>
+                      {/* <FormGroup className="form-check d-flex" inline>
                         <Label check>
                           <Input type="checkbox" />
                           Recordarme
                         </Label>
-                        {/* <Link className="ms-auto text-decoration-none" to="/auth/forgotPwd">
+                        <Link className="ms-auto text-decoration-none" to="/auth/forgotPwd">
                           <small>Forgot Pwd?</small>
-                        </Link> */}
-                      </FormGroup>
+                        </Link>
+                      </FormGroup> */}
                       <FormGroup>
                         <Button type="submit" color="primary" className="me-2 center">
                           Iniciar

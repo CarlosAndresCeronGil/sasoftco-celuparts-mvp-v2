@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import SimpleBar from 'simplebar-react';
@@ -24,10 +24,24 @@ import Logo from '../logo/Logo';
 import { ToggleMiniSidebar, ToggleMobileSidebar } from '../../store/customizer/CustomizerSlice';
 import ProfileDD from './ProfileDD';
 
+import AuthContext from '../../context/AuthProvider';
+
 const Header = () => {
+  const { setAuth } = useContext(AuthContext)
+
   const isDarkMode = useSelector((state) => state.customizer.isDark);
   const topbarColor = useSelector((state) => state.customizer.topbarBg);
   const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    setAuth({
+      email: '',
+      name: '',
+      role: '',
+      id: 0
+    })
+    localStorage.removeItem('user');
+  }
 
   return (
     <>
@@ -39,8 +53,8 @@ const Header = () => {
         className="topbar"
       >
         {/********Logo*******/}
-          
-          
+
+
         <div className="d-none d-lg-flex align-items-center logo-space">
           <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image" width="200" ></img>
           <Button
@@ -154,9 +168,11 @@ const Header = () => {
             <DropdownMenu className="ddWidth profile-dd">
               <ProfileDD />
               <div className="p-2 px-3">
-                <Button color="danger" size="sm">
-                  Logout
-                </Button>
+                <Link to="/" onClick={handleLogout}>
+                  <Button color="danger" size="sm">
+                    Logout
+                  </Button>
+                </Link>
               </div>
             </DropdownMenu>
           </UncontrolledDropdown>
