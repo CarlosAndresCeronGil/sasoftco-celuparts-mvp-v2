@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import jwtDecode from 'jwt-decode';
 import AuthContext from '../../context/AuthProvider';
 import authLogin from '../../services/authLogin';
-import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody, Input } from 'reactstrap';
+import { FormGroup, Container } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
@@ -21,8 +21,8 @@ const LoginFormik = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string().email('Email no valido').required('Email requerido'),
     password: Yup.string()
-      .min(5, 'La contraseña debe tener al menos 5 caracteres')
-      .max(10, 'La contraseña debe tener menos de 10 caracteres')
+      .min(5, 'Debe tener al menos 5 caracteres')
+      .max(10, 'Debe tener menos de 10 caracteres')
       .required('Contraseña requerida'),
   });
 
@@ -52,7 +52,7 @@ const LoginFormik = () => {
                           console.log("user", user);
                           localStorage.setItem('user', JSON.stringify(user));
                           setAuth(true);
-                          navigate('/home');
+                          navigate('/');
                       }
                   }
               })
@@ -72,8 +72,6 @@ const LoginFormik = () => {
 
   
 
-
-
   return (
     <div className="loginBox">
       <Container fluid className="h-100 border">
@@ -81,7 +79,7 @@ const LoginFormik = () => {
         <section className="h-100 gradient-form">
           <div className="container py-5 h-100">
             <div className="row d-flex justify-content-center align-items-center h-100">
-              <div className="col-xl-8">
+              <div className="col-xxl-8">
                 <div className="card rounded-3 text-black">
                   <div className="row g-0">
                     <div className="col-lg-6">
@@ -98,7 +96,7 @@ const LoginFormik = () => {
                           validationSchema={validationSchema}
                           onSubmit={(fields) => {
                             // eslint-disable-next-line no-alert
-                            alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
+                            // alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
                             navigate('/');
                           }}
                           render={({ errors, touched }) => (
@@ -112,12 +110,11 @@ const LoginFormik = () => {
                                   type="email"
                                   name="email" 
                                   placeholder="ejemplo@celuparts.com"
-                                  
                                   className={`form-control${
                                     errors.email && touched.email ? ' is-invalid' : ''
                                   }`}
                                   />    
-                              <ErrorMessage name="user" component="div" className="invalid-feedback" />
+                              <ErrorMessage name="email" component="div" className="invalid-feedback" />
                             </FormGroup>
   
                             <FormGroup className="form-outline mb-4">
@@ -147,13 +144,12 @@ const LoginFormik = () => {
                             <div className="d-flex align-items-center justify-content-center pb-4">
                               <p className="mb-0 me-2">¿No tienes cuenta?</p>
                               
-                              <button type="button" className="btn btn-outline-primary"><Link to="/auth/registerformik">!Registrate!</Link></button>
+                              <button type="button" className="btn btn-outline-primary"><Link style={{ textDecoration: 'none' }} to="/auth/registerformik">!Registrate!</Link></button>
                             </div>
   
                           </Form>
                           )}
                         />
-
 
                       </div>
                     </div>
@@ -168,7 +164,6 @@ const LoginFormik = () => {
             </div>
           </div>
         </section>
-
       </Container>
     </div>
   );
