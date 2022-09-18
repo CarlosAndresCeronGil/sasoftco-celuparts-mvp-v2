@@ -24,9 +24,7 @@ import AuthContext from '../../context/AuthProvider';
 export default function SignUp() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    
     const { setAuth } = useContext(AuthContext);
-
     const [loading, setLoading] = React.useState(false);
 
     const navigate = useNavigate()
