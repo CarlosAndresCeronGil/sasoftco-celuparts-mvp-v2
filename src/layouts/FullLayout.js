@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Container } from 'reactstrap';
 import Header from './header/Header';
-import Customizer from './customizer/Customizer';
+// import Customizer from './customizer/Customizer';
 import Sidebar from './sidebars/vertical/Sidebar';
 import HorizontalHeader from './header/HorizontalHeader';
 import HorizontalSidebar from './sidebars/horizontal/HorizontalSidebar';
@@ -38,7 +38,7 @@ const FullLayout = () => {
             <div className={isFixedSidebar && LayoutHorizontal ? 'HsidebarFixed' : ''}>
               <Outlet />
             </div>
-            <Customizer className={customizerToggle ? 'showCustomizer' : ''} />
+            {/* <Customizer className={customizerToggle ? 'showCustomizer' : ''} /> */}
             {showMobileSidebar || customizerToggle ? <div className="sidebarOverlay" /> : ''}
           </Container>
         </div>
