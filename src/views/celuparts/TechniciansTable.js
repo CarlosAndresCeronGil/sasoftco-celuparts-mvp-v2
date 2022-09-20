@@ -21,7 +21,9 @@ export default function TechniciansTable() {
                 <CardBody>
                     <CardTitle tag="h5">Lista de técnicos</CardTitle>
 
-                    <Table className="no-wrap mt-3 align-middle" responsive borderless>
+                    <hr/>
+
+                    <Table className="no-wrap mt-3 align-middle" responsive borderless striped>
                         <thead>
                             <tr>
                                 <th>Id</th>
@@ -40,7 +42,24 @@ export default function TechniciansTable() {
                                     <td>{tdata.names} {tdata.surnames}</td>
                                     <td>{tdata.phone}</td>
                                     <td>{tdata.email}</td>
-                                    <td>{tdata.accountStatus}</td>
+                                    <td>
+                                        {tdata.accountStatus === "Cerrada" ? (
+                                            <div className='d-flex align-items-center'>
+                                                <span className="p-2 bg-danger rounded-circle d-inline-block ms-3">{tdata.AccountStatus}</span>
+                                                <span className="d-inline-block ms-3">{tdata.accountStatus}</span>
+                                            </div>
+                                        ) : tdata.accountStatus === "Inhabilitada" ? (
+                                            <div className='d-flex align-items-center'>
+                                                <span className="p-2 bg-warning rounded-circle d-inline-block ms-3">{tdata.AccountStatus}</span>
+                                                <span className="d-inline-block ms-3">{tdata.accountStatus}</span>
+                                            </div>
+                                        ) : (
+                                            <div className='d-flex align-items-center'>
+                                                <span className="p-2 bg-success rounded-circle d-inline-block ms-3">{tdata.AccountStatus}</span>
+                                                <span className="d-inline-block ms-3">{tdata.accountStatus}</span>
+                                            </div>
+                                        )}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

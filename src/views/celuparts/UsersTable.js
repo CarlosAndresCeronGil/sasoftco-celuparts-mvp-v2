@@ -27,7 +27,7 @@ export default function UsersTable() {
 
                     <hr/>
 
-                    <Table className="no-wrap mt-3 align-middle" responsive borderless>
+                    <Table className="no-wrap mt-3 align-middle" responsive borderless striped>
                         <thead>
                             <tr>
                                 <th>Id</th>
@@ -81,11 +81,20 @@ export default function UsersTable() {
                                     <td>{tdata.alternativePhone}</td>
                                     <td>
                                         {tdata.accountStatus === "Cerrada" ? (
-                                            <span className="p-2 bg-danger rounded-circle d-inline-block ms-3">{tdata.AccountStatus}asasdasdasd</span>
+                                            <div className='d-flex align-items-center'>
+                                                <span className="p-2 bg-danger rounded-circle d-inline-block ms-3">{tdata.AccountStatus}</span>
+                                                <span className="d-inline-block ms-3">{tdata.accountStatus}</span>
+                                            </div>
                                         ) : tdata.accountStatus === "Inhabilitada" ? (
-                                            <span className="p-2 bg-warning rounded-circle d-inline-block ms-3">{tdata.AccountStatus}</span>
+                                            <div className='d-flex align-items-center'>
+                                                <span className="p-2 bg-warning rounded-circle d-inline-block ms-3">{tdata.AccountStatus}</span>
+                                                <span className="d-inline-block ms-3">{tdata.accountStatus}</span>
+                                            </div>
                                         ) : (
-                                            <span className="p-2 bg-success rounded-circle d-inline-block ms-3">{tdata.AccountStatus}</span>
+                                            <div className='d-flex align-items-center'>
+                                                <span className="p-2 bg-success rounded-circle d-inline-block ms-3">{tdata.AccountStatus}</span>
+                                                <span className="d-inline-block ms-3">{tdata.accountStatus}</span>
+                                            </div>
                                         )}
                                     </td>
                                 </tr>
