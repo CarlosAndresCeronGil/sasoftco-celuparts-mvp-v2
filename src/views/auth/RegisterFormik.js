@@ -40,8 +40,6 @@ const RegisterFormik = () => {
   });
 
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const { setAuth } = useContext(AuthContext);
   const [loading, setLoading] = React.useState(false);
 
@@ -137,12 +135,15 @@ const RegisterFormik = () => {
   
   return (
     
-    <section className="h-100 gradient-form">
+    <section className="h-100 gradient-form bg-white">
     <div className="container py-5 h-100">
       <div className="row d-flex justify-content-center align-items-center h-100">
         <div className="col-xxl-10">
-          <div className="card rounded-3 text-black">
-            <div className="row g-0">
+        <div className='mb-sm-5 mb-2 mt-4 mt-lg-2 d-flex justify-content-center' style={{position: 'relative',zIndex:'2'}}>
+              <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image w-25"></img>
+          </div>
+          <div className="card rounded-3 text-black shadow-lg">
+            <div className="row g-0 ">
 
               <div className="col-lg-5 d-flex align-items-center gradient-custom-2">
                 <div className="px-0">
@@ -151,7 +152,7 @@ const RegisterFormik = () => {
               </div>
 
               <div className="col-lg-7">
-                <div className="card-body p-md-5 mx-md-4">
+                <div className="card-body p-md-5 mx-md-4 ">
  
                 <h4 className="mb-0 fw-bold text-center">Regístrate</h4>
                 <div className="d-flex align-items-center justify-content-center pb-4">
@@ -337,25 +338,7 @@ const RegisterFormik = () => {
                         </FormGroup>
                         </Col>
                       </Row>
-                      {/* <FormGroup inline className="form-check">
-                        <Field
-                          type="checkbox"
-                          name="acceptTerms"
-                          id="acceptTerms"
-                          className={`form-check-input ${
-                            errors.acceptTerms && touched.acceptTerms ? ' is-invalid' : ''
-                          }`}
-                        />
-                        <Label htmlFor="acceptTerms" className="form-check-label">
-                          Aceptar Términos y Condiciones
-                        </Label>
-                        <ErrorMessage
-                          name="acceptTerms"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </FormGroup> */}
-                      <FormGroup className='d-flex align-items-center justify-content-center'>
+                      <FormGroup className='d-flex align-items-center justify-content-center pt-5'>
                         <Button className="btn btn-outline-secondary me-2" type="reset" color="">
                           Limpiar
                         </Button>

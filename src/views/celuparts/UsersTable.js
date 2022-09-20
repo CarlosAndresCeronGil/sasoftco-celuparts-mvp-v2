@@ -25,6 +25,8 @@ export default function UsersTable() {
                         Overview of the projects
                     </CardSubtitle> */}
 
+                    <hr/>
+
                     <Table className="no-wrap mt-3 align-middle" responsive borderless>
                         <thead>
                             <tr>
