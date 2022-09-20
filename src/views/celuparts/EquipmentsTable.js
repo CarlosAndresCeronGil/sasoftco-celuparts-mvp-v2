@@ -21,7 +21,9 @@ export default function EquipmentsTable() {
                 <CardBody>
                     <CardTitle tag="h5">Lista de equipos registrados en el sistema</CardTitle>
 
-                    <Table className="no-wrap mt-3 align-middle" responsive borderless>
+                    <hr/>
+
+                    <Table className="no-wrap mt-3 align-middle" responsive borderless striped>
                         <thead>
                             <tr>
                                 <th>Id</th>
@@ -34,15 +36,25 @@ export default function EquipmentsTable() {
                         </thead>
                         <tbody>
                             {equipments.map((tdata, index) => (
-                                <tr key={index} className="border-top">
+                                <tr key={index} className="">
                                     <td>
                                         <span className="text-muted">{tdata.idEquipment}</span>
                                     </td>
-                                    <td>{tdata.typeOfEquipment}</td>
+                                    <td> 
+                                        <div> 
+                                            <i className='bi-phone-fill'></i>
+                                            <span className="d-inline-block ms-3">{tdata.typeOfEquipment}</span>
+                                        </div>  
+                                    </td>
                                     <td>{tdata.equipmentBrand}</td>
                                     <td>{tdata.modelOrReference}</td>
                                     <td>{tdata.imeiOrSerial}</td>
-                                    <td>{tdata.equipmentInvoice}</td>
+                                    {/* <td>{tdata.equipmentInvoice}</td> */}
+                                    <td>
+                                        <a href="#">            
+                                            <button type="button" title={`Ver factura de ${tdata.equipmentBrand} ${tdata.modelOrReference}`} className="btn btn-outline-info">Ver Factura</button>
+                                        </a>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
