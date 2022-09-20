@@ -19,7 +19,8 @@ import { ReactComponent as LogoWhite } from '../../assets/images/logos/white-log
 import MessageDD from './MessageDD';
 import NotificationDD from './NotificationDD';
 import MegaDD from './MegaDD';
-import user1 from '../../assets/images/users/user4.jpg';
+// import user1 from '../../assets/images/users/user4.jpg';
+import userCeluparts from '../../assets/images/users/userCeluparts.png'
 import Logo from '../logo/Logo';
 import { ToggleMiniSidebar, ToggleMobileSidebar } from '../../store/customizer/CustomizerSlice';
 import ProfileDD from './ProfileDD';
@@ -31,6 +32,7 @@ const Header = () => {
 
   const isDarkMode = useSelector((state) => state.customizer.isDark);
   const topbarColor = useSelector((state) => state.customizer.topbarBg);
+
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -46,7 +48,7 @@ const Header = () => {
   return (
     <>
       <Navbar
-        color={topbarColor}
+        color='navbarcolorceluparts'
         dark={!isDarkMode}
         light={isDarkMode}
         expand="lg"
@@ -56,7 +58,9 @@ const Header = () => {
 
 
         <div className="d-none d-lg-flex align-items-center logo-space">
-          <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image" width="200" ></img>
+          <Link to="./dashboards/dashboard1">
+            <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image" width="170" ></img>
+          </Link>
           <Button
             close
             size="sm"
@@ -96,19 +100,19 @@ const Header = () => {
           {/******************************/}
           {/**********Mega DD**********/}
           {/******************************/}
-          <UncontrolledDropdown className="mega-dropdown mx-1">
+          {/* <UncontrolledDropdown className="mega-dropdown mx-1">
             <DropdownToggle className="bg-transparent border-0" color={topbarColor}>
               <Icon.Grid size={18} />
             </DropdownToggle>
             <DropdownMenu>
               <MegaDD />
             </DropdownMenu>
-          </UncontrolledDropdown>
-          <NavItem className="d-md-block d-none">
+          </UncontrolledDropdown> */}
+          {/* <NavItem className="d-md-block d-none">
             <Link to="/about" className={`nav-link ${topbarColor === 'white' ? 'text-dark' : ''}`}>
               About
             </Link>
-          </NavItem>
+          </NavItem> */}
         </Nav>
 
         <div className="d-flex align-items-center">
@@ -138,7 +142,7 @@ const Header = () => {
           {/******************************/}
           {/**********Message DD**********/}
           {/******************************/}
-          <UncontrolledDropdown className="mx-1">
+          {/* <UncontrolledDropdown className="mx-1">
             <DropdownToggle className="bg-transparent border-0" color={topbarColor}>
               <Icon.Mail size={18} />
             </DropdownToggle>
@@ -157,13 +161,13 @@ const Header = () => {
                 </Button>
               </div>
             </DropdownMenu>
-          </UncontrolledDropdown>
+          </UncontrolledDropdown> */}
           {/******************************/}
           {/**********Profile DD**********/}
           {/******************************/}
           <UncontrolledDropdown>
             <DropdownToggle color="transparent">
-              <img src={user1} alt="profile" className="rounded-circle" width="30" />
+              <img src={userCeluparts} alt="profile" className="rounded-circle" width="30" />
             </DropdownToggle>
             <DropdownMenu className="ddWidth profile-dd">
               <ProfileDD />

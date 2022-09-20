@@ -152,6 +152,8 @@ export function Router() {
   const RequestRetomaForm = lazy(() => import("../views/celuparts/RequestRetomaForm"));
   const EquipmentDetail = lazy(() => import("../views/celuparts/EquipmentDetail"));
 
+  const DashboardCeluparts = lazy(() => import("../views/celuparts/DashboardCeluparts"));
+
   /*****Routes******/
   const ThemeRoutes = [
     {
@@ -177,7 +179,7 @@ export function Router() {
         children: [
           { path: '/home', name: 'Home', element: <Navigate to="/dashboards/dashboard1" /> },
           { path: '/home/login', name: 'login', exact: true, element: <SignIn /> },
-          { path: '/home/dashboards/dashboard1', name: 'Dashboard 1', exact: true, element: <Dashboard1 /> },
+          { path: '/home/dashboards/dashboard1', name: 'Dashboard Celuparts', exact: true, element: <DashboardCeluparts /> },
           { path: '/home/user-alerts', name: 'Notificaciones', exact: true, element: <CustomerAlerts /> },
           { path: "/home/request-repair-form", exact: true, element: <RequestRepairForm /> },
           { path: "/home/request-retoma-form", exact: true, element: <RequestRetomaForm /> },
@@ -192,7 +194,7 @@ export function Router() {
         element: <FullLayout />,
         children: [
           { path: "/home", exact: true, element: <Home /> },
-          { path: '/home/dashboards/dashboard1', name: 'Dashboard 1', exact: true, element: <Dashboard1 /> },
+          { path: '/home/dashboards/dashboard1', name: 'Dashboard Celuparts', exact: true, element: <DashboardCeluparts /> },
           { path: "/home/users-table", exact: true, element: <UsersTable /> },
           { path: "/home/repair-requests-table", exact: true, element: <RepairRequestsTable /> },
           { path: "/home/retoma-requests-table", exact: true, element: <RetomaRequestsTable /> },
@@ -237,7 +239,7 @@ export function Router() {
         element: <FullLayout />,
         children: [
           { path: "/home", exact: true, element: <Home /> },
-          { path: '/home/dashboards/dashboard1', name: 'Dashboard 1', exact: true, element: <Dashboard1 /> },
+          { path: '/home/dashboards/dashboard1', name: 'Dashboard Celuparts', exact: true, element: <DashboardCeluparts /> },
           { path: "/home/repair-requests-table", exact: true, element: <RepairRequestsTable /> },
           { path: "/home/retoma-requests-table", exact: true, element: <RetomaRequestsTable /> },
           { path: "/home/repair-table", exact: true, element: <RepairTable /> },
@@ -255,7 +257,7 @@ export function Router() {
         element: <FullLayout />,
         children: [
           { path: "/home", exact: true, element: <Home /> },
-          { path: '/home/dashboards/dashboard1', name: 'Dashboard 1', exact: true, element: <Dashboard1 /> },
+          { path: '/home/dashboards/dashboard1', name: 'Dashboard Celuparts', exact: true, element: <DashboardCeluparts /> },
           { path: "/home/repair-requests-table", exact: true, element: <RepairRequestsTable /> },
           { path: "/home/retoma-requests-table", exact: true, element: <RetomaRequestsTable /> },
           { path: "/home/repair-table", exact: true, element: <RepairTable /> },

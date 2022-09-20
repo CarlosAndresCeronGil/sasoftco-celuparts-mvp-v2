@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  topbarBg: 'primary',
+  topbarBg: 'secondary',
   customizerSidebar: false,
   isRTL: false,
   isDark: false,

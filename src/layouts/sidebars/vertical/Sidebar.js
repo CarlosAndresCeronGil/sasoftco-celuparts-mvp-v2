@@ -7,7 +7,8 @@ import SimpleBar from 'simplebar-react';
 // import SidebarData from '../sidebardata/SidebarData';
 import NavItemContainer from './NavItemContainer';
 import NavSubMenu from './NavSubMenu';
-import user1 from '../../../assets/images/users/user4.jpg';
+// import user1 from '../../../assets/images/users/user4.jpg';
+import userCeluparts from '../../../assets/images/users/userCeluparts.png'
 import probg from '../../../assets/images/bg/download.jpg';
 import { useState } from 'react';
 import SidebarDatas from '../sidebardata/SidebarData';
@@ -33,7 +34,7 @@ const Sidebar = () => {
       <SimpleBar style={{ height: '100%' }}>
         <div className="profilebg" style={{ background: `url(${probg}) no-repeat` }}>
           <div className="p-3 d-flex">
-            <img src={user1} alt="user" width="50" className="rounded-circle" />
+            <img src={userCeluparts} alt="user" width="50" className="rounded-circle" />
           </div>
           <div className="bg-dark text-dark-white p-2 opacity-75 text-truncate">{JSON.parse(localStorage.getItem('user')).name}</div>
         </div>

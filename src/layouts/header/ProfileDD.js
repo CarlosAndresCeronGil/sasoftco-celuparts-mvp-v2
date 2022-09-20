@@ -2,7 +2,8 @@
 import React from 'react';
 import { DropdownItem } from 'reactstrap';
 import { User, FileText, Star, Settings, Droplet, Eye } from 'react-feather';
-import user1 from '../../assets/images/users/user4.jpg';
+// import user1 from '../../assets/images/users/user4.jpg';
+import userCeluparts from '../../assets/images/users/userCeluparts.png'
 import { Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
@@ -13,18 +14,18 @@ const ProfileDD = () => {
   return (
     <div>
       <div className="d-flex gap-3 p-3 border-bottom pt-2 align-items-center">
-        <img src={user1} alt="user" className="rounded-circle" width="60" />
+        <img src={userCeluparts} alt="user" className="rounded-circle" width="60" />
         <span>
           <Row>
             <Col xs="auto">
               <p className="mb-0 text-muted text-capitalize">{JSON.parse(localStorage.getItem('user')).role}</p>
             </Col>
-            <Col xs="auto">
+            {/* <Col xs="auto">
               <p className="mb-0 text-muted">|</p>
             </Col>
             <Col xs="auto">
               <p className="mb-0 text-muted">Activo</p>
-            </Col>
+            </Col> */}
           </Row>
           <h5 className="mb-0">{JSON.parse(localStorage.getItem('user')).name}</h5>
           {/* <small className='fs-6 text-muted fw-lighter'>{JSON.parse(localStorage.getItem('user')).email}</small> */}
@@ -41,25 +42,25 @@ const ProfileDD = () => {
       {
         JSON.parse(localStorage.getItem('user')).role === 'user' ? (
           <div>
-            <Link to="./request-repair-form">
+            <Link to="./request-repair-form" className='text-decoration-none'>
               <DropdownItem className="px-4 py-3">
                 <FileText size={20} />
                 &nbsp; Solicitud de reparación
               </DropdownItem>
             </Link>
-            <Link to="./request-retoma-form">
+            <Link to="./request-retoma-form" className='text-decoration-none'>
               <DropdownItem className="px-4 py-3">
                 <FileText size={20} />
                 &nbsp; Solicitud de retoma
               </DropdownItem>
             </Link>
-            <Link to="./user-repair-requests">
+            <Link to="./user-repair-requests" className='text-decoration-none'>
               <DropdownItem className="px-4 py-3">
                 <Eye size={20} />
                 &nbsp; Mis reparaciones
               </DropdownItem>
             </Link>
-            <Link to="./user-retoma-requests">
+            <Link to="./user-retoma-requests" className='text-decoration-none'>
               <DropdownItem className="px-4 py-3">
                 <Eye size={20} />
                 &nbsp; Mis retomas
@@ -68,6 +69,10 @@ const ProfileDD = () => {
           </div>
         ) : null
       }
+      <DropdownItem className="px-4 py-3">
+        <Settings size={20} />
+        &nbsp; Editar perfíl
+      </DropdownItem>
       {/* <DropdownItem className="px-4 py-3">
         <Star size={20} />
         &nbsp; My Balance
