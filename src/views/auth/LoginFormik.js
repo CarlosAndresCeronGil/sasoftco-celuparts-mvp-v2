@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import jwtDecode from 'jwt-decode';
 import AuthContext from '../../context/AuthProvider';
 import authLogin from '../../services/authLogin';
-import { FormGroup, Container } from 'reactstrap';
+import { FormGroup, Container, InputGroupText, InputGroup } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
@@ -28,8 +28,6 @@ const LoginFormik = () => {
 
 
   const { setAuth } = useContext(AuthContext);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -71,18 +69,16 @@ const LoginFormik = () => {
 }
 
   
-
   return (
-    <div className="loginBox">
-      <Container fluid className="h-100 border">
-
+    <div className="loginBox bg-white">
+      <Container fluid className="h-100">
         <section className="h-100 gradient-form">
           <div className="container py-5 h-100">
             <div className="row d-flex justify-content-center align-items-center h-100">
-              <div className="col-xxl-8">
-                <div className="card rounded-3 text-black">
+              <div className="col-xxl-8 col-xl-9 col-lg-10">
+                <div className="card rounded-3 text-black shadow-lg">
                   <div className="row g-0">
-                    <div className="col-lg-6">
+                    <div className="col-lg-6 d-flex align-items-center justify-content-center ">
                       <div className="card-body p-md-5 mx-md-4">
 
                         <div className="text-center">
@@ -105,20 +101,29 @@ const LoginFormik = () => {
                             <p className='text-center'>Inicia sesión con tu cuenta</p>
                             <FormGroup className="form-outline mb-4">
                                 <label className="form-label" htmlFor="email">Email</label>
-                                <Field 
-                                  id="email" 
-                                  type="email"
-                                  name="email" 
-                                  placeholder="ejemplo@celuparts.com"
-                                  className={`form-control${
-                                    errors.email && touched.email ? ' is-invalid' : ''
-                                  }`}
-                                  />    
-                              <ErrorMessage name="email" component="div" className="invalid-feedback" />
+                                <InputGroup>
+                                  <InputGroupText>
+                                    <i className="bi bi-person"></i>
+                                  </InputGroupText>
+                                  <Field 
+                                    id="email" 
+                                    type="email"
+                                    name="email" 
+                                    placeholder="ejemplo@celuparts.com"
+                                    className={`form-control${
+                                      errors.email && touched.email ? ' is-invalid' : ''
+                                    }`}
+                                    />    
+                                <ErrorMessage name="email" component="div" className="invalid-feedback" />                            
+                                </InputGroup>
                             </FormGroup>
   
                             <FormGroup className="form-outline mb-4">
                                 <label className="form-label" htmlFor="password" >Contraseña</label>
+                                <InputGroup>
+                                  <InputGroupText>
+                                    <i className="bi bi-lock"></i>
+                                  </InputGroupText>                       
                                 <Field 
                                   id="password" 
                                   type="password"
@@ -134,6 +139,7 @@ const LoginFormik = () => {
                               component="div"
                               className="invalid-feedback"
                             />
+                            </InputGroup>
                           </FormGroup>
   
                             <div className="text-center pt-1 mb-5 pb-1">
@@ -153,9 +159,9 @@ const LoginFormik = () => {
 
                       </div>
                     </div>
-                    <div className="col-lg-6 d-flex align-items-center gradient-custom-2">
-                      <div className="px-3 mx-md-4">
-                        <img className='d-none d-lg-block' src="https://images.pexels.com/photos/8490071/pexels-photo-8490071.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" height="650" alt="logo" />
+                    <div className="col-lg-6 d-flex align-items-center gradient-custom-2 border">
+                      <div className="img-fluid">
+                        <img className='d-none d-lg-block rounded-end' src="https://images.pexels.com/photos/8490071/pexels-photo-8490071.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" height="650" alt="logo" />
                       </div>
                     </div>
                   </div>

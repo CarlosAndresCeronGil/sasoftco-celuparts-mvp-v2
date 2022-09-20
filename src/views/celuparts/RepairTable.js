@@ -28,7 +28,9 @@ export default function RepairTable() {
                     <CardBody>
                         <CardTitle tag="h5">Lista de reparaciones</CardTitle>
 
-                        <Table className="no-wrap mt-3 align-middle" responsive borderless>
+                        <hr />
+
+                        <Table className="no-wrap mt-3 align-middle" responsive borderless striped>
                             <thead>
                                 <tr>
                                     <th>Id</th>
