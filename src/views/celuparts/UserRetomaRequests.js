@@ -155,7 +155,7 @@ export default function UserRetomaRequests() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {userInfo[0].requests.map((tdata, index) => (
+                                {userInfo[0]?.requests.map((tdata, index) => (
                                     tdata.requestType === "Retoma" ? (
                                         <tr key={index} className="border-top">
                                             <td>

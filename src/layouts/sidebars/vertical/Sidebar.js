@@ -1,15 +1,21 @@
+/* eslint-disable */
 import React from 'react';
 import { Nav } from 'reactstrap';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import SimpleBar from 'simplebar-react';
-import SidebarData from '../sidebardata/SidebarData';
+// import SidebarData from '../sidebardata/SidebarData';
 import NavItemContainer from './NavItemContainer';
 import NavSubMenu from './NavSubMenu';
 import user1 from '../../../assets/images/users/user4.jpg';
 import probg from '../../../assets/images/bg/download.jpg';
+import { useState } from 'react';
+import SidebarDatas from '../sidebardata/SidebarData';
 
 const Sidebar = () => {
+
+  const { SidebarData } = SidebarDatas()
+
   const location = useLocation();
   const currentURL = location.pathname.split('/').slice(0, -1).join('/');
 
