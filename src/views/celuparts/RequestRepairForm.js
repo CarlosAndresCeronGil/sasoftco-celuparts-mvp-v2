@@ -38,7 +38,8 @@ export default function RequestRepairForm() {
     const [verifyResponse, setVerifyResponse] = useState('')
 
     //Variables para las fechas, finish date empieza en un día despues al día actual
-    const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16))
+    const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), new Date().getHours() + 1));
+    console.log(startDate);
     const [finishDate, setFinishDate] = useState(new Date().setDate(new Date().getDate() + 1))
 
     const [loading, setLoading] = useState(false);
@@ -193,7 +194,7 @@ export default function RequestRepairForm() {
                 <Row>
                     <Col>
                         <Card className='container'>
-                            <CardTitle tag="h2" className="border-bottom p-3 mb-0 row justify-content-center">
+                            <CardTitle tag="h4" className="border-bottom p-3 mb-0 row justify-content-end">
                                 Nueva solicitud de reparación
                             </CardTitle>
                             <CardBody>
@@ -222,47 +223,58 @@ export default function RequestRepairForm() {
                                             required
                                         />
                                     </FormGroup>
-                                    <FormGroup>
-                                        <Label for="PickUpTime">Fecha y hora de recogida*</Label>
-                                        <DatePicker
-                                            id='PickUpTime'
-                                            dateFormat="yyyy-MM-dd h:mm aa"
-                                            showTimeSelect
-                                            minTime={new Date(new Date().setHours(minTimeHour, currentMins, 0, 0))}
-                                            // minTime={new Date(new Date().setHours(currentHour, currentMins, 0, 0))}
-                                            maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
-                                            minDate={new Date()}
-                                            includeTimes={[
-                                                setHours(setMinutes(new Date(), 30), 8),
-                                                setHours(setMinutes(new Date(), 0), 9),
-                                                setHours(setMinutes(new Date(), 30), 9),
-                                                setHours(setMinutes(new Date(), 0), 10),
-                                                setHours(setMinutes(new Date(), 30), 10),
-                                                setHours(setMinutes(new Date(), 0), 11),
-                                                setHours(setMinutes(new Date(), 30), 11),
-                                                setHours(setMinutes(new Date(), 0), 12),
-                                                setHours(setMinutes(new Date(), 0), 14),
-                                                setHours(setMinutes(new Date(), 30), 14),
-                                                setHours(setMinutes(new Date(), 0), 15),
-                                                setHours(setMinutes(new Date(), 30), 15),
-                                                setHours(setMinutes(new Date(), 0), 16),
-                                                setHours(setMinutes(new Date(), 30), 16),
-                                                setHours(setMinutes(new Date(), 0), 17),
-                                                setHours(setMinutes(new Date(), 30), 17),
-                                                setHours(setMinutes(new Date(), 0), 18),
-                                            ]}
-                                            locale="es-CO"
-                                            filterDate={isWeekDay}
-                                            selected={startDate}
-                                            onChange={(date) => setStartDate(date)}
-                                            timeFormat="HH:mm"
-                                        />
-                                    </FormGroup>
-                                    {
+
+                                    {/* <div className='d-flex align-items-center justify-content-center border'>
+                                        <div className='d-flex align-items-center justify-content-center'> */}
+
+                                    <Row>
+                                        <Col lg='6'>
+                                        <FormGroup>
+                                            <Label for="PickUpTime">Fecha y hora de recogida*</Label>
+                                            <DatePicker
+                                                className='form-control'
+                                                id='PickUpTime'
+                                                dateFormat="yyyy-MM-dd h:mm aa"
+                                                showTimeSelect
+                                                minTime={new Date(new Date().setHours(minTimeHour, currentMins, 0, 0))}
+                                                // minTime={new Date(new Date().setHours(currentHour, currentMins, 0, 0))}
+                                                maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
+                                                minDate={new Date()}
+                                                includeTimes={[
+                                                    setHours(setMinutes(new Date(), 30), 8),
+                                                    setHours(setMinutes(new Date(), 0), 9),
+                                                    setHours(setMinutes(new Date(), 30), 9),
+                                                    setHours(setMinutes(new Date(), 0), 10),
+                                                    setHours(setMinutes(new Date(), 30), 10),
+                                                    setHours(setMinutes(new Date(), 0), 11),
+                                                    setHours(setMinutes(new Date(), 30), 11),
+                                                    setHours(setMinutes(new Date(), 0), 12),
+                                                    setHours(setMinutes(new Date(), 0), 14),
+                                                    setHours(setMinutes(new Date(), 30), 14),
+                                                    setHours(setMinutes(new Date(), 0), 15),
+                                                    setHours(setMinutes(new Date(), 30), 15),
+                                                    setHours(setMinutes(new Date(), 0), 16),
+                                                    setHours(setMinutes(new Date(), 30), 16),
+                                                    setHours(setMinutes(new Date(), 0), 17),
+                                                    setHours(setMinutes(new Date(), 30), 17),
+                                                    setHours(setMinutes(new Date(), 0), 18),
+                                                ]}
+                                                filterDate={isWeekDay}
+                                                selected={startDate}
+                                                onChange={(date) => setStartDate(date)}
+                                                timeFormat="HH:mm"
+                                            />
+                                        </FormGroup>
+                                        </Col>
+
+
+                                        <Col lg='6'>
+                                        {
                                         startDate.getDay() === 6 ?
                                             <FormGroup>
                                                 <Label for="DeliveryDate">Fecha y hora de entrega*</Label>
                                                 <DatePicker
+                                                    className='form-control'
                                                     id='DeliveryDate'
                                                     dateFormat="yyyy-MM-dd h:mm aa"
                                                     // minDate={new Date().setDate(new Date().getDate() + 1)}
@@ -298,6 +310,7 @@ export default function RequestRepairForm() {
                                             <FormGroup>
                                                 <Label for="DeliveryDate">Fecha y hora de entrega*</Label>
                                                 <DatePicker
+                                                    className='form-control'
                                                     id='DeliveryDate'
                                                     dateFormat="yyyy-MM-dd h:mm aa"
                                                     // minDate={new Date().setDate(new Date().getDate() + 1)}
@@ -329,7 +342,19 @@ export default function RequestRepairForm() {
                                                     timeFormat="HH:mm"
                                                 />
                                             </FormGroup>
-                                    }
+                                        }
+                                        </Col>
+                                    </Row>
+                                        
+                                        {/* </div> */}
+
+                                        {/* <div className='d-flex align-items-center justify-content-center border'> */}
+                                        
+                                        {/* </div> */}
+                                            
+                                    
+                                    {/* </div> */}
+                                    
 
                                     <FormGroup>
                                         <Label for="paymentMethod">Método de pago*</Label>
@@ -463,12 +488,12 @@ export default function RequestRepairForm() {
                                     </FormGroup>
                                     {
                                         loading ? (
-                                            <button className="btn btn-primary" type="button" disabled>
+                                            <button className="btn btn-primary center" type="button" disabled>
                                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                 <span className="sr-only">Cargando...</span>
                                             </button>
                                         ) : (
-                                            <Button color="celuparts-dark-blue">
+                                            <Button color="celuparts-dark-blue " className='btn btn-success'>
                                                 Enviar
                                             </Button>
                                         )

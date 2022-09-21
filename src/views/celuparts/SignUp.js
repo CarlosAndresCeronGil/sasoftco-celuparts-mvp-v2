@@ -116,7 +116,7 @@ export default function SignUp() {
 
     return (
         <div className='sing-up-container'>
-            <Row className=''>
+            <Row>
                 <Col>
                     <Card className='container'>
                         <CardTitle tag="h2" className="border-bottom p-3 mb-0 row justify-content-center">

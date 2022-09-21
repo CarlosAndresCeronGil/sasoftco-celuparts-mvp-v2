@@ -31,17 +31,25 @@ export default function AdminAlerts() {
                     <i className="bi bi-bell me-2"> </i>
                     Alertas de solicitudes para vender productos
                 </CardTitle>
-                <CardBody>
+                <CardBody>                    
                     {
+                        alerts.length == 0 ? (
+                            <Alert color='danger'>
+                                <p>No tienes notificaciones.</p>
+                            </Alert>
+                        ) : (
+
                         alerts.map((tdata, index) => (
                             tdata.notificationType === "to_admin" && tdata.hideNotification === false ?
                                 <div key={index}>
                                     <Alert
                                     color='primary'>
-                                        {tdata.message}
+                                        { 
+                                            tdata.message
+                                        }
                                     </Alert>
                                 </div> : null
-                        ))
+                        )))
                     }
                 </CardBody>
             </Card>

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import { Alert, Card, CardBody, CardTitle, Table } from "reactstrap";
 import getSiigoAccountGroups from '../../services/getSiigoAccountGroups'
 
 export default function SiigoAccountGroupsTable() {
@@ -28,7 +28,17 @@ export default function SiigoAccountGroupsTable() {
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de grupos de inventario registrados en el sistema SIIGO</CardTitle>
-                        <Table className="no-wrap mt-3 align-middle" responsive borderless>
+                        
+                        <hr />
+
+                        {
+                            siigoAccountGroups.length == 0 ? (
+                                <Alert color='danger'>
+                                    <p>No hay resultados para esta búsqueda.</p>
+                                </Alert>
+                            ) : (
+                        
+                        <Table className="no-wrap mt-3 align-middle" responsive borderless striped>
                             <thead>
                                 <tr>
                                     <th>Identification</th>
@@ -46,6 +56,8 @@ export default function SiigoAccountGroupsTable() {
                                 ))}
                             </tbody>
                         </Table>
+                            )
+                        }
                     </CardBody>
                 </Card>
             </div>
