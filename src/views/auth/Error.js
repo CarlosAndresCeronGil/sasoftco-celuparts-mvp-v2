@@ -11,16 +11,16 @@ const Error = () => {
       >
         <div className="d-flex align-items-center justify-content-center h-100">
           <div className="text-center">
-            <h1 className='error-title'>404</h1>
+            {/* <h1 className='error-title'>404</h1> */}
             <div className="my-3">
-              <h4>PAGE NOT FOUND !</h4>
+              <h4>PAGINA NO ENCONTRADA!</h4>
               <span className="text-muted d-block fs-5">
-                You seem to be trying to find his way home{' '}
+              Parece que estás tratando de encontrar su camino a casa.{' '}
               </span>
             </div>
 
             <Link to="/" className="btn btn-danger">
-              Back to home
+              Volver al inicio
             </Link>
           </div>
         </div>

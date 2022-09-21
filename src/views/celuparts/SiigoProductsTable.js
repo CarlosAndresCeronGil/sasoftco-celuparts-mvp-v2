@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import { Alert, Card, CardBody, CardTitle, Table } from "reactstrap";
 import getSiigoProducts from '../../services/getSiigoProducts';
 // import { Link } from "react-router-dom";
 
@@ -33,7 +33,17 @@ export default function SiigoProductsTable() {
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de productos registrados en el sistema SIIGO</CardTitle>
-                        <Table className="no-wrap mt-3 align-middle" responsive borderless>
+
+                        <hr />
+
+                        {
+                            siigoProducts.length == 0 ? (
+                                <Alert color='danger'>
+                                    <p>No hay resultados para esta búsqueda.</p>
+                                </Alert>
+                            ) : (
+
+                                <Table className="no-wrap mt-3 align-middle" responsive borderless striped>
                             <thead>
                                 <tr>
                                     <th>Codigo</th>
@@ -51,6 +61,12 @@ export default function SiigoProductsTable() {
                                 ))}
                             </tbody>
                         </Table>
+
+                            )
+
+
+                        }
+
                     </CardBody>
                 </Card>
             </div>
