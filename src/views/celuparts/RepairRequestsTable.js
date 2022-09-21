@@ -194,14 +194,17 @@ export default function RepairRequestsTable() {
                                     <Label sm="2">Consultar por fechas</Label>
                                     <Label sm="1">Desde</Label>
                                     <Col sm="4">
-                                        <DatePicker
-                                            id='initialDate'
-                                            dateFormat="yyyy-MM-dd"
-                                            value={initialDate.initialDate}
-                                            selected={initialDate.initialDate}
-                                            onChange={(date) => setInitialDate({ initialDate: date })}
-                                            showDisabledMonthNavigation
-                                        />
+                                        <div className="customDatePickerWidth">
+                                            <DatePicker
+                                            wrapperClassName='w-50'
+                                                id='initialDate'
+                                                dateFormat="yyyy-MM-dd"
+                                                value={initialDate.initialDate}
+                                                selected={initialDate.initialDate}
+                                                onChange={(date) => setInitialDate({ initialDate: date })}
+                                                showDisabledMonthNavigation
+                                            />
+                                        </div>
                                     </Col>
                                     <Label sm="1">Hasta</Label>
                                     <Col sm="4">

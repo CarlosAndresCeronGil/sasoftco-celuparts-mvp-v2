@@ -9,8 +9,9 @@ import NavItemContainer from './NavItemContainer';
 import NavSubMenu from './NavSubMenu';
 // import user1 from '../../../assets/images/users/user4.jpg';
 import userCeluparts from '../../../assets/images/users/userCeluparts.png'
-import probg from '../../../assets/images/bg/download.jpg';
-import { useState } from 'react';
+// import probg from '../../../assets/images/bg/download.jpg';
+import sidebarCeluparts from '../../../assets/images/bg/sidebarCeluparts2.jpg';
+// import { useState } from 'react';
 import SidebarDatas from '../sidebardata/SidebarData';
 
 const Sidebar = () => {
@@ -32,7 +33,7 @@ const Sidebar = () => {
   return (
     <div className={`sidebarBox shadow bg-${activeBg} ${isFixed ? 'fixedSidebar' : ''}`}>
       <SimpleBar style={{ height: '100%' }}>
-        <div className="profilebg" style={{ background: `url(${probg}) no-repeat` }}>
+        <div className="profilebg" style={{ background: `url(${sidebarCeluparts}) no-repeat` }}>
           <div className="p-3 d-flex">
             <img src={userCeluparts} alt="user" width="50" className="rounded-circle" />
           </div>
