@@ -1,0 +1,11 @@
+.img-wrapper{
+    overflow:hidden;
+  }
+
+.hover-zoom:hover {
+  
+    transition: .3s;
+    transform: scale(1);
+    background-color: rgba(0, 0, 0, 0.049);
+    text-shadow: .1px #000;
+}
