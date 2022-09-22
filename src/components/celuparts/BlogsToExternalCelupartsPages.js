@@ -1,7 +1,9 @@
+/* eslint-disable */
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import { Row, Col, Card, CardBody, CardTitle, CardSubtitle, Button } from 'reactstrap';
 
+import '../../assets/scss/style.css';
 import blog1 from '../../assets/images/bg/bg1.jpg';
 import blog2 from '../../assets/images/bg/bg2.jpg';
 import blog3 from '../../assets/images/bg/bg3.jpg';
@@ -27,23 +29,25 @@ const blogData = [
   },
 ];
 
+const style = {
+  cursor: 'pointer',
+};
+
 const BlogsToExternalCelupartsPages = () => {
+
+  
   return (
-    /*--------------------------------------------------------------------------------*/
-    /* Blogs                                                 */
-    /*--------------------------------------------------------------------------------*/
     <Row>
-      {blogData.map((bdata) => (
-        <Col lg="4" key={bdata.img}>
-          <Card className='mt-3'>
-            <img src={bdata.img} alt={bdata.img} className='mx-3 rounded mt-n3 img-fluid' />
+      {blogData.map(({ img, title, subtitle, href }) => (
+        <Col lg="4" key={img}>
+          <Card className='mt-3 hover-zoom' style={{ height: "340px" }}>
+            <img src={img} alt={img} className='mx-3 rounded mt-n3 img-fluid' />
+            <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none',  }}>
             <CardBody>
-              <CardTitle className='mt-2' tag="h4">{bdata.title}</CardTitle>
-              <CardSubtitle className="text-muted mt-1">{bdata.subtitle}</CardSubtitle>
-              <a href={bdata.href} rel="noreferrer" target='_blank'>
-                <Button color='primary' className='mt-3'>Dirigeme allí</Button>
-              </a>
+              <CardTitle className='mt-2' tag="h4">{title}</CardTitle>
+              <CardSubtitle className="text-muted mt-1">{subtitle}</CardSubtitle>
             </CardBody>
+            </a>
           </Card>
         </Col>
       ))}

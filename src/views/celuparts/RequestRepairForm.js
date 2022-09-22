@@ -13,6 +13,7 @@ import {
     Label,
     Input,
 } from "reactstrap";
+import * as Yup from 'yup';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import setHours from 'date-fns/setHours';
@@ -29,8 +30,17 @@ import postHomeService from '../../services/postHomeService';
 import postRequestNotification from '../../services/postRequestNotification'
 import getRequestWithUserInfo from '../../services/getRequestWithUserInfo';
 import getVerifyImei from '../../services/getVerifyImei';
+import { useRef } from 'react';
 
 export default function RequestRepairForm() {
+
+    const [file, setFile] = useState(null);
+
+    const handleSetFile = (e) => {
+		setFile(e.target.files[0].size);
+        console.log(file);
+	};
+
     //Variables del formulario
     const [typeOfEquipment, setTypeOfEquipment] = useState({ typeOfEquipment: 'Computador portatil' })
     const [imei, setImei] = useState('')
@@ -194,7 +204,7 @@ export default function RequestRepairForm() {
                 <Row>
                     <Col>
                         <Card className='container'>
-                            <CardTitle tag="h4" className="border-bottom p-3 mb-0 row justify-content-end">
+                            <CardTitle tag="h4" className="border-bottom p-3 mb-0 row justify-content-start">
                                 Nueva solicitud de reparación
                             </CardTitle>
                             <CardBody>
@@ -465,14 +475,16 @@ export default function RequestRepairForm() {
                                         verifyResponse
                                     }
                                     <FormGroup>
-                                        <Label for="equipmentInvoice">Factura del dispositivo*</Label>
+                                        <Label htmlFor="equipmentInvoice">Factura del dispositivo*</Label>
                                         <Input
                                             id="equipmentInvoice"
                                             name="equipmentInvoice"
-                                            placeholder="Ingrese la factura dispositivo"
                                             type="file"
                                             accept='.pdf'
+                                            placeholder="Ingrese la factura dispositivo"
                                             required
+                                            onChange={ handleSetFile }
+                                            className="form-control"
                                         />
                                     </FormGroup>
                                     <FormGroup>
@@ -493,7 +505,7 @@ export default function RequestRepairForm() {
                                                 <span className="sr-only">Cargando...</span>
                                             </button>
                                         ) : (
-                                            <Button color="celuparts-dark-blue " className='btn btn-success'>
+                                            <Button color="celuparts-dark-blue " className='btn btn-primary'>
                                                 Enviar
                                             </Button>
                                         )

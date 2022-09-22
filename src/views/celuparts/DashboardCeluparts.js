@@ -6,6 +6,9 @@ import CelupartsOverview from '../../components/celuparts/CelupartsOverview';
 import CelupartsRepairsAndRetomas from '../../components/celuparts/CelupartsRepairsAndRetomas';
 
 const DashboardCeluparts = () => {
+
+  const currentRole = JSON.parse(localStorage.getItem('user')).role;
+
   return (
     <>
       {/* <Row>
@@ -17,7 +20,7 @@ const DashboardCeluparts = () => {
         </Col>
       </Row> */}
       <BlogsToCelupartsPages />
-      {/* <BlogsToExternalCelupartsPages /> */}
+      { currentRole === 'user' && <BlogsToExternalCelupartsPages /> }
     </>
   );
 };
