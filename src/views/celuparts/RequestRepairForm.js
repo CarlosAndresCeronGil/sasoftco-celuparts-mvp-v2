@@ -34,12 +34,15 @@ import { useRef } from 'react';
 
 export default function RequestRepairForm() {
 
-    const [file, setFile] = useState(null);
-
-    const handleSetFile = (e) => {
-		setFile(e.target.files[0].size);
-        console.log(file);
-	};
+    const [selectedFile, setSelectedFile] = useState();
+    const [errorMsg, setErrorMsg] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+  
+    const handleFileChange = (event) => {
+      if(event.target.files.length > 0){
+        setSelectedFile(event.target.files[0]);
+      }
+    };
 
     //Variables del formulario
     const [typeOfEquipment, setTypeOfEquipment] = useState({ typeOfEquipment: 'Computador portatil' })
@@ -71,101 +74,124 @@ export default function RequestRepairForm() {
     const navigate = useNavigate()
 
     const handleSubmit = (e) => {
+
         e.preventDefault();
-        setLoading(true);
-        const formData = new FormData()
 
-        formData.append("typeOfEquipment", e.target.elements.typeOfEquipment.value)
-        formData.append("equipmentBrand", e.target.elements.equipmentBrand.value)
-        formData.append("modelOrReference", e.target.elements.modelOrReference.value)
-        formData.append("imeiOrSerial", e.target.elements.imei.value)
-        formData.append("equipmentInvoice", e.target.elements.equipmentInvoice.files[0])
+        const MAX_FILE_SIZE = 1024 // 1MB
+  
+        if (!selectedFile) {
+          setErrorMsg("Por favor seleccione un archivo");
+          setIsSuccess(false)
+          return 
+        }
+    
+        const fileSizeKiloBytes = selectedFile.size / 1024
+    
+        if(fileSizeKiloBytes > MAX_FILE_SIZE){
+          setErrorMsg("Tamaño máximo de archivo 1MB");
+          setIsSuccess(false)
+          setLoading(false);
+          return
+        }
+  
+        if(fileSizeKiloBytes < MAX_FILE_SIZE){
+          console.log("Archivo válido");
+            setLoading(true);
 
-        postEquipment(formData)
-            .then(data => {
-                postRequest({
-                    idUser: JSON.parse(localStorage.getItem('user')).idUser,
-                    idEquipment: data.idEquipment,
-                    requestType: "Reparacion",
-                    pickUpAddress: e.target.elements.pickUpAddress.value,
-                    deliveryAddress: e.target.elements.deliveryAddress.value,
-                    statusQuote: "Pendiente",
-                    autoDiagnosis: e.target.elements.autoDiagnosis.value
-                })
-                    .then(data => {
-                        getRequestWithUserInfo({ id: data.idRequest })
-                            .then(userInfo => {
-                                postRequestNotification({
-                                    idRequest: data.idRequest,
-                                    message: "Nueva solicitud de servicio a domicilio a la dirección: " + data.pickUpAddress + " para la fecha " + startDate.getFullYear() + "/" + (startDate.getMonth() + 1) + "/" + startDate.getDate() + " a las " + startDate.getHours() + ":" + startDate.getMinutes() + " para recoger el dispositivo " + e.target.elements.equipmentBrand.value + " " + e.target.elements.modelOrReference.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de teléfono de contácto: " + userInfo[0].userDto.phone,
-                                    hideNotification: false,
-                                    notificationType: "to_courier"
-                                })
-                                    .catch(error => {
-                                        setLoading(false)
-                                        console.log(error)
-                                    })
-                            })
-                        postRepair({
-                            idRequest: data.idRequest,
-                            repairQuote: "0"
-                        })
-                            .then(data2 => {
-                                console.log("Entro al then de repair", data2);
-                                postRepairPayment({
-                                    idRepair: data2.idRepair,
-                                    paymentMethod: e.target.elements.paymentMethod.value,
-                                })
-                                    .then(finalResponse => {
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Exito!',
-                                            text: 'Solicitud de reparación enviada!',
-                                        })
-                                            .then(response => {
-                                                navigate("/home/user-repair-requests")
-                                            })
-                                    })
-                                    .catch(error => {
-                                        console.log(error);
-                                        setLoading(false);
-                                    });
-                            })
-                            .catch(error => {
-                                console.log(error);
-                                setLoading(false);
-                            });
-                        postRequestStatus({
-                            idRequest: data.idRequest,
-                            status: "Iniciada",
-                            paymentStatus: "No pago",
-                            productReturned: false,
-                            productSold: false
-                        })
-                            .catch(error => {
-                                setLoading(false);
-                                console.log(error);
-                            });
-                        postHomeService({
-                            idRequest: data.idRequest,
-                            pickUpDate: startDate,
-                            deliveryDate: finishDate
-                        })
-                            .catch(error => {
-                                setLoading(false);
-                                console.log(error);
-                            });
-                        setLoading(false);
-                    })
-                    .catch(error => {
-                        setLoading(false);
-                        console.log(error);
-                    })
-            })
-            .catch(error => {
-                setLoading(false);
-                console.log(error);
-            });
+          const formData = new FormData()
+          formData.append("typeOfEquipment", e.target.elements.typeOfEquipment.value)
+          formData.append("equipmentBrand", e.target.elements.equipmentBrand.value)
+          formData.append("modelOrReference", e.target.elements.modelOrReference.value)
+          formData.append("imeiOrSerial", e.target.elements.imei.value)
+          formData.append("equipmentInvoice", e.target.elements.equipmentInvoice.files[0])
+  
+          postEquipment(formData)
+              .then(data => {
+                  postRequest({
+                      idUser: JSON.parse(localStorage.getItem('user')).idUser,
+                      idEquipment: data.idEquipment,
+                      requestType: "Reparacion",
+                      pickUpAddress: e.target.elements.pickUpAddress.value,
+                      deliveryAddress: e.target.elements.deliveryAddress.value,
+                      statusQuote: "Pendiente",
+                      autoDiagnosis: e.target.elements.autoDiagnosis.value
+                  })
+                      .then(data => {
+                          getRequestWithUserInfo({ id: data.idRequest })
+                              .then(userInfo => {
+                                  postRequestNotification({
+                                      idRequest: data.idRequest,
+                                      message: "Nueva solicitud de servicio a domicilio a la dirección: " + data.pickUpAddress + " para la fecha " + startDate.getFullYear() + "/" + (startDate.getMonth() + 1) + "/" + startDate.getDate() + " a las " + startDate.getHours() + ":" + startDate.getMinutes() + " para recoger el dispositivo " + e.target.elements.equipmentBrand.value + " " + e.target.elements.modelOrReference.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de teléfono de contácto: " + userInfo[0].userDto.phone,
+                                      hideNotification: false,
+                                      notificationType: "to_courier"
+                                  })
+                                      .catch(error => {
+                                          setLoading(false)
+                                          console.log(error)
+                                      })
+                              })
+                          postRepair({
+                              idRequest: data.idRequest,
+                              repairQuote: "0"
+                          })
+                              .then(data2 => {
+                                  console.log("Entro al then de repair", data2);
+                                  postRepairPayment({
+                                      idRepair: data2.idRepair,
+                                      paymentMethod: e.target.elements.paymentMethod.value,
+                                  })
+                                      .then(finalResponse => {
+                                          Swal.fire({
+                                              icon: 'success',
+                                              title: 'Exito!',
+                                              text: 'Solicitud de reparación enviada!',
+                                          })
+                                              .then(response => {
+                                                  navigate("/home/user-repair-requests")
+                                              })
+                                      })
+                                      .catch(error => {
+                                          console.log(error);
+                                          setLoading(false);
+                                      });
+                              })
+                              .catch(error => {
+                                  console.log(error);
+                                  setLoading(false);
+                              });
+                          postRequestStatus({
+                              idRequest: data.idRequest,
+                              status: "Iniciada",
+                              paymentStatus: "No pago",
+                              productReturned: false,
+                              productSold: false
+                          })
+                              .catch(error => {
+                                  setLoading(false);
+                                  console.log(error);
+                              });
+                          postHomeService({
+                              idRequest: data.idRequest,
+                              pickUpDate: startDate,
+                              deliveryDate: finishDate
+                          })
+                              .catch(error => {
+                                  setLoading(false);
+                                  console.log(error);
+                              });
+                          setLoading(false);
+                      })
+                      .catch(error => {
+                          setLoading(false);
+                          console.log(error);
+                      })
+              })
+              .catch(error => {
+                  setLoading(false);
+                  console.log(error);
+              });
+      }
+        
     }
 
     const isWeekDay = (date) => {
@@ -242,14 +268,14 @@ export default function RequestRepairForm() {
                                         <FormGroup>
                                             <Label for="PickUpTime">Fecha y hora de recogida*</Label>
                                             <DatePicker
-                                                className='form-control'
                                                 id='PickUpTime'
+                                                className='form-control'
                                                 dateFormat="yyyy-MM-dd h:mm aa"
-                                                showTimeSelect
                                                 minTime={new Date(new Date().setHours(minTimeHour, currentMins, 0, 0))}
                                                 // minTime={new Date(new Date().setHours(currentHour, currentMins, 0, 0))}
                                                 maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
                                                 minDate={new Date()}
+                                                showTimeSelect
                                                 includeTimes={[
                                                     setHours(setMinutes(new Date(), 30), 8),
                                                     setHours(setMinutes(new Date(), 0), 9),
@@ -284,8 +310,8 @@ export default function RequestRepairForm() {
                                             <FormGroup>
                                                 <Label for="DeliveryDate">Fecha y hora de entrega*</Label>
                                                 <DatePicker
-                                                    className='form-control'
                                                     id='DeliveryDate'
+                                                    className='form-control'
                                                     dateFormat="yyyy-MM-dd h:mm aa"
                                                     // minDate={new Date().setDate(new Date().getDate() + 1)}
                                                     minDate={new Date().setDate(new Date(startDate).getDate() + 1)}
@@ -320,8 +346,8 @@ export default function RequestRepairForm() {
                                             <FormGroup>
                                                 <Label for="DeliveryDate">Fecha y hora de entrega*</Label>
                                                 <DatePicker
-                                                    className='form-control'
                                                     id='DeliveryDate'
+                                                    className='form-control'
                                                     dateFormat="yyyy-MM-dd h:mm aa"
                                                     // minDate={new Date().setDate(new Date().getDate() + 1)}
                                                     minDate={new Date().setDate(new Date(startDate).getDate() + 1)}
@@ -483,10 +509,12 @@ export default function RequestRepairForm() {
                                             accept='.pdf'
                                             placeholder="Ingrese la factura dispositivo"
                                             required
-                                            onChange={ handleSetFile }
+                                            onChange={handleFileChange}
                                             className="form-control"
                                         />
+                                        
                                     </FormGroup>
+                                    <h6 className={ errorMsg ? 'alert alert-danger' : null } >{errorMsg}</h6>
                                     <FormGroup>
                                         <Label for="autoDiagnosis">Cuentanos brevemente que quieres que reparemos*</Label>
                                         <Input

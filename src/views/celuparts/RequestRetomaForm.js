@@ -31,6 +31,19 @@ import getRequestWithUserInfo from '../../services/getRequestWithUserInfo';
 import getVerifyImei from '../../services/getVerifyImei';
 
 export default function RequestRetomaForm() {
+
+
+    const [selectedFile, setSelectedFile] = useState();
+    const [errorMsg, setErrorMsg] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+  
+    const handleFileChange = (event) => {
+      if(event.target.files.length > 0){
+        setSelectedFile(event.target.files[0]);
+      }
+    };
+
+
     //Variables del formulario
     const [typeOfEquipment, setTypeOfEquipment] = useState({ typeOfEquipment: 'Computador portatil' })
     const [imei, setImei] = useState('')
@@ -52,114 +65,135 @@ export default function RequestRetomaForm() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setLoading(true);
-        const formData = new FormData()
 
-        formData.append("typeOfEquipment", e.target.elements.typeOfEquipment.value)
-        formData.append("equipmentBrand", e.target.elements.equipmentBrand.value)
-        formData.append("modelOrReference", e.target.elements.modelOrReference.value)
-        formData.append("imeiOrSerial", e.target.elements.imei.value)
-        formData.append("equipmentInvoice", e.target.elements.equipmentInvoice.files[0])
+        const MAX_FILE_SIZE = 1024 // 1MB
+  
+        if (!selectedFile) {
+          setErrorMsg("Por favor seleccione un archivo");
+          setIsSuccess(false)
+          return 
+        }
+    
+        const fileSizeKiloBytes = selectedFile.size / 1024
+    
+        if(fileSizeKiloBytes > MAX_FILE_SIZE){
+          setErrorMsg("Tamaño máximo de archivo 1MB");
+          setIsSuccess(false)
+          setLoading(false);
+          return
+        }
+  
+        if(fileSizeKiloBytes < MAX_FILE_SIZE){
 
-        postEquipment(formData)
-            .then(dataEquipment => {
-                postRequest({
-                    idUser: JSON.parse(localStorage.getItem('user')).idUser,
-                    idEquipment: dataEquipment.idEquipment,
-                    requestType: "Retoma",
-                    pickUpAddress: e.target.elements.pickUpAddress.value,
-                    deliveryAddress: e.target.elements.deliveryAddress.value,
-                    statusQuote: "Pendiente",
-                    autoDiagnosis: e.target.elements.autoDiagnosis.value
-                })
-                    .then(dataRequest => {
-                        getRequestWithUserInfo({ id: dataRequest.idRequest })
-                            .then(userInfo => {
-                                postRequestNotification({
-                                    idRequest: dataRequest.idRequest,
-                                    message: "Nueva solicitud de servicio a domicilio a la dirección: " + dataRequest.pickUpAddress + " para la fecha " + startDate.getFullYear() + "/" + (startDate.getMonth() + 1) + "/" + startDate.getDate() + " a las " + startDate.getHours() + ":" + startDate.getMinutes() + " para recoger el dispositivo " + e.target.elements.equipmentBrand.value + " " + e.target.elements.modelOrReference.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de teléfono de contácto: " + userInfo[0].userDto.phone,
-                                    hideNotification: false,
-                                    notificationType: "to_courier"
-                                })
-                                    .catch(error => {
-                                        setLoading(false)
-                                        console.log(error)
+            setLoading(true);
+            const formData = new FormData()
+
+            formData.append("typeOfEquipment", e.target.elements.typeOfEquipment.value)
+            formData.append("equipmentBrand", e.target.elements.equipmentBrand.value)
+            formData.append("modelOrReference", e.target.elements.modelOrReference.value)
+            formData.append("imeiOrSerial", e.target.elements.imei.value)
+            formData.append("equipmentInvoice", e.target.elements.equipmentInvoice.files[0])
+
+            postEquipment(formData)
+                .then(dataEquipment => {
+                    postRequest({
+                        idUser: JSON.parse(localStorage.getItem('user')).idUser,
+                        idEquipment: dataEquipment.idEquipment,
+                        requestType: "Retoma",
+                        pickUpAddress: e.target.elements.pickUpAddress.value,
+                        deliveryAddress: e.target.elements.deliveryAddress.value,
+                        statusQuote: "Pendiente",
+                        autoDiagnosis: e.target.elements.autoDiagnosis.value
+                    })
+                        .then(dataRequest => {
+                            getRequestWithUserInfo({ id: dataRequest.idRequest })
+                                .then(userInfo => {
+                                    postRequestNotification({
+                                        idRequest: dataRequest.idRequest,
+                                        message: "Nueva solicitud de servicio a domicilio a la dirección: " + dataRequest.pickUpAddress + " para la fecha " + startDate.getFullYear() + "/" + (startDate.getMonth() + 1) + "/" + startDate.getDate() + " a las " + startDate.getHours() + ":" + startDate.getMinutes() + " para recoger el dispositivo " + e.target.elements.equipmentBrand.value + " " + e.target.elements.modelOrReference.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de teléfono de contácto: " + userInfo[0].userDto.phone,
+                                        hideNotification: false,
+                                        notificationType: "to_courier"
                                     })
-                            })
-                        postRetoma({
-                            idRequest: dataRequest.idRequest,
-                            retomaQuote: "0",
-                            deviceDiagnostic: ""
-                        })
-                            .then(dataRetoma => {
-                                console.log("Entro al then de retoma", dataRetoma);
-                                postRetomaPayment({
-                                    idRetoma: dataRetoma.idRetoma,
-                                    paymentMethod: e.target.elements.paymentMethod.value
-                                })
-                                    .then(finalResponse => {
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Exito!',
-                                            text: 'Solicitud de retoma enviada!',
+                                        .catch(error => {
+                                            setLoading(false)
+                                            console.log(error)
                                         })
-                                            .then(response => {
-                                                navigate("/home/user-retoma-requests")
-                                            })
-                                    })
-                                    .catch(error => {
-                                        console.log(error);
-                                        setLoading(false);
-                                    });
+                                })
+                            postRetoma({
+                                idRequest: dataRequest.idRequest,
+                                retomaQuote: "0",
+                                deviceDiagnostic: ""
                             })
-                            .catch(error => {
-                                console.log(error);
-                                setLoading(false);
-                            });
-                        postRequestStatus({
-                            idRequest: dataRequest.idRequest,
-                            status: "Iniciada",
-                            paymentStatus: "No pago",
-                            productReturned: false,
-                            productSold: false
+                                .then(dataRetoma => {
+                                    console.log("Entro al then de retoma", dataRetoma);
+                                    postRetomaPayment({
+                                        idRetoma: dataRetoma.idRetoma,
+                                        paymentMethod: e.target.elements.paymentMethod.value
+                                    })
+                                        .then(finalResponse => {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Exito!',
+                                                text: 'Solicitud de retoma enviada!',
+                                            })
+                                                .then(response => {
+                                                    navigate("/home/user-retoma-requests")
+                                                })
+                                        })
+                                        .catch(error => {
+                                            console.log(error);
+                                            setLoading(false);
+                                        });
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                    setLoading(false);
+                                });
+                            postRequestStatus({
+                                idRequest: dataRequest.idRequest,
+                                status: "Iniciada",
+                                paymentStatus: "No pago",
+                                productReturned: false,
+                                productSold: false
+                            })
+                                .catch(error => {
+                                    setLoading(false);
+                                    console.log(error);
+                                });
+                            postHomeService({
+                                idRequest: dataRequest.idRequest,
+                                pickUpDate: startDate,
+                            })
+                                .catch(error => {
+                                    setLoading(false);
+                                    console.log(error);
+                                });
+                            // postRequestNotification({
+                            //     idRequest: dataRequest.idRequest,
+                            //     message: "Nueva solicitud de servicio a domicilio a la dirección: " + dataRequest.pickUpAddress + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name,
+                            //     hideNotification: false,
+                            //     notificationType: "to_courier",
+                            // })
+                            setLoading(false);
                         })
-                            .catch(error => {
-                                setLoading(false);
-                                console.log(error);
-                            });
-                        postHomeService({
-                            idRequest: dataRequest.idRequest,
-                            pickUpDate: startDate,
+                        .catch(error => {
+                            setLoading(false);
+                            console.log(error);
                         })
-                            .catch(error => {
-                                setLoading(false);
-                                console.log(error);
-                            });
-                        // postRequestNotification({
-                        //     idRequest: dataRequest.idRequest,
-                        //     message: "Nueva solicitud de servicio a domicilio a la dirección: " + dataRequest.pickUpAddress + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name,
-                        //     hideNotification: false,
-                        //     notificationType: "to_courier",
-                        // })
-                        setLoading(false);
-                    })
-                    .catch(error => {
-                        setLoading(false);
-                        console.log(error);
-                    })
+                })
+                .catch(error => {
+                    setLoading(false);
+                    console.log(error);
+                });
+            Swal.fire({
+                icon: 'success',
+                title: 'Exito!',
+                text: 'Solicitud de retoma enviada!',
             })
-            .catch(error => {
-                setLoading(false);
-                console.log(error);
-            });
-        Swal.fire({
-            icon: 'success',
-            title: 'Exito!',
-            text: 'Solicitud de retoma enviada!',
-        })
-            .then(response => {
-                navigate("/home/user-retoma-requests")
-            })
+                .then(response => {
+                    navigate("/home/user-retoma-requests")
+                })
+            }
     }
 
     const isWeekDay = (date) => {
@@ -465,9 +499,11 @@ export default function RequestRetomaForm() {
                                             placeholder="Ingrese la factura dispositivo"
                                             type="file"
                                             accept='.pdf'
+                                            onChange={handleFileChange}
                                             required
                                         />
                                     </FormGroup>
+                                    <h6 className={ errorMsg ? 'alert alert-danger' : null } >{errorMsg}</h6>
                                     <FormGroup>
                                         <Label for="autoDiagnosis">Cuentanos brevemente el estado de tu dispositivo a vender*</Label>
                                         <Input
