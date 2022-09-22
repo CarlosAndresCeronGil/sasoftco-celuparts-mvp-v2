@@ -97,7 +97,6 @@ export default function RepairPaymentForm() {
             </div>
         ) : (
             <div>
-                Actualizar pago de reparación {params.id}
                 <Row>
                     <Col>
                         <Card className='container'>

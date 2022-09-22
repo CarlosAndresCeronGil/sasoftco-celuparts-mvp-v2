@@ -16,22 +16,16 @@ const SidebarDatas = () => {
     )
   } else if (JSON.parse(localStorage.getItem('user')).role === "admin") {
     SidebarData.push(
-      { caption: 'Actividad' },
       {
         title: "Notificaciones",
         href: "./admin-alerts",
       },
-      { caption: 'Listas' },
       {
-        title: 'Sistema',
+        title: 'Acciones',
         id: 1,
         icon: <MaterialIcon icon='speed' />,
         collapisble: true,
         children: [
-          {
-            title: "Usuarios",
-            href: "./users-table",
-          },
           {
             title: "Reparaciones",
             href: "./repair-requests-table",
@@ -39,6 +33,18 @@ const SidebarDatas = () => {
           {
             title: "Retomas",
             href: "./retoma-requests-table",
+          },
+        ]
+      },
+      {
+        title: 'Reportes',
+        id: 2,
+        icon: <MaterialIcon icon='speed' />,
+        collapisble: true,
+        children: [
+          {
+            title: "Usuarios",
+            href: "./users-table",
           },
           {
             title: "Equipos",
@@ -121,17 +127,11 @@ const SidebarDatas = () => {
   } else if (JSON.parse(localStorage.getItem('user')).role === "tecnico") {
     SidebarData.push(
       {
-        caption: 'Actividad'
-      },
-      {
         title: "Notificaciones",
         href: "./technician-alerts"
       },
       {
-        caption: 'Listas'
-      },
-      {
-        title: 'Sistema',
+        title: 'Acciones',
         id: 1,
         icon: <MaterialIcon icon='speed' />,
         collapisble: true,
@@ -144,6 +144,14 @@ const SidebarDatas = () => {
             title: "Retomas",
             href: "./retoma-requests-table",
           },
+        ]
+      },
+      {
+        title: 'Reportes',
+        id: 2,
+        icon: <MaterialIcon icon='speed' />,
+        collapisble: true,
+        children: [
           {
             title: "Técnicos a reparaciones",
             href: "./repair-table",
@@ -151,20 +159,14 @@ const SidebarDatas = () => {
         ]
       }
     )
-  } else if(JSON.parse(localStorage.getItem('user')).role === "mensajero") {
+  } else if (JSON.parse(localStorage.getItem('user')).role === "mensajero") {
     SidebarData.push(
-      {
-        caption: 'Actividad'
-      },
       {
         title: "Notificaciones",
         href: "./courier-alerts"
       },
       {
-        caption: 'Listas'
-      },
-      {
-        title: 'Sistema',
+        title: 'Acciones',
         id: 1,
         icon: <MaterialIcon icon='speed' />,
         collapisble: true,
@@ -181,7 +183,7 @@ const SidebarDatas = () => {
       }
     )
   }
- 
+
   // const SidebarData = [
   //   { caption: 'Home' },
   //   {
