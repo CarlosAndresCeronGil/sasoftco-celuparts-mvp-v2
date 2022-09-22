@@ -1,28 +1,46 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import getEquipmentInvoice from '../../services/getEquipmentInvoice';
 import getEquipments from '../../services/getEquipments';
 
 export default function EquipmentsTable() {
     const [equipments, setEquipments] = useState([])
+    const [loading, setLoading] = useState(false)
 
     useEffect(function() {
+        setLoading(true)
         getEquipments()
             .then((response) => {
                 console.log(response)
                 setEquipments(response)
-            }
-        )
+                setLoading(false)
+            })
+            .catch(error => {
+                console.log(error)
+                setLoading(false)
+            })
     },[setEquipments])
 
+    const handleViewEquipmentInvoice = (e, { idEquipment }) => {
+        e.preventDefault()
+        console.log(idEquipment)
+        getEquipmentInvoice({ id: idEquipment})
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
     return (
+        loading ? <div>Cargando...</div> :
         <div>
             <Card>
                 <CardBody>
                     <CardTitle tag="h5">Lista de equipos registrados en el sistema</CardTitle>
-
                     <hr/>
-
                     <Table className="no-wrap mt-3 align-middle" responsive borderless striped>
                         <thead>
                             <tr>
@@ -51,8 +69,15 @@ export default function EquipmentsTable() {
                                     <td>{tdata.imeiOrSerial}</td>
                                     {/* <td>{tdata.equipmentInvoice}</td> */}
                                     <td>
-                                        <a href="#">            
-                                            <button type="button" title={`Ver factura de ${tdata.equipmentBrand} ${tdata.modelOrReference}`} className="btn btn-outline-info">Ver Factura</button>
+                                        <a href="#">       
+                                            <button 
+                                            type="button" 
+                                            title={`Ver factura de ${tdata.equipmentBrand} ${tdata.modelOrReference}`} 
+                                            className="btn btn-outline-info"
+                                            onClick={(e) => handleViewEquipmentInvoice(e, { idEquipment: tdata.idEquipment })}
+                                            >
+                                                Ver Factura
+                                            </button>
                                         </a>
                                     </td>
                                 </tr>
