@@ -37,6 +37,7 @@
     "react-dom": "^18.1.0",
     "react-draft-wysiwyg": "^1.14.7",
     "react-feather": "^2.0.10",
+    "react-filepond": "^7.1.2",
     "react-hook-form": "^7.31.3",
     "react-iframe": "1.8.0",
     "react-jvectormap": "0.0.16",
