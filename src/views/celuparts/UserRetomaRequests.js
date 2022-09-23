@@ -148,7 +148,6 @@ export default function UserRetomaRequests() {
                             <thead>
                                 <tr>
                                     <th>Marca referencia</th>
-                                    <th>Tipo de solicitud</th>
                                     <th>Estado de la solicitud</th>
                                     <th>Valor de venta</th>
                                     <th>Estado Cotización</th>
@@ -161,7 +160,6 @@ export default function UserRetomaRequests() {
                                             <td>
                                                 {tdata.equipment.equipmentBrand} {tdata.equipment.modelOrReference}
                                             </td>
-                                            <td>{tdata.requestType}</td>
                                             <td>{tdata.requestStatus[0].status}</td>
                                             <td>{tdata.retoma[0].retomaQuote}</td>
                                             <td>

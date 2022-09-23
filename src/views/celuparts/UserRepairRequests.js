@@ -261,7 +261,6 @@ export default function UserRepairRequests() {
                             <thead>
                                 <tr>
                                     <th>Marca referencia</th>
-                                    <th>Tipo de solicitud</th>
                                     <th>Estado de la solicitud</th>
                                     <th>Valor de la Reparación</th>
                                     <th>Estado Cotización</th>
@@ -275,7 +274,6 @@ export default function UserRepairRequests() {
                                             <td>
                                                 {tdata.equipment.equipmentBrand} {tdata.equipment.modelOrReference}
                                             </td>
-                                            <td>{tdata.requestType}</td>
                                             <td>{tdata.requestStatus[0].status}</td>
                                             <td>{tdata.repairs[0].repairQuote}</td>
                                             <td>
@@ -294,7 +292,8 @@ export default function UserRepairRequests() {
                                             </td>
                                             {
                                                 tdata.homeServices[0].deliveryDate ? (
-                                                    <td>{tdata.homeServices[0].deliveryDate}</td>
+                                                    // <td>{tdata.homeServices[0].deliveryDate}</td> ${new Date(tdata.requestDate).getHours()}:${new Date(tdata.requestDate).getMinutes()}
+                                                    <td>{`${new Date(tdata.requestDate).getFullYear()}-${new Date(tdata.requestDate).getMonth() + 1}-${new Date(tdata.requestDate).getDate()}`}</td>
                                                 ) : (
                                                     <td>Fecha sin definir</td>
                                                 )

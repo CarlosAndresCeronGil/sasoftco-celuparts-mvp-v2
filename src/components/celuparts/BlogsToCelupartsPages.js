@@ -100,7 +100,7 @@ const BlogsToCelupartsPages = () => {
       ||
       JSON.parse(localStorage.getItem('user')).role === "tecnico"
       ||
-      JSON.parse(localStorage.getItem('user')).role === "tecnico"
+      JSON.parse(localStorage.getItem('user')).role === "mensajero"
       ?
       (
         <Row>
