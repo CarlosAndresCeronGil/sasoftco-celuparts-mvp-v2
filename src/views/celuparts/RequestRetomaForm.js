@@ -43,7 +43,6 @@ export default function RequestRetomaForm() {
       }
     };
 
-
     //Variables del formulario
     const [typeOfEquipment, setTypeOfEquipment] = useState({ typeOfEquipment: 'Computador portatil' })
     const [imei, setImei] = useState('')
@@ -53,7 +52,6 @@ export default function RequestRetomaForm() {
     //Variables para las fechas, finish date empieza en un día despues al día actual
     const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16))
     console.log("startDate: ", startDate)
-    // Select date tomorrow
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const [finishDate, setFinishDate] = useState(tomorrow);
