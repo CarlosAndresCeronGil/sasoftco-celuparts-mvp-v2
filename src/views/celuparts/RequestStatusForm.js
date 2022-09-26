@@ -265,6 +265,7 @@ export default function RequestStatusForm() {
         setLoading(true);
         getSingleRequestStatus({ id: params.id })
             .then((response) => {
+                console.log("request status response",response)
                 setDataRequestStatus(response)
                 setIdRequest({ idRequest: response.idRequest })
                 setStatus({ status: response.status })
@@ -313,7 +314,7 @@ export default function RequestStatusForm() {
     }, [params.id, idRequest.idRequest])
 
     return (
-        loading ? <div>Cargando...</div> : (
+        loading ? <div>Cargando...</div> : 
             <div>
                 <div>
                     <Row>
@@ -357,6 +358,7 @@ export default function RequestStatusForm() {
                                                         onChange={handleStatusChange}
                                                     >
                                                         <option>Iniciada</option>
+                                                        <option>En proceso de recogida</option>
                                                         <option value="Recibida tecnico">Recibida técnico</option>
                                                         <option>Revisado</option>
                                                         <option value="En reparacion">En reparación</option>
@@ -418,6 +420,6 @@ export default function RequestStatusForm() {
                     </Row>
                 </div>
             </div>
-        )
+        
     )
 }
