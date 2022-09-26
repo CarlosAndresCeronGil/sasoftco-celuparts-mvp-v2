@@ -41,15 +41,22 @@ export default function CustomerAlerts() {
                 </CardTitle>
                 <CardBody>
                     {
-                        alerts.map((tdata, index) => (
-                            tdata.notificationType === "to_customer" && tdata.hideNotification === false ?
-                                <div key={index}>
-                                    <Alert
-                                        color='primary'>
-                                        {tdata.message}
-                                    </Alert>
-                                </div> : null
-                        ))
+
+                        alerts.length == 0 ? (
+                            <Alert color='danger'>
+                                <p>No tienes notificaciones.</p>
+                            </Alert>
+                        ) : (
+                            alerts.map((tdata, index) => (
+                                tdata.notificationType === "to_customer" && tdata.hideNotification === false ?
+                                    <div key={index}>
+                                        <Alert
+                                            color='primary'>
+                                            {tdata.message}
+                                        </Alert>
+                                    </div> : null
+                            ))
+                        )
                     }
                 </CardBody>
             </Card>
