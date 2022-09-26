@@ -1,7 +1,5 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import getRequestNotification from '../../services/getRequestNotification';
-import getSingleRequestNotification from '../../services/getSingleRequestNotification';
 import {
     Alert,
     // UncontrolledAlert,
@@ -9,47 +7,24 @@ import {
     CardBody,
     CardTitle,
 } from "reactstrap";
-import putRequestNotification from '../../services/putRequestNotification';
+import getRequestNotificationToCourier from '../../services/getRequestNotificationToCourier';
 
 export default function CourierAlerts() {
     const [alerts, setAlerts] = useState([])
-    const [visible, setVisible] = useState(true);
+    const [loading, setLoading] = useState(false)
 
     useEffect(function () {
-        getRequestNotification()
+        setLoading(false)
+        getRequestNotificationToCourier()
             .then(response => {
-                console.log(response)
                 setAlerts(response)
+                setLoading(false)
             })
             .catch(error => {
                 console.log(error)
+                setLoading(false)
             })
     }, [])
-
-    // const onDismiss = () => {
-    //     setVisible(false);
-    // };
-
-    // const onDismiss = (id) => {
-    //     console.log("entro")
-    //     getSingleRequestNotification(id)
-    //         .then(data => {
-    //             putRequestNotification({
-    //                 idRequestNotification: data.idRequestNotification,
-    //                 idRequest: data.idRequest,
-    //                 message: data.message,
-    //                 hideNotification: true,
-    //                 notificationType: data.notificationType
-    //             })
-    //                 .catch(error => {
-    //                     console.log(error)
-    //                 })
-    //         })
-    //         .catch(error => {
-    //             console.log(error)
-    //         })
-    //     setVisible(false);
-    // };
 
     return (
         <div>

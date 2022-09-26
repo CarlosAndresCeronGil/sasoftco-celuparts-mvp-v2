@@ -26,6 +26,10 @@ import { ToggleMiniSidebar, ToggleMobileSidebar } from '../../store/customizer/C
 import ProfileDD from './ProfileDD';
 
 import AuthContext from '../../context/AuthProvider';
+import NotificationAdminDD from './NotificationAdminDD';
+import NotificationCustomerDD from './NotificationCustomerDD';
+import NotificationTechnicianDD from './NotificationTechnicianDD';
+import NotificationCourierDD from './NotificationCourierDD';
 
 const Header = () => {
   const { setAuth } = useContext(AuthContext)
@@ -129,14 +133,61 @@ const Header = () => {
               </DropdownItem>
               <DropdownItem divider />
               <SimpleBar style={{ maxHeight: '350px' }}>
-                <NotificationDD />
+                {
+                  JSON.parse(localStorage.getItem('user')).role === "admin" ?
+                    <NotificationAdminDD />
+                    : JSON.parse(localStorage.getItem('user')).role === "user" ?
+                      <NotificationCustomerDD />
+                      : JSON.parse(localStorage.getItem('user')).role === "tecnico" ?
+                        <NotificationTechnicianDD />
+                        : JSON.parse(localStorage.getItem('user')).role === "mensajero" ?
+                          <NotificationCourierDD />
+                          :
+                          <NotificationDD />
+                }
               </SimpleBar>
               <DropdownItem divider />
-              <div className="p-2 px-3">
-                <Button color="primary" size="sm" block>
-                  Check All
-                </Button>
-              </div>
+              {
+                JSON.parse(localStorage.getItem('user')).role === "admin" ?
+                  <div className="p-2 px-3">
+                    <Link to="./admin-alerts">
+                      <Button color="primary" size="sm" block>
+                        Ver todas tus notificaciones.
+                      </Button>
+                    </Link>
+                  </div>
+                  : JSON.parse(localStorage.getItem('user')).role === "user" ?
+                  <div className="p-2 px-3">
+                    <Link to="./user-alerts">
+                      <Button color="primary" size="sm" block>
+                        Ver todas tus notificaciones.
+                      </Button>
+                    </Link>
+                  </div>
+                  : JSON.parse(localStorage.getItem('user')).role === "tecnico" ?
+                  <div className="p-2 px-3">
+                    <Link to="./technician-alerts">
+                      <Button color="primary" size="sm" block>
+                        Ver todas tus notificaciones.
+                      </Button>
+                    </Link>
+                  </div>
+                  : JSON.parse(localStorage.getItem('user')).role === "mensajero" ?
+                  <div className="p-2 px-3">
+                    <Link to="./courier-alerts">
+                      <Button color="primary" size="sm" block>
+                        Ver todas tus notificaciones.
+                      </Button>
+                    </Link>
+                  </div>
+                  :
+                  <div className="p-2 px-3">
+                    <Button color="primary" size="sm" block>
+                      Check All
+                    </Button>
+                  </div>
+              }
+
             </DropdownMenu>
           </UncontrolledDropdown>
           {/******************************/}
