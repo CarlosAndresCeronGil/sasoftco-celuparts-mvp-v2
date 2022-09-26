@@ -53,8 +53,6 @@ export default function RequestRepairForm() {
     //Variables para las fechas, finish date empieza en un día despues al día actual
     const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16));
     console.log("startDate: ", startDate)
-    // const [finishDate, setFinishDate] = useState(new Date().setDate(new Date().getDate() + 1))
-
     // Select date tomorrow
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
