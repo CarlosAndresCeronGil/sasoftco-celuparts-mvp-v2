@@ -52,7 +52,12 @@ export default function RequestRetomaForm() {
 
     //Variables para las fechas, finish date empieza en un día despues al día actual
     const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16))
-    const [finishDate, setFinishDate] = useState(new Date().setDate(new Date().getDate() + 1))
+    console.log("startDate: ", startDate)
+    // Select date tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const [finishDate, setFinishDate] = useState(tomorrow);
+    console.log("finishDate: ", finishDate)
 
     const [loading, setLoading] = useState(false);
 
@@ -295,7 +300,6 @@ export default function RequestRetomaForm() {
                                                         setHours(setMinutes(new Date(), 30), 17),
                                                         setHours(setMinutes(new Date(), 0), 18),
                                                     ]}
-                                                    locale="es-CO"
                                                     filterDate={isWeekDay}
                                                     selected={startDate}
                                                     onChange={(date) => setStartDate(date)}
