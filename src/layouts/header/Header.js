@@ -81,7 +81,7 @@ const Header = () => {
           </Button>
           <NavbarBrand href="/" className="d-sm-block d-lg-none">
             {/* <LogoWhite /> */}
-            <img src="/celuparts-logo.png" alt="celuparts-logo" width='40' className="border right-card-image" ></img>
+            <img src="/celuparts-logo.png" alt="celuparts-logo" width='40' className="right-card-image" ></img>
           </NavbarBrand>
           <Button
             color={topbarColor}

@@ -51,9 +51,15 @@ export default function RequestRepairForm() {
     const [verifyResponse, setVerifyResponse] = useState('')
 
     //Variables para las fechas, finish date empieza en un día despues al día actual
-    const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), new Date().getHours() + 1));
-    console.log(startDate);
-    const [finishDate, setFinishDate] = useState(new Date().setDate(new Date().getDate() + 1))
+    const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16));
+    console.log("startDate: ", startDate)
+    // const [finishDate, setFinishDate] = useState(new Date().setDate(new Date().getDate() + 1))
+
+    // Select date tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const [finishDate, setFinishDate] = useState(tomorrow);
+    console.log("finishDate: ", finishDate)
 
     const [loading, setLoading] = useState(false);
 
@@ -173,7 +179,7 @@ export default function RequestRepairForm() {
                           postHomeService({
                               idRequest: data.idRequest,
                               pickUpDate: startDate,
-                              deliveryDate: finishDate
+                              deliveryDate: finishDate,
                           })
                               .catch(error => {
                                   setLoading(false);

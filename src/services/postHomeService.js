@@ -1,6 +1,11 @@
+/* eslint-disable */
 import { API_URL } from "./settings";
 
 export default function postHomeService(data) {
+    const { id, idUser, idEquipment, idRequest, idNotification } = data;
+
+    console.log("data", data);
+
     const apiURL = `${API_URL}/HomeService`;
 
     return fetch(apiURL, {

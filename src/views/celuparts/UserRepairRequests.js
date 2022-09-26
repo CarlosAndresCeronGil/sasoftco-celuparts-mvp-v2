@@ -291,7 +291,7 @@ export default function UserRepairRequests() {
 
                                             </td>
                                             {
-                                                tdata.homeServices[0].deliveryDate ? (
+                                                tdata.homeServices[0]?.deliveryDate ? (
                                                     // <td>{tdata.homeServices[0].deliveryDate}</td> ${new Date(tdata.requestDate).getHours()}:${new Date(tdata.requestDate).getMinutes()}
                                                     <td>{`${new Date(tdata.requestDate).getFullYear()}-${new Date(tdata.requestDate).getMonth() + 1}-${new Date(tdata.requestDate).getDate()}`}</td>
                                                 ) : (
