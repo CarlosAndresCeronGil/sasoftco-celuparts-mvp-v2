@@ -6,7 +6,7 @@ export default function getRequestRetomas({page, initialDate = '0001-1-1', final
     return fetch(apiURL)
         .then(response => response.json())
         .then((response) => {
-            console.log(response)
+            // console.log(response)
             return response;
         })
         .catch(error => {

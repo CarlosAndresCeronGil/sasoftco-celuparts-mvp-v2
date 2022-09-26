@@ -12,7 +12,7 @@ export default function SiigoCreditNotesTable() {
         setLoading(true)
         getSiigoCreditNotes()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setSiigoCreditNotes(response.results)
                 setLoading(false)
             })

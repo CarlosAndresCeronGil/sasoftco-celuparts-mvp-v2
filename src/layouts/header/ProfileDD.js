@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 const ProfileDD = () => {
 
-  console.log(JSON.parse(localStorage.getItem('user')));
+  // console.log(JSON.parse(localStorage.getItem('user')));
 
   return (
     <div>

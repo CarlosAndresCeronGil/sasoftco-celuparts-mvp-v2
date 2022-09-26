@@ -37,7 +37,7 @@ const LoginFormik = () => {
             password: e.target.elements.password.value
         })
             .then(response => {
-                console.log("Response from sign in:", response);
+                // console.log("Response from sign in:", response);
                 if (response !== undefined) {
                     if (response === "Account disabled") {
                         Swal.fire({
@@ -47,7 +47,7 @@ const LoginFormik = () => {
                         })
                     } else {
                         const user = jwtDecode(response)
-                        console.log("user", user);
+                        // console.log("user", user);
                         localStorage.setItem('user', JSON.stringify(user));
                         setAuth(true);
                         navigate('/home/dashboards/dashboard1');

@@ -11,7 +11,7 @@ export default function SiigoFixedAssetsTable() {
         setLoading(true)
         getSiigoFixedAssets()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setSiigoFixedAssets(response)
                 setLoading(false)
             })

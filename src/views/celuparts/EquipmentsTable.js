@@ -12,7 +12,7 @@ export default function EquipmentsTable() {
         setLoading(true)
         getEquipments()
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 setEquipments(response)
                 setLoading(false)
             })

@@ -11,7 +11,7 @@ export default function SiigoPriceListsTable() {
         setLoading(true)
         getSiigoPriceLists()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setSiigoPriceLists(response)
                 setLoading(false)
             })

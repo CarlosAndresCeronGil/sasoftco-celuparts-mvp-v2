@@ -11,7 +11,7 @@ export default function SiigoUsersTable() {
         setLoading(true)
         getSiigoCostCenters()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setSiigoCostCenters(response)
                 setLoading(false)
             })

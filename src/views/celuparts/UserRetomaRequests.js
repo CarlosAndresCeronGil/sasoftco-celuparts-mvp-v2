@@ -20,7 +20,7 @@ export default function UserRetomaRequests() {
         setLoading(true);
         getSingleUser({ id: JSON.parse(localStorage.getItem('user')).idUser })
             .then(response => {
-                console.log("datos del usuario", response);
+                // console.log("datos del usuario", response);
                 setUserInfo(response);
                 response[0].requests.map(tdata => (
                     tdata.requestNotifications.length !== 0 ?
@@ -38,7 +38,7 @@ export default function UserRetomaRequests() {
     const handleAcceptClick = (id) => {
         getSingleRequest({ id })
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 putRequest({
                     idRequest: id,
                     idUser: response[0].idUser,

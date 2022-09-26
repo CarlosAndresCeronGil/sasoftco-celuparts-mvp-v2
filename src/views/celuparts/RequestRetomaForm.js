@@ -125,7 +125,7 @@ export default function RequestRetomaForm() {
                                 deviceDiagnostic: ""
                             })
                                 .then(dataRetoma => {
-                                    console.log("Entro al then de retoma", dataRetoma);
+                                    // console.log("Entro al then de retoma", dataRetoma);
                                     postRetomaPayment({
                                         idRetoma: dataRetoma.idRetoma,
                                         paymentMethod: e.target.elements.paymentMethod.value
@@ -206,7 +206,7 @@ export default function RequestRetomaForm() {
         e.preventDefault()
         getVerifyImei({ id: serial })
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setVerifyResponse(response)
             })
             .catch(error => {
@@ -218,7 +218,7 @@ export default function RequestRetomaForm() {
         e.preventDefault()
         getVerifyImei({ id: imei })
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setVerifyResponse(response)
             })
             .catch(error => {
@@ -295,7 +295,6 @@ export default function RequestRetomaForm() {
                                                         setHours(setMinutes(new Date(), 30), 17),
                                                         setHours(setMinutes(new Date(), 0), 18),
                                                     ]}
-                                                    locale="es-CO"
                                                     filterDate={isWeekDay}
                                                     selected={startDate}
                                                     onChange={(date) => setStartDate(date)}

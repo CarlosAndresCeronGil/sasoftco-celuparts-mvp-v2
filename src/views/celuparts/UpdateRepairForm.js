@@ -123,7 +123,7 @@ export default function UpdateRepairForm() {
         setLoading(true);
         getSingleRepair({ id: params.id })
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 setIdTechnician({ idTechnician: response.idTechnician })
                 setDeviceDiagnostic({ deviceDiagnostic: response.deviceDiagnostic })
                 setRepairQuote({ repairQuote: response.repairQuote })

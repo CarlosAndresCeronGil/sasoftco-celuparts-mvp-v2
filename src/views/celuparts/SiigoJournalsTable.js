@@ -12,7 +12,7 @@ export default function SiigoJournalsTable() {
         setLoading(true)
         getSiigoJournals()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setSiigoJournals(response.results)
                 setLoading(false)
             })

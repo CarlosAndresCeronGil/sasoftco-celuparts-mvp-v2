@@ -18,6 +18,7 @@ const SidebarDatas = () => {
     SidebarData.push(
       {
         title: "Notificaciones",
+        id: 0.5,
         href: "./admin-alerts",
       },
       {
@@ -62,7 +63,7 @@ const SidebarDatas = () => {
       },
       {
         title: 'SIIGO',
-        id: 2,
+        id: 3,
         icon: <MaterialIcon icon='speed' />,
         collapisble: true,
         children: [
@@ -128,6 +129,7 @@ const SidebarDatas = () => {
     SidebarData.push(
       {
         title: "Notificaciones",
+        id: 0.5,
         href: "./technician-alerts"
       },
       {
@@ -163,6 +165,7 @@ const SidebarDatas = () => {
     SidebarData.push(
       {
         title: "Notificaciones",
+        id: 0.5,
         href: "./courier-alerts"
       },
       {

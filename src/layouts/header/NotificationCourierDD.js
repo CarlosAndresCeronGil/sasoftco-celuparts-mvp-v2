@@ -24,7 +24,7 @@ const NotificationCourierDD = () => {
         setLoading(true)
         getRequestNotificationToCourierFirstThree()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setAlerts(response)
                 setLoading(false)
             })

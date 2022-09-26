@@ -12,7 +12,7 @@ export default function SiigoInvoicesTables() {
         setLoading(true)
         getSiigoInvoices()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setSiigoInvoices(response.results)
                 setLoading(false)
             })

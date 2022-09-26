@@ -9,7 +9,7 @@ export default function RequestStatusTable() {
     useEffect(function() {
         getRequestStatus()
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 setRequestStates(response)
             }
         )

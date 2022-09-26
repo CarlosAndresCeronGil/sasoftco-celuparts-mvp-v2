@@ -20,10 +20,10 @@ export default function UserRepairRequests() {
 
     useEffect(function () {
         setLoading(true);
-        console.log(JSON.parse(localStorage.getItem('user')).idUser)
+        // console.log(JSON.parse(localStorage.getItem('user')).idUser)
         getSingleUser({ id: JSON.parse(localStorage.getItem('user')).idUser })
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 setUserInfo(response);
                 //Saca las notificaciones que tiene ese usuario y las almacena en un arreglo
                 response[0].requests.map(tdata => (
@@ -147,7 +147,7 @@ export default function UserRepairRequests() {
                             productSold: response[0].requestStatus[0].productSold
                         })
                             .then(response => {
-                                console.log(response)
+                                // console.log(response)
                             })
                             .catch(error => {
                                 console.log(error)
@@ -196,7 +196,7 @@ export default function UserRepairRequests() {
                             statusQuote: "Rechazada"
                         })
                             .then(response2 => {
-                                console.log(response2);
+                                // console.log(response2);
                                 getSingleEquipment({ id: response[0].idEquipment })
                                     .then(responseE => {
                                         console.log("get single equipment response", responseE)
@@ -237,7 +237,7 @@ export default function UserRepairRequests() {
                             productSold: response[0].requestStatus[0].productSold
                         })
                             .then(responseRequestStatus => {
-                                console.log(responseRequestStatus)
+                                // console.log(responseRequestStatus)
                             })
                             .catch(error => {
                                 console.log(error)

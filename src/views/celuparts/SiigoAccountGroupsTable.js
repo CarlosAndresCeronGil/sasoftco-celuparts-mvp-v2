@@ -11,7 +11,7 @@ export default function SiigoAccountGroupsTable() {
         setLoading(true)
         getSiigoAccountGroups()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setSiigoAccountGroups(response)
                 setLoading(false)
             })

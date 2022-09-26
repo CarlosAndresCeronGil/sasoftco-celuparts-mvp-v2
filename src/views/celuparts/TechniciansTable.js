@@ -9,7 +9,7 @@ export default function TechniciansTable() {
     useEffect(function() {
         getTechnicians()
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 setTechnicians(response)
             }
         )

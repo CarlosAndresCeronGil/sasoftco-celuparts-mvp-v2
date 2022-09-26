@@ -53,7 +53,7 @@ export default function RetomaPaymentForm() {
                 }
                 getSingleRetoma({ id: response.idRetoma })
                     .then(response2 => {
-                        console.log(response2.idRequest)
+                        // console.log(response2.idRequest)
                         setIdRequest({ idRequest: response2.idRequest})
                         getRequestNotification()
                             .then(response3 => {
@@ -83,7 +83,7 @@ export default function RetomaPaymentForm() {
         }
         putRetomaPayment(data)
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 console.log(notifications)
                 console.log(idRequest.idRequest)
                 notifications.map(tdata => (

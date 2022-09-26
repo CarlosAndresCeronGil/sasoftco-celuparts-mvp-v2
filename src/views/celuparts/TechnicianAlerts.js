@@ -16,7 +16,7 @@ export default function TechnicianAlerts() {
     useEffect(function () {
         getRequestNotificationToTechnician()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setAlerts(response)
             })
             .catch(error => {

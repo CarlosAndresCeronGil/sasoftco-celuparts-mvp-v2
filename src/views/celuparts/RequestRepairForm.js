@@ -52,7 +52,7 @@ export default function RequestRepairForm() {
 
     //Variables para las fechas, finish date empieza en un día despues al día actual
     const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), new Date().getHours() + 1));
-    console.log(startDate);
+    // console.log(startDate);
     const [finishDate, setFinishDate] = useState(new Date().setDate(new Date().getDate() + 1))
 
     const [loading, setLoading] = useState(false);
@@ -135,7 +135,7 @@ export default function RequestRepairForm() {
                               repairQuote: "0"
                           })
                               .then(data2 => {
-                                  console.log("Entro al then de repair", data2);
+                                //   console.log("Entro al then de repair", data2);
                                   postRepairPayment({
                                       idRepair: data2.idRepair,
                                       paymentMethod: e.target.elements.paymentMethod.value,
@@ -204,7 +204,7 @@ export default function RequestRepairForm() {
         e.preventDefault()
         getVerifyImei({ id: serial })
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setVerifyResponse(response)
             })
             .catch(error => {
@@ -216,7 +216,7 @@ export default function RequestRepairForm() {
         e.preventDefault()
         getVerifyImei({ id: imei })
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setVerifyResponse(response)
             })
             .catch(error => {

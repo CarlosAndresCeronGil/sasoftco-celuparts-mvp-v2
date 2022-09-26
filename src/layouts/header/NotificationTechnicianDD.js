@@ -24,7 +24,7 @@ const NotificationTechnicianDD = () => {
         setLoading(true)
         getRequestNotificationToTechnicianFirstThree()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setAlerts(response)
                 setLoading(false)
             })

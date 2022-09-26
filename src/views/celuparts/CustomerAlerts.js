@@ -17,7 +17,7 @@ export default function CustomerAlerts() {
         setLoading(true)
         getSingleUser({ id: JSON.parse(localStorage.getItem('user')).idUser })
             .then(response => {
-                console.log("response.requests", response[0].requests)
+                // console.log("response.requests", response[0].requests)
                 response[0].requests.map(tdata => (
                     tdata.requestNotifications.length !== 0 ?
                         setAlerts(prev => [...prev, tdata.requestNotifications[0]])

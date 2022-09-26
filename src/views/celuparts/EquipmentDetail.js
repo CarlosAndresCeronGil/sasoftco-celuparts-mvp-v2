@@ -26,7 +26,7 @@ export default function EquipmentDetail() {
         setLoading(true)
         getSingleRequest({ id: params.id })
             .then(response => {
-                console.log(response[0])
+                // console.log(response[0])
                 setInfo(response[0])
                 setLoading(false)
             })

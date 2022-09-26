@@ -12,7 +12,7 @@ export default function SiigoCustomersTable() {
         setLoading(true)
         getSiigoCustomers()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setSiigoCustomers(response.results)
                 setLoading(false)
             })
