@@ -143,7 +143,7 @@ export default function UserRetomaRequests() {
             <div>
                 <Card>
                     <CardBody>
-                        <CardTitle tag="h5">Esta es la lista de tus solicitudes de retoma {JSON.parse(localStorage.getItem('user')).name} </CardTitle>
+                        <CardTitle tag="h5">Solicitudes de retoma</CardTitle>
                         <Table className="no-wrap mt-3 align-middle" responsive>
                             <thead>
                                 <tr>

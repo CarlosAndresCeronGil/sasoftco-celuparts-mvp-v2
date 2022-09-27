@@ -11,6 +11,7 @@ import getSingleUser from '../../services/getSingleUser';
 
 export default function CustomerAlerts() {
     const [alerts, setAlerts] = useState([])
+    console.log(alerts.length)
     const [loading, setLoading] = useState(false)
 
     useEffect(function () {
@@ -41,7 +42,6 @@ export default function CustomerAlerts() {
                 </CardTitle>
                 <CardBody>
                     {
-
                         alerts.length == 0 ? (
                             <Alert color='danger'>
                                 <p>No tienes notificaciones.</p>

@@ -185,6 +185,12 @@ export function Router() {
           { path: "/home/request-retoma-form", exact: true, element: <RequestRetomaForm /> },
           { path: "/home/user-repair-requests", exact: true, element: <UserRepairRequests /> },
           { path: "/home/user-retoma-requests", exact: true, element: <UserRetomaRequests /> },
+          // {
+          //   path: '/home/tables/data-table',
+          //   name: 'data-table',
+          //   exact: true,
+          //   element: <ReactBootstrapTable />,
+          // },
         ]
       }
     ) : JSON.parse(localStorage.getItem('user')).role === "admin" ? ThemeRoutes.push(

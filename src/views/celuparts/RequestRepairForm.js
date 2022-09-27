@@ -31,6 +31,7 @@ import postRequestNotification from '../../services/postRequestNotification'
 import getRequestWithUserInfo from '../../services/getRequestWithUserInfo';
 import getVerifyImei from '../../services/getVerifyImei';
 import { useRef } from 'react';
+import { Checkbox } from '@blueprintjs/core';
 
 export default function RequestRepairForm() {
 
@@ -48,16 +49,20 @@ export default function RequestRepairForm() {
     const [typeOfEquipment, setTypeOfEquipment] = useState({ typeOfEquipment: 'Computador portatil' })
     const [imei, setImei] = useState('')
     const [serial, setSerial] = useState('')
-    const [verifyResponse, setVerifyResponse] = useState('')
+    const [verifyResponse, setVerifyResponse] = useState('');
+    const [isSameAddresses, setIsSameAddresses] = useState(false);
+
+    const handleSameAddresses = () => {
+        setIsSameAddresses(!isSameAddresses)
+    }
+
+    console.log('isSameAddresses: ', isSameAddresses)
 
     //Variables para las fechas, finish date empieza en un día despues al día actual
     const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16));
-    console.log("startDate: ", startDate)
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const [finishDate, setFinishDate] = useState(tomorrow);
-    console.log("finishDate: ", finishDate)
-
     const [loading, setLoading] = useState(false);
 
     //Variables para permitir que se haga un registro en una hora correcta
@@ -107,6 +112,9 @@ export default function RequestRepairForm() {
           formData.append("modelOrReference", e.target.elements.modelOrReference.value)
           formData.append("imeiOrSerial", e.target.elements.imei.value)
           formData.append("equipmentInvoice", e.target.elements.equipmentInvoice.files[0])
+
+          const deliveryAddress = isSameAddresses ? e.target.elements.pickUpAddress.value : e.target.elements.deliveryAddress.value
+          console.log('deliveryAddress: ', deliveryAddress)
   
           postEquipment(formData)
               .then(data => {
@@ -115,7 +123,7 @@ export default function RequestRepairForm() {
                       idEquipment: data.idEquipment,
                       requestType: "Reparacion",
                       pickUpAddress: e.target.elements.pickUpAddress.value,
-                      deliveryAddress: e.target.elements.deliveryAddress.value,
+                      deliveryAddress: deliveryAddress,
                       statusQuote: "Pendiente",
                       autoDiagnosis: e.target.elements.autoDiagnosis.value
                   })
@@ -227,6 +235,9 @@ export default function RequestRepairForm() {
             })
     }
 
+    const currentRole = JSON.parse(localStorage.getItem('user')).role;
+
+
     return (
         <div>
             <div>
@@ -244,6 +255,7 @@ export default function RequestRepairForm() {
                                     </CardSubtitle>
                                     <FormGroup>
                                         <Label for="pickUpAddress">Dirección de recogida*</Label>
+                                        <Checkbox className='ms-0 ms-md-5' label="Usar la misma dirección" onChange={handleSameAddresses}  />
                                         <Input
                                             id="pickUpAddress"
                                             name="pickUpAddress"
@@ -252,16 +264,21 @@ export default function RequestRepairForm() {
                                             required
                                         />
                                     </FormGroup>
-                                    <FormGroup>
-                                        <Label for="deliveryAddress">Dirección de entrega*</Label>
-                                        <Input
-                                            id="deliveryAddress"
-                                            name="deliveryAddress"
-                                            placeholder="Ingrese la dirección donde se devolvera el producto"
-                                            type="text"
-                                            required
-                                        />
-                                    </FormGroup>
+
+                                    {
+                                        !isSameAddresses ?
+                                            <FormGroup>
+                                                <Label for="deliveryAddress">Dirección de entrega*</Label>
+                                                <Input
+                                                    id="deliveryAddress"
+                                                    name="deliveryAddress"
+                                                    placeholder="Ingrese la dirección donde se entregara el producto"
+                                                    type="text"
+                                                    required
+                                                />
+                                            </FormGroup>
+                                            : null
+                                    }
 
                                     {/* <div className='d-flex align-items-center justify-content-center border'>
                                         <div className='d-flex align-items-center justify-content-center'> */}
@@ -456,18 +473,19 @@ export default function RequestRepairForm() {
                                                     />
                                                 </FormGroup>
                                                 {
-                                                    serial === '' ?
+                                                    serial === '' && currentRole !== 'user' ?
                                                         <FormGroup>
                                                             <Button disabled>
                                                                 Verificar serial
                                                             </Button>
                                                         </FormGroup>
-                                                        :
+                                                        : currentRole !== 'user' ?
                                                         <FormGroup>
                                                             <Button onClick={handleVerifySerial}>
                                                                 Verificar serial
                                                             </Button>
                                                         </FormGroup>
+                                                        : null
                                                 }
                                             </div>
                                             :
@@ -485,18 +503,19 @@ export default function RequestRepairForm() {
                                                     />
                                                 </FormGroup>
                                                 {
-                                                    imei === '' ?
+                                                    imei === '' && currentRole !== 'user' ?
                                                         <FormGroup>
                                                             <Button disabled>
                                                                 Verificar imei
                                                             </Button>
                                                         </FormGroup>
-                                                        :
+                                                        : currentRole !== 'user' ?
                                                         <FormGroup>
                                                             <Button onClick={handleVerifyImei}>
                                                                 Verificar imei
                                                             </Button>
                                                         </FormGroup>
+                                                        : null
                                                 }
                                             </div>
                                     }
@@ -523,7 +542,7 @@ export default function RequestRepairForm() {
                                         <Input
                                             id="autoDiagnosis"
                                             name="autoDiagnosis"
-                                            placeholder="Ingrese una breve descripción de los daños de tu dispositivo"
+                                            placeholder="máximo 250 caracteres"
                                             type="textarea"
                                             maxLength={250}
                                             required

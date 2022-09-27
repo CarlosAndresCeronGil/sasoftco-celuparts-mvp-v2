@@ -256,7 +256,7 @@ export default function UserRepairRequests() {
             <div>
                 <Card>
                     <CardBody>
-                        <CardTitle tag="h5">Esta es la lista de tus solicitudes de reparación {JSON.parse(localStorage.getItem('user')).name} </CardTitle>
+                        <CardTitle tag="h5">Solicitudes de reparación</CardTitle>
                         <Table className="no-wrap mt-3 align-middle" responsive>
                             <thead>
                                 <tr>

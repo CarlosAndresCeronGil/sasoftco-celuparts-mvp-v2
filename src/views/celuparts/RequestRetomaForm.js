@@ -29,6 +29,7 @@ import postRetomaPayment from '../../services/postRetomaPayment';
 import postRequestNotification from '../../services/postRequestNotification'
 import getRequestWithUserInfo from '../../services/getRequestWithUserInfo';
 import getVerifyImei from '../../services/getVerifyImei';
+import { Checkbox } from '@blueprintjs/core';
 
 export default function RequestRetomaForm() {
 
@@ -48,14 +49,17 @@ export default function RequestRetomaForm() {
     const [imei, setImei] = useState('')
     const [serial, setSerial] = useState('')
     const [verifyResponse, setVerifyResponse] = useState('')
+    const [isSameAddresses, setIsSameAddresses] = useState(false);
+
+    const handleSameAddresses = () => {
+        setIsSameAddresses(!isSameAddresses)
+    }
 
     //Variables para las fechas, finish date empieza en un día despues al día actual
     const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16))
-    console.log("startDate: ", startDate)
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const [finishDate, setFinishDate] = useState(tomorrow);
-    console.log("finishDate: ", finishDate)
 
     const [loading, setLoading] = useState(false);
 
@@ -97,6 +101,9 @@ export default function RequestRetomaForm() {
             formData.append("imeiOrSerial", e.target.elements.imei.value)
             formData.append("equipmentInvoice", e.target.elements.equipmentInvoice.files[0])
 
+            const deliveryAddress = isSameAddresses ? e.target.elements.pickUpAddress.value : e.target.elements.deliveryAddress.value
+          console.log('deliveryAddress: ', deliveryAddress)
+
             postEquipment(formData)
                 .then(dataEquipment => {
                     postRequest({
@@ -104,7 +111,7 @@ export default function RequestRetomaForm() {
                         idEquipment: dataEquipment.idEquipment,
                         requestType: "Retoma",
                         pickUpAddress: e.target.elements.pickUpAddress.value,
-                        deliveryAddress: e.target.elements.deliveryAddress.value,
+                        deliveryAddress: deliveryAddress,
                         statusQuote: "Pendiente",
                         autoDiagnosis: e.target.elements.autoDiagnosis.value
                     })
@@ -229,6 +236,8 @@ export default function RequestRetomaForm() {
             })
     }
 
+    const currentRole = JSON.parse(localStorage.getItem('user')).role;
+
     return (
         <div>
             <div>
@@ -246,6 +255,7 @@ export default function RequestRetomaForm() {
                                     </CardSubtitle>
                                     <FormGroup>
                                         <Label for="pickUpAddress">Dirección de recogida*</Label>
+                                        <Checkbox className='ms-0 ms-md-5' label="Usar la misma dirección" onChange={handleSameAddresses}  />
                                         <Input
                                             id="pickUpAddress"
                                             name="pickUpAddress"
@@ -254,16 +264,20 @@ export default function RequestRetomaForm() {
                                             required
                                         />
                                     </FormGroup>
-                                    <FormGroup>
-                                        <Label for="deliveryAddress">Dirección de entrega*</Label>
-                                        <Input
-                                            id="deliveryAddress"
-                                            name="deliveryAddress"
-                                            placeholder="Ingrese la dirección donde se devolvera el producto"
-                                            type="text"
-                                            required
-                                        />
-                                    </FormGroup>
+                                    {
+                                        !isSameAddresses ?
+                                            <FormGroup>
+                                                <Label for="deliveryAddress">Dirección de entrega*</Label>
+                                                <Input
+                                                    id="deliveryAddress"
+                                                    name="deliveryAddress"
+                                                    placeholder="Ingrese la dirección donde se entregara el producto"
+                                                    type="text"
+                                                    required
+                                                />
+                                            </FormGroup>
+                                            : null
+                                    }
 
 
                                     <Row>
@@ -446,18 +460,20 @@ export default function RequestRetomaForm() {
                                                     />
                                                 </FormGroup>
                                                 {
-                                                    serial === '' ?
+                                                    serial === '' && currentRole !== 'user' ?
                                                         <FormGroup>
                                                             <Button disabled>
                                                                 Verificar serial
                                                             </Button>
                                                         </FormGroup>
-                                                        :
+                                                        : currentRole !== 'user' ?
                                                         <FormGroup>
                                                             <Button onClick={handleVerifySerial}>
                                                                 Verificar serial
                                                             </Button>
                                                         </FormGroup>
+                                                        : null
+
                                                 }
                                             </div>
                                             :
@@ -475,18 +491,19 @@ export default function RequestRetomaForm() {
                                                     />
                                                 </FormGroup>
                                                 {
-                                                    imei === '' ?
+                                                    imei === '' && currentRole !== 'user' ?
                                                         <FormGroup>
                                                             <Button disabled>
                                                                 Verificar imei
                                                             </Button>
                                                         </FormGroup>
-                                                        :
+                                                        : currentRole !== 'user' ?
                                                         <FormGroup>
                                                             <Button onClick={handleVerifyImei}>
                                                                 Verificar imei
                                                             </Button>
                                                         </FormGroup>
+                                                        : null
                                                 }
                                             </div>
                                     }
@@ -511,7 +528,7 @@ export default function RequestRetomaForm() {
                                         <Input
                                             id="autoDiagnosis"
                                             name="autoDiagnosis"
-                                            placeholder="Ingrese una breve descripción del estado de su dispositivo"
+                                            placeholder="máximo 250 caracteres"
                                             type="textarea"
                                             maxLength={250}
                                             required
