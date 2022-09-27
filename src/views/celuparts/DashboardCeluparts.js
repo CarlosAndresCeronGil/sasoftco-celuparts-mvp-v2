@@ -21,6 +21,20 @@ const DashboardCeluparts = () => {
       </Row> */}
       <BlogsToCelupartsPages />
       { currentRole === 'user' && <BlogsToExternalCelupartsPages /> }
+
+      {/* Create buttom for social network */}
+      <div className="d-flex justify-content-center d-grid gap-3">
+        <a href="#" target="_blank" rel="noreferrer" className="" >
+          <i className="bi bi-facebook btn btn-facebook btn-icon"  ></i>
+        </a>
+        <a href="https://www.instagram.com/celuparts/" target="_blank" rel="noreferrer" className="">
+          <i className="bi bi-instagram btn btn-instagram btn-icon"></i>
+        </a>
+        <a href="#" target="_blank" rel="noreferrer" className="">
+          <i className="bi bi-linkedin btn btn-linkedin btn-icon"></i>
+        </a>
+      </div>
+
     </>
   );
 };

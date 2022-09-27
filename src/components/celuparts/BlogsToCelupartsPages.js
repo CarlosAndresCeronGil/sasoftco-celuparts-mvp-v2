@@ -9,42 +9,25 @@ import img2 from '../../assets/images/bg/bg2.jpg';
 import img3 from '../../assets/images/bg/bg3.jpg';
 
 
-const cards = [
+const cardsUser = [
   {
     img: img1,
-    title: 'Mis reparaciones.',
-    subtitle: 'Lista de tus reparaciones registradas en el sistema, podrás aceptar o rechazar las cotizaciones que se asignen a tus productos.',
-    role: ['admin', 'tecnico', 'mensajero', 'user',],
-    href: [
-      '/home/repair-requests-table',
-      '/home/repair-requests-table',
-      '/home/repair-requests-table',
-      '/home/user-repair-requests',
-    ],
+    title: 'Nueva reparación.',
+    subtitle: 'Registra una solicitud para una nueva reparación',
+    href: '/home/request-repair-form',
   },
   {
     img: img2,
-    title: 'Mis retomas.',
-    subtitle: 'Lista de tus retomas registradas, donde podras aceptar o rechazar el valor al que te ofrecemos vender tu dispositivo.',
-    role: ['admin', 'tecnico', 'mensajero', 'user',],
-    href: [
-      '/home/retoma-requests-table',
-      '/home/retoma-requests-table',
-      '/home/retoma-requests-table',
-      '/home/user-retoma-requests',
-    ],
+    title: 'Mis reparaciones.',
+    subtitle: 'Lista de tus reparaciones registradas en el sistema, podrás aceptar o rechazar las cotizaciones que se asignen a tus productos.',
+    href: '/home/user-repair-requests',
   },
   {
     img: img3,
-    title: 'Mis notificaciones',
-    subtitle: 'Página en donde podras ver tus notificaciones referentes a tus reparaciones o retomas activas en el sistema.',
-    role: ['admin', 'tecnico', 'mensajero', 'user',],
-    href: [
-      '/home/admin-alerts',
-      '/home/technician-alerts',
-      '/home/courier-alerts',
-      '/home/user-alerts',
-    ],
+    title: 'Mis retomas.',
+    subtitle: 'Lista de tus retomas registradas, donde podras aceptar o rechazar el valor al que te ofrecemos vender tu dispositivo.',
+    href: '/home/user-retoma-requests',
+    
   },
 ];
 
@@ -96,11 +79,11 @@ const BlogsToCelupartsPages = () => {
   const currentRole = JSON.parse(localStorage.getItem('user')).role;
 
   return (
-    JSON.parse(localStorage.getItem('user')).role === "admin"
+      currentRole === "admin"
       ||
-      JSON.parse(localStorage.getItem('user')).role === "tecnico"
+      currentRole === "tecnico"
       ||
-      JSON.parse(localStorage.getItem('user')).role === "mensajero"
+      currentRole === "mensajero"
       ?
       (
         <Row>
@@ -124,11 +107,11 @@ const BlogsToCelupartsPages = () => {
       (
         <Row>
           {
-            cards.map(({ img, title, subtitle, role, href }) => (
+            cardsUser.map(({ img, title, subtitle, role, href }) => (
               <Col lg="4" key={title}>
                 <Card className='hover-zoom mt-3 img-wrapper' style={{ height: "340px" }} >
                   <img src={img} alt={img} className='mx-3 rounded mt-n3 img-fluid' />
-                  <Link to={href[role.indexOf(currentRole)]} style={{ textDecoration: 'none', }}>
+                  <Link to={href} style={{ textDecoration: 'none', }}>
                     <CardBody style={style}>
                       <CardTitle className='mt-2' tag="h4">{title}</CardTitle>
                       <CardSubtitle className="text-muted mt-1">{subtitle}</CardSubtitle>
