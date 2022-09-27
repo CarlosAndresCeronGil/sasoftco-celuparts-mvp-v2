@@ -123,7 +123,7 @@ const Header = () => {
           {/******************************/}
           {/**********Notification DD**********/}
           {/******************************/}
-          <UncontrolledDropdown className="mx-1">
+          {/* <UncontrolledDropdown className="mx-1">
             <DropdownToggle className="bg-transparent border-0" color={topbarColor}>
               <Icon.MessageSquare size={18} />
             </DropdownToggle>
@@ -189,7 +189,7 @@ const Header = () => {
               }
 
             </DropdownMenu>
-          </UncontrolledDropdown>
+          </UncontrolledDropdown> */}
           {/******************************/}
           {/**********Message DD**********/}
           {/******************************/}
