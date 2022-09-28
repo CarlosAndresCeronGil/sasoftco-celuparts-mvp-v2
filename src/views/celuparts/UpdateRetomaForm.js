@@ -159,7 +159,7 @@ export default function UpdateRetomaForm() {
                                             />
                                         </FormGroup>
                                         <FormGroup>
-                                            <Label for="retomaQuote">Precio de venta</Label>
+                                            <Label for="retomaQuote">Precio de compra</Label>
                                             <Input
                                                 id="retomaQuote"
                                                 name="retomaQuote"

@@ -250,18 +250,23 @@ export default function UpdateRepairForm() {
                                             )
                                         }
 
-                                        <FormGroup>
-                                            <Label for="repairQuote">Cuota de reparación</Label>
-                                            <Input
-                                                id="repairQuote"
-                                                name="repairQuote"
-                                                placeholder="Ingrese la cuota de reparación del producto"
-                                                type="number"
-                                                value={repairQuote.repairQuote}
-                                                onChange={handleRepairQuoteChange}
-                                                required
-                                            />
-                                        </FormGroup>
+                                        {
+                                            JSON.parse(localStorage.getItem('user')).role == "admin" &&
+                                            <FormGroup>
+                                                <Label for="repairQuote">Cuota de reparación</Label>
+                                                <Input
+                                                    id="repairQuote"
+                                                    name="repairQuote"
+                                                    placeholder="Ingrese la cuota de reparación del producto"
+                                                    type="number"
+                                                    value={repairQuote.repairQuote}
+                                                    onChange={handleRepairQuoteChange}
+                                                    required
+                                                />
+                                            </FormGroup>
+
+                                        }
+
                                         {
                                             loadingPut ? (
                                                 <button className="btn btn-primary" type="button" disabled>

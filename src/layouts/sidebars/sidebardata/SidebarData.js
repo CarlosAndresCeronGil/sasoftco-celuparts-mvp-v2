@@ -166,7 +166,9 @@ const SidebarDatas = () => {
       {
         title: "Notificaciones",
         id: 0.5,
-        href: "./courier-alerts"
+        href: "./courier-alerts",
+        suffix: '!',
+        suffixColor: 'bg-danger',
       },
       {
         title: 'Acciones',

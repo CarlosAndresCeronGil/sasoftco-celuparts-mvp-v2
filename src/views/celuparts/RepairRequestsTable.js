@@ -44,6 +44,7 @@ export default function RepairRequestsTable() {
     const [currentDeliveryAddress, setCurrentDeliveryAddress] = useState('')
     const [currentPickUpAddress, setCurrentPickUpAdress] = useState('')
     const [currentEquipmentData, setCurrentEquipmentData] = useState('')
+    const [currentImeiOrSerial, setCurrentImeiOrSerial] = useState('')
 
     const [modal, setModal] = useState(false);
 
@@ -54,6 +55,7 @@ export default function RepairRequestsTable() {
         setLoading(true)
         getRequestRepairs({ page })
             .then((response) => {
+                console.log(response)
                 setRequests(response)
                 setLoading(false)
             })
@@ -136,12 +138,13 @@ export default function RepairRequestsTable() {
         setModal(!modal);
     };
 
-    const handleViewClick = ({ autoDiagnosis, deliveryAddress, pickUpAddress, equipmentData }) => {
+    const handleViewClick = ({ autoDiagnosis, deliveryAddress, pickUpAddress, equipmentData, imeiOrSerial }) => {
         setModal(!modal);
         setCurrentAutoDiagnosis(autoDiagnosis)
         setCurrentDeliveryAddress(deliveryAddress)
         setCurrentPickUpAdress(pickUpAddress)
         setCurrentEquipmentData(equipmentData)
+        setCurrentImeiOrSerial(imeiOrSerial)
     }
 
     return (
@@ -329,7 +332,8 @@ export default function RepairRequestsTable() {
                                                 autoDiagnosis: tdata.autoDiagnosis,
                                                 deliveryAddress: tdata.deliveryAddress,
                                                 pickUpAddress: tdata.pickUpAddress,
-                                                equipmentData: tdata.equipment.equipmentBrand + " " + tdata.equipment.modelOrReference
+                                                equipmentData: tdata.equipment.equipmentBrand + " " + tdata.equipment.modelOrReference,
+                                                imeiOrSerial: tdata.equipment.imeiOrSerial
                                             }).bind(null)} >
                                                 Detalles
                                             </Button>
@@ -388,6 +392,12 @@ export default function RepairRequestsTable() {
                                 </span>
                             </div>
                             {currentAutoDiagnosis}
+                            <div>
+                                <span className='fw-bold'>
+                                    Imei o serial del Dispositivo:
+                                </span>
+                            </div>
+                            {currentImeiOrSerial}
                         </ModalBody>
                         <ModalFooter>
                             <Button color="secondary" onClick={handleViewClick.bind(null)}>

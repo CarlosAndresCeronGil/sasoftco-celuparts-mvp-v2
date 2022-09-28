@@ -345,6 +345,7 @@ export default function RequestStatusForm() {
                                                         <option>En camino</option>
                                                         <option value="En devolucion">En devolución</option>
                                                         <option value="Devuelto sin reparacion">Devuelto sin reparación</option>
+                                                        <option>Terminada</option>
                                                     </Input>
                                                 </FormGroup>
                                                 :
