@@ -78,7 +78,7 @@ export default function UpdateRetomaForm() {
                             idRequestNotification: tdata.idRequestNotification,
                             idRequest: tdata.idRequest,
                             message: 'Tu dispositivo ya tiene precio de retoma! haz click en "Mis retomas" para revisar',
-                            hideNotification: false,
+                            wasReviewed: false,
                             notificationType: "to_customer"
                         })
                             .then(response => {

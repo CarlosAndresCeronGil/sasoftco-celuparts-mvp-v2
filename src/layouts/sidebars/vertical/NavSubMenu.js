@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect } from 'react';
 import { Collapse, NavItem, NavLink } from 'reactstrap';
 import PropTypes from 'prop-types';

@@ -60,7 +60,7 @@ export default function UpdateRepairForm() {
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
                                 message: 'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
-                                hideNotification: false,
+                                wasReviewed: false,
                                 notificationType: "to_customer"
                             })
                             .then(response=> {

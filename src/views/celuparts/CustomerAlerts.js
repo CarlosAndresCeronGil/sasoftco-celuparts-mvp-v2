@@ -48,7 +48,7 @@ export default function CustomerAlerts() {
                             </Alert>
                         ) : (
                             alerts.map((tdata, index) => (
-                                tdata.notificationType === "to_customer" && tdata.hideNotification === false ?
+                                tdata.notificationType === "to_customer" && tdata.wasReviewed === false ?
                                     <div key={index}>
                                         <Alert
                                             color='primary'>

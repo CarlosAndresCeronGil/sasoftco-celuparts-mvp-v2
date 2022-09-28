@@ -1,6 +1,25 @@
+/* eslint-disable */
+import React, { useEffect, useState } from 'react'
+import getRequestNotificationToCourier from '../../../services/getRequestNotificationToCourier';
 import MaterialIcon from '@material/react-material-icon';
 
+
+
 const SidebarDatas = () => {
+
+  const [alerts, setAlerts] = useState([])
+
+  useEffect(function () {
+      getRequestNotificationToCourier()
+          .then(response => {
+              setAlerts(response)
+          })
+          .catch(error => {
+              console.log(error)
+          })
+  }, [])
+
+  let countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
 
   const SidebarData = [];
 
@@ -20,6 +39,7 @@ const SidebarDatas = () => {
         title: "Notificaciones",
         id: 0.5,
         href: "./admin-alerts",
+        icon: <MaterialIcon icon="notifications" />,
       },
       {
         title: 'Acciones',
@@ -130,7 +150,8 @@ const SidebarDatas = () => {
       {
         title: "Notificaciones",
         id: 0.5,
-        href: "./technician-alerts"
+        href: "./technician-alerts",
+        icon: <MaterialIcon icon="notifications" />,
       },
       {
         title: 'Acciones',
@@ -167,8 +188,9 @@ const SidebarDatas = () => {
         title: "Notificaciones",
         id: 0.5,
         href: "./courier-alerts",
-        suffix: '!',
-        suffixColor: 'bg-danger',
+        icon: <MaterialIcon icon="notifications" />,
+        suffix: countwasRevieweds == 0 ? null : countwasRevieweds,
+        suffixColor: countwasRevieweds == 0 ? 'bg-success' : 'bg-danger',
       },
       {
         title: 'Acciones',

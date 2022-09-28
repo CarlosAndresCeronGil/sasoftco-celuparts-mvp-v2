@@ -34,7 +34,7 @@ export default function TechnicianAlerts() {
                 <CardBody>
                     {
                         alerts.map((tdata, index) => (
-                            tdata.notificationType === "to_technician" && tdata.hideNotification === false ?
+                            tdata.notificationType === "to_technician" && tdata.wasReviewed === false ?
                                 <div key={index}>
                                     {/* <Alert
                                     color='primary'

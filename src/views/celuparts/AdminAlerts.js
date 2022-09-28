@@ -40,7 +40,7 @@ export default function AdminAlerts() {
                         ) : (
 
                         alerts.map((tdata, index) => (
-                            tdata.notificationType === "to_admin" && tdata.hideNotification === false ?
+                            tdata.notificationType === "to_admin" && tdata.wasReviewed === false ?
                                 <div key={index}>
                                     <Alert
                                     color='primary'>

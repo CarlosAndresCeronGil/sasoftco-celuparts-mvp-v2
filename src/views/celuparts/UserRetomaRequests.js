@@ -64,7 +64,7 @@ export default function UserRetomaRequests() {
                                     idRequestNotification: tdata.idRequestNotification,
                                     idRequest: id,
                                     message: "El cliente del producto " + response.equipmentBrand + " " + response.modelOrReference + " aceptó el valor de venta.",
-                                    hideNotification: false,
+                                    wasReviewed: false,
                                     notificationType: "to_admin"
                                 })
                                     .then(response2 => {
@@ -110,7 +110,7 @@ export default function UserRetomaRequests() {
                                             idRequestNotification: tdata.idRequestNotification,
                                             idRequest: id,
                                             message: "El cliente del producto " + responseE.equipmentBrand + " " + responseE.modelOrReference + " rechazó el valor de la venta, devolver a la dirección: " + response[0].deliveryAddress,
-                                            hideNotification: false,
+                                            wasReviewed: false,
                                             notificationType: "to_courier"
                                         })
                                             .then(response3 => {

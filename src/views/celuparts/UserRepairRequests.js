@@ -68,7 +68,7 @@ export default function UserRepairRequests() {
                                     idRequestNotification: tdata.idRequestNotification,
                                     idRequest: id,
                                     message: "El cliente del producto " + response.equipmentBrand + " " + response.modelOrReference + " aceptó la cuota de reparación.",
-                                    hideNotification: false,
+                                    wasReviewed: false,
                                     notificationType: "to_technician"
                                 })
                                     .then(response2 => {
@@ -162,7 +162,7 @@ export default function UserRepairRequests() {
                                             idRequestNotification: tdata.idRequestNotification,
                                             idRequest: id,
                                             message: "El cliente del producto " + responseE.equipmentBrand + " " + responseE.modelOrReference + " decidio cambiar reparación por retoma, realizar cotización del producto a vender",
-                                            hideNotification: false,
+                                            wasReviewed: false,
                                             notificationType: "to_technician"
                                         })
                                             .then(response3 => {
@@ -208,7 +208,7 @@ export default function UserRepairRequests() {
                                                     idRequestNotification: tdata.idRequestNotification,
                                                     idRequest: id,
                                                     message: "El cliente del producto " + responseE.equipmentBrand + " " + responseE.modelOrReference + " rechazó el valor de reparación, devolver a la dirección: " + response[0].deliveryAddress,
-                                                    hideNotification: false,
+                                                    wasReviewed: false,
                                                     notificationType: "to_courier"
                                                 })
                                                     .then(response3 => {

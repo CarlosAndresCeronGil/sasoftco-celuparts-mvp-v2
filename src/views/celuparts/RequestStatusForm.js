@@ -65,7 +65,7 @@ export default function RequestStatusForm() {
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
                                 message: "Tu dispositivo esta en proceso de recogida!",
-                                hideNotification: false,
+                                wasReviewed: false,
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
@@ -83,7 +83,7 @@ export default function RequestStatusForm() {
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
                                 message: "Tu dispositivo ya ha sido recibido por uno de nuestros tecnicos",
-                                hideNotification: false,
+                                wasReviewed: false,
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
@@ -101,7 +101,7 @@ export default function RequestStatusForm() {
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
                                 message: "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
-                                hideNotification: false,
+                                wasReviewed: false,
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
@@ -119,7 +119,7 @@ export default function RequestStatusForm() {
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
                                 message: "El técnico ha empezado con la reparación de tu producto",
-                                hideNotification: false,
+                                wasReviewed: false,
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
@@ -137,7 +137,7 @@ export default function RequestStatusForm() {
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
                                 message: "Tú dispositivo ha sido reparado, contactate con el administrador al siguiente número: 3xx - xxx - xxxx o al siguiente correo pagosceluparts@celuparts.com para confirmar pago",
-                                hideNotification: false,
+                                wasReviewed: false,
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
@@ -155,7 +155,7 @@ export default function RequestStatusForm() {
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
                                 message: "Producto " + equipmentData.equipmentBrand + " " + equipmentData.modelOrReference + " para devolución el día " + deliveryDate.deliveryDate + " al barrio " + deliveryAddress.deliveryAddress,
-                                hideNotification: false,
+                                wasReviewed: false,
                                 notificationType: "to_courier"
                             })
                                 .then(response => {
@@ -173,7 +173,7 @@ export default function RequestStatusForm() {
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
                                 message: "",
-                                hideNotification: false,
+                                wasReviewed: false,
                                 notificationType: "to_none"
                             })
                                 .then(response => {
@@ -191,7 +191,7 @@ export default function RequestStatusForm() {
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
                                 message: "",
-                                hideNotification: false,
+                                wasReviewed: false,
                                 notificationType: "to_none"
                             })
                                 .then(response => {
@@ -209,7 +209,7 @@ export default function RequestStatusForm() {
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
                                 message: "Tu pago sobre tu retoma se realizara pronto! Revisa tu medio de pago registrado a celuparts para confirmarlo.",
-                                hideNotification: false,
+                                wasReviewed: false,
                                 notificationType: "to_customer"
                             })
                                 .then(response => {

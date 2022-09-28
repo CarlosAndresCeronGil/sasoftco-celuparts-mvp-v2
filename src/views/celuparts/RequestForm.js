@@ -80,7 +80,7 @@ export default function RequestForm() {
                                     postRequestNotification({
                                         idRequest: data.idRequest,
                                         message: "Nueva solicitud de servicio a domicilio a la dirección: " + data.pickUpAddress + " para la fecha " + startDate.getFullYear()+"/"+(startDate.getMonth()+1)+"/"+startDate.getDate()+ " a las " + startDate.getHours() + ":"+ startDate.getMinutes() + " para recoger el dispositivo " + e.target.elements.equipmentBrand.value + " " + e.target.elements.modelOrReference.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de telefono de contácto: " + userInfo[0].userDto.phone,
-                                        hideNotification: false,
+                                        wasReviewed: false,
                                         notificationType: "to_courier"
                                     })
                                         .catch(error => {
@@ -140,7 +140,7 @@ export default function RequestForm() {
                             // postRequestNotification({
                             //     idRequest: data.idRequest,
                             //     message: "Nueva solicitud de servicio a domicilio a la dirección: " + data.pickUpAddress + " para la fecha " + startDate + " para recoger el dispositivo " + e.target.elements.equipmentBrand.value + " " + e.target.elements.modelOrReference.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de telefono de contácto: " + userPhone,
-                            //     hideNotification: false,
+                            //     wasReviewed: false,
                             //     notificationType: "to_courier"
                             // })
                             //     .catch(error => {
@@ -182,7 +182,7 @@ export default function RequestForm() {
                                     postRequestNotification({
                                         idRequest: dataRequest.idRequest,
                                         message: "Nueva solicitud de servicio a domicilio a la dirección: " + dataRequest.pickUpAddress + " para la fecha " + startDate.getFullYear()+"/"+(startDate.getMonth()+1)+"/"+startDate.getDate()+ " a las " + startDate.getHours() + ":"+ startDate.getMinutes() + " para recoger el dispositivo " + e.target.elements.equipmentBrand.value + " " + e.target.elements.modelOrReference.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de telefono de contácto: " + userInfo[0].userDto.phone,
-                                        hideNotification: false,
+                                        wasReviewed: false,
                                         notificationType: "to_courier"
                                     })
                                         .catch(error => {
@@ -242,7 +242,7 @@ export default function RequestForm() {
                             postRequestNotification({
                                 idRequest: dataRequest.idRequest,
                                 message: "Nueva solicitud de servicio a domicilio a la dirección: " + dataRequest.pickUpAddress + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name,
-                                hideNotification: false,
+                                wasReviewed: false,
                                 notificationType: "to_courier",
                             })
                             setLoading(false);

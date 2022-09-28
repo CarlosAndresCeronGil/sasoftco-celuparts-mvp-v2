@@ -92,7 +92,7 @@ export default function RetomaPaymentForm() {
                             idRequestNotification: tdata.idRequestNotification,
                             idRequest: tdata.idRequest,
                             message: '',
-                            hideNotification: false,
+                            wasReviewed: false,
                             notificationType: "to_none"
                         })
                             .then(response2 => {

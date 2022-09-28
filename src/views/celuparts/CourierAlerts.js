@@ -2,19 +2,21 @@
 import React, { useEffect, useState } from 'react'
 import {
     Alert,
-    // UncontrolledAlert,
     Card,
     CardBody,
     CardTitle,
 } from "reactstrap";
+import ReactVisibilitySensor from 'react-visibility-sensor';
 import getRequestNotificationToCourier from '../../services/getRequestNotificationToCourier';
+import putRequestNotification from '../../services/putRequestNotification';
 
 export default function CourierAlerts() {
     const [alerts, setAlerts] = useState([])
     const [loading, setLoading] = useState(false)
+    const [visible, setVisible] = useState(false)
 
     useEffect(function () {
-        setLoading(false)
+        setLoading(true)
         getRequestNotificationToCourier()
             .then(response => {
                 setAlerts(response)
@@ -26,8 +28,38 @@ export default function CourierAlerts() {
             })
     }, [])
 
+    let countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+
+    const updateAlerts = alerts.map(( alert ) => {
+        return (
+            {
+                ...alert,
+                wasReviewed: true
+            }
+        )
+    })
+
+    useEffect(() => {
+        updateAlerts.forEach((alert) => {
+            putRequestNotification(alert)
+                .then(response => {
+                    return
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        })
+        getRequestNotificationToCourier()
+            .then(data => {
+                setAlerts(data)
+            })
+            .catch(error => console.log(error))
+    }, [ visible ])
+
     return (
-        <div>
+        <ReactVisibilitySensor
+        onChange={isVisible => { setVisible(isVisible)}}
+        >
             <Card>
                 <CardTitle tag="h6" className="border-bottom p-3 mb-0">
                     <i className="bi bi-bell me-2"> </i>
@@ -36,8 +68,8 @@ export default function CourierAlerts() {
                 <CardBody>
                     {
                         alerts.map((tdata, index) => (
-                            tdata.notificationType === "to_courier" && tdata.hideNotification === false ?
-                                <div key={index}>
+                            tdata.notificationType === "to_courier" ?
+                                <div key={index} >
                                     {/* <Alert
                                     color='primary'
                                     isOpen={visible}
@@ -48,11 +80,13 @@ export default function CourierAlerts() {
                                     color='primary'>
                                         {tdata.message}
                                     </Alert>
-                                </div> : null
+                                </div>
+                                : null    
                         ))
                     }
                 </CardBody>
             </Card>
-        </div>
+        </ReactVisibilitySensor>
+        
     )
 }
