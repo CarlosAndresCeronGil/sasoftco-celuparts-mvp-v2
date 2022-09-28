@@ -15,18 +15,18 @@ const blogData = [
     subtitle: 'El sitío perfecto donde podrás comprar al mejor precio los dispositivos que buscas!.',
     href: 'https://celuparts.co/'
   },
-  {
-    img: blog2,
-    title: 'Instagram.',
-    subtitle: 'Siguenos en instagram para descubrir las novedades que tenemos para tí!.',
-    href: 'https://www.instagram.com/celuparts/?hl=es'
-  },
-  {
-    img: blog3,
-    title: 'Plataforma SIIGO.',
-    subtitle: 'Software de contable para administración financiera.',
-    href: 'https://www.siigo.com/'
-  },
+  // {
+  //   img: blog2,
+  //   title: 'Instagram.',
+  //   subtitle: 'Siguenos en instagram para descubrir las novedades que tenemos para tí!.',
+  //   href: 'https://www.instagram.com/celuparts/?hl=es'
+  // },
+  // {
+  //   img: blog3,
+  //   title: 'Plataforma SIIGO.',
+  //   subtitle: 'Software de contable para administración financiera.',
+  //   href: 'https://www.siigo.com/'
+  // },
 ];
 
 const style = {
