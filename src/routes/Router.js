@@ -221,7 +221,7 @@ export function Router() {
           { path: "/home/siigo-voucher-form", exact: true, element: <SiigoVoucherForm /> },
           { path: "/home/siigo-journals-table", exact: true, element: <SiigoJournalsTable /> },
           { path: "/home/siigo-journal-form", exact: true, element: <SiigoJournalsForm /> },
-          { path: "/home/siigo-account-groups-table", exact: true, element: <SiigoAccountGroupsTable /> },
+          // { path: "/home/siigo-account-groups-table", exact: true, element: <SiigoAccountGroupsTable /> },
           { path: "/home/siigo-taxes-table", exact: true, element: <SiigoTaxesTable /> },
           { path: "/home/siigo-price-lists-table", exact: true, element: <SiigoPriceListsTable /> },
           { path: "/home/siigo-ware-houses-table", exact: true, element: <SiigoWareHousesTable /> },

@@ -6,6 +6,8 @@ export default function getSiigoCostCenters() {
         .then(response => response.json())
         .then((response) => {
             return response;
-        }
-    )
+        })
+        .catch(error => {
+            console.log(error)
+        })
 }

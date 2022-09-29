@@ -7,7 +7,7 @@ export default function SiigoAccountGroupsTable() {
     const [siigoAccountGroups, setSiigoAccountGroups] = useState([])
     const [loading, setLoading] = useState(false)
 
-    useEffect(function() {
+    useEffect(function () {
         setLoading(true)
         getSiigoAccountGroups()
             .then(response => {
@@ -28,34 +28,33 @@ export default function SiigoAccountGroupsTable() {
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de grupos de inventario registrados en el sistema SIIGO</CardTitle>
-                        
+
                         <hr />
 
                         {
-                            siigoAccountGroups.length == 0 ? (
+                            siigoAccountGroups.length === 0 ? (
                                 <Alert color='danger'>
                                     <p>No hay resultados para esta búsqueda.</p>
                                 </Alert>
                             ) : (
-                        
-                        <Table className="no-wrap mt-3 align-middle" responsive borderless striped>
-                            <thead>
-                                <tr>
-                                    <th>Identification</th>
-                                    <th>Nombre</th>
-                                    <th>Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {siigoAccountGroups.map((tdata, index) => (
-                                    <tr key={index} className="border-top">
-                                        <td>{tdata.id}</td>
-                                        <td>{tdata.name}</td>
-                                        <td>{tdata.active ? <div>activo</div> : <div>Inactivo</div>}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </Table>
+                                <Table className="no-wrap mt-3 align-middle" responsive borderless striped>
+                                    <thead>
+                                        <tr>
+                                            <th>Identification</th>
+                                            <th>Nombre</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {siigoAccountGroups.map((tdata, index) => (
+                                            <tr key={index} className="border-top">
+                                                <td>{tdata.id}</td>
+                                                <td>{tdata.name}</td>
+                                                <td>{tdata.active ? <div>activo</div> : <div>Inactivo</div>}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </Table>
                             )
                         }
                     </CardBody>
