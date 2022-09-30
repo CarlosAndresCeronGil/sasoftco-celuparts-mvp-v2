@@ -36,18 +36,18 @@ const LoginFormik = () => {
     console.log(userObject)
   }
 
-  useEffect(function() {
-    /* global google */
-    google.accounts.id.initialize({
-      client_id: "180088451221-aq25n429q5jh3547bm29m2vceggdh5k6.apps.googleusercontent.com",
-      callback: handleCallbackResponse
-    });
+  // useEffect(function() {
+  //   /* global google */
+  //   google.accounts.id.initialize({
+  //     client_id: "180088451221-aq25n429q5jh3547bm29m2vceggdh5k6.apps.googleusercontent.com",
+  //     callback: handleCallbackResponse
+  //   });
 
-    google.accounts.id.renderButton(
-      document.getElementById("SingInGoogle"),
-      { theme: "outline", size: "large" }
-    )
-  }, [])
+  //   google.accounts.id.renderButton(
+  //     document.getElementById("SingInGoogle"),
+  //     { theme: "outline", size: "large" }
+  //   )
+  // }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault();
