@@ -22,6 +22,7 @@ import getSingleRequestStatus from '../../services/getSingleRequestStatus';
 import putRequestNotification from '../../services/putRequestNotification';
 import putRequestStatus from '../../services/putRequestStatus';
 import Swal from 'sweetalert2'
+import getCelupartsInfo from '../../services/getCelupartsInfo';
 
 export default function RequestStatusForm() {
     const [dataRequestStatus, setDataRequestStatus] = useState({});
@@ -37,6 +38,9 @@ export default function RequestStatusForm() {
     })
     const [deliveryAddress, setDeliveryAddress] = useState({ deliveryAddress: "" })
     const [deliveryDate, setDeliveryDate] = useState({ deliveryDate: new Date() })
+
+    const [celupartsContactPhone, setCelupartsContactPhone] = useState("")
+    const [celupartsContactEmail, setCelupartsContactEmail] = useState("")
 
     const [loading, setLoading] = useState(false);
     const [loadingPut, setLoadingPut] = useState(false);
@@ -136,7 +140,7 @@ export default function RequestStatusForm() {
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
-                                message: "Tú dispositivo ha sido reparado, contactate con el administrador al siguiente número: 3xx - xxx - xxxx o al siguiente correo pagosceluparts@celuparts.com para confirmar pago",
+                                message: "Tú dispositivo ha sido reparado, contactate con el administrador al siguiente número: " + celupartsContactPhone + " o al siguiente correo " + celupartsContactEmail + " para confirmar pago",
                                 wasReviewed: false,
                                 notificationType: "to_customer"
                             })
@@ -300,6 +304,15 @@ export default function RequestStatusForm() {
                             .catch(error => {
                                 console.log(error)
                                 setLoading(false);
+                            })
+                        getCelupartsInfo()
+                            .then(response => {
+                                console.log("respuesta de celuparts info", response[0])
+                                setCelupartsContactPhone(response[0].contactPhone)
+                                setCelupartsContactEmail(response[0].contactEmail)
+                            })
+                            .catch(error => {
+                                console.log(error)
                             })
                     })
                     .catch(error => {
