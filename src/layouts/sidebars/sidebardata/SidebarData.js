@@ -1,6 +1,9 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
+import getSingleUser from '../../../services/getSingleUser';
+import getRequestNotificationToAdmin from '../../../services/getRequestNotificationToAdmin';
 import getRequestNotificationToCourier from '../../../services/getRequestNotificationToCourier';
+import getRequestNotificationToTechnician from '../../../services/getRequestNotificationToTechnician';
 import MaterialIcon from '@material/react-material-icon';
 
 
@@ -8,9 +11,45 @@ import MaterialIcon from '@material/react-material-icon';
 const SidebarDatas = () => {
 
   const [alerts, setAlerts] = useState([])
+  let countwasRevieweds = 0
 
-  useEffect(function () {
-      getRequestNotificationToCourier()
+  const SidebarData = [];
+
+
+
+  if (JSON.parse(localStorage.getItem('user')).role === "user") {
+
+    useEffect(function () {
+      getSingleUser({ id: JSON.parse(localStorage.getItem('user')).idUser })
+          .then(response => {
+              response[0].requests.map(tdata => (
+                  tdata.requestNotifications.length !== 0 ?
+                      setAlerts(prev => [...prev, tdata.requestNotifications[0]])
+                      : console.log("nothing")
+              ))
+          })
+          .catch(error => {
+              console.log(error)
+          })
+  }, [])
+  
+  countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+
+    SidebarData.push(
+      { caption: 'Actividad' },
+      {
+        title: "Notificaciones",
+        href: "./user-alerts",
+        id: 1,
+        icon: <MaterialIcon icon="notifications" />,
+        suffix: countwasRevieweds == 0 ? null : countwasRevieweds,
+        suffixColor: countwasRevieweds == 0 ? 'bg-success' : 'bg-danger',
+      }
+    )
+  } else if (JSON.parse(localStorage.getItem('user')).role === "admin") {
+
+    useEffect(function () {
+      getRequestNotificationToAdmin()
           .then(response => {
               setAlerts(response)
           })
@@ -19,27 +58,16 @@ const SidebarDatas = () => {
           })
   }, [])
 
-  let countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+  countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
 
-  const SidebarData = [];
-
-  if (JSON.parse(localStorage.getItem('user')).role === "user") {
-    SidebarData.push(
-      { caption: 'Actividad' },
-      {
-        title: "Notificaciones",
-        href: "./user-alerts",
-        id: 1,
-        icon: <MaterialIcon icon="notifications" />,
-      }
-    )
-  } else if (JSON.parse(localStorage.getItem('user')).role === "admin") {
     SidebarData.push(
       {
         title: "Notificaciones",
         id: 0.5,
         href: "./admin-alerts",
         icon: <MaterialIcon icon="notifications" />,
+        suffix: countwasRevieweds == 0 ? null : countwasRevieweds,
+        suffixColor: countwasRevieweds == 0 ? 'bg-success' : 'bg-danger',
       },
       {
         title: 'Acciones',
@@ -146,12 +174,27 @@ const SidebarDatas = () => {
       }
     )
   } else if (JSON.parse(localStorage.getItem('user')).role === "tecnico") {
+
+    useEffect(function () {
+      getRequestNotificationToTechnician()
+          .then(response => {
+              setAlerts(response)
+          })
+          .catch(error => {
+              console.log(error)
+          })
+  }, [])
+
+  countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+
     SidebarData.push(
       {
         title: "Notificaciones",
         id: 0.5,
         href: "./technician-alerts",
         icon: <MaterialIcon icon="notifications" />,
+        suffix: countwasRevieweds == 0 ? null : countwasRevieweds,
+        suffixColor: countwasRevieweds == 0 ? 'bg-success' : 'bg-danger',
       },
       {
         title: 'Acciones',
@@ -183,6 +226,21 @@ const SidebarDatas = () => {
       }
     )
   } else if (JSON.parse(localStorage.getItem('user')).role === "mensajero") {
+
+    
+
+    useEffect(function () {
+        getRequestNotificationToCourier()
+            .then(response => {
+                setAlerts(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [])
+
+    countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+
     SidebarData.push(
       {
         title: "Notificaciones",

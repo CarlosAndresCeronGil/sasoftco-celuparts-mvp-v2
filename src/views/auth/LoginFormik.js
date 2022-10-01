@@ -117,7 +117,7 @@ const LoginFormik = () => {
                           }}
                           render={({ errors, touched }) => (
 
-                            <Form onSubmit={handleSubmit}>
+                            <Form onSubmit={handleSubmit} autocomplete="off">
                               <p className='text-center'>Inicia sesión con tu cuenta</p>
                               <FormGroup className="form-outline mb-4">
                                 <label className="form-label" htmlFor="email">Email</label>

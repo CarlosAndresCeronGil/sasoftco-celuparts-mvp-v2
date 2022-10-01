@@ -225,7 +225,7 @@ const Header = () => {
               <div className="p-2 px-3">
                 <Link to="/" onClick={handleLogout}>
                   <Button color="danger" size="sm">
-                    Logout
+                    Cerrar sesión
                   </Button>
                 </Link>
               </div>

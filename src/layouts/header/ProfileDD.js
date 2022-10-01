@@ -69,10 +69,10 @@ const ProfileDD = () => {
           </div>
         ) : null
       }
-      <DropdownItem className="px-4 py-3">
+      {/* <DropdownItem className="px-4 py-3">
         <Settings size={20} />
         &nbsp; Editar perfíl
-      </DropdownItem>
+      </DropdownItem> */}
       {/* <DropdownItem className="px-4 py-3">
         <Star size={20} />
         &nbsp; My Balance

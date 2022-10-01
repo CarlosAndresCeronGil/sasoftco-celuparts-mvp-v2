@@ -1,9 +1,7 @@
 /* eslint-disable */
-import { Row, Col } from 'reactstrap';
 import BlogsToCelupartsPages from '../../components/celuparts/BlogsToCelupartsPages';
-import BlogsToExternalCelupartsPages from '../../components/celuparts/BlogsToExternalCelupartsPages';
-import CelupartsOverview from '../../components/celuparts/CelupartsOverview';
-import CelupartsRepairsAndRetomas from '../../components/celuparts/CelupartsRepairsAndRetomas';
+// import CelupartsOverview from '../../components/celuparts/CelupartsOverview';
+// import CelupartsRepairsAndRetomas from '../../components/celuparts/CelupartsRepairsAndRetomas';
 
 const DashboardCeluparts = () => {
 
@@ -20,19 +18,18 @@ const DashboardCeluparts = () => {
         </Col>
       </Row> */}
       <BlogsToCelupartsPages />
-      { currentRole === 'user' && <BlogsToExternalCelupartsPages /> }
 
       {/* Create buttom for social network */}
       <div className="d-flex justify-content-center d-grid gap-3">
-        <a href="#" target="_blank" rel="noreferrer" className="" >
+        {/* <a href="#" target="_blank" rel="noreferrer" className="" >
           <i className="bi bi-facebook btn btn-facebook btn-icon"  ></i>
-        </a>
+        </a> */}
         <a href="https://www.instagram.com/celuparts/" target="_blank" rel="noreferrer" className="">
           <i className="bi bi-instagram btn btn-instagram btn-icon"></i>
         </a>
-        <a href="#" target="_blank" rel="noreferrer" className="">
+        {/* <a href="#" target="_blank" rel="noreferrer" className="">
           <i className="bi bi-linkedin btn btn-linkedin btn-icon"></i>
-        </a>
+        </a> */}
       </div>
 
     </>
