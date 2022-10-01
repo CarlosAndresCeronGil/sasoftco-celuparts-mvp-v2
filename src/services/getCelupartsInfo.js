@@ -1,7 +1,8 @@
 import { API_URL } from "./settings";
 
-export default function getSiigoCostCenters() {
-    const apiURL = `${API_URL}/CostCenters`;
+export default function getCelupartsInfo() {
+    const apiURL = `${API_URL}/CelupartsInfo`;
+
     return fetch(apiURL)
         .then(response => response.json())
         .then((response) => {

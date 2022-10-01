@@ -1,9 +1,9 @@
 /* eslint-disable */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 import AuthContext from '../../context/AuthProvider';
 import authLogin from '../../services/authLogin';
-import { FormGroup, Container, InputGroupText, InputGroup } from 'reactstrap';
+import { FormGroup, Container, InputGroupText, InputGroup, Button } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
@@ -29,46 +29,66 @@ const LoginFormik = () => {
 
   const { setAuth } = useContext(AuthContext);
 
+  const handleCallbackResponse = (response) => {
+    console.log("Google JWT", response.credential)
+    var userObject = jwtDecode(response.credential)
+
+    console.log(userObject)
+  }
+
+  // useEffect(function() {
+  //   /* global google */
+  //   google.accounts.id.initialize({
+  //     client_id: "180088451221-aq25n429q5jh3547bm29m2vceggdh5k6.apps.googleusercontent.com",
+  //     callback: handleCallbackResponse
+  //   });
+
+  //   google.accounts.id.renderButton(
+  //     document.getElementById("SingInGoogle"),
+  //     { theme: "outline", size: "large" }
+  //   )
+  // }, [])
+
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
-        authLogin({
-            email: e.target.elements.email.value,
-            password: e.target.elements.password.value
+      authLogin({
+        email: e.target.elements.email.value,
+        password: e.target.elements.password.value
+      })
+        .then(response => {
+          // console.log("Response from sign in:", response);
+          if (response !== undefined) {
+            if (response === "Account disabled") {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Cuenta inhabilitada, contacte con el número 3xx-xxx-xxxx para soporte técnico'
+              })
+            } else {
+              const user = jwtDecode(response)
+              // console.log("user", user);
+              localStorage.setItem('user', JSON.stringify(user));
+              setAuth(true);
+              navigate('/home/dashboards/dashboard1');
+            }
+          }
         })
-            .then(response => {
-                // console.log("Response from sign in:", response);
-                if (response !== undefined) {
-                    if (response === "Account disabled") {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Cuenta inhabilitada, contacte con el número 3xx-xxx-xxxx para soporte técnico'
-                        })
-                    } else {
-                        const user = jwtDecode(response)
-                        // console.log("user", user);
-                        localStorage.setItem('user', JSON.stringify(user));
-                        setAuth(true);
-                        navigate('/home/dashboards/dashboard1');
-                    }
-                }
-            })
-            .catch(error => {
-                console.log("error:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Usuario o contraseña incorrecto!'
-                })
-            });
+        .catch(error => {
+          console.log("error:", error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Usuario o contraseña incorrecto!'
+          })
+        });
 
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-}
+  }
 
-  
+
   return (
     <div className="loginBox bg-white">
       <Container fluid className="h-100">
@@ -96,64 +116,66 @@ const LoginFormik = () => {
                             navigate('/');
                           }}
                           render={({ errors, touched }) => (
-                          
-                          <Form onSubmit={ handleSubmit }>
-                            <p className='text-center'>Inicia sesión con tu cuenta</p>
-                            <FormGroup className="form-outline mb-4">
+
+                            <Form onSubmit={handleSubmit}>
+                              <p className='text-center'>Inicia sesión con tu cuenta</p>
+                              <FormGroup className="form-outline mb-4">
                                 <label className="form-label" htmlFor="email">Email</label>
                                 <InputGroup>
                                   <InputGroupText>
                                     <i className="bi bi-person"></i>
                                   </InputGroupText>
-                                  <Field 
-                                    id="email" 
+                                  <Field
+                                    id="email"
                                     type="email"
-                                    name="email" 
+                                    name="email"
                                     placeholder="ejemplo@celuparts.com"
-                                    className={`form-control${
-                                      errors.email && touched.email ? ' is-invalid' : ''
-                                    }`}
-                                    />    
-                                <ErrorMessage name="email" component="div" className="invalid-feedback" />                            
+                                    className={`form-control${errors.email && touched.email ? ' is-invalid' : ''
+                                      }`}
+                                  />
+                                  <ErrorMessage name="email" component="div" className="invalid-feedback" />
                                 </InputGroup>
-                            </FormGroup>
-  
-                            <FormGroup className="form-outline mb-4">
+                              </FormGroup>
+
+                              <FormGroup className="form-outline mb-4">
                                 <label className="form-label" htmlFor="password" >Contraseña</label>
                                 <InputGroup>
                                   <InputGroupText>
                                     <i className="bi bi-lock"></i>
-                                  </InputGroupText>                       
-                                <Field 
-                                  id="password" 
-                                  type="password"
-                                  name="password" 
-                                  placeholder='********'
-                                  // onChange={(e) => setPassword(e.target.value)}
-                                  className={`form-control${
-                                    errors.password && touched.password ? ' is-invalid' : ''
-                                  }`}
+                                  </InputGroupText>
+                                  <Field
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    placeholder='********'
+                                    // onChange={(e) => setPassword(e.target.value)}
+                                    className={`form-control${errors.password && touched.password ? ' is-invalid' : ''
+                                      }`}
                                   />
-                            <ErrorMessage
-                              name="password"
-                              component="div"
-                              className="invalid-feedback"
-                            />
-                            </InputGroup>
-                          </FormGroup>
-  
-                            <div className="text-center pt-1 mb-5 pb-1">
-                              <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Iniciar</button>
-                              {/* <a className="text-muted" href="#!">Forgot password?</a> */}
-                            </div>
-  
-                            <div className="d-flex align-items-center justify-content-center pb-4">
-                              <p className="mb-0 me-2">¿No tienes cuenta?</p>
-                              
-                              <button type="button" className="btn btn-outline-primary"><Link style={{ textDecoration: 'none' }} to="/registerformik">!Registrate!</Link></button>
-                            </div>
-  
-                          </Form>
+                                  <ErrorMessage
+                                    name="password"
+                                    component="div"
+                                    className="invalid-feedback"
+                                  />
+                                </InputGroup>
+                              </FormGroup>
+
+                              <div className="text-center pt-1 mb-5 pb-1">
+                                <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Iniciar</button>
+                                {/* <a className="text-muted" href="#!">Forgot password?</a> */}
+                              </div>
+
+                              {/* <div className="d-inline-flex p-2 pt-1 mb-5 pb-1">
+                                <div id='SingInGoogle' className="g-signin2" data-onsuccess="onSignIn"></div>
+                              </div> */}
+
+                              <div className="d-flex align-items-center justify-content-center pb-4">
+                                <p className="mb-0 me-2">¿No tienes cuenta?</p>
+
+                                <button type="button" className="btn btn-outline-primary"><Link style={{ textDecoration: 'none' }} to="/registerformik">!Registrate!</Link></button>
+                              </div>
+
+                            </Form>
                           )}
                         />
 

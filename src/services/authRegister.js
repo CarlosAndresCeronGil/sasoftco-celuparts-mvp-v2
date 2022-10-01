@@ -13,11 +13,15 @@ export default function authRegister(data) {
     })
         // .then(response => response.json())
         .then(data2 => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Exito!',
-                text: 'Registro exitoso!',
-            })
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: 'Exito!',
+            //     text: 'Registro exitoso!',
+            // })
+            if(!data2.ok) {
+                // return data2.text().then(text => { throw new Error(text) })
+                return data2.json().then(response => {throw new Error(response.InnerException.Message)})
+            }
             return data2;
         })
         .catch(error => {

@@ -122,7 +122,7 @@ export default function RepairPaymentForm() {
                                             <option>Transferencia bancaria</option>
                                         </Input>
                                     </FormGroup>
-                                    <FormGroup>
+                                    {/* <FormGroup>
                                         <Label for="billPayment">Factura de pago</Label>
                                         <Input
                                             id="billPayment"
@@ -130,7 +130,7 @@ export default function RepairPaymentForm() {
                                             value={billPayment.billPayment}
                                             onChange={handleBillPaymentChange}
                                         />
-                                    </FormGroup>
+                                    </FormGroup> */}
                                     {
                                         isPaymentDateNull.isPaymentDateNull ? (
                                             <FormGroup>
