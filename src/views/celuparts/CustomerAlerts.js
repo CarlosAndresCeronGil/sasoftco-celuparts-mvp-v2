@@ -31,6 +31,8 @@ export default function CustomerAlerts() {
             })
     }, [])
 
+    console.log("alerts", alerts)
+
     return (
         loading ? <div>Cargando ...</div> :
         <div>

@@ -24,6 +24,8 @@ export default function TechnicianAlerts() {
             })
     }, [])
 
+    console.log("alerts", alerts)
+
     return (
         <div>
             <Card>
@@ -33,6 +35,12 @@ export default function TechnicianAlerts() {
                 </CardTitle>
                 <CardBody>
                     {
+                        alerts.length == 0 ? (
+                            <Alert color='danger'>
+                                <p>No tienes notificaciones.</p>
+                            </Alert>
+                        ) : (
+
                         alerts.map((tdata, index) => (
                             tdata.notificationType === "to_technician" && tdata.wasReviewed === false ?
                                 <div key={index}>
@@ -47,7 +55,7 @@ export default function TechnicianAlerts() {
                                         {tdata.message}
                                     </Alert>
                                 </div> : null
-                        ))
+                        )))
                     }
                 </CardBody>
             </Card>

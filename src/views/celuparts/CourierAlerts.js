@@ -28,15 +28,15 @@ export default function CourierAlerts() {
             })
     }, [])
 
-    let countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+    let wasNotRevieweds = alerts.filter(alert => alert.wasReviewed == false) 
 
-    const updateAlerts = alerts.map(( alert ) => {
-        return (
-            {
-                ...alert,
-                wasReviewed: true
-            }
-        )
+    const updateAlerts = wasNotRevieweds.map(( alert ) => {
+            return (
+                {
+                    ...alert,
+                    wasReviewed: true
+                }
+            )
     })
 
     useEffect(() => {

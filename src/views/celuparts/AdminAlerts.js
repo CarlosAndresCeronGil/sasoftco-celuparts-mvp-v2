@@ -24,6 +24,8 @@ export default function AdminAlerts() {
             })
     }, [])
 
+    console.log("alerts", alerts)
+
     return (
         <div>
             <Card>
