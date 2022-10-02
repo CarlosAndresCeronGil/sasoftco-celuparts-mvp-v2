@@ -92,7 +92,7 @@ const SidebarDatas = () => {
         collapisble: true,
         children: [
           {
-            title: "Usuarios",
+            title: "Clientes",
             href: "./users-table",
           },
           {

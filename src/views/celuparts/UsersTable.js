@@ -2,21 +2,34 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
 import getUsers from '../../services/getUsers';
+import getUsersSimpleInfo from '../../services/getUsersSimpleInfo';
 
 export default function UsersTable() {
     const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false)
 
 
     useEffect(function () {
-        getUsers()
-            .then((response) => {
-                setUsers(response);
+        setLoading(true)
+        // getUsers()
+        //     .then((response) => {
+        //         setUsers(response);
+        //     })
+        getUsersSimpleInfo()
+            .then(response => {
+                setLoading(false)
+                setUsers(response)
+            })
+            .catch(error => {
+                setLoading(false)
+                console.log(error)
             })
     }, [setUsers])
 
     // console.log(JSON.parse(localStorage.getItem('user')).role);
 
     return (
+        loading ? <div>Cargando...</div> :
         <div>
             <Card>
                 <CardBody>
