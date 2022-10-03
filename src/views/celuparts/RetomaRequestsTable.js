@@ -1,31 +1,19 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import {
-    Card,
-    CardBody,
-    CardTitle,
     Row,
     Col,
     Form,
     FormGroup,
     Label,
-    Input,
     Table,
     FormText,
     Button,
-    InputGroup,
-    InputGroupText,
-    ButtonDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-    FormFeedback,
     Modal,
     ModalHeader,
     ModalBody,
     ModalFooter,
 } from 'reactstrap';
-// import getRequests from '../../services/getRequests';
 import { Link } from "react-router-dom";
 import DatePicker from 'react-datepicker';
 import getRequestRetomas from '../../services/getRequestRetomas';
@@ -33,7 +21,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ComponentCard from '../../components/ComponentCard';
 
 export default function RetomaRequestsTable() {
-    const [requests, setRequests] = useState()
+    const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true)
     const [page, setPage] = useState(1)
 
@@ -234,7 +222,7 @@ export default function RetomaRequestsTable() {
                             </tr>
                         </thead>
                         <tbody>
-                            {requests.requests.map((tdata, index) => (
+                            {requests.requests?.map((tdata, index) => (
                                 tdata.requestType === "Retoma" ? (
                                     <tr key={index} className="border-top">
                                         <td>{tdata.userDto.names} {tdata.userDto.surnames}</td>
@@ -320,7 +308,7 @@ export default function RetomaRequestsTable() {
                     </Table>
                     {
                         <div>
-                            Página número: {requests.currentPage} de {requests.pages}
+                            Página número: { requests.currentPage } de { requests.pages === 0 ? 1 : requests.pages }
                         </div>
                     }
                     <div className='d-flex justify-content-between'>
@@ -330,7 +318,8 @@ export default function RetomaRequestsTable() {
                                 : <Button className="btn" color='primary' onClick={handlePrevious}>Anterior</Button>
                         }
                         {
-                            requests.currentPage === requests.pages ?
+                            
+                            requests.currentPage === requests.pages || requests.currentPage === requests.pages + 1 ?
                                 <button className="btn btn-celuparts-dark-blue" disabled>Siguiente</button>
                                 : <Button className="btn" color='primary' onClick={handleNext}>Siguiente</Button>
                         }

@@ -26,7 +26,8 @@ const RegisterFormik = () => {
 
   const validationSchema = Yup.object().shape({
     idNumber: Yup.string()
-      .min(10, "El numero de identificación debe tener mínimo 10 caracteres")
+      .min(7, "El numero de identificación debe tener mínimo 7 caracteres")
+      .max(10, "El numero de identificación debe tener máximo 10 caracteres")
       .required('Número de identificación requerido'),
     UserName: Yup.string().required('Nombre requerido'),
     LastName: Yup.string().required('Apellidos requerido'),

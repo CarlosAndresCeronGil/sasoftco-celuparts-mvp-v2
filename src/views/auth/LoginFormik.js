@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 import AuthContext from '../../context/AuthProvider';
 import authLogin from '../../services/authLogin';
-import { FormGroup, Container, InputGroupText, InputGroup, Button } from 'reactstrap';
+import { FormGroup, Container, InputGroupText, InputGroup, Button, Spinner } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ import Swal from 'sweetalert2'
 const LoginFormik = () => {
 
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const initialValues = {
     email: '',
@@ -50,6 +51,7 @@ const LoginFormik = () => {
   // }, [])
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       authLogin({
@@ -60,6 +62,7 @@ const LoginFormik = () => {
           // console.log("Response from sign in:", response);
           if (response !== undefined) {
             if (response === "Account disabled") {
+              setLoading(false);
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -75,6 +78,7 @@ const LoginFormik = () => {
           }
         })
         .catch(error => {
+          setLoading(false);
           console.log("error:", error);
           Swal.fire({
             icon: 'error',
@@ -84,6 +88,7 @@ const LoginFormik = () => {
         });
 
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   }
@@ -159,11 +164,23 @@ const LoginFormik = () => {
                                   />
                                 </InputGroup>
                               </FormGroup>
-
-                              <div className="text-center pt-1 mb-5 pb-1">
-                                <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Iniciar</button>
+                              {
+                                loading ? (
+                                  <div className="d-flex justify-content-center">
+                                    <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit" disabled>
+                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                      <span className='ms-2'>Cargando...</span>
+                                      </button>
+                                    
+                                  </div>
+                                ) : (
+                                  <div className="text-center pt-1 mb-5 pb-1">
+                                    <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Iniciar sesión</button>
+                                    
+                                  </div>
+                                )
+                              }
                                 {/* <a className="text-muted" href="#!">Forgot password?</a> */}
-                              </div>
 
                               {/* <div className="d-inline-flex p-2 pt-1 mb-5 pb-1">
                                 <div id='SingInGoogle' className="g-signin2" data-onsuccess="onSignIn"></div>

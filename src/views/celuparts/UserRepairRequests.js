@@ -272,7 +272,7 @@ export default function UserRepairRequests() {
                                     tdata.requestType === "Reparacion" ? (
                                         <tr key={index} className="border-top">
                                             <td>
-                                                {tdata.equipment.equipmentBrand} {tdata.equipment.modelOrReference}
+                                                {tdata.equipment?.equipmentBrand} {tdata.equipment?.modelOrReference}
                                             </td>
                                             <td>{tdata.requestStatus[0].status}</td>
                                             <td>{tdata.repairs[0].repairQuote}</td>

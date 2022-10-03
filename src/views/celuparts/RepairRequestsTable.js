@@ -35,7 +35,7 @@ import ComponentCard from '../../components/ComponentCard';
 import getSingleRequest from '../../services/getSingleRequest';
 
 export default function RepairRequestsTable() {
-    const [requests, setRequests] = useState({})
+    const [requests, setRequests] = useState([])
     const [loading, setLoading] = useState(true)
     const [page, setPage] = useState(1)
 
@@ -348,7 +348,7 @@ export default function RepairRequestsTable() {
                     </Table>
                     {
                         <div>
-                            Página número: {requests.currentPage} de {requests.pages}
+                            Página número: {requests.currentPage} de { requests.pages === 0 ? 1 : requests.pages }
                         </div>
                     }
                     <div className='d-flex justify-content-between'>
@@ -358,7 +358,7 @@ export default function RepairRequestsTable() {
                                 : <Button className="btn" color='primary' onClick={handlePrevious}>Anterior</Button>
                         }
                         {
-                            requests.currentPage === requests.pages ?
+                            requests.currentPage === requests.pages || requests.currentPage === requests.pages + 1 ?
                                 <button className="btn btn-celuparts-dark-blue" disabled>Siguiente</button>
                                 : <Button className="btn" color='primary' onClick={handleNext}>Siguiente</Button>
                         }

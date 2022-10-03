@@ -1,10 +1,10 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import getSingleUser from '../../../services/getSingleUser';
 import getRequestNotificationToAdmin from '../../../services/getRequestNotificationToAdmin';
 import getRequestNotificationToCourier from '../../../services/getRequestNotificationToCourier';
 import getRequestNotificationToTechnician from '../../../services/getRequestNotificationToTechnician';
 import MaterialIcon from '@material/react-material-icon';
+import getRequestNotificationByIdUserDto from '../../../services/getRequestNotificationByIdUserDto'
 
 
 
@@ -15,23 +15,17 @@ const SidebarDatas = () => {
 
   const SidebarData = [];
 
-
-
   if (JSON.parse(localStorage.getItem('user')).role === "user") {
 
-    useEffect(function () {
-      getSingleUser({ id: JSON.parse(localStorage.getItem('user')).idUser })
-          .then(response => {
-              response[0].requests.map(tdata => (
-                  tdata.requestNotifications.length !== 0 ?
-                      setAlerts(prev => [...prev, tdata.requestNotifications[0]])
-                      : console.log("nothing")
-              ))
-          })
-          .catch(error => {
-              console.log(error)
-          })
-  }, [])
+  useEffect(function () {
+    getRequestNotificationByIdUserDto({ idUserDto: JSON.parse(localStorage.getItem('user')).idUser })
+        .then(response => {
+            setAlerts(response)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}, [])
   
   countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
 

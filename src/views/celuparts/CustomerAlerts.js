@@ -1,36 +1,20 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
-// import getRequestNotification from '../../services/getRequestNotification';
-import getRequestNotificationByIdUserDto from '../../services/getRequestNotificationByIdUserDto'
 import {
     Alert,
     Card,
     CardBody,
     CardTitle,
 } from "reactstrap";
-import getSingleUser from '../../services/getSingleUser';
+import getRequestNotificationByIdUserDto from '../../services/getRequestNotificationByIdUserDto'
 import putRequestNotification from '../../services/putRequestNotification';
 
 export default function CustomerAlerts() {
     const [alerts, setAlerts] = useState([])
     const [loading, setLoading] = useState(false)
 
-    useEffect(function () {
+    useEffect( () => {
         setLoading(true)
-        // getSingleUser({ id: JSON.parse(localStorage.getItem('user')).idUser })
-        //     .then(response => {
-        //         // console.log("response.requests", response[0].requests)
-        //         response[0].requests.map(tdata => (
-        //             tdata.requestNotifications.length !== 0 ?
-        //                 setAlerts(prev => [...prev, tdata.requestNotifications[0]])
-        //                 : console.log("nothing")
-        //         ))
-        //         setLoading(false)
-        //     })
-        //     .catch(error => {
-        //         console.log(error)
-        //         setLoading(false)
-        //     })
         getRequestNotificationByIdUserDto({ idUserDto: JSON.parse(localStorage.getItem('user')).idUser })
             .then(response => {
                 setLoading(false)
@@ -42,33 +26,33 @@ export default function CustomerAlerts() {
             })
     }, [])
 
-    // let wasNotRevieweds = alerts.filter(alert => alert.wasReviewed == false) 
+    let wasNotRevieweds = alerts.filter(alert => alert.wasReviewed == false) 
 
-    // const updateAlerts = wasNotRevieweds.map(( alert ) => {
-    //         return (
-    //             {
-    //                 ...alert,
-    //                 wasReviewed: true
-    //             }
-    //         )
-    // })
+    const updateAlerts = wasNotRevieweds.map(( alert ) => {
+            return (
+                {
+                    ...alert,
+                    wasReviewed: true
+                }
+            )
+    })
 
-    // useEffect(() => {
-    //     updateAlerts.forEach((alert) => {
-    //         putRequestNotification(alert)
-    //             .then(response => {
-    //                 return
-    //             })
-    //             .catch(error => {
-    //                 console.log(error)
-    //             })
-    //     })
-    //     getSingleUser({ id: JSON.parse(localStorage.getItem('user')).idUser })
-    //     .then(data => {
-    //             setAlerts(data)
-    //         })
-    //         .catch(error => console.log(error))
-    // }, [ loading ])
+    useEffect(() => {
+        updateAlerts.forEach((alert) => {
+            putRequestNotification(alert)
+                .then(response => {
+                    return
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        })
+        getRequestNotificationByIdUserDto({ idUserDto: JSON.parse(localStorage.getItem('user')).idUser })
+        .then(data => {
+                setAlerts(data)
+            })
+            .catch(error => console.log(error))
+    }, [ loading ])
 
     console.log("alerts", alerts)
 
