@@ -82,7 +82,7 @@ const SidebarDatas = () => {
       {
         title: 'Reportes',
         id: 2,
-        icon: <MaterialIcon icon='speed' />,
+        icon: <MaterialIcon icon='summarize' />,
         collapisble: true,
         children: [
           {
@@ -98,6 +98,10 @@ const SidebarDatas = () => {
             href: "./technicians-table",
           },
           {
+            title: "Domicilios",
+            href: "./pickups-table",
+          },
+          {
             title: "Tecnicos a reparaciones",
             href: "./repair-table",
           },
@@ -106,7 +110,7 @@ const SidebarDatas = () => {
       {
         title: 'SIIGO',
         id: 3,
-        icon: <MaterialIcon icon='speed' />,
+        icon: <MaterialIcon icon='account_balance_wallet' />,
         collapisble: true,
         children: [
           {

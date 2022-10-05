@@ -360,6 +360,7 @@ export default function RequestStatusForm() {
                                                         <option value="En devolucion">En devolución</option>
                                                         <option value="Devuelto sin reparacion">Devuelto sin reparación</option>
                                                         <option>Terminada</option>
+                                                        <option>Anulado por IMEI</option>
                                                     </Input>
                                                 </FormGroup>
                                                 :
@@ -384,6 +385,7 @@ export default function RequestStatusForm() {
                                                         <option value="Devuelto sin reparacion">Devuelto sin reparación</option>
                                                         <option>Retoma</option>
                                                         <option>Abandonada</option>
+                                                        <option>Anulado por IMEI</option>
                                                     </Input>
                                                 </FormGroup>
                                         }

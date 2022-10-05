@@ -113,6 +113,7 @@ export function Router() {
   const RepairRequestsTable = lazy(() => import("../views/celuparts/RepairRequestsTable"));
   const RetomaRequestsTable = lazy(() => import("../views/celuparts/RetomaRequestsTable"));
   const EquipmentsTable = lazy(() => import("../views/celuparts/EquipmentsTable"));
+  const PickupsTable = lazy(() => import("../views/celuparts/PickupsTable"));
   const RequestStatusTable = lazy(() => import("../views/celuparts/RequestStatusTable"));
   const TechniciansTable = lazy(() => import("../views/celuparts/TechniciansTable"));
   const RepairTable = lazy(() => import("../views/celuparts/RepairTable"));
@@ -203,6 +204,7 @@ export function Router() {
           { path: "/home/equipments-table", exact: true, element: <EquipmentsTable /> },
           { path: "/home/request-status-table", exact: true, element: <RequestStatusTable /> },
           { path: "/home/technicians-table", exact: true, element: <TechniciansTable /> },
+          { path: "/home/pickups-table", exact: true, element: <PickupsTable /> },
           { path: "/home/repair-table", exact: true, element: <RepairTable /> },
           { path: "/home/update-repair-form", exact: true, element: <UpdateRepairForm /> },
           { path: "/home/request-status-form", exact: true, element: <RequestStatusForm /> },
