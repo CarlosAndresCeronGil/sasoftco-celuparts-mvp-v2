@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Card,
     Row,
@@ -27,8 +27,13 @@ import postHomeService from '../../services/postHomeService';
 import postRetoma from '../../services/postRetoma';
 import postRetomaPayment from '../../services/postRetomaPayment';
 import postRequestNotification from '../../services/postRequestNotification'
+
 import getRequestWithUserInfo from '../../services/getRequestWithUserInfo';
+import getCellphoneBrands from '../../services/getCellphoneBrands'
+import getComputerBrands from '../../services/getComputerBrands'
+import getTypeOfEquipments from '../../services/getTypeOfEquipments'
 import getVerifyImei from '../../services/getVerifyImei';
+
 import { Checkbox } from '@blueprintjs/core';
 
 export default function RequestRetomaForm() {
@@ -37,19 +42,25 @@ export default function RequestRetomaForm() {
     const [selectedFile, setSelectedFile] = useState();
     const [errorMsg, setErrorMsg] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-  
+
     const handleFileChange = (event) => {
-      if(event.target.files.length > 0){
-        setSelectedFile(event.target.files[0]);
-      }
+        if (event.target.files.length > 0) {
+            setSelectedFile(event.target.files[0]);
+        }
     };
 
     //Variables del formulario
-    const [typeOfEquipment, setTypeOfEquipment] = useState({ typeOfEquipment: 'Computador portatil' })
+    const [typeOfEquipment, setTypeOfEquipment] = useState({ typeOfEquipment: '1' })
     const [imei, setImei] = useState('')
     const [serial, setSerial] = useState('')
     const [verifyResponse, setVerifyResponse] = useState('')
     const [isSameAddresses, setIsSameAddresses] = useState(false);
+
+    /*Datos donde iran la lista de marcas de celulares, computadoras mas populares y tipops de
+    dispositivo*/
+    const [cellphoneList, setCellphoneList] = useState([])
+    const [computersList, setComputersList] = useState([])
+    const [typeOfEquipmentList, setTypeOfEquipmentList] = useState([])
 
     const handleSameAddresses = () => {
         setIsSameAddresses(!isSameAddresses)
@@ -62,6 +73,7 @@ export default function RequestRetomaForm() {
     const [finishDate, setFinishDate] = useState(tomorrow);
 
     const [loading, setLoading] = useState(false);
+    const [loadingPage, setLoadingPage] = useState(false)
 
     //Variables para permitir que se haga un registro en una hora correcta
     const isSelectedDateToday = new Date().getDate() === startDate.getDate();
@@ -70,39 +82,72 @@ export default function RequestRetomaForm() {
 
     const navigate = useNavigate()
 
+    useEffect(function () {
+        setLoadingPage(true)
+        getTypeOfEquipments()
+            .then(typeOfEquipmentResponse => {
+                setTypeOfEquipmentList(typeOfEquipmentResponse)
+                console.log("Lista de tipos de equipos", typeOfEquipmentResponse)
+                getCellphoneBrands()
+                    .then(cellphonesResponse => {
+                        setCellphoneList(cellphonesResponse)
+                        console.log("Lista de celulares", cellphonesResponse)
+                        getComputerBrands()
+                            .then(computersResponse => {
+                                setComputersList(computersResponse)
+                                console.log("Lista de computadoras", computersResponse)
+                                setLoadingPage(false)
+                            })
+                            .catch(error => {
+                                console.log(error)
+                                setLoadingPage(false)
+                            })
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        setLoadingPage(false)
+                    })
+            })
+            .catch(error => {
+                console.log(error)
+                setLoadingPage(false)
+            })
+    }, [])
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const MAX_FILE_SIZE = 1024 // 1MB
-  
+
         if (!selectedFile) {
-          setErrorMsg("Por favor seleccione un archivo");
-          setIsSuccess(false)
-          return 
+            setErrorMsg("Por favor seleccione un archivo");
+            setIsSuccess(false)
+            return
         }
-    
+
         const fileSizeKiloBytes = selectedFile.size / 1024
-    
-        if(fileSizeKiloBytes > MAX_FILE_SIZE){
-          setErrorMsg("Tamaño máximo de archivo 1MB");
-          setIsSuccess(false)
-          setLoading(false);
-          return
+
+        if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+            setErrorMsg("Tamaño máximo de archivo 1MB");
+            setIsSuccess(false)
+            setLoading(false);
+            return
         }
-  
-        if(fileSizeKiloBytes < MAX_FILE_SIZE){
+
+        if (fileSizeKiloBytes < MAX_FILE_SIZE) {
 
             setLoading(true);
             const formData = new FormData()
 
-            formData.append("typeOfEquipment", e.target.elements.typeOfEquipment.value)
+            //formData.append("typeOfEquipment", e.target.elements.typeOfEquipment.value)
+            formData.append("idTypeOfEquipment", e.target.elements.typeOfEquipment.value)
             formData.append("equipmentBrand", e.target.elements.equipmentBrand.value)
             formData.append("modelOrReference", e.target.elements.modelOrReference.value)
             formData.append("imeiOrSerial", e.target.elements.imei.value)
             formData.append("equipmentInvoice", e.target.elements.equipmentInvoice.files[0])
 
             const deliveryAddress = isSameAddresses ? e.target.elements.pickUpAddress.value : e.target.elements.deliveryAddress.value
-          console.log('deliveryAddress: ', deliveryAddress)
+            console.log('deliveryAddress: ', deliveryAddress)
 
             postEquipment(formData)
                 .then(dataEquipment => {
@@ -203,7 +248,7 @@ export default function RequestRetomaForm() {
                 .then(response => {
                     navigate("/home/user-retoma-requests")
                 })
-            }
+        }
     }
 
     const isWeekDay = (date) => {
@@ -255,7 +300,7 @@ export default function RequestRetomaForm() {
                                     </CardSubtitle>
                                     <FormGroup>
                                         <Label for="pickUpAddress">Dirección de recogida*</Label>
-                                        <Checkbox className='ms-0 ms-md-5' label="Usar la misma dirección" onChange={handleSameAddresses}  />
+                                        <Checkbox className='ms-0 ms-md-5' label="Usar la misma dirección" onChange={handleSameAddresses} />
                                         <Input
                                             id="pickUpAddress"
                                             name="pickUpAddress"
@@ -281,7 +326,7 @@ export default function RequestRetomaForm() {
 
 
                                     <Row>
-                                            <Col lg={6}>
+                                        <Col lg={6}>
 
                                             <FormGroup>
                                                 <Label for="PickUpTime">Fecha y hora de recogida*</Label>
@@ -317,10 +362,10 @@ export default function RequestRetomaForm() {
                                                     onChange={(date) => setStartDate(date)}
                                                     timeFormat="HH:mm"
                                                 />
-                                                </FormGroup>
-                                                
-                                            </Col>
-                                            <Col lg={6}>
+                                            </FormGroup>
+
+                                        </Col>
+                                        <Col lg={6}>
                                             {
                                                 startDate.getDay() === 6 ?
                                                     <FormGroup>
@@ -395,10 +440,10 @@ export default function RequestRetomaForm() {
                                                         />
                                                     </FormGroup>
                                             }
-                                            </Col>
+                                        </Col>
                                     </Row>
 
-                                    
+
                                     <FormGroup>
                                         <Label for="paymentMethod">Método de pago (de celuparts a ti)*</Label>
                                         <Input id="paymentMethod" name="paymentMethod" type="select">
@@ -420,8 +465,13 @@ export default function RequestRetomaForm() {
                                             value={typeOfEquipment.typeOfEquipment}
                                             onChange={(e) => setTypeOfEquipment({ typeOfEquipment: e.target.value })}
                                         >
-                                            <option value="Computador portatil">Computador portátil</option>
-                                            <option value="Telefono celular">Teléfono celular</option>
+                                            {
+                                                typeOfEquipmentList.map((typeOfEquipmentData, index) => (
+                                                    <option value={typeOfEquipmentData.idTypeOfEquipment} key={index}>{typeOfEquipmentData.equipmentTypeName}</option>
+                                                ))
+                                            }
+                                            {/* <option value="Computador portatil">Computador portátil</option>
+                                            <option value="Telefono celular">Teléfono celular</option> */}
                                         </Input>
                                     </FormGroup>
                                     <FormGroup>
@@ -430,9 +480,20 @@ export default function RequestRetomaForm() {
                                             id="equipmentBrand"
                                             name="equipmentBrand"
                                             placeholder="Ingrese la marca del dispositivo"
-                                            type="text"
+                                            type="select"
                                             required
-                                        />
+                                        >
+                                            {
+                                                typeOfEquipment.typeOfEquipment === '1' ?
+                                                    computersList.map((computerData, index) => (
+                                                        <option key={index}>{computerData.brandName}</option>
+                                                    ))
+                                                    :
+                                                    cellphoneList.map((cellphoneData, index) => (
+                                                        <option key={index}>{cellphoneData.brandName}</option>
+                                                    ))
+                                            }
+                                        </Input>
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="modelOrReference">Modelo o referencia dispositivo*</Label>
@@ -467,12 +528,12 @@ export default function RequestRetomaForm() {
                                                             </Button>
                                                         </FormGroup>
                                                         : currentRole !== 'user' ?
-                                                        <FormGroup>
-                                                            <Button onClick={handleVerifySerial}>
-                                                                Verificar serial
-                                                            </Button>
-                                                        </FormGroup>
-                                                        : null
+                                                            <FormGroup>
+                                                                <Button onClick={handleVerifySerial}>
+                                                                    Verificar serial
+                                                                </Button>
+                                                            </FormGroup>
+                                                            : null
 
                                                 }
                                             </div>
@@ -498,12 +559,12 @@ export default function RequestRetomaForm() {
                                                             </Button>
                                                         </FormGroup>
                                                         : currentRole !== 'user' ?
-                                                        <FormGroup>
-                                                            <Button onClick={handleVerifyImei}>
-                                                                Verificar imei
-                                                            </Button>
-                                                        </FormGroup>
-                                                        : null
+                                                            <FormGroup>
+                                                                <Button onClick={handleVerifyImei}>
+                                                                    Verificar imei
+                                                                </Button>
+                                                            </FormGroup>
+                                                            : null
                                                 }
                                             </div>
                                     }
@@ -522,7 +583,7 @@ export default function RequestRetomaForm() {
                                             required
                                         />
                                     </FormGroup>
-                                    <h6 className={ errorMsg ? 'alert alert-danger' : null } >{errorMsg}</h6>
+                                    <h6 className={errorMsg ? 'alert alert-danger' : null} >{errorMsg}</h6>
                                     <FormGroup>
                                         <Label for="autoDiagnosis">Cuentanos brevemente el estado de tu dispositivo a vender*</Label>
                                         <Input

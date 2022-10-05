@@ -1,7 +1,7 @@
 import { API_URL } from "./settings";
 
-export default function getRequestNotificationByIdRequest({idRequest}) {
-    const apiURL = `${API_URL}/RequestNotification/Request/IdRequest/${idRequest}`;
+export default function getTypeOfEquipments() {
+    const apiURL = `${API_URL}/TypeOfEquipment`;
 
     return fetch(apiURL)
         .then(response => response.json())

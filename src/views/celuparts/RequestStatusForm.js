@@ -227,7 +227,7 @@ export default function RequestStatusForm() {
                 ) : console.log("do nothing")
                 setLoadingPut(false);
             })
-            .then(finalResponse => {
+            .finally(finalResponse => {
                 Swal.fire({
                     icon: 'success',
                     title: 'Exito!',
@@ -285,6 +285,7 @@ export default function RequestStatusForm() {
                 getRequestNotificationByIdRequest({ idRequest: response.idRequest })
                     .then(response2 => {
                         console.log("requestNotificationByIdRequest:", response2)
+                        console.log("response.idRequest", response.idRequest)
                         setNotifications(response2)
                         /*Esta parte se necesita para el mensaje final al mensajero donde necesita saber fecha, 
                         nombre del producto y direccion de entrega*/
