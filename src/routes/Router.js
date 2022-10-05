@@ -104,6 +104,7 @@ export function Router() {
   const Maintanance = Loadable(lazy(() => import('../views/auth/Maintanance')));
   const LockScreen = Loadable(lazy(() => import('../views/auth/LockScreen')));
   const RecoverPassword = Loadable(lazy(() => import('../views/auth/RecoverPassword')));
+  const ChangePassword = Loadable(lazy(() => import('../views/auth/ChangePassword')));
 
   /***** Celuparts Pages ****/
   const SignIn = lazy(() => import("../views/celuparts/SignIn"));
@@ -166,7 +167,8 @@ export function Router() {
         { path: 'registerformik', element: <RegisterFormik /> },
         { path: 'maintanance', element: <Maintanance /> },
         { path: 'lockscreen', element: <LockScreen /> },
-        { path: 'recoverpwd', element: <RecoverPassword /> },
+        { path: 'recoverpassword', element: <RecoverPassword /> },
+        { path: 'changepassword', element: <ChangePassword /> },
       ],
     },
   ]
@@ -228,6 +230,32 @@ export function Router() {
           { path: "/home/siigo-users-table", exact: true, element: <SiigoUsersTable /> },
           { path: "/home/siigo-cost-centers-table", exact: true, element: <SiigoCostCentersTable /> },
           { path: "/home/siigo-fixed-assets-table", exact: true, element: <SiigoFixedAssetsTable /> },
+          { path: "/home/admin-alerts", exact: true, element: <AdminAlerts /> },
+          { path: "/home/equipment-detail/:id", exact: true, element: <EquipmentDetail /> }
+        ],
+      }
+    ) : JSON.parse(localStorage.getItem('user')).role === "aux_admin" ? ThemeRoutes.push(
+      {
+        path: "/home",
+        exact: true,
+        element: <FullLayout />,
+        children: [
+          { path: "/home", exact: true, element: <Home /> },
+          { path: '/home/dashboards/dashboard1', name: 'Dashboard Celuparts', exact: true, element: <DashboardCeluparts /> },
+          { path: "/home/users-table", exact: true, element: <UsersTable /> },
+          { path: "/home/repair-requests-table", exact: true, element: <RepairRequestsTable /> },
+          { path: "/home/retoma-requests-table", exact: true, element: <RetomaRequestsTable /> },
+          { path: "/home/equipments-table", exact: true, element: <EquipmentsTable /> },
+          { path: "/home/request-status-table", exact: true, element: <RequestStatusTable /> },
+          { path: "/home/technicians-table", exact: true, element: <TechniciansTable /> },
+          { path: "/home/repair-table", exact: true, element: <RepairTable /> },
+          { path: "/home/update-repair-form", exact: true, element: <UpdateRepairForm /> },
+          { path: "/home/request-status-form", exact: true, element: <RequestStatusForm /> },
+          { path: "/home/request-status-form/:id", exact: true, element: <RequestStatusForm /> },
+          { path: "/home/update-repair-form/:id", exact: true, element: <UpdateRepairForm /> },
+          { path: "/home/update-retoma-form/:id", exact: true, element: <UpdateRetomaForm /> },
+          { path: "/home/repair-payment-form/:id", exact: true, element: <RepairPaymentForm /> },
+          { path: "/home/retoma-payment-form/:id", exact: true, element: <RetomaPaymentForm /> },
           { path: "/home/admin-alerts", exact: true, element: <AdminAlerts /> },
           { path: "/home/equipment-detail/:id", exact: true, element: <EquipmentDetail /> }
         ],

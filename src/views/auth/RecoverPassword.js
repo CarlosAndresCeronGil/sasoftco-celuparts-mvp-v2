@@ -1,9 +1,9 @@
+/* eslint-disable */
 import React from 'react';
 import {
   Button,
   Label,
   FormGroup,
-  CardTitle,
   Container,
   Row,
   Col,
@@ -13,60 +13,39 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import AuthLogo from '../../layouts/logo/AuthLogo';
-import { ReactComponent as LeftBg } from '../../assets/images/bg/login-bgleft.svg';
-import { ReactComponent as RightBg } from '../../assets/images/bg/login-bg-right.svg';
-import img1 from '../../assets/images/users/user4.jpg';
 
 const RecoverPassword = () => {
   const navigate = useNavigate();
 
   const initialValues = {
     email: '',
-    uname: '',
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Email is invalid').required('Email is required'),
-    uname: Yup.string().required('Username is required'),
+    email: Yup.string().email('Email no es valido').required('Email es requerido'),
   });
   return (
     <div className="loginBox">
-      <LeftBg className="position-absolute left bottom-0" />
-      <RightBg className="position-absolute end-0 top" />
       <Container fluid className="h-100">
         <Row className="justify-content-center align-items-center h-100">
           <Col lg="12" className="loginContainer">
-            <AuthLogo />
             <Card>
               <CardBody className="p-4 m-1">
+
                 <div className="text-center">
-                  <img src={img1} alt="avatar" className="rounded-circle" width="95" />
-                  <CardTitle tag="h4" className="mt-2">
-                    John Deo
-                  </CardTitle>
+                  <img src="/celuparts-transparent-2.png"
+                    width="200" alt="logo" />
+                  <h5 className="mt-4 mb-5 pb-1">Escribe tu correo y se te enviará las instrucciones!</h5>
                 </div>
                 <Formik
                   initialValues={initialValues}
                   validationSchema={validationSchema}
                   onSubmit={(fields) => {
-                    // eslint-disable-next-line no-alert
                     alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
                     navigate('/');
                   }}
                   render={({ errors, touched }) => (
                     <Form className="mt-3">
-                      <FormGroup>
-                        <Label htmlFor="name">Name</Label>
-                        <Field
-                          name="name"
-                          type="text"
-                          className={`form-control${
-                            errors.uname && touched.uname ? ' is-invalid' : ''
-                          }`}
-                        />
-                        <ErrorMessage name="name" component="div" className="invalid-feedback" />
-                      </FormGroup>
                       <FormGroup>
                         <Label htmlFor="email">Email</Label>
                         <Field
@@ -79,9 +58,11 @@ const RecoverPassword = () => {
                         <ErrorMessage name="email" component="div" className="invalid-feedback" />
                       </FormGroup>
                       <FormGroup>
-                        <Button type="submit" color="info" block className="me-2">
-                          Reset
-                        </Button>
+                        <div className="text-center pt-1 mb-3 pb-1">
+                          <Button type="submit" color="primary" className="me-2">
+                            Solicitar
+                          </Button>
+                        </div>
                       </FormGroup>
                     </Form>
                   )}

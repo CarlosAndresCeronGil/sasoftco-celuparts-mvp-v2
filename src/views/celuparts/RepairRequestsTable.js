@@ -374,24 +374,28 @@ export default function RepairRequestsTable() {
                                 </span>
                             </div>
                             {currentEquipmentData}
+                            <hr />
                             <div>
                                 <span className='fw-bold'>
                                     Dirección de recogida:
                                 </span>
                             </div>
                             {currentPickUpAddress}
+                            <hr />
                             <div>
                                 <span className='fw-bold'>
                                     Dirección de entrega:
                                 </span>
                             </div>
                             {currentDeliveryAddress}
+                            <hr />
                             <div>
                                 <span className='fw-bold'>
                                     Detalle de la solicitud:
                                 </span>
                             </div>
                             {currentAutoDiagnosis}
+                            <hr />
                             <div>
                                 <span className='fw-bold'>
                                     Imei o serial del Dispositivo:

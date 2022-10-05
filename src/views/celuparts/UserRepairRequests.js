@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
-import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import { Card, CardBody, CardTitle, Table, Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import Swal from 'sweetalert2'
 import getSingleRequest from '../../services/getSingleRequest';
 import getSingleUser from '../../services/getSingleUser';
@@ -12,12 +12,35 @@ import getSingleEquipment from '../../services/getSingleEquipment'
 import putRequestStatus from '../../services/putRequestStatus';
 
 export default function UserRepairRequests() {
-    const [userInfo, setUserInfo] = useState([]);
+    const [userInfo, setUserInfo] = useState([])
     const [notifications, setNotifications] = useState([])
 
     const [showButtons, setShowButtons] = useState(true);
     const [loading, setLoading] = useState(false);
 
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    console.log(isOpenModal)
+    const [viewDetails, setViewDetails] = useState({
+        autoDiagnosis: '',
+        deliveryAddress: '',
+        deliveryDate: '',
+        pickUpAddress: '',
+        pickUpDate: '',
+    });
+
+    const handleViewDetails = ({autoDiagnosis, deliveryAddress, pickUpAddress, homeServices }) => {
+        setIsOpenModal( !isOpenModal );
+        setViewDetails({
+            autoDiagnosis,
+            deliveryAddress,
+            deliveryDate: homeServices[0].deliveryDate,
+            pickUpAddress,
+            pickUpDate: homeServices[0].pickUpDate,
+        });
+    };
+
+
+    
     useEffect(function () {
         setLoading(true);
         console.log(JSON.parse(localStorage.getItem('user')).idUser)
@@ -265,6 +288,7 @@ export default function UserRepairRequests() {
                                     <th>Valor de la Reparación</th>
                                     <th>Estado Cotización</th>
                                     <th>Fecha de entrega</th>
+                                    <th>Ver detalles</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -298,6 +322,11 @@ export default function UserRepairRequests() {
                                                     <td>Fecha sin definir</td>
                                                 )
                                             }
+                                            <td>
+                                                <Button className='btn' color='info' type='button' onClick={() => handleViewDetails( tdata )} >
+                                                    Detalles
+                                                </Button>
+                                            </td>
                                         </tr>
                                     ) : (
                                         null
@@ -305,6 +334,53 @@ export default function UserRepairRequests() {
                                 ))}
                             </tbody>
                         </Table>
+
+                        <Modal isOpen={ isOpenModal } toggle={handleViewDetails.bind(null)}>
+                            <ModalHeader toggle={handleViewDetails.bind(null)}>
+                                Detalles de la solicitud
+                            </ModalHeader>
+                        <ModalBody>
+                            <div>
+                                <span className='fw-bold'>
+                                    Falla reportada:
+                                </span>
+                            </div>
+                            {viewDetails.autoDiagnosis}
+                            <hr />
+                            <div>
+                                <span className='fw-bold'>
+                                    Dirección de recogida:
+                                </span>
+                            </div>
+                            {viewDetails.pickUpAddress}
+                            <hr />
+                            <div>
+                                <span className='fw-bold'>
+                                    Fecha de recogida:
+                                </span>
+                            </div>
+                            {viewDetails.pickUpDate}
+                            <hr />
+                            <div>
+                                <span className='fw-bold'>
+                                    Dirección de entrega:
+                                </span>
+                            </div>
+                            {viewDetails.deliveryAddress}
+                            <hr />
+                            <div>
+                                <span className='fw-bold'>
+                                    Fecha de entrega:
+                                </span>
+                            </div>
+                            {viewDetails.deliveryDate}
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="secondary" onClick={handleViewDetails.bind(null)}>
+                                Cerrar
+                            </Button>
+                        </ModalFooter>
+                    </Modal>
                     </CardBody>
                 </Card>
             </div>

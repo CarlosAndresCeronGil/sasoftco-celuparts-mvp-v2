@@ -122,7 +122,7 @@ const LoginFormik = () => {
                           }}
                           render={({ errors, touched }) => (
 
-                            <Form onSubmit={handleSubmit} autocomplete="off">
+                            <Form onSubmit={handleSubmit} autoComplete="off">
                               <p className='text-center'>Inicia sesión con tu cuenta</p>
                               <FormGroup className="form-outline mb-4">
                                 <label className="form-label" htmlFor="email">Email</label>
@@ -166,7 +166,7 @@ const LoginFormik = () => {
                               </FormGroup>
                               {
                                 loading ? (
-                                  <div className="d-flex justify-content-center">
+                                  <div className="d-flex justify-content-center mb-5">
                                     <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit" disabled>
                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                       <span className='ms-2'>Cargando...</span>
@@ -174,13 +174,17 @@ const LoginFormik = () => {
                                     
                                   </div>
                                 ) : (
-                                  <div className="text-center pt-1 mb-5 pb-1">
-                                    <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Iniciar sesión</button>
+                                  <>
+                                    <div className="text-center pt-1 mb-3 pb-1">
+                                      <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Iniciar sesión</button>
+                                    </div>
+                                    <div className="d-flex justify-content-center align-items-center mb-4">
+                                      <Link to="/recoverpassword" className="text-muted">Olvidaste la contraseña?</Link>
+                                    </div>
                                     
-                                  </div>
+                                  </>
                                 )
                               }
-                                {/* <a className="text-muted" href="#!">Forgot password?</a> */}
 
                               {/* <div className="d-inline-flex p-2 pt-1 mb-5 pb-1">
                                 <div id='SingInGoogle' className="g-signin2" data-onsuccess="onSignIn"></div>
@@ -189,7 +193,9 @@ const LoginFormik = () => {
                               <div className="d-flex align-items-center justify-content-center pb-4">
                                 <p className="mb-0 me-2">¿No tienes cuenta?</p>
 
-                                <button type="button" className="btn btn-outline-primary"><Link style={{ textDecoration: 'none' }} to="/registerformik">!Registrate!</Link></button>
+                                <Link style={{ textDecoration: 'none' }} to="/registerformik">
+                                  <button type="button" className="btn btn-outline-primary">!Registrate!</button>
+                                </Link>
                               </div>
 
                             </Form>

@@ -5,8 +5,6 @@ import BlogsToCelupartsPages from '../../components/celuparts/BlogsToCelupartsPa
 
 const DashboardCeluparts = () => {
 
-  const currentRole = JSON.parse(localStorage.getItem('user')).role;
-
   return (
     <>
       {/* <Row>
@@ -19,7 +17,6 @@ const DashboardCeluparts = () => {
       </Row> */}
       <BlogsToCelupartsPages />
 
-      {/* Create buttom for social network */}
       <div className="d-flex justify-content-center d-grid gap-3">
         {/* <a href="#" target="_blank" rel="noreferrer" className="" >
           <i className="bi bi-facebook btn btn-facebook btn-icon"  ></i>

@@ -163,7 +163,9 @@ const RegisterFormik = () => {
                     <h4 className="mb-0 fw-bold text-center">Regístrate</h4>
                     <div className="d-flex align-items-center justify-content-center pb-4">
                       <p className="mb-0 me-2">¿Ya tienes una cuenta?</p>
-                      <button type="button" className="btn btn-outline-primary"><Link style={{ textDecoration: 'none' }} to="/">Iniciar</Link></button>
+                      <Link style={{ textDecoration: 'none' }} to="/">
+                        <button type="button" className="btn btn-outline-primary">Iniciar</button>
+                      </Link>
                     </div>
 
                     {/* <small className="pb-4 d-block">

@@ -335,18 +335,21 @@ export default function RetomaRequestsTable() {
                                 </span>
                             </div>
                             {currentEquipmentData}
+                            <hr />
                             <div>
                                 <span className='fw-bold'>
                                     Dirección de recogida:
                                 </span>
                             </div>
                             {currentPickUpAddress}
+                            <hr />
                             <div>
                                 <span className='fw-bold'>
                                     Dirección de entrega:
                                 </span>
                             </div>
                             {currentDeliveryAddress}
+                            <hr />
                             <div>
                                 <span className='fw-bold'>
                                     Detalle de la solicitud:

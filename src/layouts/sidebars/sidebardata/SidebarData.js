@@ -167,6 +167,58 @@ const SidebarDatas = () => {
         ]
       }
     )
+  } else if (JSON.parse(localStorage.getItem('user')).role === "aux_admin") {
+
+    useEffect(function () {
+      getRequestNotificationToAdmin()
+          .then(response => {
+              setAlerts(response)
+          })
+          .catch(error => {
+              console.log(error)
+          })
+  }, [])
+
+  countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+
+    SidebarData.push(
+      {
+        title: "Notificaciones",
+        id: 0.5,
+        href: "./admin-alerts",
+        icon: <MaterialIcon icon="notifications" />,
+        suffix: countwasRevieweds == 0 ? null : countwasRevieweds,
+        suffixColor: countwasRevieweds == 0 ? 'bg-success' : 'bg-danger',
+      },
+      {
+        title: 'Acciones',
+        id: 1,
+        icon: <MaterialIcon icon='speed' />,
+        collapisble: true,
+        children: [
+          {
+            title: "Reparaciones",
+            href: "./repair-requests-table",
+          },
+          {
+            title: "Retomas",
+            href: "./retoma-requests-table",
+          },
+        ]
+      },
+      {
+        title: 'Reportes',
+        id: 2,
+        icon: <MaterialIcon icon='speed' />,
+        collapisble: true,
+        children: [
+          {
+            title: "Equipos",
+            href: "./equipments-table",
+          },
+        ]
+      },
+    )
   } else if (JSON.parse(localStorage.getItem('user')).role === "tecnico") {
 
     useEffect(function () {

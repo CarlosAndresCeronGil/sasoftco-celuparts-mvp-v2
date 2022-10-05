@@ -60,8 +60,9 @@ const cardsForAdmins = [
     img: img1,
     title: 'Lista de reparaciones.',
     subtitle: 'Lista de las reparaciones registradas en el sistema, donde podrás actualizar los estados de estas.',
-    role: ['admin', 'tecnico', 'mensajero', 'user',],
+    role: ['admin', 'tecnico', 'mensajero', 'aux_admin', 'user',],
     href: [
+      '/home/repair-requests-table',
       '/home/repair-requests-table',
       '/home/repair-requests-table',
       '/home/repair-requests-table',
@@ -72,8 +73,9 @@ const cardsForAdmins = [
     img: img2,
     title: 'Lista de retomas.',
     subtitle: 'Lista de las retomas registradas en el sistema. Al igual que la lista de reparacione podras actualizar los estados de estos procesos.',
-    role: ['admin', 'tecnico', 'mensajero', 'user',],
+    role: ['admin', 'tecnico', 'mensajero', 'aux_admin', 'user',],
     href: [
+      '/home/retoma-requests-table',
       '/home/retoma-requests-table',
       '/home/retoma-requests-table',
       '/home/retoma-requests-table',
@@ -84,11 +86,12 @@ const cardsForAdmins = [
     img: img3,
     title: 'Mis notificaciones',
     subtitle: 'Página en donde podras ver tus notificaciones referentes a procesos nuevos o actualizaciones de los clientes.',
-    role: ['admin', 'tecnico', 'mensajero', 'user',],
+    role: ['admin', 'tecnico', 'mensajero', 'aux_admin', 'user',],
     href: [
       '/home/admin-alerts',
       '/home/technician-alerts',
       '/home/courier-alerts',
+      '/home/admin-alerts',
       '/home/user-alerts',
     ],
   },
@@ -108,6 +111,8 @@ const BlogsToCelupartsPages = () => {
       currentRole === "tecnico"
       ||
       currentRole === "mensajero"
+      ||
+      currentRole === "aux_admin"
       ?
       (
         <Row>

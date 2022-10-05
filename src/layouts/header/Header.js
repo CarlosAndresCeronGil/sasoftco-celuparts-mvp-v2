@@ -63,7 +63,7 @@ const Header = () => {
 
         <div className="d-none d-lg-flex align-items-center logo-space">
           <Link to="./dashboards/dashboard1">
-            <img src="/celuparts-transparent-2.png" alt="celuparts-logo" className="right-card-image" width="170" ></img>
+            <img src="/celuparts-transparent-3.png" alt="celuparts-logo" className="right-card-image" width="170" ></img>
           </Link>
           <Button
             close
@@ -85,7 +85,7 @@ const Header = () => {
           </Button>
           <NavbarBrand href="/" className="d-sm-block d-lg-none">
             {/* <LogoWhite /> */}
-            <img src="/celuparts-logo.png" alt="celuparts-logo" width='40' className="right-card-image" ></img>
+            <img src="/celuparts-logo-2.png" alt="celuparts-logo" width='40' className="right-card-image" ></img>
           </NavbarBrand>
           <Button
             color={topbarColor}
