@@ -37,7 +37,7 @@ const RegisterFormik = () => {
       .min(8, 'La contraseña debe tener al menos 8 caracteres')
       .max(15, 'La contraseña debe tener menos de 15 caracteres')
       .required('Contraseña requerida')
-      .matches(/^(?=.*[!@#%&])/, "La contraseña debe tener al menos un caracter especial"),
+      .matches(/^(?=.*[!@#%&])/, "La contraseña debe tener al menos un caracter especial, ejemplo: !@#%&"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir')
       .required('Se requiere confirmar contraseña'),

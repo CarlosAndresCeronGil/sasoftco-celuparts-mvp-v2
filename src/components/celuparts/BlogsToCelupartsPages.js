@@ -30,14 +30,14 @@ const cardsUser = [
   },
   {
     img: img1,
-    title: 'Consultar mis retomas.',
+    title: 'Consultar mis retomas',
     subtitle: 'Consulta aquí el estado de tu retoma. Podrás consultar y aceptar o rechazar las retomas propuestas. Tambien podrás ver el histórico de tus retomas.',
     href: '/home/user-retoma-requests',
     
   },
   {
     img: img2,
-    title: 'Celuparts store.',
+    title: 'Celuparts store',
     subtitle: 'El sitío perfecto donde podrás comprar al mejor precio los dispositivos que buscas!.',
     href: 'https://celuparts.co/'
   },
@@ -58,7 +58,7 @@ const cardsUser = [
 const cardsForAdmins = [
   {
     img: img1,
-    title: 'Lista de reparaciones.',
+    title: 'Lista de reparaciones',
     subtitle: 'Lista de las reparaciones registradas en el sistema, donde podrás actualizar los estados de estas.',
     role: ['admin', 'tecnico', 'mensajero', 'aux_admin', 'user',],
     href: [
@@ -71,7 +71,7 @@ const cardsForAdmins = [
   },
   {
     img: img2,
-    title: 'Lista de retomas.',
+    title: 'Lista de retomas',
     subtitle: 'Lista de las retomas registradas en el sistema. Al igual que la lista de reparacione podras actualizar los estados de estos procesos.',
     role: ['admin', 'tecnico', 'mensajero', 'aux_admin', 'user',],
     href: [
@@ -118,7 +118,7 @@ const BlogsToCelupartsPages = () => {
         <Row>
           {
             cardsForAdmins.map(({ img, title, subtitle, role, href }) => (
-              <Col lg="4" key={title}>
+              <Col xl='4' lg="6" md='4' sm='6' key={title}>
                 <Card className='hover-zoom mt-3 img-wrapper' style={{ height: "340px" }} >
                   <img src={img} alt={img} className='mx-3 rounded mt-n3 img-fluid' />
                   <Link to={href[role.indexOf(currentRole)]} style={{ textDecoration: 'none', }}>
