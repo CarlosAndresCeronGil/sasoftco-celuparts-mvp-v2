@@ -139,6 +139,7 @@ export default function RetomaRequestsTable() {
                                     <Label sm="1">Desde</Label>
                                     <Col sm="4">
                                         <DatePicker
+                                            className='form-control'
                                             id='initialDate'
                                             dateFormat="yyyy-MM-dd"
                                             value={initialDate.initialDate}
@@ -151,6 +152,7 @@ export default function RetomaRequestsTable() {
                                     <Col sm="4">
                                         <DatePicker
                                             id='finalDate'
+                                            className='form-control'
                                             dateFormat="yyyy-MM-dd"
                                             value={finalDate.finalDate}
                                             selected={finalDate.finalDate}

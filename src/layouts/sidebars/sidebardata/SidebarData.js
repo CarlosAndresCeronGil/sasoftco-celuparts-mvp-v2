@@ -213,7 +213,7 @@ const SidebarDatas = () => {
       {
         title: 'Reportes',
         id: 2,
-        icon: <MaterialIcon icon='speed' />,
+        icon: <MaterialIcon icon='summarize' />,
         collapisble: true,
         children: [
           {
@@ -265,7 +265,7 @@ const SidebarDatas = () => {
       {
         title: 'Reportes',
         id: 2,
-        icon: <MaterialIcon icon='speed' />,
+        icon: <MaterialIcon icon='summarize' />,
         collapisble: true,
         children: [
           {

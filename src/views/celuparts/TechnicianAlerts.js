@@ -69,19 +69,18 @@ export default function TechnicianAlerts() {
                     ) : (
 
                     alerts.map((tdata, index) => (
-                        tdata.notificationType === "to_technician" ?
-                            <div key={index}>
-                                {/* <Alert
-                                color='primary'
-                                isOpen={visible}
-                                toggle={onDismiss({id: tdata.idRequestNotification }).bind(null)}>
-                                    {tdata.message}
-                                </Alert> */}
-                                <Alert
-                                color='primary'>
-                                    {tdata.message}
-                                </Alert>
-                            </div> : null
+                        tdata.notificationType === "to_technician" &&
+                        tdata.wasReviewed === false ? 
+                           <Alert color="success" key={index}>
+                               {tdata.message}
+                               <span className="float-end text-muted">
+                                   Nueva
+                               </span>
+                           </Alert>
+                           :
+                           <Alert color="primary" key={index}>
+                               {tdata.message}
+                           </Alert>
                     )))
                 }
             </CardBody>
