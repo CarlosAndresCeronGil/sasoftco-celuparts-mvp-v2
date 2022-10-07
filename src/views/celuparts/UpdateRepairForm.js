@@ -251,7 +251,7 @@ export default function UpdateRepairForm() {
                                         }
 
                                         {
-                                            JSON.parse(localStorage.getItem('user')).role == "admin" &&
+                                            JSON.parse(localStorage.getItem('user')).role == "admin" || JSON.parse(localStorage.getItem('user')).role == "aux_admin" ?
                                             <FormGroup>
                                                 <Label for="repairQuote">Cuota de reparación</Label>
                                                 <Input
@@ -264,7 +264,7 @@ export default function UpdateRepairForm() {
                                                     required
                                                 />
                                             </FormGroup>
-
+                                            : null
                                         }
 
                                         {
