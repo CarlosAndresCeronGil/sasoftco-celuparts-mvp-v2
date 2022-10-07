@@ -6,10 +6,11 @@ import { Row, Col, Card, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
 import '../../assets/scss/style.css';
 import img1 from '../../assets/images/bg/bg1.jpg';
 import img2 from '../../assets/images/bg/bg2.jpg';
-import img3 from '../../assets/images/bg/bg3.jpg';
 
-// import misReparaciones from '../../assets/images/misreparaciones.png';
-// import misRetomas from '../../assets/images/misretomas.png';
+import misReparaciones from '../../assets/images/misreparaciones.png';
+import misRetomas from '../../assets/images/misretomas.png';
+import misNotificaciones from '../../assets/images/misnotificaciones.png';
+import celupartsStore from '../../assets/images/celupartsstore.png';
 
 
 const cardsUser = [
@@ -22,24 +23,24 @@ const cardsUser = [
   {
     img: img2,
     title: 'Solicitar retoma',
-    subtitle: 'Deseas vender tu equipo usado? Nosotros te lo compramos y recogemos a domicilio.  Registra aquí los datos para generarte una cotización, y para solicitar la recogida.',
+    subtitle: '¿Deseas vender tu equipo usado? Nosotros te lo compramos y recogemos a domicilio.  Registra aquí los datos para generarte una cotización, y para solicitar la recogida.',
     href: '/home/request-retoma-form',
   },
   {
-    img: img3,
+    img: misReparaciones,
     title: 'Consultar mis reparaciones',
     subtitle: 'Consulta aquí el estado de tu reparación. Podrás consultar y aceptar o rechazar las cotizaciones propuestas. Tambien podrás ver el histórico de tus reparaciones.',
     href: '/home/user-repair-requests',
   },
   {
-    img: img1,
+    img: misRetomas,
     title: 'Consultar mis retomas',
     subtitle: 'Consulta aquí el estado de tu retoma. Podrás consultar y aceptar o rechazar las retomas propuestas. Tambien podrás ver el histórico de tus retomas.',
     href: '/home/user-retoma-requests',
     
   },
   {
-    img: img2,
+    img: celupartsStore,
     title: 'Celuparts store',
     subtitle: 'El sitío perfecto donde podrás comprar al mejor precio los dispositivos que buscas!.',
     href: 'https://celuparts.co/'
@@ -60,7 +61,7 @@ const cardsUser = [
 
 const cardsForAdmins = [
   {
-    img: img1,
+    img: misReparaciones,
     title: 'Lista de reparaciones',
     subtitle: 'Lista de las reparaciones registradas en el sistema, donde podrás actualizar los estados de estas.',
     role: ['admin', 'tecnico', 'mensajero', 'aux_admin', 'user',],
@@ -73,7 +74,7 @@ const cardsForAdmins = [
     ],
   },
   {
-    img: img2,
+    img: misRetomas,
     title: 'Lista de retomas',
     subtitle: 'Lista de las retomas registradas en el sistema. Al igual que la lista de reparacione podras actualizar los estados de estos procesos.',
     role: ['admin', 'tecnico', 'mensajero', 'aux_admin', 'user',],
@@ -86,7 +87,7 @@ const cardsForAdmins = [
     ],
   },
   {
-    img: img3,
+    img: misNotificaciones,
     title: 'Mis notificaciones',
     subtitle: 'Página en donde podras ver tus notificaciones referentes a procesos nuevos o actualizaciones de los clientes.',
     role: ['admin', 'tecnico', 'mensajero', 'aux_admin', 'user',],

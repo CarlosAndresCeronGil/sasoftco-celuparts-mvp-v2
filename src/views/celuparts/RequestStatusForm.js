@@ -14,7 +14,6 @@ import {
     Label,
     Input,
 } from "reactstrap";
-import getRequestNotification from '../../services/getRequestNotification';
 import getRequestNotificationByIdRequest from '../../services/getRequestNotificationByIdRequest';
 import getSingleEquipment from '../../services/getSingleEquipment';
 import getSingleRequest from '../../services/getSingleRequest';
@@ -38,6 +37,7 @@ export default function RequestStatusForm() {
     })
     const [deliveryAddress, setDeliveryAddress] = useState({ deliveryAddress: "" })
     const [deliveryDate, setDeliveryDate] = useState({ deliveryDate: new Date() })
+    console.log('Date: ', deliveryDate.deliveryDate.toLocaleDateString('es', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric" }))
 
     const [celupartsContactPhone, setCelupartsContactPhone] = useState("")
     const [celupartsContactEmail, setCelupartsContactEmail] = useState("")
@@ -158,7 +158,7 @@ export default function RequestStatusForm() {
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
-                                message: "Producto " + equipmentData.equipmentBrand + " " + equipmentData.modelOrReference + " para devolución el día " + deliveryDate.deliveryDate + " al barrio " + deliveryAddress.deliveryAddress,
+                                message: "Producto " + equipmentData.equipmentBrand + " " + equipmentData.modelOrReference + " para devolución el día " + deliveryDate.deliveryDate.toLocaleDateString('es', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric" }) + " al barrio " + deliveryAddress.deliveryAddress,
                                 wasReviewed: false,
                                 notificationType: "to_courier"
                             })
@@ -215,6 +215,24 @@ export default function RequestStatusForm() {
                                 message: "Tu pago sobre tu retoma se realizara pronto! Revisa tu medio de pago registrado a celuparts para confirmarlo.",
                                 wasReviewed: false,
                                 notificationType: "to_customer"
+                            })
+                                .then(response => {
+                                    console.log("exito!", response)
+                                })
+                                .catch(error => {
+                                    console.log(error)
+                                })
+                        ) : null
+                    ))
+                ) : status.status === "Anulado por IMEI" ? (
+                    notifications.map((tdata) => (
+                        tdata.idRequest === idRequest.idRequest ? (
+                            putRequestNotification({
+                                idRequestNotification: tdata.idRequestNotification,
+                                idRequest: tdata.idRequest,
+                                message: "Anulado por IMEI",
+                                wasReviewed: false,
+                                notificationType: "to_none"
                             })
                                 .then(response => {
                                     console.log("exito!", response)
@@ -284,8 +302,6 @@ export default function RequestStatusForm() {
                 //     })
                 getRequestNotificationByIdRequest({ idRequest: response.idRequest })
                     .then(response2 => {
-                        console.log("requestNotificationByIdRequest:", response2)
-                        console.log("response.idRequest", response.idRequest)
                         setNotifications(response2)
                         /*Esta parte se necesita para el mensaje final al mensajero donde necesita saber fecha, 
                         nombre del producto y direccion de entrega*/
@@ -308,7 +324,6 @@ export default function RequestStatusForm() {
                             })
                         getCelupartsInfo()
                             .then(response => {
-                                console.log("respuesta de celuparts info", response[0])
                                 setCelupartsContactPhone(response[0].contactPhone)
                                 setCelupartsContactEmail(response[0].contactEmail)
                             })

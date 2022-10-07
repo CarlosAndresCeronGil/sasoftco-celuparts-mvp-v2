@@ -72,13 +72,18 @@ export default function CustomerAlerts() {
                         </Alert>
                     ) : (
                         alerts.map((tdata, index) => (
-                            tdata.notificationType === "to_customer" ?
-                                <div key={index}>
-                                    <Alert
-                                        color='primary'>
-                                        {tdata.message}
-                                    </Alert>
-                                </div> : null
+                            tdata.notificationType === "to_customer" &&
+                            tdata.wasReviewed === false ? 
+                               <Alert color="success" key={index}>
+                                   {tdata.message}
+                                   <span className="float-end text-muted">
+                                       Nueva
+                                   </span>
+                               </Alert>
+                               :
+                               <Alert color="primary" key={index}>
+                                   {tdata.message}
+                               </Alert>
                         ))
                     )
                 }

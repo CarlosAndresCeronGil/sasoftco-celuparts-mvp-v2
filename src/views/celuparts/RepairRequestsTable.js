@@ -199,7 +199,7 @@ export default function RepairRequestsTable() {
                                     <Col sm="4">
                                         <div className="customDatePickerWidth">
                                             <DatePicker
-                                            wrapperClassName='w-50'
+                                                className='form-control'
                                                 id='initialDate'
                                                 dateFormat="yyyy-MM-dd"
                                                 value={initialDate.initialDate}
@@ -212,6 +212,7 @@ export default function RepairRequestsTable() {
                                     <Label sm="1">Hasta</Label>
                                     <Col sm="4">
                                         <DatePicker
+                                            className='form-control'
                                             id='finalDate'
                                             dateFormat="yyyy-MM-dd"
                                             value={finalDate.finalDate}

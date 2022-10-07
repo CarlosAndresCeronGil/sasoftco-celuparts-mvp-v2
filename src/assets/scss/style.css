@@ -1,11 +1,12 @@
 .img-wrapper{
-    overflow:hidden;
+    /* overflow:hidden; */
   }
 
 .hover-zoom:hover {
-  
     transition: .3s;
-    transform: scale(1);
+    transform: scale(1.02);
     background-color: rgba(0, 0, 0, 0.049);
-    text-shadow: .1px #000;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    transition: ease-in .2s;
+    zoom: revert;
 }
