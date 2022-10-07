@@ -15,13 +15,13 @@ import celupartsStore from '../../assets/images/celupartsstore.png';
 
 const cardsUser = [
   {
-    img: img1,
+    img: misRetomas,
     title: 'Nueva solicitud reparación',
     subtitle: 'Registra una solicitud para una nueva reparación',
     href: '/home/request-repair-form',
   },
   {
-    img: img2,
+    img: misReparaciones,
     title: 'Solicitar retoma',
     subtitle: '¿Deseas vender tu equipo usado? Nosotros te lo compramos y recogemos a domicilio.  Registra aquí los datos para generarte una cotización, y para solicitar la recogida.',
     href: '/home/request-retoma-form',
