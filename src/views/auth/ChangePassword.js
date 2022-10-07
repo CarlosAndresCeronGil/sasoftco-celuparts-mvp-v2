@@ -1,15 +1,14 @@
 /* eslint-disable */
-/* eslint-disable */
 import React, { useState } from 'react';
 import {
   Button,
-  Label,
   FormGroup,
   Container,
   Row,
   Col,
   Card,
   CardBody,
+  InputGroup,
 } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
@@ -22,6 +21,15 @@ const ChangePassword = () => {
   const [loadingButton, setLoadingButton] = useState(false)
 
   const params = useParams()
+  const [passwordType, setPasswordType] = useState('password');
+
+  const togglePassword = () => {
+    if (passwordType === 'password') {
+      setPasswordType('text');
+    } else {
+      setPasswordType('password');
+    }
+  };
 
   const initialValues = {
     password: '',
@@ -62,16 +70,16 @@ const ChangePassword = () => {
                     formData.append("token", params.token)
                     postRecoverPassword(formData)
                       .then(response => {
-                          setLoadingButton(false)
-                          console.log("respuesta recover password", response)
-                          Swal.fire({
-                            icon: 'success',
-                            title: 'Exito!',
-                            text: 'Contraseña actualizada!'
+                        setLoadingButton(false)
+                        console.log("respuesta recover password", response)
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'Exito!',
+                          text: 'Contraseña actualizada!'
+                        })
+                          .then(response => {
+                            navigate('/');
                           })
-                            .then(response => {
-                              navigate('/');
-                            })
                       })
                       .catch(error => {
                         console.log("error del recover password", error)
@@ -133,8 +141,7 @@ const ChangePassword = () => {
                                 </Button>
                               </div>
                             )
-                        }
-                      </FormGroup>
+                        }                      </FormGroup>
                     </Form>
                   )}
                 />

@@ -20,6 +20,9 @@ import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import Swal from 'sweetalert2'
 
+import Combobox from "react-widgets/Combobox";
+import "react-widgets/styles.css";
+
 import { useNavigate } from 'react-router-dom';
 import postRequest from '../../services/postRequest';
 import postEquipment from '../../services/postEquipment';
@@ -56,8 +59,6 @@ export default function RequestRepairForm() {
         setIsSameAddresses(!isSameAddresses)
     }
 
-    console.log('isSameAddresses: ', isSameAddresses)
-
     //Variables para las fechas, finish date empieza en un día despues al día actual
     const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16));
     const tomorrow = new Date();
@@ -88,15 +89,12 @@ export default function RequestRepairForm() {
         getTypeOfEquipments()
             .then(typeOfEquipmentResponse => {
                 setTypeOfEquipmentList(typeOfEquipmentResponse)
-                console.log("Lista de tipos de equipos", typeOfEquipmentResponse)
                 getCellphoneBrands()
                     .then(cellphonesResponse => {
                         setCellphoneList(cellphonesResponse)
-                        console.log("Lista de celulares", cellphonesResponse)
                         getComputerBrands()
                             .then(computersResponse => {
                                 setComputersList(computersResponse)
-                                console.log("Lista de computadoras", computersResponse)
                                 setLoadingPage(false)
                             })
                             .catch(error => {
@@ -115,6 +113,9 @@ export default function RequestRepairForm() {
             })
     }, [])
 
+
+    const [equipmentBrand, setEquipmentBrand] = useState('Samsung');
+
     const handleSubmit = (e) => {
 
         e.preventDefault();
@@ -123,7 +124,7 @@ export default function RequestRepairForm() {
         const formData = new FormData()
         //formData.append("typeOfEquipment", e.target.elements.typeOfEquipment.value)
         formData.append("idTypeOfEquipment", e.target.elements.typeOfEquipment.value)
-        formData.append("equipmentBrand", e.target.elements.equipmentBrand.value)
+        formData.append("equipmentBrand", equipmentBrand)
         formData.append("modelOrReference", e.target.elements.modelOrReference.value)
         formData.append("imeiOrSerial", e.target.elements.imei.value)
         // formData.append("equipmentInvoice", null)
@@ -147,7 +148,7 @@ export default function RequestRepairForm() {
                             .then(userInfo => {
                                 postRequestNotification({
                                     idRequest: data.idRequest,
-                                    message: "Nueva solicitud de servicio a domicilio a la dirección: " + data.pickUpAddress + " para la fecha " + startDate.getFullYear() + "/" + (startDate.getMonth() + 1) + "/" + startDate.getDate() + " a las " + startDate.getHours() + ":" + startDate.getMinutes() + " para recoger el dispositivo " + e.target.elements.equipmentBrand.value + " " + e.target.elements.modelOrReference.value + " con imei o serial: " + e.target.elements.imei.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de teléfono de contácto: " + userInfo[0].userDto.phone + ", el usuario decidió pagar por medio de " + e.target.elements.paymentMethod.value,
+                                    message: "Nueva solicitud de servicio a domicilio a la dirección: " + data.pickUpAddress + " para la fecha " + startDate.getFullYear() + "/" + (startDate.getMonth() + 1) + "/" + startDate.getDate() + " a las " + startDate.getHours() + ":" + startDate.getMinutes() + " para recoger el dispositivo " + equipmentBrand + " " + e.target.elements.modelOrReference.value + " con imei o serial: " + e.target.elements.imei.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de teléfono de contácto: " + userInfo[0].userDto.phone + ", el usuario decidió pagar por medio de " + e.target.elements.paymentMethod.value,
                                     wasReviewed: false,
                                     notificationType: "to_courier"
                                 })
@@ -452,33 +453,39 @@ export default function RequestRepairForm() {
                                                 {
                                                     typeOfEquipmentList.map((typeOfEquipmentData, index) => (
                                                         <option value={typeOfEquipmentData.idTypeOfEquipment} key={index}>{typeOfEquipmentData.equipmentTypeName}</option>
-                                                    ))
-                                                }
-                                                {/* <option value="Computador portatil">Computador portátil</option>
-                                            <option value="Telefono celular">Teléfono celular</option> */}
+                                                        ))
+                                                    }
                                             </Input>
                                         </FormGroup>
-                                        <FormGroup>
-                                            <Label for="equipmentBrand">Marca del dispositivo*</Label>
-                                            <Input
-                                                id="equipmentBrand"
-                                                name="equipmentBrand"
-                                                placeholder="Ingrese la marca del dispositivo"
-                                                type="select"
-                                                required
-                                            >
-                                                {
-                                                    typeOfEquipment.typeOfEquipment === '1' ?
-                                                        computersList.map((computerData, index) => (
-                                                            <option key={index}>{computerData.brandName}</option>
-                                                        ))
-                                                        :
-                                                        cellphoneList.map((cellphoneData, index) => (
-                                                            <option key={index}>{cellphoneData.brandName}</option>
-                                                        ))
-                                                }
-                                            </Input>
-                                        </FormGroup>
+                                        {
+                                            typeOfEquipment.typeOfEquipment === '1' ?
+                                                <FormGroup>
+                                                    <Label for="typeOfEquipment">Marca del computador*</Label>
+                                                        <Combobox
+                                                        required
+                                                        placeholder='Seleccione la marca del computador'
+                                                        id="equipmentBrand"
+                                                        name="equipmentBrand"
+                                                        data={computersList.map(computerData => computerData.brandName)}
+                                                        value={equipmentBrand}
+                                                        onChange={brand => setEquipmentBrand(brand)}
+                                                        />
+                                                </FormGroup>
+                                                :
+                                                <FormGroup>
+                                                <Label for="typeOfEquipment">Marca del celular*</Label>
+                                                    <Combobox
+                                                    required
+                                                    placeholder='Seleccione la marca del celular'
+                                                    id="equipmentBrand"
+                                                    name="equipmentBrand"
+                                                    data={cellphoneList.map(cellphoneData => cellphoneData.brandName)}
+                                                    value={equipmentBrand}
+                                                    onChange={brand => setEquipmentBrand(brand)}
+                                                    />
+                                            </FormGroup>
+                                        }
+
                                         <FormGroup>
                                             <Label for="modelOrReference">Modelo o referencia dispositivo*</Label>
                                             <Input

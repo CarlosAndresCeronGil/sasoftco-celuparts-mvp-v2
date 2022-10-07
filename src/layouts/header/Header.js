@@ -83,10 +83,9 @@ const Header = () => {
           >
             <Icon.Menu size={18} />
           </Button>
-          <NavbarBrand href="/" className="d-sm-block d-lg-none">
-            {/* <LogoWhite /> */}
+          <Link to="./dashboards/dashboard1" className="d-sm-block d-lg-none">
             <img src="/celuparts-logo-2.png" alt="celuparts-logo" width='40' className="right-card-image" ></img>
-          </NavbarBrand>
+          </Link>
           <Button
             color={topbarColor}
             className="d-sm-block d-lg-none bg-transparent border-0 mx-1"

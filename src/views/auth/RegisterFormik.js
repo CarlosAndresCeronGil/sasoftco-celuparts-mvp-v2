@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import jwtDecode from 'jwt-decode';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { Button, Label, FormGroup, Row, Col } from 'reactstrap';
+import { Button, Label, FormGroup, Row, Col, Input, InputGroupText, InputGroup} from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
@@ -12,6 +12,17 @@ import authLogin from '../../services/authLogin';
 import AuthContext from '../../context/AuthProvider';
 
 const RegisterFormik = () => {
+
+  const [passwordType, setPasswordType] = useState('password');
+
+  const togglePassword = () => {
+    if (passwordType === 'password') {
+      setPasswordType('text');
+    } else {
+      setPasswordType('password');
+    }
+  };
+
 
   const initialValues = {
     idNumber: '',
@@ -37,7 +48,7 @@ const RegisterFormik = () => {
       .min(8, 'La contraseña debe tener al menos 8 caracteres')
       .max(15, 'La contraseña debe tener menos de 15 caracteres')
       .required('Contraseña requerida')
-      .matches(/^(?=.*[!@#%&])/, "La contraseña debe tener al menos un caracter especial"),
+      .matches(/^(?=.*[!@#%&])/, "La contraseña debe tener al menos un caracter especial, ejemplo: !@#%&"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir')
       .required('Se requiere confirmar contraseña'),
@@ -153,7 +164,7 @@ const RegisterFormik = () => {
 
                 <div className="col-lg-5 d-flex align-items-center gradient-custom-2">
                   <div className="px-0">
-                    <img className='d-none d-lg-block float-left rounded-start' style={{ textDecoration: 'none' }} src="https://images.pexels.com/photos/8490073/pexels-photo-8490073.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" height="600" alt="logo" />
+                    <img className='d-none d-lg-block float-left rounded-start' style={{ textDecoration: 'none' }} src="registrousuario.png" height="600" alt="logo" />
                   </div>
                 </div>
 
@@ -180,7 +191,6 @@ const RegisterFormik = () => {
                       }}
                       render={({ errors, touched }) => (
                         <Form onSubmit={handleSubmit}>
-
                           <Row>
                             <Col lg="6">
                               <Label htmlFor="idType">Tipo de documento</Label>
@@ -302,56 +312,56 @@ const RegisterFormik = () => {
                               </FormGroup>
                             </Col>
                           </Row>
+                          
 
                           <Row>
                             <Col md="6">
-                              <FormGroup>
-                                {/* <Label htmlFor="password">Contraseña*</Label> */}
-                                <Field
+                              <InputGroup>
+                                <Input
                                   id="password"
                                   name="password"
-                                  type="password"
+                                  type={passwordType}
                                   placeholder="Contraseña"
-                                  // value={password}
-                                  // onChange={ e => setPassword(e.target.value) }
                                   className={`form-control${errors.password && touched.password ? ' is-invalid' : ''
                                     }`}
-                                  required
-                                />
+                                    >
+                                </Input>
+                                <Button color='primary' type='button' onClick={togglePassword}>
+                                  { passwordType==="password"? <i className="bi bi-eye-slash"></i> :<i className="bi bi-eye"></i> }
+                                </Button>
                                 <ErrorMessage
                                   name="password"
                                   component="div"
                                   className="invalid-feedback"
                                 />
-                              </FormGroup>
+                              </InputGroup>
                             </Col>
                             <Col md="6">
-                              <FormGroup>
-                                {/* <Label htmlFor="confirmPassword">Confirmar contraseña*</Label> */}
+                              <InputGroup>
                                 <Field
                                   id="confirmPassword"
                                   name="confirmPassword"
-                                  type="password"
+                                  type={passwordType}
                                   placeholder="Confirmar contraseña"
                                   className={`form-control${errors.confirmPassword && touched.confirmPassword ? ' is-invalid' : ''
                                     }`}
                                   required
                                 />
+                                <Button color='primary' type='button' onClick={togglePassword}>
+                                  { passwordType==="password"? <i className="bi bi-eye-slash"></i> :<i className="bi bi-eye"></i> }
+                                </Button>
                                 <ErrorMessage
                                   name="confirmPassword"
                                   component="div"
                                   className="invalid-feedback"
                                 />
-                              </FormGroup>
+                              </InputGroup>
                             </Col>
                           </Row>
                           <FormGroup className='d-flex align-items-center justify-content-center pt-5'>
                             <Button className="btn btn-outline-secondary me-2" type="reset" color="">
                               Limpiar
                             </Button>
-                            {/* <Button type="submit" color="primary" className="">
-                          Registrate
-                        </Button> */}
                             {
                               loading ? (
                                 <button className="btn btn-primary" type="button" disabled>
@@ -368,9 +378,6 @@ const RegisterFormik = () => {
                         </Form>
                       )}
                     />
-
-
-
                   </div>
                 </div>
 

@@ -11,7 +11,7 @@ import blog3 from '../../assets/images/bg/bg3.jpg';
 const blogData = [
   {
     img: blog1,
-    title: 'Celuparts store.',
+    title: 'Celuparts store',
     subtitle: 'El sitío perfecto donde podrás comprar al mejor precio los dispositivos que buscas!.',
     href: 'https://celuparts.co/'
   },

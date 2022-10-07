@@ -10,7 +10,7 @@ import {
   Card,
   CardBody,
 } from 'reactstrap';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import postStartRecovery from '../../services/postStartRecovery';
@@ -109,6 +109,7 @@ const RecoverPassword = () => {
                             )
                         }
                       </FormGroup>
+
                     </Form>
                   )}
                 />
