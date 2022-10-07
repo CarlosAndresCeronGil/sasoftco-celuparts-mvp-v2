@@ -251,7 +251,7 @@ export default function RepairRequestsTable() {
                                     )
                                 }
                                 {
-                                    JSON.parse(localStorage.getItem('user')).role === "admin" ? (
+                                    JSON.parse(localStorage.getItem('user')).role === "admin" || JSON.parse(localStorage.getItem('user')).role === "aux_admin" ? (
                                         <th>Actualizar pago reparación</th>
                                     ) : (
                                         null
@@ -301,7 +301,7 @@ export default function RepairRequestsTable() {
                                             )
                                         }
                                         {
-                                            JSON.parse(localStorage.getItem('user')).role === "admin" ? (
+                                            JSON.parse(localStorage.getItem('user')).role === "admin" || JSON.parse(localStorage.getItem('user')).role === "aux_admin" ? (
                                                 <td>
                                                     {
                                                         tdata.requestStatus[0].status === 'Iniciada' ||

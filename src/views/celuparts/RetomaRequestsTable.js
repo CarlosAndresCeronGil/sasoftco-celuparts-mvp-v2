@@ -214,7 +214,7 @@ export default function RetomaRequestsTable() {
                                     )
                                 }
                                 {
-                                    JSON.parse(localStorage.getItem('user')).role === "admin" ? (
+                                    JSON.parse(localStorage.getItem('user')).role === "admin" || JSON.parse(localStorage.getItem('user')).role === "aux_admin"  ? (
                                         <th>Actualizar pago retoma</th>
                                     ) : (
                                         null
@@ -264,7 +264,7 @@ export default function RetomaRequestsTable() {
                                             )
                                         }
                                         {
-                                            JSON.parse(localStorage.getItem('user')).role === "admin" ? (
+                                            JSON.parse(localStorage.getItem('user')).role === "admin" || JSON.parse(localStorage.getItem('user')).role === "aux_admin" ? (
                                                 <td>
                                                     {
                                                         tdata.requestStatus[0].status === 'Iniciada' ||
