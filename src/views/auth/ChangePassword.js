@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* eslint-disable */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Label,
@@ -11,12 +11,17 @@ import {
   Card,
   CardBody,
 } from 'reactstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import postRecoverPassword from '../../services/postRecoverPassword';
+import Swal from 'sweetalert2'
 
 const ChangePassword = () => {
   const navigate = useNavigate();
+  const [loadingButton, setLoadingButton] = useState(false)
+
+  const params = useParams()
 
   const initialValues = {
     password: '',
@@ -40,7 +45,7 @@ const ChangePassword = () => {
           <Col lg="12" className="loginContainer">
             <Card>
               <CardBody className="p-4 m-1">
-
+                {/* token {params.token} */}
                 <div className="text-center">
                   <img src="/celuparts-transparent-2.png"
                     width="200" alt="logo" />
@@ -50,52 +55,85 @@ const ChangePassword = () => {
                   initialValues={initialValues}
                   validationSchema={validationSchema}
                   onSubmit={(fields) => {
-                    alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
-                    navigate('/');
+                    setLoadingButton(true)
+                    // alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
+                    const formData = new FormData();
+                    formData.append("newPassword", fields.password)
+                    formData.append("token", params.token)
+                    postRecoverPassword(formData)
+                      .then(response => {
+                          setLoadingButton(false)
+                          console.log("respuesta recover password", response)
+                          Swal.fire({
+                            icon: 'success',
+                            title: 'Exito!',
+                            text: 'Contraseña actualizada!'
+                          })
+                            .then(response => {
+                              navigate('/');
+                            })
+                      })
+                      .catch(error => {
+                        console.log("error del recover password", error)
+                        setLoadingButton(false)
+                      })
+                    // navigate('/');
                   }}
                   render={({ errors, touched }) => (
                     <Form className="mt-3">
-                        
-                        <FormGroup>
-                        <Field
-                            id="password"
-                            name="password"
-                            type="password"
-                            placeholder="Nueva contraseña"
-                            // value={password}
-                            // onChange={ e => setPassword(e.target.value) }
-                            className={`form-control${errors.password && touched.password ? ' is-invalid' : ''
-                            }`}
-                            required
-                        />
-                        <ErrorMessage
-                            name="password"
-                            component="div"
-                            className="invalid-feedback"
-                        />
-                        </FormGroup>
-                        <FormGroup>
-                        <Field
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            type="password"
-                            placeholder="Confirmar contraseña"
-                            className={`form-control${errors.confirmPassword && touched.confirmPassword ? ' is-invalid' : ''
-                            }`}
-                            required
-                        />
-                        <ErrorMessage
-                            name="confirmPassword"
-                            component="div"
-                            className="invalid-feedback"
-                        />
-                        </FormGroup>
+
                       <FormGroup>
-                        <div className="text-center pt-1 mb-3 pb-1">
-                          <Button type="submit" color="primary" className="me-2">
-                            Cambiar contraseña
-                          </Button>
-                        </div>
+                        <Field
+                          id="password"
+                          name="password"
+                          type="password"
+                          placeholder="Nueva contraseña"
+                          // value={password}
+                          // onChange={ e => setPassword(e.target.value) }
+                          className={`form-control${errors.password && touched.password ? ' is-invalid' : ''
+                            }`}
+                          required
+                        />
+                        <ErrorMessage
+                          name="password"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        <Field
+                          id="confirmPassword"
+                          name="confirmPassword"
+                          type="password"
+                          placeholder="Confirmar contraseña"
+                          className={`form-control${errors.confirmPassword && touched.confirmPassword ? ' is-invalid' : ''
+                            }`}
+                          required
+                        />
+                        <ErrorMessage
+                          name="confirmPassword"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        {
+                          loadingButton ? (
+                            <div className="d-flex justify-content-center mb-5">
+                              <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit" disabled>
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span className='ms-2'>Cargando...</span>
+                              </button>
+                            </div>
+                          ) :
+                            (
+                              <div className="text-center pt-1 mb-3 pb-1">
+                                <Button type="submit" color="primary" className="me-2">
+                                  Cambiar contraseña
+                                </Button>
+                              </div>
+                            )
+                        }
                       </FormGroup>
                     </Form>
                   )}
