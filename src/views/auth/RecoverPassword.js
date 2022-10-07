@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Label,
@@ -13,9 +13,12 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import postStartRecovery from '../../services/postStartRecovery';
+import Swal from 'sweetalert2'
 
 const RecoverPassword = () => {
   const navigate = useNavigate();
+  const [loadingButton, setLoadingButton] = useState(false)
 
   const initialValues = {
     email: '',
@@ -24,6 +27,7 @@ const RecoverPassword = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string().email('Email no es valido').required('Email es requerido'),
   });
+
   return (
     <div className="loginBox">
       <Container fluid className="h-100">
@@ -41,8 +45,37 @@ const RecoverPassword = () => {
                   initialValues={initialValues}
                   validationSchema={validationSchema}
                   onSubmit={(fields) => {
-                    alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
-                    navigate('/');
+                    // alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
+                    // alert(fields.email)
+                    setLoadingButton(true)
+                    postStartRecovery(fields.email)
+                      .then(response => {
+                        if (response.status == 200) {
+                          setLoadingButton(false)
+                          console.log("start recovery response", response)
+                          Swal.fire({
+                            icon: 'success',
+                            title: 'Exito!',
+                            text: 'Revisa tu correo!'
+                          })
+                            .then(response => {
+                              navigate('/');
+                            })
+                        } else {
+                          Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'El correo que ingresaste no existe'
+                          })
+                            .then(response => {
+                              setLoadingButton(false)
+                            })
+                        }
+                      })
+                      .catch(error => {
+                        setLoadingButton(false)
+                        console.log("error ", error)
+                      })
                   }}
                   render={({ errors, touched }) => (
                     <Form className="mt-3">
@@ -51,24 +84,30 @@ const RecoverPassword = () => {
                         <Field
                           name="email"
                           type="text"
-                          className={`form-control${
-                            errors.email && touched.email ? ' is-invalid' : ''
-                          }`}
+                          className={`form-control${errors.email && touched.email ? ' is-invalid' : ''
+                            }`}
                         />
                         <ErrorMessage name="email" component="div" className="invalid-feedback" />
                       </FormGroup>
                       <FormGroup>
-                        <div className="text-center pt-1 mb-3 pb-1">
-                          <Button type="submit" color="primary">
-                            Solicitar
-                          </Button>
-                        </div>
-                        <div className='d-flex align-items-center justify-content-center'>
-                        <Link to="/">
-                          <button type="button" className="btn btn-outline-primary">Volver</button>
-                        </Link>
-                        </div>
-                      
+                        {
+                          loadingButton ? (
+                            <div className="d-flex justify-content-center mb-5">
+                              <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit" disabled>
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span className='ms-2'>Cargando...</span>
+                              </button>
+                            </div>
+                          )
+                            :
+                            (
+                              <div className="text-center pt-1 mb-3 pb-1">
+                                <Button type="submit" color="primary" className="me-2">
+                                  Solicitar
+                                </Button>
+                              </div>
+                            )
+                        }
                       </FormGroup>
 
                     </Form>

@@ -169,7 +169,7 @@ export function Router() {
         { path: 'maintanance', element: <Maintanance /> },
         { path: 'lockscreen', element: <LockScreen /> },
         { path: 'recoverpassword', element: <RecoverPassword /> },
-        { path: 'changepassword', element: <ChangePassword /> },
+        { path: 'changepassword/:token', element: <ChangePassword /> },
       ],
     },
   ]
