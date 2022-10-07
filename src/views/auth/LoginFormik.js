@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 import AuthContext from '../../context/AuthProvider';
 import authLogin from '../../services/authLogin';
-import { FormGroup, Container, InputGroupText, InputGroup, Button, Spinner } from 'reactstrap';
+import { FormGroup, Container, InputGroupText, InputGroup, Button, Input } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,6 +13,17 @@ const LoginFormik = () => {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [passwordType, setPasswordType] = useState('password');
+
+  const togglePassword = () => {
+    if (passwordType === 'password') {
+      setPasswordType('text');
+    } else {
+      setPasswordType('password');
+    }
+  };
+
+
 
   const initialValues = {
     email: '',
@@ -26,7 +37,6 @@ const LoginFormik = () => {
       .max(10, 'Debe tener menos de 10 caracteres')
       .required('Contraseña requerida'),
   });
-
 
   const { setAuth } = useContext(AuthContext);
 
@@ -148,15 +158,17 @@ const LoginFormik = () => {
                                   <InputGroupText>
                                     <i className="bi bi-lock"></i>
                                   </InputGroupText>
-                                  <Field
+                                  <Input
                                     id="password"
-                                    type="password"
+                                    type={passwordType}
                                     name="password"
                                     placeholder='********'
-                                    // onChange={(e) => setPassword(e.target.value)}
                                     className={`form-control${errors.password && touched.password ? ' is-invalid' : ''
                                       }`}
                                   />
+                                  <Button color='primary' type='button' onClick={togglePassword}>
+                                  { passwordType==="password"? <i className="bi bi-eye-slash"></i> :<i className="bi bi-eye"></i> }
+                                  </Button>
                                   <ErrorMessage
                                     name="password"
                                     component="div"
@@ -186,10 +198,6 @@ const LoginFormik = () => {
                                 )
                               }
 
-                              {/* <div className="d-inline-flex p-2 pt-1 mb-5 pb-1">
-                                <div id='SingInGoogle' className="g-signin2" data-onsuccess="onSignIn"></div>
-                              </div> */}
-
                               <div className="d-flex align-items-center justify-content-center pb-4">
                                 <p className="mb-0 me-2">¿No tienes cuenta?</p>
 
@@ -206,7 +214,7 @@ const LoginFormik = () => {
                     </div>
                     <div className="col-lg-6 d-flex align-items-center gradient-custom-2 border">
                       <div className="img-fluid">
-                        <img className='d-none d-lg-block rounded-end' src="https://images.pexels.com/photos/8490071/pexels-photo-8490071.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" height="650" alt="logo" />
+                        <img className='d-none d-lg-block rounded-end' src="iniciodesesion.png" height="650" alt="logo" />
                       </div>
                     </div>
                   </div>

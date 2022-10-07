@@ -59,8 +59,6 @@ export default function RequestRepairForm() {
         setIsSameAddresses(!isSameAddresses)
     }
 
-    console.log('isSameAddresses: ', isSameAddresses)
-
     //Variables para las fechas, finish date empieza en un día despues al día actual
     const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16));
     const tomorrow = new Date();
@@ -91,15 +89,12 @@ export default function RequestRepairForm() {
         getTypeOfEquipments()
             .then(typeOfEquipmentResponse => {
                 setTypeOfEquipmentList(typeOfEquipmentResponse)
-                console.log("Lista de tipos de equipos", typeOfEquipmentResponse)
                 getCellphoneBrands()
                     .then(cellphonesResponse => {
                         setCellphoneList(cellphonesResponse)
-                        console.log("Lista de celulares", cellphonesResponse)
                         getComputerBrands()
                             .then(computersResponse => {
                                 setComputersList(computersResponse)
-                                console.log("Lista de computadoras", computersResponse)
                                 setLoadingPage(false)
                             })
                             .catch(error => {
@@ -120,7 +115,6 @@ export default function RequestRepairForm() {
 
 
     const [equipmentBrand, setEquipmentBrand] = useState('Samsung');
-    console.log("Brand", equipmentBrand)
 
     const handleSubmit = (e) => {
 
@@ -461,32 +455,8 @@ export default function RequestRepairForm() {
                                                         <option value={typeOfEquipmentData.idTypeOfEquipment} key={index}>{typeOfEquipmentData.equipmentTypeName}</option>
                                                         ))
                                                     }
-                                                {/* <option value="Computador portatil">Computador portátil</option>
-                                            <option value="Telefono celular">Teléfono celular</option> */}
                                             </Input>
                                         </FormGroup>
-                                        {/* <FormGroup>
-                                            <Label for="equipmentBrand">Marca del dispositivo*</Label>
-                                            <Input
-                                                id="equipmentBrand"
-                                                name="equipmentBrand"
-                                                placeholder="Ingrese la marca del dispositivo"
-                                                type="select"
-                                                required
-                                            >
-                                                {
-                                                    typeOfEquipment.typeOfEquipment === '1' ?
-                                                        computersList.map((computerData, index) => (
-                                                            <option key={index}>{computerData.brandName}</option>
-                                                        ))
-                                                        :
-                                                        cellphoneList.map((cellphoneData, index) => (
-                                                            <option key={index}>{cellphoneData.brandName}</option>
-                                                        ))
-                                                }
-                                            </Input>
-                                        </FormGroup> */}
-
                                         {
                                             typeOfEquipment.typeOfEquipment === '1' ?
                                                 <FormGroup>
@@ -502,7 +472,6 @@ export default function RequestRepairForm() {
                                                         />
                                                 </FormGroup>
                                                 :
-
                                                 <FormGroup>
                                                 <Label for="typeOfEquipment">Marca del celular*</Label>
                                                     <Combobox

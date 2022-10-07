@@ -8,6 +8,9 @@ import img1 from '../../assets/images/bg/bg1.jpg';
 import img2 from '../../assets/images/bg/bg2.jpg';
 import img3 from '../../assets/images/bg/bg3.jpg';
 
+// import misReparaciones from '../../assets/images/misreparaciones.png';
+// import misRetomas from '../../assets/images/misretomas.png';
+
 
 const cardsUser = [
   {
@@ -136,7 +139,7 @@ const BlogsToCelupartsPages = () => {
       (
         <Row>
           {
-            cardsUser.map(({ img, title, subtitle, role, href }) => (
+            cardsUser.map(({ img, title, subtitle, href }) => (
               <Col xl='4' lg="6" md='4' sm='6'  key={title}>
                 <Card className='hover-zoom mt-3 img-wrapper' style={{ height: "350px" }} >
                   <img src={img} alt={img} className='mx-3  rounded mt-n3 img-fluid' />

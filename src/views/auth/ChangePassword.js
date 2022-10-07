@@ -1,15 +1,14 @@
 /* eslint-disable */
-/* eslint-disable */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
-  Label,
   FormGroup,
   Container,
   Row,
   Col,
   Card,
   CardBody,
+  InputGroup,
 } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
@@ -17,6 +16,15 @@ import * as Yup from 'yup';
 
 const ChangePassword = () => {
   const navigate = useNavigate();
+  const [passwordType, setPasswordType] = useState('password');
+
+  const togglePassword = () => {
+    if (passwordType === 'password') {
+      setPasswordType('text');
+    } else {
+      setPasswordType('password');
+    }
+  };
 
   const initialValues = {
     password: '',
@@ -56,11 +64,11 @@ const ChangePassword = () => {
                   render={({ errors, touched }) => (
                     <Form className="mt-3">
                         
-                        <FormGroup>
+                        <InputGroup className='mb-4'>
                         <Field
                             id="password"
                             name="password"
-                            type="password"
+                            type={passwordType}
                             placeholder="Nueva contraseña"
                             // value={password}
                             // onChange={ e => setPassword(e.target.value) }
@@ -68,30 +76,36 @@ const ChangePassword = () => {
                             }`}
                             required
                         />
+                        <Button color='primary' type='button' onClick={togglePassword}>
+                            { passwordType==="password"? <i className="bi bi-eye-slash"></i> :<i className="bi bi-eye"></i> }
+                        </Button>
                         <ErrorMessage
                             name="password"
                             component="div"
                             className="invalid-feedback"
                         />
-                        </FormGroup>
-                        <FormGroup>
+                        </InputGroup>
+                        <InputGroup>
                         <Field
                             id="confirmPassword"
                             name="confirmPassword"
-                            type="password"
+                            type={passwordType}
                             placeholder="Confirmar contraseña"
                             className={`form-control${errors.confirmPassword && touched.confirmPassword ? ' is-invalid' : ''
                             }`}
                             required
                         />
+                        <Button color='primary' type='button' onClick={togglePassword}>
+                            { passwordType==="password"? <i className="bi bi-eye-slash"></i> :<i className="bi bi-eye"></i> }
+                        </Button>
                         <ErrorMessage
                             name="confirmPassword"
                             component="div"
                             className="invalid-feedback"
                         />
-                        </FormGroup>
+                        </InputGroup>
                       <FormGroup>
-                        <div className="text-center pt-1 mb-3 pb-1">
+                        <div className="text-center pt-4 mb-3 pb-1">
                           <Button type="submit" color="primary" className="me-2">
                             Cambiar contraseña
                           </Button>

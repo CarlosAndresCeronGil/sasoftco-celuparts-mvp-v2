@@ -10,7 +10,7 @@ import {
   Card,
   CardBody,
 } from 'reactstrap';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
@@ -59,11 +59,18 @@ const RecoverPassword = () => {
                       </FormGroup>
                       <FormGroup>
                         <div className="text-center pt-1 mb-3 pb-1">
-                          <Button type="submit" color="primary" className="me-2">
+                          <Button type="submit" color="primary">
                             Solicitar
                           </Button>
                         </div>
+                        <div className='d-flex align-items-center justify-content-center'>
+                        <Link to="/">
+                          <button type="button" className="btn btn-outline-primary">Volver</button>
+                        </Link>
+                        </div>
+                      
                       </FormGroup>
+
                     </Form>
                   )}
                 />
