@@ -5,6 +5,7 @@ import {
     Col,
     Form,
     FormGroup,
+    Input,
     Label,
     Table,
     FormText,
@@ -32,8 +33,19 @@ export default function RetomaRequestsTable() {
 
     const [modal, setModal] = useState(false);
 
+    //Variables para los filtrados
     const [initialDate, setInitialDate] = useState({ initialDate: null })
     const [finalDate, setFinalDate] = useState({ finalDate: null })
+    const [requestStatus, setRequestStatus] = useState('')
+    const [userDtoIdNumber, setUserDtoIdNumber] = useState('')
+    const [userDtoName, setUserDtoName] = useState('')
+    const [userDtoSurname, setUserDtoSurname] = useState('')
+    const [equipmentBrand, setEquipmentBrand] = useState('')
+    const [equipmentModel, setEquipmentModel] = useState('')
+
+    //Variables auxiliares
+    const [formattedInitialDate, setFormattedInitialDate] = useState('0001-1-1')
+    const [formattedFinallDate, setFormattedFinalDate] = useState('0001-1-1')
 
     useEffect(function () {
         setLoading(true)
@@ -50,63 +62,18 @@ export default function RetomaRequestsTable() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        if (initialDate.initialDate !== null && finalDate.finalDate !== null) {
-            //Se consulta desde una fecha inicial hasta una fecha final
-            setLoading(true)
+        //Se consulta desde una fecha inicial hasta una fecha final
+        setLoading(true)
 
-            const selectedInitialDate = initialDate.initialDate
-            const selectedFinalDate = finalDate.finalDate
-
-            const formattedInitialDate = `${selectedInitialDate.getFullYear()}-${selectedInitialDate.getMonth() + 1}-${selectedInitialDate.getDate()}`
-            const formattedFinallDate = `${selectedFinalDate.getFullYear()}-${selectedFinalDate.getMonth() + 1}-${selectedFinalDate.getDate()}`
-            console.log("desde: " + formattedInitialDate + " hasta: " + formattedFinallDate)
-
-            getRequestRetomas({ page: 1, initialDate: formattedInitialDate, finalDate: formattedFinallDate })
-                .then((response) => {
-                    setRequests(response)
-                    setLoading(false)
-                })
-                .catch(error => {
-                    console.log(error)
-                    setLoading(false)
-                })
-        } else if (initialDate.initialDate !== null && finalDate.finalDate === null) {
-            //Se consulta desde una fecha inicial pero sin especificar fecha final
-            setLoading(true)
-
-            const selectedInitialDate = initialDate.initialDate
-
-            const formattedInitialDate = `${selectedInitialDate.getFullYear()}-${selectedInitialDate.getMonth() + 1}-${selectedInitialDate.getDate()}`
-            console.log("desde: " + formattedInitialDate)
-
-            getRequestRetomas({ page: 1, initialDate: formattedInitialDate })
-                .then((response) => {
-                    setRequests(response)
-                    setLoading(false)
-                })
-                .catch(error => {
-                    console.log(error)
-                    setLoading(false)
-                })
-        } else if (initialDate.initialDate === null && finalDate.finalDate !== null) {
-            //Se consulta desde una fecha final sin especificar fecha inicial
-            setLoading(true)
-
-            const selectedFinalDate = finalDate.finalDate
-
-            const formattedFinallDate = `${selectedFinalDate.getFullYear()}-${selectedFinalDate.getMonth() + 1}-${selectedFinalDate.getDate()}`
-            console.log(" hasta: " + formattedFinallDate)
-
-            getRequestRetomas({ page: 1, finalDate: formattedFinallDate })
-                .then((response) => {
-                    setRequests(response)
-                    setLoading(false)
-                })
-                .catch(error => {
-                    console.log(error)
-                    setLoading(false)
-                })
-        }
+        getRequestRetomas({ page: 1, initialDate: formattedInitialDate, finalDate: formattedFinallDate, requestStatus: requestStatus, userDtoIdNumber: userDtoIdNumber, userDtoName: userDtoName, userDtoSurname: userDtoSurname, equipmentBrand: equipmentBrand, equipmentModel: equipmentModel })
+            .then((response) => {
+                setRequests(response)
+                setLoading(false)
+            })
+            .catch(error => {
+                console.log(error)
+                setLoading(false)
+            })
     }
 
     const handleNext = () => {
@@ -144,7 +111,10 @@ export default function RetomaRequestsTable() {
                                             dateFormat="yyyy-MM-dd"
                                             value={initialDate.initialDate}
                                             selected={initialDate.initialDate}
-                                            onChange={(date) => setInitialDate({ initialDate: date })}
+                                            onChange={(date) => {
+                                                setFormattedInitialDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
+                                                setInitialDate({ initialDate: date })
+                                            }}
                                             showDisabledMonthNavigation
                                         />
                                     </Col>
@@ -156,9 +126,108 @@ export default function RetomaRequestsTable() {
                                             dateFormat="yyyy-MM-dd"
                                             value={finalDate.finalDate}
                                             selected={finalDate.finalDate}
-                                            onChange={(date) => setFinalDate({ finalDate: date })}
+                                            onChange={(date) => {
+                                                setFormattedFinalDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
+                                                setFinalDate({ finalDate: date })
+                                            }}
                                             showDisabledMonthNavigation
                                         />
+                                    </Col>
+                                </Row>
+                                <Row className='mt-2'>
+                                    <Label sm="2">Consultar por clientes</Label>
+                                    <Label sm="1">Id</Label>
+                                    <Col sm="2">
+                                        <div className="userDtoIdNumber">
+                                            <Input
+                                                className='form-control'
+                                                id='userDtoIdNumber'
+                                                value={userDtoIdNumber}
+                                                onChange={(e) => setUserDtoIdNumber(e.target.value)}
+                                                type='text'
+                                            />
+                                        </div>
+                                    </Col>
+                                    <Label sm="2">Nombres</Label>
+                                    <Col sm="2">
+                                        <div className="userDtoNames">
+                                            <Input
+                                                className='form-control'
+                                                id='userDtoNames'
+                                                value={userDtoName}
+                                                onChange={(e) => setUserDtoName(e.target.value)}
+                                                type='text'
+                                            />
+                                        </div>
+                                    </Col>
+                                    <Label sm="1">Apellidos</Label>
+                                    <Col sm="2">
+                                        <div className="userDtoSurnames">
+                                            <Input
+                                                className='form-control'
+                                                id='userDtoSurnames'
+                                                value={userDtoSurname}
+                                                onChange={(e) => setUserDtoSurname(e.target.value)}
+                                                type='text'
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row className='mt-2'>
+                                    <Label sm="2">Consultar por equipos</Label>
+                                    <Label sm="1">Marca</Label>
+                                    <Col sm="2">
+                                        <div className="equipmentBrand">
+                                            <Input
+                                                className='form-control'
+                                                id='equipmentBrand'
+                                                value={equipmentBrand}
+                                                onChange={(e) => setEquipmentBrand(e.target.value)}
+                                                type='text'
+                                            />
+                                        </div>
+                                    </Col>
+                                    <Label sm="1">Modelo</Label>
+                                    <Col sm="2">
+                                        <div className="equipmentModel">
+                                            <Input
+                                                className='form-control'
+                                                id='equipmentModel'
+                                                value={equipmentModel}
+                                                onChange={(e) => setEquipmentModel(e.target.value)}
+                                                type='text'
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row className='mt-2'>
+                                    <Label sm="2">Consultar por estado de solicitud</Label>
+                                    <Label sm="1">Estado</Label>
+                                    <Col sm="2">
+                                        <div className="requestStatus">
+                                            <Input
+                                                className='form-control'
+                                                id='requestStatus'
+                                                value={requestStatus || ''}
+                                                onChange={(e) => setRequestStatus(e.target.value)}
+                                                type='select'
+                                            >
+                                                <option value=''>SIN FILTRO</option>
+                                                <option>Iniciada</option>
+                                                <option>En proceso de recogida</option>
+                                                <option value="Recibida tecnico">Recibida técnico</option>
+                                                <option>Revisado</option>
+                                                <option value="En reparacion">En reparación</option>
+                                                <option value="Reparado pendiente de pago">Reparado, pendiente de pago</option>
+                                                <option>En camino</option>
+                                                <option>Terminada</option>
+                                                <option value="En devolucion">En devolución</option>
+                                                <option value="Devuelto sin reparacion">Devuelto sin reparación</option>
+                                                <option>Retoma</option>
+                                                <option>Abandonada</option>
+                                                <option>Anulado por IMEI</option>
+                                            </Input>
+                                        </div>
                                     </Col>
                                 </Row>
                             </FormGroup>
@@ -214,7 +283,7 @@ export default function RetomaRequestsTable() {
                                     )
                                 }
                                 {
-                                    JSON.parse(localStorage.getItem('user')).role === "admin" || JSON.parse(localStorage.getItem('user')).role === "aux_admin"  ? (
+                                    JSON.parse(localStorage.getItem('user')).role === "admin" || JSON.parse(localStorage.getItem('user')).role === "aux_admin" ? (
                                         <th>Actualizar pago retoma</th>
                                     ) : (
                                         null
@@ -224,7 +293,7 @@ export default function RetomaRequestsTable() {
                             </tr>
                         </thead>
                         <tbody>
-                            {requests.requests?.map((tdata, index) => (
+                            {requests.requests.map((tdata, index) => (
                                 tdata.requestType === "Retoma" ? (
                                     <tr key={index} className="border-top">
                                         <td>{tdata.userDto.names} {tdata.userDto.surnames}</td>
@@ -310,7 +379,7 @@ export default function RetomaRequestsTable() {
                     </Table>
                     {
                         <div>
-                            Página número: { requests.currentPage } de { requests.pages === 0 ? 1 : requests.pages }
+                            Página número: {requests.currentPage} de {requests.pages === 0 ? 1 : requests.pages}
                         </div>
                     }
                     <div className='d-flex justify-content-between'>
@@ -320,7 +389,7 @@ export default function RetomaRequestsTable() {
                                 : <Button className="btn" color='primary' onClick={handlePrevious}>Anterior</Button>
                         }
                         {
-                            
+
                             requests.currentPage === requests.pages || requests.currentPage === requests.pages + 1 ?
                                 <button className="btn btn-celuparts-dark-blue" disabled>Siguiente</button>
                                 : <Button className="btn" color='primary' onClick={handleNext}>Siguiente</Button>

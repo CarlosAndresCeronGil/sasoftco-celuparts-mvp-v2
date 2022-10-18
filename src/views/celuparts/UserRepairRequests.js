@@ -373,7 +373,8 @@ export default function UserRepairRequests() {
                                     Fecha de entrega:
                                 </span>
                             </div>
-                            {viewDetails.deliveryDate}
+                            {/* {viewDetails.deliveryDate} */}
+                            {new Date(viewDetails.deliveryDate).toLocaleDateString('es', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric" })}
                         </ModalBody>
                         <ModalFooter>
                             <Button color="secondary" onClick={handleViewDetails.bind(null)}>

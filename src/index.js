@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* eslint-disable import/no-named-as-default-member */
 import React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -5,6 +6,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 // eslint-disable-next-line import/no-named-as-default
 import reportWebVitals from './reportWebVitals';
+import moment from 'moment-timezone';
 import { store } from './store/Store';
 import App from './App';
 import './data';
@@ -12,6 +14,8 @@ import { AuthProvider } from './context/AuthProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
+moment.tz.setDefault('America/Bogota');
+// moment.tz.guess();
 
 root.render(
   <Provider store={store}>
