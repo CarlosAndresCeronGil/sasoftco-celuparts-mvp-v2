@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getEquipmentInvoice from '../../services/getEquipmentInvoice';
 import getEquipments from '../../services/getEquipments';
 
@@ -37,6 +38,7 @@ export default function EquipmentsTable() {
     return (
         loading ? <div>Cargando...</div> :
             <div>
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de equipos registrados en el sistema</CardTitle>

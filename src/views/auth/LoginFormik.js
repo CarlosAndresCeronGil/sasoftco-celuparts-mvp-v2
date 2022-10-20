@@ -76,7 +76,7 @@ const LoginFormik = () => {
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Cuenta inhabilitada, contacte con el número 3xx-xxx-xxxx para soporte técnico'
+                text: 'Cuenta inhabilitada, contacte con el número 315-808-0836 para soporte técnico'
               })
             } else {
               const user = jwtDecode(response)

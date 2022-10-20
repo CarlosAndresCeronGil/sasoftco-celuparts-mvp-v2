@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getTechnicians from '../../services/getTechnicians'
 
 export default function TechniciansTable() {
@@ -17,6 +18,7 @@ export default function TechniciansTable() {
 
     return (
         <div>
+            <BreadCrumbsCeluparts />
             <Card>
                 <CardBody>
                     <CardTitle tag="h5">Lista de técnicos</CardTitle>

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import {
     Card,
     Row,
@@ -37,6 +37,7 @@ export default function RetomaPaymentForm() {
     const [loadingPut, setLoadingPut] = useState(false)
 
     const params = useParams()
+    const navigate = useNavigate()
 
     useEffect(function () {
         setLoading(true)
@@ -118,6 +119,10 @@ export default function RetomaPaymentForm() {
         }));
     }
 
+    const handleBackPage = (e) => {
+        navigate(-1)
+    }
+
     return (
         loading ? (
             <div className="d-flex justify-content-center">
@@ -127,6 +132,9 @@ export default function RetomaPaymentForm() {
             </div>
         ) : (
             <div>
+                <Button className='btn btn-danger' onClick={handleBackPage}>
+                   Atrás
+                </Button>
                 <Row>
                     <Col>
                         <Card className='container'>

@@ -7,6 +7,7 @@ import putRequest from '../../services/putRequest';
 import Swal from 'sweetalert2'
 import getSingleEquipment from '../../services/getSingleEquipment';
 import putRequestNotification from '../../services/putRequestNotification'
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 
 export default function UserRetomaRequests() {
     const [userInfo, setUserInfo] = useState([]);
@@ -157,6 +158,7 @@ export default function UserRetomaRequests() {
     return (
         loading ? <div>Loading...</div> : (
             <div>
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Solicitudes de retoma</CardTitle>
@@ -242,7 +244,8 @@ export default function UserRetomaRequests() {
                                     Fecha de entrega:
                                 </span>
                             </div>
-                            {viewDetails.deliveryDate}
+                            {/* {viewDetails.deliveryDate} */}
+                            { new Date(viewDetails.deliveryDate).toLocaleDateString('es', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric" }) }
                         </ModalBody>
                         <ModalFooter>
                             <Button color="secondary" onClick={handleViewDetails.bind(null)}>

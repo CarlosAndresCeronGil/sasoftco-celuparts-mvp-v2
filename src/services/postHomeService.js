@@ -1,9 +1,14 @@
 /* eslint-disable */
+import moment from "moment";
+import { date } from "yup";
 import { API_URL } from "./settings";
 
 export default function postHomeService(data) {
 
     const apiURL = `${API_URL}/HomeService`;
+
+    data.pickUpDate = moment(data.pickUpDate).format("YYYY-MM-DD HH:mm:ss")
+    data.deliveryDate = moment(data.deliveryDate).format("YYYY-MM-DD HH:mm:ss")
 
     return fetch(apiURL, {
         method: 'POST',

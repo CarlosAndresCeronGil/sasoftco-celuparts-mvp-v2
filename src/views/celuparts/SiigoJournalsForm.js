@@ -15,6 +15,7 @@ import {
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import postSiigoJournal from '../../services/postSiigoJournal';
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 
 export default function SiigoJournalsForm() {
     const [loadingPost, setLoadingPost] = useState(false)
@@ -82,6 +83,7 @@ export default function SiigoJournalsForm() {
 
     return (
         <div>
+            <BreadCrumbsCeluparts />
             <Row>
                 <Col>
                     <Card className='container'>

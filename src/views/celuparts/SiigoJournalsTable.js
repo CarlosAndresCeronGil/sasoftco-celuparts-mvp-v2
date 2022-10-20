@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardTitle, Table, Alert } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getSiigoJournals from '../../services/getSiigoJournals'
 // import { Link } from "react-router-dom";
 
@@ -31,6 +32,7 @@ export default function SiigoJournalsTable() {
                         Nuevo comprobante contable
                     </button>
                 </Link> */}
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de comprobantes contables registrados en el sistema SIIGO</CardTitle>

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Alert, Card, CardBody, CardTitle, Table } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getSiigoAccountGroups from '../../services/getSiigoAccountGroups'
 
 export default function SiigoAccountGroupsTable() {
@@ -25,6 +26,7 @@ export default function SiigoAccountGroupsTable() {
     return (
         loading ? <div> Cargando... </div> : (
             <div>
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de grupos de inventario registrados en el sistema SIIGO</CardTitle>

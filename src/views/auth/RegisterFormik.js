@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import jwtDecode from 'jwt-decode';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { Button, Label, FormGroup, Row, Col, Input, InputGroupText, InputGroup} from 'reactstrap';
+import { Button, Label, FormGroup, Row, Col, Input, InputGroupText, InputGroup } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
@@ -47,8 +47,8 @@ const RegisterFormik = () => {
     password: Yup.string()
       .min(8, 'La contraseña debe tener al menos 8 caracteres')
       .max(15, 'La contraseña debe tener menos de 15 caracteres')
-      .required('Contraseña requerida')
-      .matches(/^(?=.*[!@#%&])/, "La contraseña debe tener al menos un caracter especial, ejemplo: !@#%&"),
+      .matches(/^(?=.*[!@#%&])/, "La contraseña debe tener al menos un caracter especial, ejemplo: !@#%&")
+      .required('Contraseña requerida'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir')
       .required('Se requiere confirmar contraseña'),
@@ -94,40 +94,40 @@ const RegisterFormik = () => {
                 //   text: 'Registro exitoso!'
                 // })
                 //   .then(() => {
-                    // console.log("respuesta del ok del alert", response)
-                    // Una vez el registro sea exitoso, ingresar al usuario dentro del
-                    // sistema
-                    authLogin({
-                      email: e.target.elements.email.value,
-                      password: e.target.elements.password.value
-                    })
-                      .then(response2 => {
-                        console.log("Response from sign in:", response2);
-                        if (response2 !== undefined) {
-                          if (response2 === "Account disabled") {
-                            Swal.fire({
-                              icon: 'error',
-                              title: 'Oops...',
-                              text: 'Cuenta inhabilitada, contacte con el número 3xx-xxx-xxxx para soporte técnico'
-                            })
-                          } else {
-                            const user = jwtDecode(response2)
-                            console.log("user", user);
-                            localStorage.setItem('user', JSON.stringify(user));
-                            setAuth(true);
-                            navigate('/home/dashboards/dashboard1');
-                          }
-                        }
-                      })
-                      .catch(error => {
-                        console.log("error:", error);
+                // console.log("respuesta del ok del alert", response)
+                // Una vez el registro sea exitoso, ingresar al usuario dentro del
+                // sistema
+                authLogin({
+                  email: e.target.elements.email.value,
+                  password: e.target.elements.password.value
+                })
+                  .then(response2 => {
+                    console.log("Response from sign in:", response2);
+                    if (response2 !== undefined) {
+                      if (response2 === "Account disabled") {
                         Swal.fire({
                           icon: 'error',
                           title: 'Oops...',
-                          text: 'Usuario o contraseña incorrecto!'
+                          text: 'Cuenta inhabilitada, contacte con el número 315-808-0836 para soporte técnico'
                         })
-                      });
-                  // })
+                      } else {
+                        const user = jwtDecode(response2)
+                        console.log("user", user);
+                        localStorage.setItem('user', JSON.stringify(user));
+                        setAuth(true);
+                        navigate('/home/dashboards/dashboard1');
+                      }
+                    }
+                  })
+                  .catch(error => {
+                    console.log("error:", error);
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: 'Usuario o contraseña incorrecto!'
+                    })
+                  });
+                // })
               } else {
                 Swal.fire({
                   icon: 'error',
@@ -312,22 +312,22 @@ const RegisterFormik = () => {
                               </FormGroup>
                             </Col>
                           </Row>
-                          
+
 
                           <Row>
                             <Col md="6">
                               <InputGroup>
-                                <Input
+                                <Field
                                   id="password"
                                   name="password"
                                   type={passwordType}
                                   placeholder="Contraseña"
                                   className={`form-control${errors.password && touched.password ? ' is-invalid' : ''
                                     }`}
-                                    >
-                                </Input>
+                                  required
+                                />
                                 <Button color='primary' type='button' onClick={togglePassword}>
-                                  { passwordType==="password"? <i className="bi bi-eye-slash"></i> :<i className="bi bi-eye"></i> }
+                                  {passwordType === "password" ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
                                 </Button>
                                 <ErrorMessage
                                   name="password"
@@ -348,7 +348,7 @@ const RegisterFormik = () => {
                                   required
                                 />
                                 <Button color='primary' type='button' onClick={togglePassword}>
-                                  { passwordType==="password"? <i className="bi bi-eye-slash"></i> :<i className="bi bi-eye"></i> }
+                                  {passwordType === "password" ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
                                 </Button>
                                 <ErrorMessage
                                   name="confirmPassword"

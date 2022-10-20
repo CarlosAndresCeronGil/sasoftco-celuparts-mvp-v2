@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardTitle, Table, Alert } from "reactstrap";
 import { Link } from "react-router-dom";
 import getSiigoCreditNotes from '../../services/getSiigoCreditNotes'
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 
 export default function SiigoCreditNotesTable() {
     const [siigoCreditNotes, setSiigoCreditNotes] = useState([])
@@ -31,6 +32,7 @@ export default function SiigoCreditNotesTable() {
                         Nueva nota de crédito
                     </button>
                 </Link> */}
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de notas de crédito registradas en el sistema SIIGO</CardTitle>

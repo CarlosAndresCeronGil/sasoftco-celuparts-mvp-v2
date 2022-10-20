@@ -38,6 +38,9 @@ import getTypeOfEquipments from '../../services/getTypeOfEquipments'
 import getVerifyImei from '../../services/getVerifyImei';
 
 import { Checkbox } from '@blueprintjs/core';
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
+import getUserLastRetomaRequestInfo from '../../services/getUserLastRetomaRequestInfo';
+import ComponentCard from '../../components/ComponentCard';
 
 export default function RequestRetomaForm() {
 
@@ -58,6 +61,9 @@ export default function RequestRetomaForm() {
     const [serial, setSerial] = useState('')
     const [verifyResponse, setVerifyResponse] = useState('')
     const [isSameAddresses, setIsSameAddresses] = useState(false);
+    const [pickUpAddress, setPickUpAddress] = useState('');
+    const [deliveryAddress, setDeliveryAddress] = useState('')
+    const [equipmentBrand, setEquipmentBrand] = useState('');
 
     /*Datos donde iran la lista de marcas de celulares, computadoras mas populares y tipops de
     dispositivo*/
@@ -96,7 +102,16 @@ export default function RequestRetomaForm() {
                         getComputerBrands()
                             .then(computersResponse => {
                                 setComputersList(computersResponse)
-                                setLoadingPage(false)
+                                getUserLastRetomaRequestInfo({ id: JSON.parse(localStorage.getItem('user')).idUser })
+                                    .then(lastRequestInfoResponse => {
+                                        setPickUpAddress(lastRequestInfoResponse[0].requests[0].pickUpAddress)
+                                        setDeliveryAddress(lastRequestInfoResponse[0].requests[0].deliveryAddress)
+                                        setLoadingPage(false)
+                                    })
+                                    .catch(error => {
+                                        console.log(error)
+                                        setLoadingPage(false)
+                                    })
                             })
                             .catch(error => {
                                 console.log(error)
@@ -113,8 +128,6 @@ export default function RequestRetomaForm() {
                 setLoadingPage(false)
             })
     }, [])
-
-    const [equipmentBrand, setEquipmentBrand] = useState('Samsung');
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -148,8 +161,8 @@ export default function RequestRetomaForm() {
             formData.append("imeiOrSerial", e.target.elements.imei.value)
             formData.append("equipmentInvoice", e.target.elements.equipmentInvoice.files[0])
 
-            const deliveryAddress = isSameAddresses ? e.target.elements.pickUpAddress.value : e.target.elements.deliveryAddress.value
-            console.log('deliveryAddress: ', deliveryAddress)
+            const deliveryAddress2 = isSameAddresses ? e.target.elements.pickUpAddress.value : e.target.elements.deliveryAddress.value
+            console.log('deliveryAddress: ', deliveryAddress2)
 
             postEquipment(formData)
                 .then(dataEquipment => {
@@ -157,8 +170,8 @@ export default function RequestRetomaForm() {
                         idUser: JSON.parse(localStorage.getItem('user')).idUser,
                         idEquipment: dataEquipment.idEquipment,
                         requestType: "Retoma",
-                        pickUpAddress: e.target.elements.pickUpAddress.value,
-                        deliveryAddress: deliveryAddress,
+                        pickUpAddress: pickUpAddress,
+                        deliveryAddress: deliveryAddress2,
                         statusQuote: "Pendiente",
                         autoDiagnosis: e.target.elements.autoDiagnosis.value
                     })
@@ -283,346 +296,381 @@ export default function RequestRetomaForm() {
             })
     }
 
+    const handleCancel = () => {
+        navigate("/home/dashboards/dashboard1")
+    }
+
     const currentRole = JSON.parse(localStorage.getItem('user')).role;
 
     return (
-        <div>
+        loadingPage ? <div>Cargando...</div> :
             <div>
-                <Row>
-                    <Col>
-                        <Card className='container'>
-                            <CardTitle tag="h4" className="border-bottom p-3 mb-0 row justify-content-start">
+                <BreadCrumbsCeluparts />
+                <div>
+                    <Row>
+                        <Col>
+                            {/* <Card className='container'> */}
+                            <CardTitle tag="h4" className="border-bottom p-3 mb-0 justify-content-start">
                                 Nueva solicitud de retoma
                             </CardTitle>
                             <CardBody>
                                 <Form onSubmit={handleSubmit}>
-                                    <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
-                                        <i className="bi bi-box-seam"> </i>
-                                        <strong>Datos de la solicitud</strong>
-                                    </CardSubtitle>
-                                    <FormGroup>
-                                        <Label for="pickUpAddress">Dirección de recogida*</Label>
-                                        <Checkbox className='ms-0 ms-md-5' label="Usar la misma dirección" onChange={handleSameAddresses} />
-                                        <Input
-                                            id="pickUpAddress"
-                                            name="pickUpAddress"
-                                            placeholder="Ingrese la dirección donde se recogera el producto"
-                                            type="text"
-                                            required
-                                        />
-                                    </FormGroup>
-                                    {
-                                        !isSameAddresses ?
-                                            <FormGroup>
-                                                <Label for="deliveryAddress">Dirección de entrega*</Label>
-                                                <Input
-                                                    id="deliveryAddress"
-                                                    name="deliveryAddress"
-                                                    placeholder="Ingrese la dirección donde se entregara el producto"
-                                                    type="text"
-                                                    required
-                                                />
-                                            </FormGroup>
-                                            : null
-                                    }
+                                    <ComponentCard title="Datos de la solicitud">
+                                        {/* <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
+                                            <i className="bi bi-box-seam"> </i>
+                                            <strong>Datos de la solicitud</strong>
+                                        </CardSubtitle> */}
+                                        <FormGroup>
+                                            <Label for="pickUpAddress">Dirección de recogida*</Label>
+                                            <Checkbox className='ms-0 ms-md-5' label="Usar la misma dirección" onChange={handleSameAddresses} />
+                                            <Input
+                                                id="pickUpAddress"
+                                                name="pickUpAddress"
+                                                value={pickUpAddress}
+                                                onChange={(e) => setPickUpAddress(e.target.value)}
+                                                type="text"
+                                                required
+                                            />
+                                        </FormGroup>
+                                        {
+                                            !isSameAddresses ?
+                                                <FormGroup>
+                                                    <Label for="deliveryAddress">Dirección de entrega*</Label>
+                                                    <Input
+                                                        id="deliveryAddress"
+                                                        name="deliveryAddress"
+                                                        value={deliveryAddress}
+                                                        onChange={(e) => setDeliveryAddress(e.target.value)}
+                                                        type="text"
+                                                        required
+                                                    />
+                                                </FormGroup>
+                                                :
+                                                <FormGroup>
+                                                    <Label for="deliveryAddress">Dirección de entrega*</Label>
+                                                    <Input
+                                                        id="deliveryAddress"
+                                                        name="deliveryAddress"
+                                                        value={pickUpAddress}
+                                                        // placeholder="Ingrese la dirección donde se entregara el producto"
+                                                        type="text"
+                                                        disabled
+                                                    />
+                                                </FormGroup>
+                                        }
 
 
-                                    <Row>
-                                        <Col lg={6}>
+                                        <Row>
+                                            <Col lg={6}>
 
-                                            <FormGroup>
-                                                <Label for="PickUpTime">Fecha y hora de recogida*</Label>
-                                                <DatePicker
-                                                    id='PickUpTime'
-                                                    className='form-control'
-                                                    dateFormat="yyyy-MM-dd h:mm aa"
-                                                    showTimeSelect
-                                                    minTime={new Date(new Date().setHours(minTimeHour, 0, 0, 0))}
-                                                    maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
-                                                    minDate={new Date()}
-                                                    includeTimes={[
-                                                        setHours(setMinutes(new Date(), 30), 8),
-                                                        setHours(setMinutes(new Date(), 0), 9),
-                                                        setHours(setMinutes(new Date(), 30), 9),
-                                                        setHours(setMinutes(new Date(), 0), 10),
-                                                        setHours(setMinutes(new Date(), 30), 10),
-                                                        setHours(setMinutes(new Date(), 0), 11),
-                                                        setHours(setMinutes(new Date(), 30), 11),
-                                                        setHours(setMinutes(new Date(), 0), 12),
-                                                        setHours(setMinutes(new Date(), 0), 14),
-                                                        setHours(setMinutes(new Date(), 30), 14),
-                                                        setHours(setMinutes(new Date(), 0), 15),
-                                                        setHours(setMinutes(new Date(), 30), 15),
-                                                        setHours(setMinutes(new Date(), 0), 16),
-                                                        setHours(setMinutes(new Date(), 30), 16),
-                                                        setHours(setMinutes(new Date(), 0), 17),
-                                                        setHours(setMinutes(new Date(), 30), 17),
-                                                        setHours(setMinutes(new Date(), 0), 18),
-                                                    ]}
-                                                    filterDate={isWeekDay}
-                                                    selected={startDate}
-                                                    onChange={(date) => setStartDate(date)}
-                                                    timeFormat="HH:mm"
-                                                />
-                                            </FormGroup>
+                                                <FormGroup>
+                                                    <Label for="PickUpTime">Fecha y hora de recogida*</Label>
+                                                    <DatePicker
+                                                        id='PickUpTime'
+                                                        className='form-control'
+                                                        dateFormat="yyyy-MM-dd h:mm aa"
+                                                        showTimeSelect
+                                                        minTime={new Date(new Date().setHours(minTimeHour, 0, 0, 0))}
+                                                        maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
+                                                        minDate={new Date()}
+                                                        includeTimes={[
+                                                            setHours(setMinutes(new Date(), 30), 8),
+                                                            setHours(setMinutes(new Date(), 0), 9),
+                                                            setHours(setMinutes(new Date(), 30), 9),
+                                                            setHours(setMinutes(new Date(), 0), 10),
+                                                            setHours(setMinutes(new Date(), 30), 10),
+                                                            setHours(setMinutes(new Date(), 0), 11),
+                                                            setHours(setMinutes(new Date(), 30), 11),
+                                                            setHours(setMinutes(new Date(), 0), 12),
+                                                            setHours(setMinutes(new Date(), 0), 14),
+                                                            setHours(setMinutes(new Date(), 30), 14),
+                                                            setHours(setMinutes(new Date(), 0), 15),
+                                                            setHours(setMinutes(new Date(), 30), 15),
+                                                            setHours(setMinutes(new Date(), 0), 16),
+                                                            setHours(setMinutes(new Date(), 30), 16),
+                                                            setHours(setMinutes(new Date(), 0), 17),
+                                                            setHours(setMinutes(new Date(), 30), 17),
+                                                            setHours(setMinutes(new Date(), 0), 18),
+                                                        ]}
+                                                        filterDate={isWeekDay}
+                                                        selected={startDate}
+                                                        onChange={(date) => setStartDate(date)}
+                                                        timeFormat="HH:mm"
+                                                    />
+                                                </FormGroup>
 
-                                        </Col>
-                                        <Col lg={6}>
-                                            {
-                                                startDate.getDay() === 6 ?
-                                                    <FormGroup>
-                                                        <Label for="DeliveryDate">Fecha y hora tentativa a entrega en caso de no aceptar valor de venta*</Label>
-                                                        <DatePicker
-                                                            id='DeliveryDate'
-                                                            className='form-control'
-                                                            dateFormat="yyyy-MM-dd h:mm aa"
-                                                            // minDate={new Date().setDate(new Date().getDate() + 1)}
-                                                            minDate={new Date().setDate(new Date(startDate).getDate() + 1)}
-                                                            showTimeSelect
-                                                            includeTimes={[
-                                                                setHours(setMinutes(new Date(), 30), 8),
-                                                                setHours(setMinutes(new Date(), 0), 9),
-                                                                setHours(setMinutes(new Date(), 30), 9),
-                                                                setHours(setMinutes(new Date(), 0), 10),
-                                                                setHours(setMinutes(new Date(), 30), 10),
-                                                                setHours(setMinutes(new Date(), 0), 11),
-                                                                setHours(setMinutes(new Date(), 30), 11),
-                                                                setHours(setMinutes(new Date(), 0), 12),
-                                                                setHours(setMinutes(new Date(), 0), 14),
-                                                                setHours(setMinutes(new Date(), 30), 14),
-                                                                setHours(setMinutes(new Date(), 0), 15),
-                                                                setHours(setMinutes(new Date(), 30), 15),
-                                                                setHours(setMinutes(new Date(), 0), 16),
-                                                                setHours(setMinutes(new Date(), 30), 16),
-                                                                setHours(setMinutes(new Date(), 0), 17),
-                                                                setHours(setMinutes(new Date(), 30), 17),
-                                                                setHours(setMinutes(new Date(), 0), 18),
-                                                            ]}
-                                                            // selected={new Date().setDate(new Date(startDate).getDate() + 2)}
-                                                            selected={finishDate}
-                                                            filterDate={isWeekDay}
-                                                            onChange={(date) => setFinishDate(date)}
-                                                            timeFormat="HH:mm"
-                                                        />
-                                                    </FormGroup>
-                                                    :
-                                                    <FormGroup>
-                                                        <Label for="DeliveryDate">Fecha y hora tentativa a entrega en caso de no aceptar valor de venta*</Label>
-                                                        <DatePicker
-                                                            id='DeliveryDate'
-                                                            className='form-control'
-                                                            dateFormat="yyyy-MM-dd h:mm aa"
-                                                            // minDate={new Date().setDate(new Date().getDate() + 1)}
-                                                            minDate={new Date().setDate(new Date(startDate).getDate() + 1)}
-                                                            showTimeSelect
-                                                            includeTimes={[
-                                                                setHours(setMinutes(new Date(), 30), 8),
-                                                                setHours(setMinutes(new Date(), 0), 9),
-                                                                setHours(setMinutes(new Date(), 30), 9),
-                                                                setHours(setMinutes(new Date(), 0), 10),
-                                                                setHours(setMinutes(new Date(), 30), 10),
-                                                                setHours(setMinutes(new Date(), 0), 11),
-                                                                setHours(setMinutes(new Date(), 30), 11),
-                                                                setHours(setMinutes(new Date(), 0), 12),
-                                                                setHours(setMinutes(new Date(), 0), 14),
-                                                                setHours(setMinutes(new Date(), 30), 14),
-                                                                setHours(setMinutes(new Date(), 0), 15),
-                                                                setHours(setMinutes(new Date(), 30), 15),
-                                                                setHours(setMinutes(new Date(), 0), 16),
-                                                                setHours(setMinutes(new Date(), 30), 16),
-                                                                setHours(setMinutes(new Date(), 0), 17),
-                                                                setHours(setMinutes(new Date(), 30), 17),
-                                                                setHours(setMinutes(new Date(), 0), 18),
-                                                            ]}
-                                                            // selected={new Date().setDate(new Date(startDate).getDate() + 2)}
-                                                            selected={finishDate}
-                                                            onChange={(date) => setFinishDate(date)}
-                                                            filterDate={isWeekDay}
-                                                            timeFormat="HH:mm"
-                                                        />
-                                                    </FormGroup>
-                                            }
-                                        </Col>
-                                    </Row>
+                                            </Col>
+                                            <Col lg={6}>
+                                                {
+                                                    startDate.getDay() === 6 ?
+                                                        <FormGroup>
+                                                            <Label for="DeliveryDate">Fecha y hora tentativa a entrega en caso de no aceptar valor de venta*</Label>
+                                                            <DatePicker
+                                                                id='DeliveryDate'
+                                                                className='form-control'
+                                                                dateFormat="yyyy-MM-dd h:mm aa"
+                                                                // minDate={new Date().setDate(new Date().getDate() + 1)}
+                                                                minDate={new Date().setDate(new Date(startDate).getDate() + 1)}
+                                                                showTimeSelect
+                                                                includeTimes={[
+                                                                    setHours(setMinutes(new Date(), 30), 8),
+                                                                    setHours(setMinutes(new Date(), 0), 9),
+                                                                    setHours(setMinutes(new Date(), 30), 9),
+                                                                    setHours(setMinutes(new Date(), 0), 10),
+                                                                    setHours(setMinutes(new Date(), 30), 10),
+                                                                    setHours(setMinutes(new Date(), 0), 11),
+                                                                    setHours(setMinutes(new Date(), 30), 11),
+                                                                    setHours(setMinutes(new Date(), 0), 12),
+                                                                    setHours(setMinutes(new Date(), 0), 14),
+                                                                    setHours(setMinutes(new Date(), 30), 14),
+                                                                    setHours(setMinutes(new Date(), 0), 15),
+                                                                    setHours(setMinutes(new Date(), 30), 15),
+                                                                    setHours(setMinutes(new Date(), 0), 16),
+                                                                    setHours(setMinutes(new Date(), 30), 16),
+                                                                    setHours(setMinutes(new Date(), 0), 17),
+                                                                    setHours(setMinutes(new Date(), 30), 17),
+                                                                    setHours(setMinutes(new Date(), 0), 18),
+                                                                ]}
+                                                                // selected={new Date().setDate(new Date(startDate).getDate() + 2)}
+                                                                selected={finishDate}
+                                                                filterDate={isWeekDay}
+                                                                onChange={(date) => setFinishDate(date)}
+                                                                timeFormat="HH:mm"
+                                                            />
+                                                        </FormGroup>
+                                                        :
+                                                        <FormGroup>
+                                                            <Label for="DeliveryDate">Fecha y hora tentativa a entrega en caso de no aceptar valor de venta*</Label>
+                                                            <DatePicker
+                                                                id='DeliveryDate'
+                                                                className='form-control'
+                                                                dateFormat="yyyy-MM-dd h:mm aa"
+                                                                // minDate={new Date().setDate(new Date().getDate() + 1)}
+                                                                minDate={new Date().setDate(new Date(startDate).getDate() + 1)}
+                                                                showTimeSelect
+                                                                includeTimes={[
+                                                                    setHours(setMinutes(new Date(), 30), 8),
+                                                                    setHours(setMinutes(new Date(), 0), 9),
+                                                                    setHours(setMinutes(new Date(), 30), 9),
+                                                                    setHours(setMinutes(new Date(), 0), 10),
+                                                                    setHours(setMinutes(new Date(), 30), 10),
+                                                                    setHours(setMinutes(new Date(), 0), 11),
+                                                                    setHours(setMinutes(new Date(), 30), 11),
+                                                                    setHours(setMinutes(new Date(), 0), 12),
+                                                                    setHours(setMinutes(new Date(), 0), 14),
+                                                                    setHours(setMinutes(new Date(), 30), 14),
+                                                                    setHours(setMinutes(new Date(), 0), 15),
+                                                                    setHours(setMinutes(new Date(), 30), 15),
+                                                                    setHours(setMinutes(new Date(), 0), 16),
+                                                                    setHours(setMinutes(new Date(), 30), 16),
+                                                                    setHours(setMinutes(new Date(), 0), 17),
+                                                                    setHours(setMinutes(new Date(), 30), 17),
+                                                                    setHours(setMinutes(new Date(), 0), 18),
+                                                                ]}
+                                                                // selected={new Date().setDate(new Date(startDate).getDate() + 2)}
+                                                                selected={finishDate}
+                                                                onChange={(date) => setFinishDate(date)}
+                                                                filterDate={isWeekDay}
+                                                                timeFormat="HH:mm"
+                                                            />
+                                                        </FormGroup>
+                                                }
+                                            </Col>
+                                        </Row>
+                                        <FormGroup>
+                                            <Label for="paymentMethod">Método de pago (de celuparts a ti)*</Label>
+                                            <Input id="paymentMethod" name="paymentMethod" type="select">
+                                                <option>Contraentrega</option>
+                                                <option>Transferencia bancaria</option>
+                                            </Input>
+                                        </FormGroup>
+                                    </ComponentCard>
 
-
-                                    <FormGroup>
-                                        <Label for="paymentMethod">Método de pago (de celuparts a ti)*</Label>
-                                        <Input id="paymentMethod" name="paymentMethod" type="select">
-                                            <option>Contraentrega</option>
-                                            <option>Transferencia bancaria</option>
-                                        </Input>
-                                    </FormGroup>
-                                    {/* --------------- Datos equipo ---------------- */}
-                                    <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
-                                        <i className="bi bi-box-seam"> </i>
-                                        <strong>Datos del equipo</strong>
-                                    </CardSubtitle>
-                                    <FormGroup>
-                                        <Label for="typeOfEquipment">Tipo de dispositivo*</Label>
-                                        <Input
-                                            id="typeOfEquipment"
-                                            name="select"
-                                            type="select"
-                                            value={typeOfEquipment.typeOfEquipment}
-                                            onChange={(e) => setTypeOfEquipment({ typeOfEquipment: e.target.value })}
-                                        >
-                                            {
-                                                typeOfEquipmentList.map((typeOfEquipmentData, index) => (
-                                                    <option value={typeOfEquipmentData.idTypeOfEquipment} key={index}>{typeOfEquipmentData.equipmentTypeName}</option>
-                                                ))
-                                            }
-                                            {/* <option value="Computador portatil">Computador portátil</option>
-                                            <option value="Telefono celular">Teléfono celular</option> */}
-                                        </Input>
-                                    </FormGroup>
-                                    {
+                                    <ComponentCard title="Datos del equipo">
+                                        {/* --------------- Datos equipo ---------------- */}
+                                        {/* <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
+                                            <i className="bi bi-box-seam"> </i>
+                                            <strong>Datos del equipo</strong>
+                                        </CardSubtitle> */}
+                                        <FormGroup>
+                                            <Label for="typeOfEquipment">Tipo de dispositivo*</Label>
+                                            <Input
+                                                id="typeOfEquipment"
+                                                name="select"
+                                                type="select"
+                                                value={typeOfEquipment.typeOfEquipment}
+                                                onChange={(e) => {
+                                                    setEquipmentBrand('')
+                                                    setTypeOfEquipment({ typeOfEquipment: e.target.value })
+                                                }}
+                                            >
+                                                {
+                                                    typeOfEquipmentList.map((typeOfEquipmentData, index) => (
+                                                        <option value={typeOfEquipmentData.idTypeOfEquipment} key={index}>{typeOfEquipmentData.equipmentTypeName}</option>
+                                                    ))
+                                                }
+                                            </Input>
+                                        </FormGroup>
+                                        {
                                             typeOfEquipment.typeOfEquipment === '1' ?
                                                 <FormGroup>
                                                     <Label for="typeOfEquipment">Marca del computador*</Label>
-                                                        <Combobox
+                                                    <Combobox
                                                         required
                                                         placeholder='Seleccione la marca del computador'
                                                         id="equipmentBrand"
                                                         name="equipmentBrand"
+                                                        defaultValue={''}
                                                         data={computersList.map(computerData => computerData.brandName)}
                                                         value={equipmentBrand}
                                                         onChange={brand => setEquipmentBrand(brand)}
-                                                        />
+                                                    />
                                                 </FormGroup>
                                                 :
 
                                                 <FormGroup>
-                                                <Label for="typeOfEquipment">Marca del celular*</Label>
+                                                    <Label for="typeOfEquipment">Marca del celular*</Label>
                                                     <Combobox
-                                                    required
-                                                    placeholder='Seleccione la marca del celular'
-                                                    id="equipmentBrand"
-                                                    name="equipmentBrand"
-                                                    data={cellphoneList.map(cellphoneData => cellphoneData.brandName)}
-                                                    value={equipmentBrand}
-                                                    onChange={brand => setEquipmentBrand(brand)}
-                                                    />
-                                            </FormGroup>
-                                        }
-                                    <FormGroup>
-                                        <Label for="modelOrReference">Modelo o referencia dispositivo*</Label>
-                                        <Input
-                                            id="modelOrReference"
-                                            name="modelOrReference"
-                                            placeholder="Ingrese el modelo o referencia del dispositivo"
-                                            type="text"
-                                            required
-                                        />
-                                    </FormGroup>
-                                    {
-                                        typeOfEquipment.typeOfEquipment === "Computador portatil" ?
-                                            <div>
-                                                <FormGroup>
-                                                    <Label for="imei">Serial del dispositivo*</Label>
-                                                    <Input
-                                                        id="imei"
-                                                        name="imei"
-                                                        value={serial}
-                                                        placeholder="Ingrese el imei dispositivo"
-                                                        type="text"
-                                                        onChange={(e) => setSerial(e.target.value)}
                                                         required
+                                                        placeholder='Seleccione la marca del celular'
+                                                        id="equipmentBrand"
+                                                        name="equipmentBrand"
+                                                        defaultValue={''}
+                                                        data={cellphoneList.map(cellphoneData => cellphoneData.brandName)}
+                                                        value={equipmentBrand}
+                                                        onChange={brand => setEquipmentBrand(brand)}
                                                     />
                                                 </FormGroup>
-                                                {
-                                                    serial === '' && currentRole !== 'user' ?
-                                                        <FormGroup>
-                                                            <Button disabled>
-                                                                Verificar serial
-                                                            </Button>
-                                                        </FormGroup>
-                                                        : currentRole !== 'user' ?
+                                        }
+                                        <FormGroup>
+                                            <Label for="modelOrReference">Modelo o referencia dispositivo*</Label>
+                                            <Input
+                                                id="modelOrReference"
+                                                name="modelOrReference"
+                                                placeholder="Ingrese el modelo o referencia del dispositivo"
+                                                type="text"
+                                                required
+                                            />
+                                        </FormGroup>
+                                        {
+                                            typeOfEquipment.typeOfEquipment === "1" ?
+                                                <div>
+                                                    <FormGroup>
+                                                        <Label for="imei">Serial del dispositivo*</Label>
+                                                        <Input
+                                                            id="imei"
+                                                            name="imei"
+                                                            value={serial}
+                                                            placeholder="Ingrese el imei dispositivo"
+                                                            type="text"
+                                                            onChange={(e) => setSerial(e.target.value)}
+                                                            required
+                                                        />
+                                                    </FormGroup>
+                                                    {
+                                                        serial === '' && currentRole !== 'user' ?
                                                             <FormGroup>
-                                                                <Button onClick={handleVerifySerial}>
+                                                                <Button disabled>
                                                                     Verificar serial
                                                                 </Button>
                                                             </FormGroup>
-                                                            : null
+                                                            : currentRole !== 'user' ?
+                                                                <FormGroup>
+                                                                    <Button onClick={handleVerifySerial}>
+                                                                        Verificar serial
+                                                                    </Button>
+                                                                </FormGroup>
+                                                                : null
 
-                                                }
-                                            </div>
-                                            :
-                                            <div>
-                                                <FormGroup>
-                                                    <Label for="imei">Imei del dispositivo*</Label>
-                                                    <Input
-                                                        id="imei"
-                                                        name="imei"
-                                                        value={imei}
-                                                        placeholder="Ingrese el imei dispositivo"
-                                                        type="text"
-                                                        onChange={(e) => setImei(e.target.value)}
-                                                        required
-                                                    />
-                                                </FormGroup>
-                                                {
-                                                    imei === '' && currentRole !== 'user' ?
-                                                        <FormGroup>
-                                                            <Button disabled>
-                                                                Verificar imei
-                                                            </Button>
-                                                        </FormGroup>
-                                                        : currentRole !== 'user' ?
+                                                    }
+                                                </div>
+                                                :
+                                                <div>
+                                                    <FormGroup>
+                                                        <Label for="imei">Imei del dispositivo*</Label>
+                                                        <Input
+                                                            id="imei"
+                                                            name="imei"
+                                                            value={imei}
+                                                            placeholder="Ingrese el imei dispositivo"
+                                                            type="text"
+                                                            onChange={(e) => setImei(e.target.value)}
+                                                            required
+                                                        />
+                                                    </FormGroup>
+                                                    {
+                                                        imei === '' && currentRole !== 'user' ?
                                                             <FormGroup>
-                                                                <Button onClick={handleVerifyImei}>
+                                                                <Button disabled>
                                                                     Verificar imei
                                                                 </Button>
                                                             </FormGroup>
-                                                            : null
-                                                }
-                                            </div>
-                                    }
-                                    {
-                                        verifyResponse
-                                    }
-                                    <FormGroup>
-                                        <Label for="equipmentInvoice">Factura del dispositivo*</Label>
-                                        <Input
-                                            id="equipmentInvoice"
-                                            name="equipmentInvoice"
-                                            placeholder="Ingrese la factura dispositivo"
-                                            type="file"
-                                            accept='.pdf'
-                                            onChange={handleFileChange}
-                                            required
-                                        />
-                                    </FormGroup>
-                                    <h6 className={errorMsg ? 'alert alert-danger' : null} >{errorMsg}</h6>
-                                    <FormGroup>
-                                        <Label for="autoDiagnosis">Cuentanos brevemente el estado de tu dispositivo a vender*</Label>
-                                        <Input
-                                            id="autoDiagnosis"
-                                            name="autoDiagnosis"
-                                            placeholder="máximo 250 caracteres"
-                                            type="textarea"
-                                            maxLength={250}
-                                            required
-                                        />
-                                    </FormGroup>
-                                    {
-                                        loading ? (
-                                            <button className="btn btn-primary" type="button" disabled>
-                                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                <span className="sr-only">Cargando...</span>
-                                            </button>
-                                        ) : (
-                                            <Button color="celuparts-dark-blue" className='btn btn-primary'>
-                                                Enviar
+                                                            : currentRole !== 'user' ?
+                                                                <FormGroup>
+                                                                    <Button onClick={handleVerifyImei}>
+                                                                        Verificar imei
+                                                                    </Button>
+                                                                </FormGroup>
+                                                                : null
+                                                    }
+                                                </div>
+                                        }
+                                        {
+                                            verifyResponse
+                                        }
+                                        <FormGroup>
+                                            <Label for="equipmentInvoice">Factura del dispositivo*</Label>
+                                            <Input
+                                                id="equipmentInvoice"
+                                                name="equipmentInvoice"
+                                                placeholder="Ingrese la factura dispositivo"
+                                                type="file"
+                                                accept='.pdf'
+                                                onChange={handleFileChange}
+                                                required
+                                            />
+                                        </FormGroup>
+                                        <h6 className={errorMsg ? 'alert alert-danger' : null} >{errorMsg}</h6>
+                                        <FormGroup>
+                                            <Label for="autoDiagnosis">Cuentanos brevemente el estado de tu dispositivo a vender*</Label>
+                                            <Input
+                                                id="autoDiagnosis"
+                                                name="autoDiagnosis"
+                                                placeholder="máximo 250 caracteres"
+                                                type="textarea"
+                                                maxLength={250}
+                                                required
+                                            />
+                                        </FormGroup>
+                                        <div className='d-flex justify-content-between'>
+                                            {
+                                                loading ? (
+                                                    <button className="btn btn-primary" type="button" disabled>
+                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        <span className="sr-only">Cargando...</span>
+                                                    </button>
+                                                ) : (
+                                                    computersList.some(e => e.brandName == equipmentBrand) || cellphoneList.some(e => e.brandName == equipmentBrand) ? (
+                                                        <Button color="celuparts-dark-blue " className='btn btn-primary'>
+                                                            Enviar
+                                                        </Button>
+                                                    ) :
+                                                        <Button color="celuparts-dark-blue " className='btn btn-primary' disabled>
+                                                            Enviar
+                                                        </Button>
+                                                )
+                                            }
+                                            <Button className='btn btn-danger justify-content-end' onClick={handleCancel}>
+                                                Cancelar
                                             </Button>
-                                        )
-                                    }
+                                        </div>
+                                    </ComponentCard>
                                 </Form>
                             </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
+                            {/* </Card> */}
+                        </Col>
+                    </Row>
+                </div>
             </div>
-        </div>
     )
 }

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getRepairs from '../../services/getRepairs';
 
 export default function RepairTable() {
@@ -12,7 +13,7 @@ export default function RepairTable() {
         getRepairs()
             .then((response) => {
                 setRepairs(response)
-                // console.log(response)
+                console.log(response)
                 setLoading(false)
             })
             .catch(error => {
@@ -24,6 +25,7 @@ export default function RepairTable() {
     return (
         loading ? <div>Loading...</div> : (
             <div>
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de reparaciones</CardTitle>
@@ -52,7 +54,7 @@ export default function RepairTable() {
                                         {
                                             tdata.repairDate ? (
                                                 <td>
-                                                    {tdata.repairDate}
+                                                    {new Date(tdata.repairDate).toLocaleDateString('es', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric" })}
                                                 </td>
                                             ) : (
                                                 <td>

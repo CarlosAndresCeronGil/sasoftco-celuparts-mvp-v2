@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardTitle, Table, Alert } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getSiigoTaxes from '../../services/getSiigoTaxes'
 
 export default function SiigoTaxesTable() {
@@ -25,6 +26,7 @@ export default function SiigoTaxesTable() {
     return (
         loading ? <div> Cargando... </div> : (
             <div>
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de impuestos registrados en el sistema SIIGO</CardTitle>

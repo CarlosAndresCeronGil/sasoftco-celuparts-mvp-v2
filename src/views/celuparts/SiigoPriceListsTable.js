@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardTitle, Table, Alert } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getSiigoPriceLists from '../../services/getSiigoPriceLists'
 
 export default function SiigoPriceListsTable() {
@@ -25,6 +26,7 @@ export default function SiigoPriceListsTable() {
     return (
         loading ? <div> Cargando... </div> : (
             <div>
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de precios registrados en el sistema SIIGO</CardTitle>
