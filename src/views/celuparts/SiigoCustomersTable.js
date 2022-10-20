@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardTitle, Table, Alert } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getSiigoCustomers from '../../services/getSiigoCustomers'
 // import { Link } from "react-router-dom";
 
@@ -30,6 +31,7 @@ export default function SiigoCustomersTable() {
                         Nuevo cliente
                     </button>
                 </Link> */}
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de clientes registrados en el sistema SIIGO</CardTitle>

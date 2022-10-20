@@ -1,13 +1,14 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardTitle, Table, Alert } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getSiigoCostCenters from '../../services/getSiigoCostCenters'
 
 export default function SiigoUsersTable() {
-    const [siigoCostCenters, setSiigoCostCenters] = useState([])
     const [loading, setLoading] = useState(false)
+    const [siigoCostCenters, setSiigoCostCenters] = useState([])
 
-    useEffect(function() {
+    useEffect(function () {
         setLoading(true)
         getSiigoCostCenters()
             .then(response => {
@@ -19,20 +20,20 @@ export default function SiigoUsersTable() {
                 console.log(error)
                 setLoading(false)
             })
-    }, [])
-
+    }, [setLoading])
 
     return (
         loading ? <div> Cargando... </div> : (
             <div>
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de centros de costo registrados en el sistema SIIGO</CardTitle>
-                        
+
                         <hr />
-                        
+
                         {
-                            siigoCostCenters.length == 0 ? (
+                            siigoCostCenters?.length == 0 ? (
                                 <Alert color='danger'>
                                     <p>No hay resultados para esta búsqueda.</p>
                                 </Alert>
@@ -47,12 +48,12 @@ export default function SiigoUsersTable() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {siigoCostCenters.map((tdata, index) => (
+                                        {siigoCostCenters?.map((tdata, index) => (
                                             <tr key={index} className="border-top">
                                                 <td>{tdata.id}</td>
                                                 <td>{tdata.code}</td>
                                                 <td>{tdata.name}</td>
-                                                <td>{tdata.active?<div>Activo</div>:<div>Inactivo</div>}</td>
+                                                <td>{tdata.active ? <div>Activo</div> : <div>Inactivo</div>}</td>
                                             </tr>
                                         ))}
                                     </tbody>

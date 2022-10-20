@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardTitle, Table, Alert } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getSiigoWareHouses from '../../services/getSiigoWareHouses'
 
 export default function SiigoWareHousesTable() {
@@ -25,6 +26,7 @@ export default function SiigoWareHousesTable() {
     return (
         loading ? <div> Cargando... </div> : (
             <div>
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de bodegas registradas en el sistema SIIGO</CardTitle>

@@ -18,7 +18,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 import Combobox from "react-widgets/Combobox";
 import "react-widgets/styles.css";
@@ -39,6 +39,9 @@ import getTypeOfEquipments from '../../services/getTypeOfEquipments'
 import getVerifyImei from '../../services/getVerifyImei';
 
 import { Checkbox } from '@blueprintjs/core';
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
+import getUserLastRepairRequestInfo from '../../services/getUserLastRepairRequestInfo';
+import ComponentCard from '../../components/ComponentCard';
 
 export default function RequestRepairForm() {
 
@@ -48,12 +51,20 @@ export default function RequestRepairForm() {
     const [serial, setSerial] = useState('')
     const [verifyResponse, setVerifyResponse] = useState('');
     const [isSameAddresses, setIsSameAddresses] = useState(false);
+    const [pickUpAddress, setPickUpAddress] = useState('');
+    const [deliveryAddress, setDeliveryAddress] = useState('')
+    const [equipmentBrand, setEquipmentBrand] = useState('');
 
     /*Datos donde iran la lista de marcas de celulares, computadoras mas populares y tipops de
     dispositivo*/
     const [cellphoneList, setCellphoneList] = useState([])
     const [computersList, setComputersList] = useState([])
     const [typeOfEquipmentList, setTypeOfEquipmentList] = useState([])
+
+    /**Este objeto pondra la ultima direccion registrada por el cliente para que sea llenado este
+     * campo automaticamente
+     */
+
 
     const handleSameAddresses = () => {
         setIsSameAddresses(!isSameAddresses)
@@ -95,7 +106,16 @@ export default function RequestRepairForm() {
                         getComputerBrands()
                             .then(computersResponse => {
                                 setComputersList(computersResponse)
-                                setLoadingPage(false)
+                                getUserLastRepairRequestInfo({ id: JSON.parse(localStorage.getItem('user')).idUser })
+                                    .then(lastRequestInfoResponse => {
+                                        setPickUpAddress(lastRequestInfoResponse[0].requests[0].pickUpAddress)
+                                        setDeliveryAddress(lastRequestInfoResponse[0].requests[0].deliveryAddress)
+                                        setLoadingPage(false)
+                                    })
+                                    .catch(error => {
+                                        console.log(error)
+                                        setLoadingPage(false)
+                                    })
                             })
                             .catch(error => {
                                 console.log(error)
@@ -113,13 +133,12 @@ export default function RequestRepairForm() {
             })
     }, [])
 
-
-    const [equipmentBrand, setEquipmentBrand] = useState('Samsung');
-
     const handleSubmit = (e) => {
 
         e.preventDefault();
         setLoading(true);
+
+        console.log("Entro al handleSubmit")
 
         const formData = new FormData()
         //formData.append("typeOfEquipment", e.target.elements.typeOfEquipment.value)
@@ -129,8 +148,8 @@ export default function RequestRepairForm() {
         formData.append("imeiOrSerial", e.target.elements.imei.value)
         // formData.append("equipmentInvoice", null)
 
-        const deliveryAddress = isSameAddresses ? e.target.elements.pickUpAddress.value : e.target.elements.deliveryAddress.value
-        console.log('deliveryAddress: ', deliveryAddress)
+        const deliveryAddress2 = isSameAddresses ? e.target.elements.pickUpAddress.value : e.target.elements.deliveryAddress.value
+        console.log('deliveryAddress: ', deliveryAddress2)
 
         postEquipment(formData)
             .then(data => {
@@ -138,8 +157,8 @@ export default function RequestRepairForm() {
                     idUser: JSON.parse(localStorage.getItem('user')).idUser,
                     idEquipment: data.idEquipment,
                     requestType: "Reparacion",
-                    pickUpAddress: e.target.elements.pickUpAddress.value,
-                    deliveryAddress: deliveryAddress,
+                    pickUpAddress: pickUpAddress,
+                    deliveryAddress: deliveryAddress2,
                     statusQuote: "Pendiente",
                     autoDiagnosis: e.target.elements.autoDiagnosis.value
                 })
@@ -217,8 +236,6 @@ export default function RequestRepairForm() {
                 setLoading(false);
                 console.log(error);
             });
-
-
     }
 
     const isWeekDay = (date) => {
@@ -251,32 +268,39 @@ export default function RequestRepairForm() {
             })
     }
 
+    const handleCancel = () => {
+        navigate("/home/dashboards/dashboard1")
+    }
+
     const currentRole = JSON.parse(localStorage.getItem('user')).role;
 
 
     return (
         loadingPage ? <div>Cargando...</div> :
             <div>
+                <BreadCrumbsCeluparts />
                 <div>
                     <Row>
                         <Col>
-                            <Card className='container'>
-                                <CardTitle tag="h4" className="border-bottom p-3 mb-0 row justify-content-start">
-                                    Nueva solicitud de reparación
-                                </CardTitle>
-                                <CardBody>
-                                    <Form onSubmit={handleSubmit}>
-                                        <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
+                            {/* <Card className='container'> */}
+                            <CardTitle tag="h4" className="border-bottom p-3 mb-0 justify-content-start" >
+                                Nueva solicitud de reparación
+                            </CardTitle>
+                            <CardBody>
+                                <Form onSubmit={handleSubmit}>
+                                    <ComponentCard title="Datos de la solicitud">
+                                        {/* <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
                                             <i className="bi bi-box-seam"> </i>
                                             <strong>Datos de la solicitud</strong>
-                                        </CardSubtitle>
+                                        </CardSubtitle> */}
                                         <FormGroup>
                                             <Label for="pickUpAddress">Dirección de recogida*</Label>
                                             <Checkbox className='ms-0 ms-md-5' label="Usar la misma dirección" onChange={handleSameAddresses} />
                                             <Input
                                                 id="pickUpAddress"
                                                 name="pickUpAddress"
-                                                placeholder="Ingrese la dirección donde se recogera el producto"
+                                                value={pickUpAddress}
+                                                onChange={(e) => setPickUpAddress(e.target.value)}
                                                 type="text"
                                                 required
                                             />
@@ -289,16 +313,26 @@ export default function RequestRepairForm() {
                                                     <Input
                                                         id="deliveryAddress"
                                                         name="deliveryAddress"
+                                                        value={deliveryAddress}
+                                                        onChange={(e) => setDeliveryAddress(e.target.value)}
                                                         placeholder="Ingrese la dirección donde se entregara el producto"
                                                         type="text"
                                                         required
                                                     />
                                                 </FormGroup>
-                                                : null
+                                                :
+                                                <FormGroup>
+                                                    <Label for="deliveryAddress">Dirección de entrega*</Label>
+                                                    <Input
+                                                        id="deliveryAddress"
+                                                        name="deliveryAddress"
+                                                        value={pickUpAddress}
+                                                        // placeholder="Ingrese la dirección donde se entregara el producto"
+                                                        type="text"
+                                                        disabled
+                                                    />
+                                                </FormGroup>
                                         }
-
-                                        {/* <div className='d-flex align-items-center justify-content-center border'>
-                                        <div className='d-flex align-items-center justify-content-center'> */}
 
                                         <Row>
                                             <Col lg='6'>
@@ -418,17 +452,6 @@ export default function RequestRepairForm() {
                                                 }
                                             </Col>
                                         </Row>
-
-                                        {/* </div> */}
-
-                                        {/* <div className='d-flex align-items-center justify-content-center border'> */}
-
-                                        {/* </div> */}
-
-
-                                        {/* </div> */}
-
-
                                         <FormGroup>
                                             <Label for="paymentMethod">Método de pago*</Label>
                                             <Input id="paymentMethod" name="paymentMethod" type="select">
@@ -436,11 +459,14 @@ export default function RequestRepairForm() {
                                                 <option>Transferencia bancaria</option>
                                             </Input>
                                         </FormGroup>
+                                    </ComponentCard>
+
+                                    <ComponentCard title='Datos del equipo'>
                                         {/* --------------- Datos equipo ---------------- */}
-                                        <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
+                                        {/* <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
                                             <i className="bi bi-box-seam"> </i>
                                             <strong>Datos del equipo</strong>
-                                        </CardSubtitle>
+                                        </CardSubtitle> */}
                                         <FormGroup>
                                             <Label for="typeOfEquipment">Tipo de dispositivo*</Label>
                                             <Input
@@ -448,42 +474,47 @@ export default function RequestRepairForm() {
                                                 name="select"
                                                 type="select"
                                                 value={typeOfEquipment.typeOfEquipment}
-                                                onChange={(e) => setTypeOfEquipment({ typeOfEquipment: e.target.value })}
+                                                onChange={(e) => {
+                                                    setEquipmentBrand('')
+                                                    setTypeOfEquipment({ typeOfEquipment: e.target.value })
+                                                }}
                                             >
                                                 {
                                                     typeOfEquipmentList.map((typeOfEquipmentData, index) => (
                                                         <option value={typeOfEquipmentData.idTypeOfEquipment} key={index}>{typeOfEquipmentData.equipmentTypeName}</option>
-                                                        ))
-                                                    }
+                                                    ))
+                                                }
                                             </Input>
                                         </FormGroup>
                                         {
                                             typeOfEquipment.typeOfEquipment === '1' ?
                                                 <FormGroup>
                                                     <Label for="typeOfEquipment">Marca del computador*</Label>
-                                                        <Combobox
+                                                    <Combobox
                                                         required
                                                         placeholder='Seleccione la marca del computador'
                                                         id="equipmentBrand"
                                                         name="equipmentBrand"
+                                                        defaultValue={''}
                                                         data={computersList.map(computerData => computerData.brandName)}
                                                         value={equipmentBrand}
                                                         onChange={brand => setEquipmentBrand(brand)}
-                                                        />
+                                                    />
                                                 </FormGroup>
                                                 :
                                                 <FormGroup>
-                                                <Label for="typeOfEquipment">Marca del celular*</Label>
+                                                    <Label for="typeOfEquipment">Marca del celular*</Label>
                                                     <Combobox
-                                                    required
-                                                    placeholder='Seleccione la marca del celular'
-                                                    id="equipmentBrand"
-                                                    name="equipmentBrand"
-                                                    data={cellphoneList.map(cellphoneData => cellphoneData.brandName)}
-                                                    value={equipmentBrand}
-                                                    onChange={brand => setEquipmentBrand(brand)}
+                                                        required
+                                                        placeholder='Seleccione la marca del celular'
+                                                        id="equipmentBrand"
+                                                        name="equipmentBrand"
+                                                        defaultValue={''}
+                                                        data={cellphoneList.map(cellphoneData => cellphoneData.brandName)}
+                                                        value={equipmentBrand}
+                                                        onChange={brand => setEquipmentBrand(brand)}
                                                     />
-                                            </FormGroup>
+                                                </FormGroup>
                                         }
 
                                         <FormGroup>
@@ -572,21 +603,33 @@ export default function RequestRepairForm() {
                                                 required
                                             />
                                         </FormGroup>
-                                        {
-                                            loading ? (
-                                                <button className="btn btn-primary center" type="button" disabled>
-                                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    <span className="sr-only">Cargando...</span>
-                                                </button>
-                                            ) : (
-                                                <Button color="celuparts-dark-blue " className='btn btn-primary'>
-                                                    Enviar
-                                                </Button>
-                                            )
-                                        }
-                                    </Form>
-                                </CardBody>
-                            </Card>
+                                        <div className='d-flex justify-content-between'>
+                                            {
+                                                loading ? (
+                                                    <button className="btn btn-primary center" type="button" disabled>
+                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        <span className="sr-only">Cargando...</span>
+                                                    </button>
+                                                ) : (
+                                                    computersList.some(e => e.brandName == equipmentBrand) || cellphoneList.some(e => e.brandName == equipmentBrand) ? (
+                                                        <Button color="celuparts-dark-blue " className='btn btn-primary'>
+                                                            Enviar
+                                                        </Button>
+                                                    ) :
+                                                        <Button color="celuparts-dark-blue " className='btn btn-primary' disabled>
+                                                            Enviar
+                                                        </Button>
+                                                )
+                                            }
+                                            <Button className='btn btn-danger justify-content-end' onClick={handleCancel}>
+                                                Cancelar
+                                            </Button>
+                                        </div>
+                                    </ComponentCard>
+                                </Form>
+                            </CardBody>
+                            {/* </Card> */}
+
                         </Col>
                     </Row>
                 </div>

@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import getSingleRepair from '../../services/getSingleRepair';
 import putRepair from '../../services/putRepair';
 import getRequestNotification from '../../services/getRequestNotification';
@@ -37,6 +37,7 @@ export default function UpdateRepairForm() {
     const [loadingPut, setLoadingPut] = useState(false);
 
     const params = useParams()
+    const navigate = useNavigate()
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -175,9 +176,16 @@ export default function UpdateRepairForm() {
         }));
     }
 
+    const handleBackPage = (e) => {
+        navigate(-1)
+    }
+
     return (
         loading ? <div>Loading...</div> : (
             <div>
+                <Button className='btn btn-danger' onClick={handleBackPage}>
+                   Atrás
+                </Button>
                 <div>
                     <Row>
                         <Col>

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getUsers from '../../services/getUsers';
 import getUsersSimpleInfo from '../../services/getUsersSimpleInfo';
 
@@ -31,6 +32,7 @@ export default function UsersTable() {
     return (
         loading ? <div>Cargando...</div> :
         <div>
+            <BreadCrumbsCeluparts />
             <Card>
                 <CardBody>
                     <CardTitle tag="h5">Lista de usuarios registrados en el sistema</CardTitle>

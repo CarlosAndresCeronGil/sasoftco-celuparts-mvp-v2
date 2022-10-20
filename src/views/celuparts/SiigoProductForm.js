@@ -13,6 +13,7 @@ import {
     Label,
     Input,
 } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import postSiigoProduct from '../../services/postSiigoProduct';
 
 export default function SiigoProductForm() {
@@ -73,6 +74,7 @@ export default function SiigoProductForm() {
 
     return (
         <div>
+            <BreadCrumbsCeluparts />
             <Row>
                 <Col>
                     <Card className='container'>

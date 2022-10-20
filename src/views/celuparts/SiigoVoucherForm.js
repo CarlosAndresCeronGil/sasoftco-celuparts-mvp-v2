@@ -15,6 +15,7 @@ import {
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import postSiigoVoucher from '../../services/postSiigoVoucher';
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 
 export default function SiigoVoucherForm() {
     const [loadingPost, setLoadingPost] = useState(false)
@@ -79,6 +80,7 @@ export default function SiigoVoucherForm() {
 
     return (
         <div>
+            <BreadCrumbsCeluparts />
             <Row>
                 <Col>
                     <Card className='container'>

@@ -33,6 +33,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import getRequestRepairs from '../../services/getRequestRepairs';
 import ComponentCard from '../../components/ComponentCard';
 import getSingleRequest from '../../services/getSingleRequest';
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 
 export default function RepairRequestsTable() {
     const [requests, setRequests] = useState([])
@@ -45,6 +46,7 @@ export default function RepairRequestsTable() {
     const [currentPickUpAddress, setCurrentPickUpAdress] = useState('')
     const [currentEquipmentData, setCurrentEquipmentData] = useState('')
     const [currentImeiOrSerial, setCurrentImeiOrSerial] = useState('')
+    const [currentClientPhone, setCurrentClientPhone] = useState('')
 
     const [modal, setModal] = useState(false);
 
@@ -106,20 +108,20 @@ export default function RepairRequestsTable() {
         setModal(!modal);
     };
 
-    const handleViewClick = ({ autoDiagnosis, deliveryAddress, pickUpAddress, equipmentData, imeiOrSerial }) => {
+    const handleViewClick = ({ autoDiagnosis, deliveryAddress, pickUpAddress, equipmentData, imeiOrSerial, clientPhone }) => {
         setModal(!modal);
         setCurrentAutoDiagnosis(autoDiagnosis)
         setCurrentDeliveryAddress(deliveryAddress)
         setCurrentPickUpAdress(pickUpAddress)
         setCurrentEquipmentData(equipmentData)
         setCurrentImeiOrSerial(imeiOrSerial)
+        setCurrentClientPhone(clientPhone)
     }
 
     return (
         loading ? <div>Cargando...</div> :
             <div>
-                {/* <Card> */}
-                {/* <CardBody> */}
+                <BreadCrumbsCeluparts />
                 <ComponentCard title="Lista de reparaciones registradas en el sistema">
                     <Form onSubmit={handleSubmit}>
                         <div className='container'>
@@ -367,7 +369,8 @@ export default function RepairRequestsTable() {
                                                 deliveryAddress: tdata.deliveryAddress,
                                                 pickUpAddress: tdata.pickUpAddress,
                                                 equipmentData: tdata.equipment.equipmentBrand + " " + tdata.equipment.modelOrReference,
-                                                imeiOrSerial: tdata.equipment.imeiOrSerial
+                                                imeiOrSerial: tdata.equipment.imeiOrSerial,
+                                                clientPhone: tdata.userDto.phone
                                             }).bind(null)} >
                                                 Detalles
                                             </Button>
@@ -411,6 +414,13 @@ export default function RepairRequestsTable() {
                             <hr />
                             <div>
                                 <span className='fw-bold'>
+                                    Imei o serial del Dispositivo:
+                                </span>
+                            </div>
+                            {currentImeiOrSerial}
+                            <hr />
+                            <div>
+                                <span className='fw-bold'>
                                     Dirección de recogida:
                                 </span>
                             </div>
@@ -425,17 +435,17 @@ export default function RepairRequestsTable() {
                             <hr />
                             <div>
                                 <span className='fw-bold'>
+                                    Teléfono cliente:
+                                </span>
+                            </div>
+                            {currentClientPhone}
+                            <hr />
+                            <div>
+                                <span className='fw-bold'>
                                     Detalle de la solicitud:
                                 </span>
                             </div>
                             {currentAutoDiagnosis}
-                            <hr />
-                            <div>
-                                <span className='fw-bold'>
-                                    Imei o serial del Dispositivo:
-                                </span>
-                            </div>
-                            {currentImeiOrSerial}
                         </ModalBody>
                         <ModalFooter>
                             <Button color="secondary" onClick={handleViewClick.bind(null)}>

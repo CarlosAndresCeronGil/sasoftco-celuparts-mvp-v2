@@ -1,8 +1,8 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Alert, Card, CardBody, CardTitle, Table } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getSiigoProducts from '../../services/getSiigoProducts';
-// import { Link } from "react-router-dom";
 
 export default function SiigoProductsTable() {
     const [loading, setLoading] = useState(false);
@@ -12,7 +12,7 @@ export default function SiigoProductsTable() {
         setLoading(true)
         getSiigoProducts()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setSiigoProductsTable(response.results)
                 setLoading(false)
             })
@@ -25,11 +25,7 @@ export default function SiigoProductsTable() {
     return (
         loading ? <div> Cargando... </div> : (
             <div>
-                {/* <Link to={`/home/siigo-product-form`} className="mb-1">
-                    <button className='btn btn-primary' type='button'>
-                        Nuevo producto
-                    </button>
-                </Link> */}
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de productos registrados en el sistema SIIGO</CardTitle>
@@ -42,25 +38,24 @@ export default function SiigoProductsTable() {
                                     <p>No hay resultados para esta búsqueda.</p>
                                 </Alert>
                             ) : (
-
                                 <Table className="no-wrap mt-3 align-middle" responsive borderless striped>
-                            <thead>
-                                <tr>
-                                    <th>Codigo</th>
-                                    <th>Nombre</th>
-                                    <th>Precio</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {siigoProducts.map((tdata, index) => (
-                                    <tr key={index} className="border-top">
-                                        <td>{tdata.code}</td>
-                                        <td>{tdata.name}</td>
-                                        <td>{tdata.prices !== undefined ? tdata.prices[0].price_list[0].value : <div>Sin asignar</div>}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </Table>
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Nombre</th>
+                                            <th>Precio</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {siigoProducts.map((tdata, index) => (
+                                            <tr key={index} className="border-top">
+                                                <td>{tdata.code}</td>
+                                                <td>{tdata.name}</td>
+                                                <td>{tdata.prices !== undefined ? tdata.prices[0].price_list[0].value : <div>Sin asignar</div>}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </Table>
 
                             )
 

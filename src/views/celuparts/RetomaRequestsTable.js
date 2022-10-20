@@ -20,6 +20,7 @@ import DatePicker from 'react-datepicker';
 import getRequestRetomas from '../../services/getRequestRetomas';
 import 'react-datepicker/dist/react-datepicker.css';
 import ComponentCard from '../../components/ComponentCard';
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 
 export default function RetomaRequestsTable() {
     const [requests, setRequests] = useState([]);
@@ -30,6 +31,8 @@ export default function RetomaRequestsTable() {
     const [currentDeliveryAddress, setCurrentDeliveryAddress] = useState('')
     const [currentPickUpAddress, setCurrentPickUpAdress] = useState('')
     const [currentEquipmentData, setCurrentEquipmentData] = useState('')
+    const [currentImeiOrSerial, setCurrentImeiOrSerial] = useState('')
+    const [currentClientPhone, setCurrentClientPhone] = useState('')
 
     const [modal, setModal] = useState(false);
 
@@ -84,12 +87,14 @@ export default function RetomaRequestsTable() {
         setPage(currentPage => currentPage - 1);
     }
 
-    const handleViewClick = ({ autoDiagnosis, deliveryAddress, pickUpAddress, equipmentData }) => {
+    const handleViewClick = ({ autoDiagnosis, deliveryAddress, pickUpAddress, equipmentData, imeiOrSerial, clientPhone }) => {
         setModal(!modal);
         setCurrentAutoDiagnosis(autoDiagnosis)
         setCurrentDeliveryAddress(deliveryAddress)
         setCurrentPickUpAdress(pickUpAddress)
         setCurrentEquipmentData(equipmentData)
+        setCurrentImeiOrSerial(imeiOrSerial)
+        setCurrentClientPhone(clientPhone)
     }
 
     return (
@@ -97,6 +102,7 @@ export default function RetomaRequestsTable() {
             <div>Cargando...</div>
         ) :
             <div>
+                <BreadCrumbsCeluparts />
                 <ComponentCard title="Lista de retomas registradas en el sistema">
                     <Form onSubmit={handleSubmit}>
                         <div className='container'>
@@ -365,7 +371,9 @@ export default function RetomaRequestsTable() {
                                                 autoDiagnosis: tdata.autoDiagnosis,
                                                 deliveryAddress: tdata.deliveryAddress,
                                                 pickUpAddress: tdata.pickUpAddress,
-                                                equipmentData: tdata.equipment.equipmentBrand + " " + tdata.equipment.modelOrReference
+                                                equipmentData: tdata.equipment.equipmentBrand + " " + tdata.equipment.modelOrReference,
+                                                imeiOrSerial: tdata.equipment.imeiOrSerial,
+                                                clientPhone: tdata.userDto.phone
                                             }).bind(null)} >
                                                 Detalles
                                             </Button>
@@ -409,6 +417,13 @@ export default function RetomaRequestsTable() {
                             <hr />
                             <div>
                                 <span className='fw-bold'>
+                                    Imei o serial del Dispositivo:
+                                </span>
+                            </div>
+                            {currentImeiOrSerial}
+                            <hr />
+                            <div>
+                                <span className='fw-bold'>
                                     Dirección de recogida:
                                 </span>
                             </div>
@@ -420,6 +435,13 @@ export default function RetomaRequestsTable() {
                                 </span>
                             </div>
                             {currentDeliveryAddress}
+                            <hr />
+                            <div>
+                                <span className='fw-bold'>
+                                    Teléfono cliente:
+                                </span>
+                            </div>
+                            {currentClientPhone}
                             <hr />
                             <div>
                                 <span className='fw-bold'>

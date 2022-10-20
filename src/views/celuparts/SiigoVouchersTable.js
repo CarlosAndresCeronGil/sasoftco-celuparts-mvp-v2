@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardTitle, Table, Alert } from "reactstrap";
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 // import { Link } from "react-router-dom";
 import getSiigoVouchers from '../../services/getSiigoVouchers'
 
@@ -31,6 +32,7 @@ export default function SiigoVouchersTable() {
                         Nuevo recibo de caja
                     </button>
                 </Link> */}
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de recibos de caja en el sistema SIIGO</CardTitle>

@@ -13,7 +13,7 @@ import {
     Label,
     Input,
 } from "reactstrap";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import getSingleRetoma from '../../services/getSingleRetoma';
 import putRetoma from '../../services/putRetoma';
 import getRequestNotification from '../../services/getRequestNotification';
@@ -32,6 +32,7 @@ export default function UpdateRetomaForm() {
     const [loadingPut, setLoadingPut] = useState(false);
 
     const params = useParams()
+    const navigate = useNavigate()
 
     useEffect(function () {
         setLoading(true);
@@ -118,9 +119,16 @@ export default function UpdateRetomaForm() {
         }));
     }
 
+    const handleBackPage = (e) => {
+        navigate(-1)
+    }
+
     return (
         loading ? <div>Loading...</div> : (
             <div>
+                <Button className='btn btn-danger' onClick={handleBackPage}>
+                   Atrás
+                </Button>
                 <div>
                     <Row>
                         <Col>

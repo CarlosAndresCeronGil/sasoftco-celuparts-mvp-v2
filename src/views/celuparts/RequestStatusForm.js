@@ -22,6 +22,7 @@ import putRequestNotification from '../../services/putRequestNotification';
 import putRequestStatus from '../../services/putRequestStatus';
 import Swal from 'sweetalert2'
 import getCelupartsInfo from '../../services/getCelupartsInfo';
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 
 export default function RequestStatusForm() {
     const [dataRequestStatus, setDataRequestStatus] = useState({});
@@ -283,6 +284,10 @@ export default function RequestStatusForm() {
         }));
     }
 
+    const handleBackPage = (e) => {
+        navigate(-1)
+    }
+
     useEffect(function () {
         setLoading(true);
         getSingleRequestStatus({ id: params.id })
@@ -345,6 +350,9 @@ export default function RequestStatusForm() {
     return (
         loading ? <div>Cargando...</div> : 
             <div>
+                <Button className='btn btn-danger' onClick={handleBackPage}>
+                   Atrás
+                </Button>
                 <div>
                     <Row>
                         <Col>

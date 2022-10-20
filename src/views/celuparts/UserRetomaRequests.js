@@ -7,6 +7,7 @@ import putRequest from '../../services/putRequest';
 import Swal from 'sweetalert2'
 import getSingleEquipment from '../../services/getSingleEquipment';
 import putRequestNotification from '../../services/putRequestNotification'
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 
 export default function UserRetomaRequests() {
     const [userInfo, setUserInfo] = useState([]);
@@ -157,6 +158,7 @@ export default function UserRetomaRequests() {
     return (
         loading ? <div>Loading...</div> : (
             <div>
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Solicitudes de retoma</CardTitle>

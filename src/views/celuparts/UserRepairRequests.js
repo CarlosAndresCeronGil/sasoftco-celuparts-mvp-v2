@@ -10,6 +10,7 @@ import postRetomaPayment from '../../services/postRetomaPayment';
 import putRequestNotification from '../../services/putRequestNotification';
 import getSingleEquipment from '../../services/getSingleEquipment'
 import putRequestStatus from '../../services/putRequestStatus';
+import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 
 export default function UserRepairRequests() {
     const [userInfo, setUserInfo] = useState([])
@@ -28,8 +29,8 @@ export default function UserRepairRequests() {
         pickUpDate: '',
     });
 
-    const handleViewDetails = ({autoDiagnosis, deliveryAddress, pickUpAddress, homeServices }) => {
-        setIsOpenModal( !isOpenModal );
+    const handleViewDetails = ({ autoDiagnosis, deliveryAddress, pickUpAddress, homeServices }) => {
+        setIsOpenModal(!isOpenModal);
         setViewDetails({
             autoDiagnosis,
             deliveryAddress,
@@ -40,7 +41,7 @@ export default function UserRepairRequests() {
     };
 
 
-    
+
     useEffect(function () {
         setLoading(true);
         console.log(JSON.parse(localStorage.getItem('user')).idUser)
@@ -277,6 +278,7 @@ export default function UserRepairRequests() {
     return (
         loading ? <div>Loading...</div> : (
             <div>
+                <BreadCrumbsCeluparts />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Solicitudes de reparación</CardTitle>
@@ -323,7 +325,7 @@ export default function UserRepairRequests() {
                                                 )
                                             }
                                             <td>
-                                                <Button className='btn' color='info' type='button' onClick={() => handleViewDetails( tdata )} >
+                                                <Button className='btn' color='info' type='button' onClick={() => handleViewDetails(tdata)} >
                                                     Detalles
                                                 </Button>
                                             </td>
@@ -335,53 +337,53 @@ export default function UserRepairRequests() {
                             </tbody>
                         </Table>
 
-                        <Modal isOpen={ isOpenModal } toggle={handleViewDetails.bind(null)}>
+                        <Modal isOpen={isOpenModal} toggle={handleViewDetails.bind(null)}>
                             <ModalHeader toggle={handleViewDetails.bind(null)}>
                                 Detalles de la solicitud
                             </ModalHeader>
-                        <ModalBody>
-                            <div>
-                                <span className='fw-bold'>
-                                    Falla reportada:
-                                </span>
-                            </div>
-                            {viewDetails.autoDiagnosis}
-                            <hr />
-                            <div>
-                                <span className='fw-bold'>
-                                    Dirección de recogida:
-                                </span>
-                            </div>
-                            {viewDetails.pickUpAddress}
-                            <hr />
-                            <div>
-                                <span className='fw-bold'>
-                                    Fecha de recogida:
-                                </span>
-                            </div>
-                            {viewDetails.pickUpDate}
-                            <hr />
-                            <div>
-                                <span className='fw-bold'>
-                                    Dirección de entrega:
-                                </span>
-                            </div>
-                            {viewDetails.deliveryAddress}
-                            <hr />
-                            <div>
-                                <span className='fw-bold'>
-                                    Fecha de entrega:
-                                </span>
-                            </div>
-                            {/* {viewDetails.deliveryDate} */}
-                            {new Date(viewDetails.deliveryDate).toLocaleDateString('es', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric" })}
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="secondary" onClick={handleViewDetails.bind(null)}>
-                                Cerrar
-                            </Button>
-                        </ModalFooter>
-                    </Modal>
+                            <ModalBody>
+                                <div>
+                                    <span className='fw-bold'>
+                                        Falla reportada:
+                                    </span>
+                                </div>
+                                {viewDetails.autoDiagnosis}
+                                <hr />
+                                <div>
+                                    <span className='fw-bold'>
+                                        Dirección de recogida:
+                                    </span>
+                                </div>
+                                {viewDetails.pickUpAddress}
+                                <hr />
+                                <div>
+                                    <span className='fw-bold'>
+                                        Fecha de recogida:
+                                    </span>
+                                </div>
+                                {viewDetails.pickUpDate}
+                                <hr />
+                                <div>
+                                    <span className='fw-bold'>
+                                        Dirección de entrega:
+                                    </span>
+                                </div>
+                                {viewDetails.deliveryAddress}
+                                <hr />
+                                <div>
+                                    <span className='fw-bold'>
+                                        Fecha de entrega:
+                                    </span>
+                                </div>
+                                {/* {viewDetails.deliveryDate} */}
+                                {new Date(viewDetails.deliveryDate).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" })}
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="secondary" onClick={handleViewDetails.bind(null)}>
+                                    Cerrar
+                                </Button>
+                            </ModalFooter>
+                        </Modal>
                     </CardBody>
                 </Card>
             </div>
