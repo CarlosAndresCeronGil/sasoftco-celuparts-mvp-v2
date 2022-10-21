@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { Button, Label, FormGroup, Row, Col, Input, InputGroupText, InputGroup } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import validator from 'validator';
 
 import authRegister from '../../services/authRegister';
 import authLogin from '../../services/authLogin';
@@ -15,6 +16,13 @@ const RegisterFormik = () => {
 
   const [passwordType, setPasswordType] = useState('password');
 
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [email, setEmail] = useState('');
+
+  console.log(password);
+
   const togglePassword = () => {
     if (passwordType === 'password') {
       setPasswordType('text');
@@ -22,7 +30,6 @@ const RegisterFormik = () => {
       setPasswordType('password');
     }
   };
-
 
   const initialValues = {
     idNumber: '',
@@ -62,41 +69,60 @@ const RegisterFormik = () => {
   const navigate = useNavigate()
 
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    Swal.fire({
-      title: 'Condiciones de servicio.',
-      text: 'Las condiciones de uso y servicio de Celuparts incluyen el uso y tratamiento de datos requeridos para ofrecer el servicio.',
-      input: 'checkbox',
-      inputPlaceholder: 'Acepto las condiciones de servicio y política de privacidad de Celuparts.'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (result.value) {
-          authRegister({
-            idType: e.target.elements.idType.value,
-            idNumber: e.target.elements.idNumber.value,
-            names: e.target.elements.names.value,
-            surnames: e.target.elements.surnames.value,
-            phone: e.target.elements.phone.value,
-            alternativePhone: e.target.elements.alternativePhone.value,
-            email: e.target.elements.email.value,
-            password: e.target.elements.password.value,
-            accountStatus: "Habilitada"
+    
+    if ( password != confirmPassword ) {
+      Swal.fire({
+        icon: 'error',
+        text: 'Las contraseñas no coinciden'
+      })
+    } 
+    
+    if ( !validator.isEmail(email) ) {
+      Swal.fire({
+        icon: 'error',
+        text: 'El email no es valido'
+      })
+    }
+
+    if ( password === confirmPassword && validator.isEmail(email) ) {
+      setLoading(true);
+      authRegister({
+      idType: e.target.elements.idType.value,
+      idNumber: e.target.elements.idNumber.value,
+      names: e.target.elements.names.value,
+      surnames: e.target.elements.surnames.value,
+      phone: e.target.elements.phone.value,
+      alternativePhone: e.target.elements.alternativePhone.value,
+      email: e.target.elements.email.value,
+      password: e.target.elements.password.value,
+      accountStatus: "Habilitada"
+    })
+      .then(data => {
+        setLoading(false);
+
+        if (data.status !== 200) {
+          Swal.fire({
+            icon: 'error',
+            text: 'El email o número de identificación que estas intentando ingresar ya esta registrado'
           })
-            .then(data => {
-              setLoading(false);
-              console.log(data.status)
-              if (data.status === 200) {
-                // Swal.fire({
-                //   icon: 'success',
-                //   text: 'Registro exitoso!'
-                // })
-                //   .then(() => {
-                // console.log("respuesta del ok del alert", response)
-                // Una vez el registro sea exitoso, ingresar al usuario dentro del
-                // sistema
+          return;
+        }
+
+        
+
+          Swal.fire({
+            title: 'Condiciones de servicio.',
+            text: 'Las condiciones de uso y servicio de Celuparts incluyen el uso y tratamiento de datos requeridos para ofrecer el servicio.',
+            input: 'checkbox',
+            inputPlaceholder: 'Acepto las condiciones de servicio y política de privacidad de Celuparts.'
+          }).then((result) => {
+      
+            if (result.isConfirmed) {
+  
+              if( result.value ) {
+                
                 authLogin({
                   email: e.target.elements.email.value,
                   password: e.target.elements.password.value
@@ -127,27 +153,21 @@ const RegisterFormik = () => {
                       text: 'Usuario o contraseña incorrecto!'
                     })
                   });
-                // })
               } else {
-                Swal.fire({
-                  icon: 'error',
-                  text: 'El email o número de identificación que estas intentando ingresar ya esta registrado'
-                })
+                Swal.fire({ icon: 'error', text: "Debes aceptar los términos y condiciones para registrarte en el sistema." });
+                setLoading(false);
               }
-            }).catch(error => {
-              // console.log("ERROR", error);
-              setLoading(false);
-            });
-        } else {
-          Swal.fire({ icon: 'error', text: "Debes aceptar los términos y condiciones para registrarte en el sistema." });
-          setLoading(false);
+  
+            }})
+
+            
+          }).catch(error => {
+            setLoading(false);
+          });
+          
         }
-      } else {
-        console.log(`modal was dismissed by ${result.dismiss}`)
-        setLoading(false)
-      }
-    })
-  }
+  };
+
 
 
   return (
@@ -272,16 +292,13 @@ const RegisterFormik = () => {
                               id="email"
                               name="email"
                               type="text"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)} 
                               placeholder="Email"
-                              // value={ email }
-                              // onChange={ e => setEmail(e.target.value) }
-                              className={`form-control ${errors.email && touched.email ? ' is-invalid' : ''
-                                }`}
+                              className="form-control"
                               required
                             />
-                            <ErrorMessage name="email" component="div" className="invalid-feedback" />
                           </FormGroup>
-
 
                           <Row>
                             <Col md="6">
@@ -320,20 +337,16 @@ const RegisterFormik = () => {
                                 <Field
                                   id="password"
                                   name="password"
+                                  value={password}
+                                  onChange={(e) => setPassword(e.target.value)}
                                   type={passwordType}
                                   placeholder="Contraseña"
-                                  className={`form-control${errors.password && touched.password ? ' is-invalid' : ''
-                                    }`}
+                                  className="form-control"
                                   required
                                 />
                                 <Button color='primary' type='button' onClick={togglePassword}>
                                   {passwordType === "password" ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
                                 </Button>
-                                <ErrorMessage
-                                  name="password"
-                                  component="div"
-                                  className="invalid-feedback"
-                                />
                               </InputGroup>
                             </Col>
                             <Col md="6">
@@ -341,20 +354,16 @@ const RegisterFormik = () => {
                                 <Field
                                   id="confirmPassword"
                                   name="confirmPassword"
+                                  value={confirmPassword}
+                                  onChange={(e) => setConfirmPassword(e.target.value)}
                                   type={passwordType}
                                   placeholder="Confirmar contraseña"
-                                  className={`form-control${errors.confirmPassword && touched.confirmPassword ? ' is-invalid' : ''
-                                    }`}
+                                  className="form-control"
                                   required
                                 />
                                 <Button color='primary' type='button' onClick={togglePassword}>
                                   {passwordType === "password" ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
                                 </Button>
-                                <ErrorMessage
-                                  name="confirmPassword"
-                                  component="div"
-                                  className="invalid-feedback"
-                                />
                               </InputGroup>
                             </Col>
                           </Row>
