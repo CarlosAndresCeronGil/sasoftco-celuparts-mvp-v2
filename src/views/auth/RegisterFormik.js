@@ -11,6 +11,7 @@ import validator from 'validator';
 import authRegister from '../../services/authRegister';
 import authLogin from '../../services/authLogin';
 import AuthContext from '../../context/AuthProvider';
+import postValidateUniqueEmailAndId from '../../services/postValidateUniqueEmailAndId';
 
 const RegisterFormik = () => {
 
@@ -32,10 +33,12 @@ const RegisterFormik = () => {
   };
 
   const initialValues = {
+    idType: 'CC',
     idNumber: '',
-    UserName: '',
-    LastName: '',
+    userName: '',
+    lastName: '',
     phone: '',
+    alternativePhone: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -47,8 +50,8 @@ const RegisterFormik = () => {
       .min(7, "El numero de identificación debe tener mínimo 7 caracteres")
       .max(10, "El numero de identificación debe tener máximo 10 caracteres")
       .required('Número de identificación requerido'),
-    UserName: Yup.string().required('Nombre requerido'),
-    LastName: Yup.string().required('Apellidos requerido'),
+    userName: Yup.string().required('Nombre requerido'),
+    lastName: Yup.string().required('Apellidos requerido'),
     phone: Yup.string().required('Número requerido'),
     email: Yup.string().email('Email no valido').required('Email requerido'),
     password: Yup.string()
@@ -59,113 +62,180 @@ const RegisterFormik = () => {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir')
       .required('Se requiere confirmar contraseña'),
-    acceptTerms: Yup.bool().oneOf([true], 'Aceptar los términos y condiciones es obligatorio'),
+    // acceptTerms: Yup.bool().oneOf([true], 'Aceptar los términos y condiciones es obligatorio'),
   });
 
 
   const { setAuth } = useContext(AuthContext);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate()
 
+  const handleSubmit = (fields) => {
+    console.log(fields)
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if ( password != confirmPassword ) {
-      Swal.fire({
-        icon: 'error',
-        text: 'Las contraseñas no coinciden'
-      })
-    } 
-    
-    if ( !validator.isEmail(email) ) {
-      Swal.fire({
-        icon: 'error',
-        text: 'El email no es valido'
-      })
-    }
+    const formData = new FormData();
+    formData.append("email", fields.email)
+    formData.append("id", fields.idNumber)
 
-    if ( password === confirmPassword && validator.isEmail(email) ) {
-      setLoading(true);
-      authRegister({
-      idType: e.target.elements.idType.value,
-      idNumber: e.target.elements.idNumber.value,
-      names: e.target.elements.names.value,
-      surnames: e.target.elements.surnames.value,
-      phone: e.target.elements.phone.value,
-      alternativePhone: e.target.elements.alternativePhone.value,
-      email: e.target.elements.email.value,
-      password: e.target.elements.password.value,
-      accountStatus: "Habilitada"
-    })
-      .then(data => {
-        setLoading(false);
-
-        if (data.status !== 200) {
-          Swal.fire({
-            icon: 'error',
-            text: 'El email o número de identificación que estas intentando ingresar ya esta registrado'
-          })
-          return;
-        }
-
-        
-
+    setLoading(true);
+    postValidateUniqueEmailAndId(formData)
+      .then(response => {
+        console.log("Respuesta validate:", response)
+        console.log(response.status)
+        if (response.status != 404) {
           Swal.fire({
             title: 'Condiciones de servicio.',
             text: 'Las condiciones de uso y servicio de Celuparts incluyen el uso y tratamiento de datos requeridos para ofrecer el servicio.',
             input: 'checkbox',
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
             inputPlaceholder: 'Acepto las condiciones de servicio y política de privacidad de Celuparts.'
           }).then((result) => {
-      
             if (result.isConfirmed) {
-  
-              if( result.value ) {
-                
-                authLogin({
-                  email: e.target.elements.email.value,
-                  password: e.target.elements.password.value
+              if (result.value) {
+                authRegister({
+                  idType: fields.idType,
+                  idNumber: fields.idNumber,
+                  names: fields.userName,
+                  surnames: fields.lastName,
+                  phone: fields.phone,
+                  alternativePhone: fields.alternativePhone,
+                  email: fields.email,
+                  password: fields.password,
+                  accountStatus: "Habilitada"
                 })
-                  .then(response2 => {
-                    console.log("Response from sign in:", response2);
-                    if (response2 !== undefined) {
-                      if (response2 === "Account disabled") {
+                  .then(data => {
+                    authLogin({
+                      email: fields.email,
+                      password: fields.password
+                    })
+                      .then(response2 => {
+                        console.log("Response from sign in:", response2);
+                        if (response2 !== undefined) {
+                          if (response2 === "Account disabled") {
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Oops...',
+                              text: 'Cuenta inhabilitada, contacte con el número 315-808-0836 para soporte técnico'
+                            })
+                          } else {
+                            const user = jwtDecode(response2)
+                            console.log("user", user);
+                            localStorage.setItem('user', JSON.stringify(user));
+                            setAuth(true);
+                            navigate('/home/dashboards/dashboard1');
+                          }
+                        }
+                      })
+                      .catch(error => {
+                        console.log("error:", error);
                         Swal.fire({
                           icon: 'error',
                           title: 'Oops...',
-                          text: 'Cuenta inhabilitada, contacte con el número 315-808-0836 para soporte técnico'
+                          text: 'Usuario o contraseña incorrecto!'
                         })
-                      } else {
-                        const user = jwtDecode(response2)
-                        console.log("user", user);
-                        localStorage.setItem('user', JSON.stringify(user));
-                        setAuth(true);
-                        navigate('/home/dashboards/dashboard1');
-                      }
-                    }
+                      });
                   })
-                  .catch(error => {
-                    console.log("error:", error);
-                    Swal.fire({
-                      icon: 'error',
-                      title: 'Oops...',
-                      text: 'Usuario o contraseña incorrecto!'
-                    })
-                  });
+
               } else {
                 Swal.fire({ icon: 'error', text: "Debes aceptar los términos y condiciones para registrarte en el sistema." });
                 setLoading(false);
               }
-  
-            }})
-
-            
-          }).catch(error => {
-            setLoading(false);
-          });
-          
+            } else {
+              setLoading(false)
+            }
+          })
+        } else {
+          Swal.fire({
+            icon: 'error',
+            text: 'El email o número de identificación que estas intentando ingresar ya esta registrado'
+          })
+            .then(responseError => {
+              setLoading(false)
+            })
         }
+
+      })
+      .catch(error => {
+        setLoading(false)
+        console.log(error)
+      })
+    // authRegister({
+    //   idType: fields.idType,
+    //   idNumber: fields.idNumber,
+    //   names: fields.userName,
+    //   surnames: fields.lastName,
+    //   phone: fields.phone,
+    //   alternativePhone: fields.alternativePhone,
+    //   email: fields.email,
+    //   password: fields.password,
+    //   accountStatus: "Habilitada"
+    // })
+    //   .then(data => {
+    //     setLoading(false);
+
+    //     if (data.status !== 200) {
+    //       Swal.fire({
+    //         icon: 'error',
+    //         text: 'El email o número de identificación que estas intentando ingresar ya esta registrado'
+    //       })
+    //       return;
+    //     }
+
+    //     Swal.fire({
+    //       title: 'Condiciones de servicio.',
+    //       text: 'Las condiciones de uso y servicio de Celuparts incluyen el uso y tratamiento de datos requeridos para ofrecer el servicio.',
+    //       input: 'checkbox',
+    //       inputPlaceholder: 'Acepto las condiciones de servicio y política de privacidad de Celuparts.'
+    //     }).then((result) => {
+
+    //       if (result.isConfirmed) {
+
+    //         if (result.value) {
+
+    //           authLogin({
+    //             email: fields.email,
+    //             password: fields.password
+    //           })
+    //             .then(response2 => {
+    //               console.log("Response from sign in:", response2);
+    //               if (response2 !== undefined) {
+    //                 if (response2 === "Account disabled") {
+    //                   Swal.fire({
+    //                     icon: 'error',
+    //                     title: 'Oops...',
+    //                     text: 'Cuenta inhabilitada, contacte con el número 315-808-0836 para soporte técnico'
+    //                   })
+    //                 } else {
+    //                   const user = jwtDecode(response2)
+    //                   console.log("user", user);
+    //                   localStorage.setItem('user', JSON.stringify(user));
+    //                   setAuth(true);
+    //                   navigate('/home/dashboards/dashboard1');
+    //                 }
+    //               }
+    //             })
+    //             .catch(error => {
+    //               console.log("error:", error);
+    //               Swal.fire({
+    //                 icon: 'error',
+    //                 title: 'Oops...',
+    //                 text: 'Usuario o contraseña incorrecto!'
+    //               })
+    //             });
+    //         } else {
+    //           Swal.fire({ icon: 'error', text: "Debes aceptar los términos y condiciones para registrarte en el sistema." });
+    //           setLoading(false);
+    //         }
+
+    //       }
+    //     })
+
+
+    //   }).catch(error => {
+    //     setLoading(false);
+    //   });
   };
 
 
@@ -198,29 +268,28 @@ const RegisterFormik = () => {
                         <button type="button" className="btn btn-outline-primary">Iniciar</button>
                       </Link>
                     </div>
-
-                    {/* <small className="pb-4 d-block">
-                 ¿Ya tienes una cuenta? <Link to="/auth/loginformik">Iniciar</Link>
-                 </small> */}
                     <Formik
                       initialValues={initialValues}
                       validationSchema={validationSchema}
                       onSubmit={(fields) => {
                         // eslint-disable-next-line no-alert
                         // alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
+                        handleSubmit(fields)
+                        console.log(fields)
                       }}
-                      render={({ errors, touched }) => (
-                        <Form onSubmit={handleSubmit}>
+                    >
+                      {({ touched, errors }) => (
+                        <Form>
                           <Row>
                             <Col lg="6">
                               <Label htmlFor="idType">Tipo de documento</Label>
                               <div >
-                                <select id="idType" className="form-select mb-3">
+                                <Field id="idType" className="form-select mb-3" name="idType" as="select">
                                   <option value="CC">Cédula de ciudadania</option>
                                   <option value="TI">Tarjeta de identidad</option>
                                   <option value="CE">Cédula de extranjeria</option>
                                   <option value="NIP">Número de identificación tributaria</option>
-                                </select>
+                                </Field>
                               </div>
                             </Col>
 
@@ -250,16 +319,16 @@ const RegisterFormik = () => {
                               <FormGroup>
                                 {/* <Label htmlFor="firstName">Nombres*</Label> */}
                                 <Field
-                                  id="names"
-                                  name="UserName"
+                                  id="userName"
+                                  name="userName"
                                   type="text"
                                   placeholder="Nombres"
-                                  className={`form-control ${errors.UserName && touched.UserName ? ' is-invalid' : ''
+                                  className={`form-control ${errors.userName && touched.userName ? ' is-invalid' : ''
                                     }`}
                                   required
                                 />
                                 <ErrorMessage
-                                  name="UserName"
+                                  name="userName"
                                   component="div"
                                   className="invalid-feedback"
                                 />
@@ -270,15 +339,15 @@ const RegisterFormik = () => {
                                 {/* <Label htmlFor="LastName">Apellidos*</Label> */}
                                 <Field
                                   id="surnames"
-                                  name="LastName"
+                                  name="lastName"
                                   type="text"
                                   placeholder="Apellidos"
-                                  className={`form-control ${errors.LastName && touched.LastName ? ' is-invalid' : ''
+                                  className={`form-control ${errors.lastName && touched.lastName ? ' is-invalid' : ''
                                     }`}
                                   required
                                 />
                                 <ErrorMessage
-                                  name="LastName"
+                                  name="lastName"
                                   component="div"
                                   className="invalid-feedback"
                                 />
@@ -292,11 +361,18 @@ const RegisterFormik = () => {
                               id="email"
                               name="email"
                               type="text"
-                              value={email}
-                              onChange={(e) => setEmail(e.target.value)} 
+                              // value={email}
+                              // onChange={(e) => setEmail(e.target.value)}
                               placeholder="Email"
-                              className="form-control"
+                              // className="form-control"
+                              className={`form-control ${errors.email && touched.email ? ' is-invalid' : ''
+                                }`}
                               required
+                            />
+                            <ErrorMessage
+                              name="email"
+                              component="div"
+                              className="invalid-feedback"
                             />
                           </FormGroup>
 
@@ -321,7 +397,7 @@ const RegisterFormik = () => {
                                 {/* <Label htmlFor="numberAlternative">Número de teléfono</Label> */}
                                 <Field
                                   id="alternativePhone"
-                                  name="numberAlternative"
+                                  name="alternativePhone"
                                   type="tel"
                                   placeholder="Teléfono opcional"
                                   className="form-control"
@@ -330,23 +406,29 @@ const RegisterFormik = () => {
                             </Col>
                           </Row>
 
-
                           <Row>
                             <Col md="6">
                               <InputGroup>
                                 <Field
                                   id="password"
                                   name="password"
-                                  value={password}
-                                  onChange={(e) => setPassword(e.target.value)}
+                                  // value={password}
+                                  // onChange={(e) => setPassword(e.target.value)}
                                   type={passwordType}
                                   placeholder="Contraseña"
-                                  className="form-control"
+                                  // className="form-control"
+                                  className={`form-control ${errors.password && touched.password ? ' is-invalid' : ''
+                                    }`}
                                   required
                                 />
                                 <Button color='primary' type='button' onClick={togglePassword}>
                                   {passwordType === "password" ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
                                 </Button>
+                                <ErrorMessage
+                                  name="password"
+                                  component="div"
+                                  className="invalid-feedback"
+                                />
                               </InputGroup>
                             </Col>
                             <Col md="6">
@@ -354,16 +436,23 @@ const RegisterFormik = () => {
                                 <Field
                                   id="confirmPassword"
                                   name="confirmPassword"
-                                  value={confirmPassword}
-                                  onChange={(e) => setConfirmPassword(e.target.value)}
+                                  // value={confirmPassword}
+                                  // onChange={(e) => setConfirmPassword(e.target.value)}
                                   type={passwordType}
                                   placeholder="Confirmar contraseña"
-                                  className="form-control"
+                                  // className="form-control"
+                                  className={`form-control ${errors.confirmPassword && touched.confirmPassword ? ' is-invalid' : ''
+                                    }`}
                                   required
                                 />
                                 <Button color='primary' type='button' onClick={togglePassword}>
                                   {passwordType === "password" ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
                                 </Button>
+                                <ErrorMessage
+                                  name="confirmPassword"
+                                  component="div"
+                                  className="invalid-feedback"
+                                />
                               </InputGroup>
                             </Col>
                           </Row>
@@ -386,7 +475,7 @@ const RegisterFormik = () => {
                           </FormGroup>
                         </Form>
                       )}
-                    />
+                    </Formik>
                   </div>
                 </div>
 
