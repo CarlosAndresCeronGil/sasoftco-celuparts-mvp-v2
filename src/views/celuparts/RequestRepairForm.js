@@ -337,7 +337,7 @@ export default function RequestRepairForm() {
                                         <Row>
                                             <Col lg='6'>
                                                 <FormGroup>
-                                                    <Label for="PickUpTime">Fecha y hora de recogida*</Label>
+                                                    <Label for="PickUpTime">Fecha y hora de recogida* (El mensajero llegará en un estimado de 1 hora)</Label>
                                                     <DatePicker
                                                         id='PickUpTime'
                                                         className='form-control'
@@ -379,7 +379,7 @@ export default function RequestRepairForm() {
                                                 {
                                                     startDate.getDay() === 6 ?
                                                         <FormGroup>
-                                                            <Label for="DeliveryDate">Fecha y hora de entrega*</Label>
+                                                            <Label for="DeliveryDate">Fecha y hora de entrega* (El mensajero llegará en un estimado de 1 hora)</Label>
                                                             <DatePicker
                                                                 id='DeliveryDate'
                                                                 className='form-control'
@@ -415,7 +415,7 @@ export default function RequestRepairForm() {
                                                         </FormGroup>
                                                         :
                                                         <FormGroup>
-                                                            <Label for="DeliveryDate">Fecha y hora de entrega*</Label>
+                                                            <Label for="DeliveryDate">Fecha y hora de entrega* (El mensajero llegará en un estimado de 1 hora)</Label>
                                                             <DatePicker
                                                                 id='DeliveryDate'
                                                                 className='form-control'

@@ -364,7 +364,7 @@ export default function RequestRetomaForm() {
                                             <Col lg={6}>
 
                                                 <FormGroup>
-                                                    <Label for="PickUpTime">Fecha y hora de recogida*</Label>
+                                                    <Label for="PickUpTime">Fecha y hora de recogida* (El mensajero llegará en un estimado de 1 hora)</Label>
                                                     <DatePicker
                                                         id='PickUpTime'
                                                         className='form-control'
@@ -404,7 +404,7 @@ export default function RequestRetomaForm() {
                                                 {
                                                     startDate.getDay() === 6 ?
                                                         <FormGroup>
-                                                            <Label for="DeliveryDate">Fecha y hora tentativa a entrega en caso de no aceptar valor de venta*</Label>
+                                                            <Label for="DeliveryDate">Fecha y hora tentativa a entrega en caso de no aceptar valor de venta* (El mensajero llegará en un estimado de 1 hora)</Label>
                                                             <DatePicker
                                                                 id='DeliveryDate'
                                                                 className='form-control'
@@ -440,7 +440,7 @@ export default function RequestRetomaForm() {
                                                         </FormGroup>
                                                         :
                                                         <FormGroup>
-                                                            <Label for="DeliveryDate">Fecha y hora tentativa a entrega en caso de no aceptar valor de venta*</Label>
+                                                            <Label for="DeliveryDate">Fecha y hora tentativa a entrega en caso de no aceptar valor de venta* (El mensajero llegará en un estimado de 1 hora)</Label>
                                                             <DatePicker
                                                                 id='DeliveryDate'
                                                                 className='form-control'
