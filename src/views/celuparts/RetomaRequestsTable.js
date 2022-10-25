@@ -275,11 +275,9 @@ export default function RetomaRequestsTable() {
                             <tr>
                                 <th>Nombre cliente</th>
                                 <th>Fecha solicitud</th>
-                                {/* <th>Dispositivo</th>
-                                <th>Dirección recogida</th>
-                                <th>Dirección entrega</th> */}
                                 <th>Estado de cotización</th>
                                 <th>Estado de solicitud</th>
+                                <th>Valor de retoma</th>
                                 <th>Actualizar estado Solicitud</th>
                                 {
                                     JSON.parse(localStorage.getItem('user')).role === "mensajero" ? (
@@ -309,6 +307,7 @@ export default function RetomaRequestsTable() {
                                         <td>{tdata.deliveryAddress}</td> */}
                                         <td>{tdata.statusQuote}</td>
                                         <td>{tdata.requestStatus[0].status}</td>
+                                        <td>{tdata.retoma[0].retomaQuote}</td>
                                         <td>
                                             <Link to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}>
                                                 <Button className="btn" color='primary'>Actualizar</Button>

@@ -31,6 +31,7 @@ import postRepair from '../../services/postRepair';
 import postRepairPayment from '../../services/postRepairPayment';
 import postHomeService from '../../services/postHomeService';
 import postRequestNotification from '../../services/postRequestNotification'
+import postRequestHistory from '../../services/postRequestHistory';
 
 import getRequestWithUserInfo from '../../services/getRequestWithUserInfo';
 import getCellphoneBrands from '../../services/getCellphoneBrands'
@@ -42,6 +43,7 @@ import { Checkbox } from '@blueprintjs/core';
 import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getUserLastRepairRequestInfo from '../../services/getUserLastRepairRequestInfo';
 import ComponentCard from '../../components/ComponentCard';
+
 
 export default function RequestRepairForm() {
 
@@ -216,6 +218,15 @@ export default function RequestRepairForm() {
                                 setLoading(false);
                                 console.log(error);
                             });
+                        postRequestHistory({
+                            idRequest: data.idRequest,
+                            status: "Iniciada",
+                            date: new Date()
+                        })
+                            .catch(error => {
+                                setLoading(false)
+                                console.log(error)
+                            })
                         postHomeService({
                             idRequest: data.idRequest,
                             pickUpDate: startDate,

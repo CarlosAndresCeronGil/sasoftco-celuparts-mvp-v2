@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 import getSingleEquipment from '../../services/getSingleEquipment';
 import putRequestNotification from '../../services/putRequestNotification'
 import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
+import { Link } from "react-router-dom";
 
 export default function UserRetomaRequests() {
     const [userInfo, setUserInfo] = useState([]);
@@ -169,7 +170,9 @@ export default function UserRetomaRequests() {
                                     <th>Estado de la solicitud</th>
                                     <th>Valor de venta</th>
                                     <th>Estado Cotización</th>
+                                    <th>Número de teléfono</th>
                                     <th>Ver detalles</th>
+                                    <th>Ver historial de solicitud</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -195,9 +198,19 @@ export default function UserRetomaRequests() {
                                                 }
                                             </td>
                                             <td>
+                                                {
+                                                    userInfo[0].phone
+                                                }
+                                            </td>
+                                            <td>
                                                 <Button className='btn' color='info' type='button' onClick={() => handleViewDetails( tdata )} >
                                                     Detalles
                                                 </Button>
+                                            </td>
+                                            <td>
+                                                <Link to={`/home/request-history-table/${tdata.idRequest}`}>
+                                                    <Button type='button' className="btn" color='primary'>Ver</Button>
+                                                </Link>
                                             </td>
                                         </tr>
                                     ) : (

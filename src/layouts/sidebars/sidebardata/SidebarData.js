@@ -105,6 +105,10 @@ const SidebarDatas = () => {
             title: "Tecnicos a reparaciones",
             href: "./repair-table",
           },
+          {
+            title: "Pagos de retomas",
+            href: "./retoma-payments-table",
+          },
         ]
       },
       {
@@ -219,6 +223,10 @@ const SidebarDatas = () => {
           {
             title: "Equipos",
             href: "./equipments-table",
+          },
+          {
+            title: "Pagos de retomas",
+            href: "./retoma-payments-table",
           },
         ]
       },

@@ -23,13 +23,17 @@ import getSingleRetoma from '../../services/getSingleRetoma';
 // import getSingleRequest from '../../services/getSingleRequest';
 import getRequestNotification from '../../services/getRequestNotification';
 import putRequestNotification from '../../services/putRequestNotification';
+import moment from "moment";
 
 export default function RetomaPaymentForm() {
     const [paymentMethod, setPaymentMethod] = useState({ paymentMethod: '' })
-    const [paymentDate, setPaymentDate] = useState({ paymentDate: new Date() })
+    const [paymentDate, setPaymentDate] = useState(new Date())
     const [isPaymentDateNull, setIsPaymentDateNull] = useState({ isPaymentDateNull: false })
-    const [idRetoma, setIdRetoma] = useState({ idRpeair: 0 })
+    const [idRetoma, setIdRetoma] = useState({ idRetoma: 0 })
     const [idRequest, setIdRequest] = useState({ idRequest: 0 })
+    const [voucherNumber, setVoucherNumber] = useState('')
+
+    const [selectedFile, setSelectedFile] = useState()
 
     const [notifications, setNotifications] = useState([])
 
@@ -44,18 +48,18 @@ export default function RetomaPaymentForm() {
         getSingleRetomaPayment({ id: params.id })
             .then((response) => {
                 setPaymentMethod({ paymentMethod: response.paymentMethod })
-                setIdRetoma({ idRpeair: response.idRetoma })
+                setIdRetoma({ idRetoma: response.idRetoma })
                 if (response.paymentDate === null) {
                     setIsPaymentDateNull({ isPaymentDateNull: true })
-                    setPaymentDate({ paymentDate: new Date() })
+                    setPaymentDate(new Date())
                 } else {
                     setIsPaymentDateNull({ isPaymentDateNull: false })
-                    setPaymentDate({ paymentDate: new Date(response.paymentDate) })
+                    setPaymentDate(new Date(response.paymentDate))
                 }
                 getSingleRetoma({ id: response.idRetoma })
                     .then(response2 => {
                         // console.log(response2.idRequest)
-                        setIdRequest({ idRequest: response2.idRequest})
+                        setIdRequest({ idRequest: response2.idRequest })
                         getRequestNotification()
                             .then(response3 => {
                                 setNotifications(response3)
@@ -76,13 +80,23 @@ export default function RetomaPaymentForm() {
     const handleSubmit = (e) => {
         e.preventDefault()
         setLoadingPut(true)
+
+        const formData = new FormData()
+
+        formData.append("idRetomaPayment", params.id)
+        formData.append("idRetoma", idRetoma.idRetoma)
+        formData.append("PaymentMethod", paymentMethod.paymentMethod)
+        formData.append("paymentDate", moment(paymentDate).format("YYYY-MM-DD HH:mm:ss"))
+        formData.append("voucherNumber", voucherNumber.voucherNumber)
+        formData.append("retomaBillPayment", e.target.elements.retomaBillPayment.files[0])
+
         const data = {
             idRetomaPayment: parseInt(params.id),
-            idRetoma: idRetoma.idRpeair,
+            idRetoma: idRetoma.idRetoma,
             paymentMethod: paymentMethod.paymentMethod,
             paymentDate: paymentDate.paymentDate
         }
-        putRetomaPayment(data)
+        putRetomaPayment(formData)
             .then((response) => {
                 // console.log(response)
                 console.log(notifications)
@@ -123,6 +137,12 @@ export default function RetomaPaymentForm() {
         navigate(-1)
     }
 
+    const handleFileChange = (event) => {
+        if (event.target.files.length > 0) {
+            setSelectedFile(event.target.files[0]);
+        }
+    };
+
     return (
         loading ? (
             <div className="d-flex justify-content-center">
@@ -133,7 +153,7 @@ export default function RetomaPaymentForm() {
         ) : (
             <div>
                 <Button className='btn btn-danger' onClick={handleBackPage}>
-                   Atrás
+                    Atrás
                 </Button>
                 <Row>
                     <Col>
@@ -145,7 +165,7 @@ export default function RetomaPaymentForm() {
                                 <Form onSubmit={handleSubmit}>
                                     <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
                                         <i className="bi bi-eyeglasses"> </i>
-                                        <strong>Datos de la pago</strong>
+                                        <strong>Datos del pago</strong>
                                     </CardSubtitle>
                                     <FormGroup>
                                         <Label for="paymentMethod">Método de pago</Label>
@@ -168,9 +188,9 @@ export default function RetomaPaymentForm() {
                                                     id='paymentDate'
                                                     dateFormat="yyyy-MM-dd h:mm aa"
                                                     showTimeSelect
-                                                    value={paymentDate.paymentDate}
-                                                    selected={paymentDate.paymentDate}
-                                                    onChange={(date) => setPaymentDate({ paymentDate: date })}
+                                                    value={paymentDate}
+                                                    selected={paymentDate}
+                                                    onChange={(date) => setPaymentDate(date)}
                                                     timeFormat="HH:mm"
                                                 />
                                             </FormGroup>
@@ -181,15 +201,37 @@ export default function RetomaPaymentForm() {
                                                     id='paymentDate'
                                                     dateFormat="yyyy-MM-dd h:mm aa"
                                                     showTimeSelect
-                                                    value={paymentDate.paymentDate}
-                                                    selected={paymentDate.paymentDate}
-                                                    onChange={(date) => setPaymentDate({ paymentDate: date })}
+                                                    value={paymentDate}
+                                                    selected={paymentDate}
+                                                    onChange={(date) => setPaymentDate(date)}
                                                     required
                                                     timeFormat="HH:mm"
                                                 />
                                             </FormGroup>
                                         )
                                     }
+                                    <FormGroup>
+                                        <Label for="voucherNumber">Número del voucher</Label>
+                                        <Input
+                                            type="number"
+                                            name="voucherNumber"
+                                            id="voucherNumber"
+                                            value={voucherNumber.voucherNumber}
+                                            onChange={(e) => setVoucherNumber({ voucherNumber: e.target.value })}
+                                        />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="retomaBillPayment">Factura del pago*</Label>
+                                        <Input
+                                            id="retomaBillPayment"
+                                            name="retomaBillPayment"
+                                            placeholder="Ingrese la factura de pago"
+                                            type="file"
+                                            accept='.pdf'
+                                            onChange={handleFileChange}
+                                            required
+                                        />
+                                    </FormGroup>
                                     {
                                         loadingPut ? (
                                             <button className="btn btn-primary" type="button" disabled>

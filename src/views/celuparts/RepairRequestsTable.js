@@ -40,13 +40,14 @@ export default function RepairRequestsTable() {
     const [loading, setLoading] = useState(true)
     const [page, setPage] = useState(1)
 
-    // const [listOfAutoDiagnosis, setListOfAutoDiagnosis] = useState([])
     const [currentAutoDiagnosis, setCurrentAutoDiagnosis] = useState('')
     const [currentDeliveryAddress, setCurrentDeliveryAddress] = useState('')
     const [currentPickUpAddress, setCurrentPickUpAdress] = useState('')
     const [currentEquipmentData, setCurrentEquipmentData] = useState('')
     const [currentImeiOrSerial, setCurrentImeiOrSerial] = useState('')
     const [currentClientPhone, setCurrentClientPhone] = useState('')
+    const [currentRepairQuote, setCurrentRepairQuote] = useState('')
+    const [currentDeliveryDate, setCurrentDeliveryDate] = useState('')
 
     const [modal, setModal] = useState(false);
 
@@ -108,7 +109,7 @@ export default function RepairRequestsTable() {
         setModal(!modal);
     };
 
-    const handleViewClick = ({ autoDiagnosis, deliveryAddress, pickUpAddress, equipmentData, imeiOrSerial, clientPhone }) => {
+    const handleViewClick = ({ autoDiagnosis, deliveryAddress, pickUpAddress, equipmentData, imeiOrSerial, clientPhone, repairQuote, deliveryDate }) => {
         setModal(!modal);
         setCurrentAutoDiagnosis(autoDiagnosis)
         setCurrentDeliveryAddress(deliveryAddress)
@@ -116,6 +117,8 @@ export default function RepairRequestsTable() {
         setCurrentEquipmentData(equipmentData)
         setCurrentImeiOrSerial(imeiOrSerial)
         setCurrentClientPhone(clientPhone)
+        setCurrentRepairQuote(repairQuote)
+        setCurrentDeliveryDate(deliveryDate)
     }
 
     return (
@@ -272,11 +275,10 @@ export default function RepairRequestsTable() {
                             <tr>
                                 <th>Nombre cliente</th>
                                 <th>Fecha solicitud</th>
-                                {/* <th>Dispositivo</th>
-                                <th>Dirección recogida</th>
-                                <th>Dirección entrega</th> */}
                                 <th>Estado de cotización</th>
                                 <th>Estado de solicitud</th>
+                                <th>Técnico asociado</th>
+                                <th>Tiempo de servicio de reparación</th>
                                 <th>Actualizar estado Solicitud</th>
                                 {
                                     JSON.parse(localStorage.getItem('user')).role === "mensajero" ? (
@@ -306,6 +308,8 @@ export default function RepairRequestsTable() {
                                         <td>{tdata.deliveryAddress}</td> */}
                                         <td>{tdata.statusQuote}</td>
                                         <td>{tdata.requestStatus[0].status}</td>
+                                        <td>{ tdata.repairs[0].technician != null ? tdata.repairs[0].technician.names + " " + tdata.repairs[0].technician.surnames : "Sin técnico asociado" }</td>
+                                        <td>{ tdata.repairs[0].repairTime != null ? tdata.repairs[0].repairTime : "Sin registrar" }</td>
                                         <td>
                                             <Link to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}>
                                                 <Button type='button' className="btn" color='primary'>Actualizar</Button>
@@ -370,7 +374,9 @@ export default function RepairRequestsTable() {
                                                 pickUpAddress: tdata.pickUpAddress,
                                                 equipmentData: tdata.equipment.equipmentBrand + " " + tdata.equipment.modelOrReference,
                                                 imeiOrSerial: tdata.equipment.imeiOrSerial,
-                                                clientPhone: tdata.userDto.phone
+                                                clientPhone: tdata.userDto.phone,
+                                                repairQuote: tdata.repairs[0].repairQuote,
+                                                deliveryDate: tdata.homeServices[0].deliveryDate
                                             }).bind(null)} >
                                                 Detalles
                                             </Button>
@@ -435,6 +441,13 @@ export default function RepairRequestsTable() {
                             <hr />
                             <div>
                                 <span className='fw-bold'>
+                                    Fecha de entrega:
+                                </span>
+                            </div>
+                            {new Date(currentDeliveryDate).toLocaleDateString('es', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric" })}
+                            <hr />
+                            <div>
+                                <span className='fw-bold'>
                                     Teléfono cliente:
                                 </span>
                             </div>
@@ -446,6 +459,13 @@ export default function RepairRequestsTable() {
                                 </span>
                             </div>
                             {currentAutoDiagnosis}
+                            <hr />
+                            <div>
+                                <span className='fw-bold'>
+                                    Cuota de reparación:
+                                </span>
+                            </div>
+                            {currentRepairQuote}
                         </ModalBody>
                         <ModalFooter>
                             <Button color="secondary" onClick={handleViewClick.bind(null)}>

@@ -30,6 +30,7 @@ import postHomeService from '../../services/postHomeService';
 import postRetoma from '../../services/postRetoma';
 import postRetomaPayment from '../../services/postRetomaPayment';
 import postRequestNotification from '../../services/postRequestNotification'
+import postRequestHistory from '../../services/postRequestHistory';
 
 import getRequestWithUserInfo from '../../services/getRequestWithUserInfo';
 import getCellphoneBrands from '../../services/getCellphoneBrands'
@@ -41,6 +42,7 @@ import { Checkbox } from '@blueprintjs/core';
 import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getUserLastRetomaRequestInfo from '../../services/getUserLastRetomaRequestInfo';
 import ComponentCard from '../../components/ComponentCard';
+
 
 export default function RequestRetomaForm() {
 
@@ -230,6 +232,15 @@ export default function RequestRetomaForm() {
                                     setLoading(false);
                                     console.log(error);
                                 });
+                            postRequestHistory({
+                                idRequest: dataRequest.idRequest,
+                                status: "Iniciada",
+                                date: new Date()
+                            })
+                                .catch(error => {
+                                    setLoading(false)
+                                    console.log(error)
+                                })
                             postHomeService({
                                 idRequest: dataRequest.idRequest,
                                 pickUpDate: startDate,

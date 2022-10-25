@@ -11,6 +11,7 @@ import putRequestNotification from '../../services/putRequestNotification';
 import getSingleEquipment from '../../services/getSingleEquipment'
 import putRequestStatus from '../../services/putRequestStatus';
 import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
+import { Link } from "react-router-dom";
 
 export default function UserRepairRequests() {
     const [userInfo, setUserInfo] = useState([])
@@ -26,7 +27,7 @@ export default function UserRepairRequests() {
         deliveryAddress: '',
         deliveryDate: '',
         pickUpAddress: '',
-        pickUpDate: '',
+        pickUpDate: ''
     });
 
     const handleViewDetails = ({ autoDiagnosis, deliveryAddress, pickUpAddress, homeServices }) => {
@@ -36,7 +37,7 @@ export default function UserRepairRequests() {
             deliveryAddress,
             deliveryDate: homeServices[0].deliveryDate,
             pickUpAddress,
-            pickUpDate: homeServices[0].pickUpDate,
+            pickUpDate: homeServices[0].pickUpDate
         });
     };
 
@@ -170,8 +171,8 @@ export default function UserRepairRequests() {
                             productReturned: response[0].requestStatus[0].productReturned,
                             productSold: response[0].requestStatus[0].productSold
                         })
-                            .then(response => {
-                                console.log(response)
+                            .then(putRequestResponse => {
+                                console.log(putRequestResponse)
                             })
                             .catch(error => {
                                 console.log(error)
@@ -290,7 +291,9 @@ export default function UserRepairRequests() {
                                     <th>Valor de la Reparación</th>
                                     <th>Estado Cotización</th>
                                     <th>Fecha de entrega</th>
+                                    <th>Número de teléfono</th>
                                     <th>Ver detalles</th>
+                                    <th>Ver historial de solicitud</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -325,9 +328,20 @@ export default function UserRepairRequests() {
                                                 )
                                             }
                                             <td>
+                                                {
+                                                    userInfo[0].phone
+                                                }
+                                            </td>
+                                            <td>
+                                                {/* <Button className='btn' color='info' type='button' onClick={() => handleViewDetails(tdata)} > */}
                                                 <Button className='btn' color='info' type='button' onClick={() => handleViewDetails(tdata)} >
                                                     Detalles
                                                 </Button>
+                                            </td>
+                                            <td>
+                                                <Link to={`/home/request-history-table/${tdata.idRequest}`}>
+                                                    <Button type='button' className="btn" color='primary'>Ver</Button>
+                                                </Link>
                                             </td>
                                         </tr>
                                     ) : (
@@ -361,7 +375,7 @@ export default function UserRepairRequests() {
                                         Fecha de recogida:
                                     </span>
                                 </div>
-                                {viewDetails.pickUpDate}
+                                {new Date(viewDetails.pickUpDate).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" })}
                                 <hr />
                                 <div>
                                     <span className='fw-bold'>
@@ -375,7 +389,6 @@ export default function UserRepairRequests() {
                                         Fecha de entrega:
                                     </span>
                                 </div>
-                                {/* {viewDetails.deliveryDate} */}
                                 {new Date(viewDetails.deliveryDate).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" })}
                             </ModalBody>
                             <ModalFooter>

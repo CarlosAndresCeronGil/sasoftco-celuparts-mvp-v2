@@ -153,6 +153,8 @@ export function Router() {
   const RequestRepairForm = lazy(() => import("../views/celuparts/RequestRepairForm"));
   const RequestRetomaForm = lazy(() => import("../views/celuparts/RequestRetomaForm"));
   const EquipmentDetail = lazy(() => import("../views/celuparts/EquipmentDetail"));
+  const RequestHistoryTable = lazy(() => import("../views/celuparts/RequestHistoryTable"));
+  const RetomaPaymentsTable = lazy(() => import("../views/celuparts/RetomaPaymentsTable"));
 
   const DashboardCeluparts = lazy(() => import("../views/celuparts/DashboardCeluparts"));
 
@@ -188,6 +190,7 @@ export function Router() {
           { path: "/home/request-retoma-form", exact: true, element: <RequestRetomaForm /> },
           { path: "/home/user-repair-requests", exact: true, element: <UserRepairRequests /> },
           { path: "/home/user-retoma-requests", exact: true, element: <UserRetomaRequests /> },
+          { path: "/home/request-history-table/:id", exact: true, element: <RequestHistoryTable /> },
         ]
       }
     ) : JSON.parse(localStorage.getItem('user')).role === "admin" ? ThemeRoutes.push(
@@ -233,7 +236,8 @@ export function Router() {
           { path: "/home/siigo-cost-centers-table", exact: true, element: <SiigoCostCentersTable /> },
           { path: "/home/siigo-fixed-assets-table", exact: true, element: <SiigoFixedAssetsTable /> },
           { path: "/home/admin-alerts", exact: true, element: <AdminAlerts /> },
-          { path: "/home/equipment-detail/:id", exact: true, element: <EquipmentDetail /> }
+          { path: "/home/equipment-detail/:id", exact: true, element: <EquipmentDetail /> },
+          { path: "/home/retoma-payments-table", exact: true, element: <RetomaPaymentsTable /> }
         ],
       }
     ) : JSON.parse(localStorage.getItem('user')).role === "aux_admin" ? ThemeRoutes.push(
@@ -259,7 +263,8 @@ export function Router() {
           { path: "/home/repair-payment-form/:id", exact: true, element: <RepairPaymentForm /> },
           { path: "/home/retoma-payment-form/:id", exact: true, element: <RetomaPaymentForm /> },
           { path: "/home/admin-alerts", exact: true, element: <AdminAlerts /> },
-          { path: "/home/equipment-detail/:id", exact: true, element: <EquipmentDetail /> }
+          { path: "/home/equipment-detail/:id", exact: true, element: <EquipmentDetail /> },
+          { path: "/home/retoma-payments-table", exact: true, element: <RetomaPaymentsTable /> }
         ],
       }
     ) : JSON.parse(localStorage.getItem('user')).role === "tecnico" ? ThemeRoutes.push(

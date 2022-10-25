@@ -24,12 +24,16 @@ import putRequestNotification from '../../services/putRequestNotification';
 export default function UpdateRepairForm() {
     const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
     const [deviceDiagnostic, setDeviceDiagnostic] = useState({ deviceDiagnostic: "" });
+    const [repairStartDate, setRepairStartDate] = useState({ repairStartDate: new Date() });
     const [repairDate, setRepairDate] = useState({ repairDate: new Date() });
-    const [isRepairDateNull, setIsRepairDateNull] = useState({ isRepairDateNull: false });
     const [repairQuote, setRepairQuote] = useState({ repairQuote: 0 });
     const [idRequest, setIdRequest] = useState({ idRequest: 0 });
 
-    const [nullDateArrived, setNullDateArrived] = useState(false)
+    const [isRepairDateNull, setIsRepairDateNull] = useState({ isRepairDateNull: false });
+    const [isRepairStartDateNull, setIsRepairStartDateNull] = useState({ isRepairStartDateNull: false })
+
+    const [nullFinishDateArrived, setNullFinishDateArrived] = useState(false)
+    const [nullStartDateArrived, setNullStartDateArrived] = useState(false)
 
     const [notifications, setNotifications] = useState([])
 
@@ -43,13 +47,58 @@ export default function UpdateRepairForm() {
         e.preventDefault();
         setLoadingPut(true);
         console.log(repairDate.repairDate)
-        nullDateArrived ? (
+        nullFinishDateArrived && nullStartDateArrived ? (
             //PRODUCTO REVISADO SIN SER ACEPTADA LA COTIZACION
             putRepair({
                 idRepair: params.id,
                 idRequest: idRequest.idRequest,
                 idTechnician: idTechnician.idTechnician,
                 repairDate: null,
+                repairStartDate: null,
+                deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
+                repairQuote: repairQuote.repairQuote,
+            })
+                .then(data => {
+                    notifications.map(tdata => (
+                        tdata.idRequest === idRequest.idRequest ? (
+                            putRequestNotification({
+                                idRequestNotification: tdata.idRequestNotification,
+                                idRequest: tdata.idRequest,
+                                message: 'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
+                                wasReviewed: false,
+                                notificationType: "to_customer"
+                            })
+                                .then(response => {
+                                    console.log("Exito!", response)
+                                })
+                                .then(finalResponse => {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Exito!',
+                                        text: 'Estado de reparación actualizadisimo!',
+                                    })
+                                        .then(response => {
+                                            navigate(-1)
+                                        })
+                                })
+                                .catch(error => {
+                                    console.log(error)
+                                })
+                        ) : null
+                    ))
+                    setLoadingPut(false);
+                })
+                .catch(error => {
+                    console.log(error);
+                    setLoadingPut(false);
+                })
+        ) : nullFinishDateArrived && !nullStartDateArrived ? (
+            putRepair({
+                idRepair: params.id,
+                idRequest: idRequest.idRequest,
+                idTechnician: idTechnician.idTechnician,
+                repairDate: null,
+                repairStartDate: repairStartDate.repairStartDate,
                 deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
                 repairQuote: repairQuote.repairQuote,
             })
@@ -64,25 +113,69 @@ export default function UpdateRepairForm() {
                                 wasReviewed: false,
                                 notificationType: "to_customer"
                             })
-                            .then(response=> {
-                                console.log("Exito!", response)
-                            })
-                            .then(finalResponse => {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Exito!',
-                                    text: 'Estado de reparación actualizadisimo!',
+                                .then(response => {
+                                    console.log("Exito!", response)
                                 })
-                                    .then(response => {
-                                        navigate(-1)
+                                .then(finalResponse => {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Exito!',
+                                        text: 'Estado de reparación actualizadisimo!',
                                     })
-                            })
-                            .catch(error => {
-                                console.log(error)
-                            })
+                                        .then(response => {
+                                            navigate(-1)
+                                        })
+                                })
+                                .catch(error => {
+                                    console.log(error)
+                                })
                         ) : null
                     ))
-                    console.log("se envio fecha null")
+                    setLoadingPut(false);
+                })
+                .catch(error => {
+                    console.log(error);
+                    setLoadingPut(false);
+                })
+        ) : nullStartDateArrived  && !nullFinishDateArrived ? (
+            putRepair({
+                idRepair: params.id,
+                idRequest: idRequest.idRequest,
+                idTechnician: idTechnician.idTechnician,
+                repairDate: repairDate.repairDate,
+                repairStartDate: null,
+                deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
+                repairQuote: repairQuote.repairQuote,
+            })
+                .then(data => {
+                    console.log(data)
+                    notifications.map(tdata => (
+                        tdata.idRequest === idRequest.idRequest ? (
+                            putRequestNotification({
+                                idRequestNotification: tdata.idRequestNotification,
+                                idRequest: tdata.idRequest,
+                                message: 'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
+                                wasReviewed: false,
+                                notificationType: "to_customer"
+                            })
+                                .then(response => {
+                                    console.log("Exito!", response)
+                                })
+                                .then(finalResponse => {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Exito!',
+                                        text: 'Estado de reparación actualizadisimo!',
+                                    })
+                                        .then(response => {
+                                            navigate(-1)
+                                        })
+                                })
+                                .catch(error => {
+                                    console.log(error)
+                                })
+                        ) : null
+                    ))
                     setLoadingPut(false);
                 })
                 .catch(error => {
@@ -96,13 +189,12 @@ export default function UpdateRepairForm() {
                 idRequest: idRequest.idRequest,
                 idTechnician: idTechnician.idTechnician,
                 repairDate: repairDate.repairDate,
+                repairStartDate: repairStartDate.repairStartDate,
                 deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
                 repairQuote: repairQuote.repairQuote,
             })
                 .then(data => {
                     setLoadingPut(false);
-                    console.log(data)
-                    console.log("se envio con fecha")
                 })
                 .then(finalResponse => {
                     Swal.fire({
@@ -124,19 +216,28 @@ export default function UpdateRepairForm() {
         setLoading(true);
         getSingleRepair({ id: params.id })
             .then(response => {
-                // console.log(response);
                 setIdTechnician({ idTechnician: response.idTechnician })
                 setDeviceDiagnostic({ deviceDiagnostic: response.deviceDiagnostic })
                 setRepairQuote({ repairQuote: response.repairQuote })
                 setIdRequest({ idRequest: response.idRequest })
+
                 if (response.repairDate === null) {
                     setIsRepairDateNull({ isRepairDateNull: true })
                     setRepairDate({ repairDate: new Date() })
-                    setNullDateArrived(true)
+                    setNullFinishDateArrived(true)
                 }
                 else {
                     setIsRepairDateNull({ isRepairDateNull: false })
                     setRepairDate({ repairDate: new Date(response.repairDate) })
+                }
+
+                if (response.repairStartDate === null) {
+                    setIsRepairStartDateNull({ isRepairStartDateNull: true })
+                    setRepairStartDate({ repairStartDate: new Date() })
+                    setNullStartDateArrived(true)
+                } else {
+                    setIsRepairStartDateNull({ isRepairStartDateNull: false })
+                    setRepairStartDate({ repairStartDate: new Date(response.repairStartDate) })
                 }
                 getRequestNotification()
                     .then(response => {
@@ -184,7 +285,7 @@ export default function UpdateRepairForm() {
         loading ? <div>Loading...</div> : (
             <div>
                 <Button className='btn btn-danger' onClick={handleBackPage}>
-                   Atrás
+                    Atrás
                 </Button>
                 <div>
                     <Row>
@@ -223,6 +324,42 @@ export default function UpdateRepairForm() {
                                                 required
                                             />
                                         </FormGroup>
+
+                                        {
+                                            isRepairStartDateNull.isRepairStartDateNull ? (
+                                                <FormGroup>
+                                                    <Label for="repairStartDate">Ingrese la fecha de inicio de la reparación</Label>
+                                                    <DatePicker
+                                                        id='repairStartDate'
+                                                        dateFormat="yyyy-MM-dd h:mm aa"
+                                                        showTimeSelect
+                                                        value={repairStartDate.repairStartDate}
+                                                        selected={repairStartDate.repairStartDate}
+                                                        onChange={(date) => {
+                                                            setRepairStartDate({ repairStartDate: date })
+                                                            setNullStartDateArrived(false)
+                                                        }}
+                                                        required
+                                                        timeFormat="HH:mm"
+                                                    />
+                                                </FormGroup>
+                                            ) : (
+                                                <FormGroup>
+                                                    <Label for="repairStartDate">Edite la fecha de inicio de la reparación</Label>
+                                                    <DatePicker
+                                                        id='repairStartDate'
+                                                        dateFormat="yyyy-MM-dd h:mm aa"
+                                                        showTimeSelect
+                                                        value={repairStartDate.repairStartDate}
+                                                        selected={repairStartDate.repairStartDate}
+                                                        onChange={(date) => setRepairStartDate({ repairStartDate: date })}
+                                                        required
+                                                        timeFormat="HH:mm"
+                                                    />
+                                                </FormGroup>
+                                            )
+                                        }
+
                                         {
                                             isRepairDateNull.isRepairDateNull ? (
                                                 <FormGroup>
@@ -235,7 +372,7 @@ export default function UpdateRepairForm() {
                                                         selected={repairDate.repairDate}
                                                         onChange={(date) => {
                                                             setRepairDate({ repairDate: date })
-                                                            setNullDateArrived(false)
+                                                            setNullFinishDateArrived(false)
                                                         }}
                                                         required
                                                         timeFormat="HH:mm"
@@ -260,19 +397,19 @@ export default function UpdateRepairForm() {
 
                                         {
                                             JSON.parse(localStorage.getItem('user')).role == "admin" || JSON.parse(localStorage.getItem('user')).role == "aux_admin" ?
-                                            <FormGroup>
-                                                <Label for="repairQuote">Cuota de reparación</Label>
-                                                <Input
-                                                    id="repairQuote"
-                                                    name="repairQuote"
-                                                    placeholder="Ingrese la cuota de reparación del producto"
-                                                    type="number"
-                                                    value={repairQuote.repairQuote}
-                                                    onChange={handleRepairQuoteChange}
-                                                    required
-                                                />
-                                            </FormGroup>
-                                            : null
+                                                <FormGroup>
+                                                    <Label for="repairQuote">Cuota de reparación</Label>
+                                                    <Input
+                                                        id="repairQuote"
+                                                        name="repairQuote"
+                                                        placeholder="Ingrese la cuota de reparación del producto"
+                                                        type="number"
+                                                        value={repairQuote.repairQuote}
+                                                        onChange={handleRepairQuoteChange}
+                                                        required
+                                                    />
+                                                </FormGroup>
+                                                : null
                                         }
 
                                         {

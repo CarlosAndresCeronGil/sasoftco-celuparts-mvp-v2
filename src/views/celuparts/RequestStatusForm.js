@@ -23,6 +23,8 @@ import putRequestStatus from '../../services/putRequestStatus';
 import Swal from 'sweetalert2'
 import getCelupartsInfo from '../../services/getCelupartsInfo';
 import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
+import putRequestHistory from '../../services/putRequestHistory';
+import postRequestHistory from '../../services/postRequestHistory';
 
 export default function RequestStatusForm() {
     const [dataRequestStatus, setDataRequestStatus] = useState({});
@@ -63,6 +65,14 @@ export default function RequestStatusForm() {
                 // console.log("DATA", data);
                 /*Aqui se mira el estado de la solicitud, para asi, enviar un mensaje en la 
                 notificacion a quien corresponda*/
+                postRequestHistory({
+                    idRequest: data.idRequest,
+                    status: status.status,
+                    date: new Date()
+                })
+                    .catch(error => {
+                        console.log(error)
+                    })
                 status.status === "En proceso de recogida" ? (
                     notifications.map((tdata) => (
                         tdata.idRequest === idRequest.idRequest ? (
