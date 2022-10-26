@@ -21,7 +21,7 @@ const DashboardCeluparts = () => {
         {/* <a href="#" target="_blank" rel="noreferrer" className="" >
           <i className="bi bi-facebook btn btn-facebook btn-icon"  ></i>
         </a> */}
-        <a href="https://www.instagram.com/celuparts/" target="_blank" rel="noreferrer" className="">
+        <a href="https://www.instagram.com/celuparts1/" target="_blank" rel="noreferrer" className="">
           <i className="bi bi-instagram btn btn-instagram btn-icon"></i>
         </a>
         {/* <a href="#" target="_blank" rel="noreferrer" className="">
