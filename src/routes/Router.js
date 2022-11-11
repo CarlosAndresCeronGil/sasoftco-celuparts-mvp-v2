@@ -155,6 +155,8 @@ export function Router() {
   const EquipmentDetail = lazy(() => import("../views/celuparts/EquipmentDetail"));
   const RequestHistoryTable = lazy(() => import("../views/celuparts/RequestHistoryTable"));
   const RetomaPaymentsTable = lazy(() => import("../views/celuparts/RetomaPaymentsTable"));
+  const RepairStepts = lazy(() => import("../views/celuparts/RepariRequestSteps/RequestSteps"));
+  const AllRequestsTable = lazy(() => import("../views/celuparts/AllRequestsTable"));
 
   const DashboardCeluparts = lazy(() => import("../views/celuparts/DashboardCeluparts"));
 
@@ -187,6 +189,7 @@ export function Router() {
           { path: '/home/dashboards/dashboard1', name: 'Dashboard Celuparts', exact: true, element: <DashboardCeluparts /> },
           { path: '/home/user-alerts', name: 'Notificaciones', exact: true, element: <CustomerAlerts /> },
           { path: "/home/request-repair-form", exact: true, element: <RequestRepairForm /> },
+          // { path: "/home/request-repair-form", exact: true, element: <RepairStepts /> }, 
           { path: "/home/request-retoma-form", exact: true, element: <RequestRetomaForm /> },
           { path: "/home/user-repair-requests", exact: true, element: <UserRepairRequests /> },
           { path: "/home/user-retoma-requests", exact: true, element: <UserRetomaRequests /> },
@@ -298,7 +301,8 @@ export function Router() {
           { path: "/home/repair-table", exact: true, element: <RepairTable /> },
           { path: "/home/update-repair-form", exact: true, element: <UpdateRepairForm /> },
           { path: "/home/request-status-form/:id", exact: true, element: <RequestStatusForm /> },
-          { path: "/home/courier-alerts", exact: true, element: <CourierAlerts /> }
+          { path: "/home/courier-alerts", exact: true, element: <CourierAlerts /> },
+          { path: "/home/all-requests-table", exact: true, element: <AllRequestsTable /> }
         ],
       }
     ) : ThemeRoutes.push(

@@ -42,6 +42,8 @@ import { Checkbox } from '@blueprintjs/core';
 import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getUserLastRetomaRequestInfo from '../../services/getUserLastRetomaRequestInfo';
 import ComponentCard from '../../components/ComponentCard';
+import getSmartWatchesBrands from '../../services/getSmartWatchesBrands';
+import getTabletsBrands from '../../services/getTabletsBrands';
 
 
 export default function RequestRetomaForm() {
@@ -71,6 +73,8 @@ export default function RequestRetomaForm() {
     dispositivo*/
     const [cellphoneList, setCellphoneList] = useState([])
     const [computersList, setComputersList] = useState([])
+    const [tabletsList, setTabletsList] = useState([])
+    const [smartWatchesList, setSmartWatchesList] = useState([])
     const [typeOfEquipmentList, setTypeOfEquipmentList] = useState([])
 
     const handleSameAddresses = () => {
@@ -104,15 +108,24 @@ export default function RequestRetomaForm() {
                         getComputerBrands()
                             .then(computersResponse => {
                                 setComputersList(computersResponse)
-                                getUserLastRetomaRequestInfo({ id: JSON.parse(localStorage.getItem('user')).idUser })
-                                    .then(lastRequestInfoResponse => {
-                                        setPickUpAddress(lastRequestInfoResponse[0].requests[0].pickUpAddress)
-                                        setDeliveryAddress(lastRequestInfoResponse[0].requests[0].deliveryAddress)
-                                        setLoadingPage(false)
-                                    })
-                                    .catch(error => {
-                                        console.log(error)
-                                        setLoadingPage(false)
+                                setEquipmentBrand(computersResponse[0].brandName)
+                                getTabletsBrands()
+                                    .then(tabletsResponse => {
+                                        setTabletsList(tabletsResponse)
+                                        getSmartWatchesBrands()
+                                            .then(smartWatchesResponse => {
+                                                setSmartWatchesList(smartWatchesResponse)
+                                                getUserLastRetomaRequestInfo({ id: JSON.parse(localStorage.getItem('user')).idUser })
+                                                    .then(lastRequestInfoResponse => {
+                                                        setPickUpAddress(lastRequestInfoResponse[0].requests[0].pickUpAddress)
+                                                        setDeliveryAddress(lastRequestInfoResponse[0].requests[0].deliveryAddress)
+                                                        setLoadingPage(false)
+                                                    })
+                                                    .catch(error => {
+                                                        console.log(error)
+                                                        setLoadingPage(false)
+                                                    })
+                                            })
                                     })
                             })
                             .catch(error => {
@@ -182,7 +195,8 @@ export default function RequestRetomaForm() {
                                 .then(userInfo => {
                                     postRequestNotification({
                                         idRequest: dataRequest.idRequest,
-                                        message: "Nueva solicitud de servicio a domicilio a la dirección: " + dataRequest.pickUpAddress + " para la fecha " + startDate.getFullYear() + "/" + (startDate.getMonth() + 1) + "/" + startDate.getDate() + " a las " + startDate.getHours() + ":" + startDate.getMinutes() + " para recoger el dispositivo " + equipmentBrand + " " + e.target.elements.modelOrReference.value + " con imei o serial: " + e.target.elements.imei.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de teléfono de contácto: " + userInfo[0].userDto.phone + ", el usuario decidió pagar por medio de " + e.target.elements.paymentMethod.value,
+                                        // message: "Nueva solicitud de servicio a domicilio a la dirección: " + dataRequest.pickUpAddress + " para la fecha " + startDate.getFullYear() + "/" + (startDate.getMonth() + 1) + "/" + startDate.getDate() + " a las " + startDate.getHours() + ":" + startDate.getMinutes() + " para recoger el dispositivo " + equipmentBrand + " " + e.target.elements.modelOrReference.value + " con imei o serial: " + e.target.elements.imei.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de teléfono de contácto: " + userInfo[0].userDto.phone + ", el usuario decidió pagar por medio de " + e.target.elements.paymentMethod.value,
+                                        message: "Nueva solicitud de servicio a domicilio a la dirección: " + dataRequest.pickUpAddress + " para la fecha " + startDate.toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }) + " para recoger el dispositivo " + equipmentBrand + " " + e.target.elements.modelOrReference.value + " con imei o serial: " + e.target.elements.imei.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de teléfono de contácto: " + userInfo[0].userDto.phone + ", el usuario decidió pagar por medio de " + e.target.elements.paymentMethod.value,
                                         wasReviewed: false,
                                         notificationType: "to_courier"
                                     })
@@ -370,48 +384,47 @@ export default function RequestRetomaForm() {
                                                 </FormGroup>
                                         }
 
-
                                         <Row>
-                                            <Col lg={6}>
+                                            {/* <Col lg={6}> */}
 
-                                                <FormGroup>
-                                                    <Label for="PickUpTime">Fecha y hora de recogida* (El mensajero llegará en un estimado de 1 hora)</Label>
-                                                    <DatePicker
-                                                        id='PickUpTime'
-                                                        className='form-control'
-                                                        dateFormat="yyyy-MM-dd h:mm aa"
-                                                        showTimeSelect
-                                                        minTime={new Date(new Date().setHours(minTimeHour, 0, 0, 0))}
-                                                        maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
-                                                        minDate={new Date()}
-                                                        includeTimes={[
-                                                            setHours(setMinutes(new Date(), 30), 8),
-                                                            setHours(setMinutes(new Date(), 0), 9),
-                                                            setHours(setMinutes(new Date(), 30), 9),
-                                                            setHours(setMinutes(new Date(), 0), 10),
-                                                            setHours(setMinutes(new Date(), 30), 10),
-                                                            setHours(setMinutes(new Date(), 0), 11),
-                                                            setHours(setMinutes(new Date(), 30), 11),
-                                                            setHours(setMinutes(new Date(), 0), 12),
-                                                            setHours(setMinutes(new Date(), 0), 14),
-                                                            setHours(setMinutes(new Date(), 30), 14),
-                                                            setHours(setMinutes(new Date(), 0), 15),
-                                                            setHours(setMinutes(new Date(), 30), 15),
-                                                            setHours(setMinutes(new Date(), 0), 16),
-                                                            setHours(setMinutes(new Date(), 30), 16),
-                                                            setHours(setMinutes(new Date(), 0), 17),
-                                                            setHours(setMinutes(new Date(), 30), 17),
-                                                            setHours(setMinutes(new Date(), 0), 18),
-                                                        ]}
-                                                        filterDate={isWeekDay}
-                                                        selected={startDate}
-                                                        onChange={(date) => setStartDate(date)}
-                                                        timeFormat="HH:mm"
-                                                    />
-                                                </FormGroup>
+                                            <FormGroup>
+                                                <Label for="PickUpTime">Fecha y hora de recogida* (El mensajero llegará en un estimado de 1 hora)</Label>
+                                                <DatePicker
+                                                    id='PickUpTime'
+                                                    className='form-control'
+                                                    dateFormat="yyyy-MM-dd h:mm aa"
+                                                    showTimeSelect
+                                                    minTime={new Date(new Date().setHours(minTimeHour, 0, 0, 0))}
+                                                    maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
+                                                    minDate={new Date()}
+                                                    includeTimes={[
+                                                        setHours(setMinutes(new Date(), 30), 8),
+                                                        setHours(setMinutes(new Date(), 0), 9),
+                                                        setHours(setMinutes(new Date(), 30), 9),
+                                                        setHours(setMinutes(new Date(), 0), 10),
+                                                        setHours(setMinutes(new Date(), 30), 10),
+                                                        setHours(setMinutes(new Date(), 0), 11),
+                                                        setHours(setMinutes(new Date(), 30), 11),
+                                                        setHours(setMinutes(new Date(), 0), 12),
+                                                        setHours(setMinutes(new Date(), 0), 14),
+                                                        setHours(setMinutes(new Date(), 30), 14),
+                                                        setHours(setMinutes(new Date(), 0), 15),
+                                                        setHours(setMinutes(new Date(), 30), 15),
+                                                        setHours(setMinutes(new Date(), 0), 16),
+                                                        setHours(setMinutes(new Date(), 30), 16),
+                                                        setHours(setMinutes(new Date(), 0), 17),
+                                                        setHours(setMinutes(new Date(), 30), 17),
+                                                        setHours(setMinutes(new Date(), 0), 18),
+                                                    ]}
+                                                    filterDate={isWeekDay}
+                                                    selected={startDate}
+                                                    onChange={(date) => setStartDate(date)}
+                                                    timeFormat="HH:mm"
+                                                />
+                                            </FormGroup>
 
-                                            </Col>
-                                            <Col lg={6}>
+                                            {/* </Col> */}
+                                            {/* <Col lg={6}>
                                                 {
                                                     startDate.getDay() === 6 ?
                                                         <FormGroup>
@@ -486,13 +499,14 @@ export default function RequestRetomaForm() {
                                                             />
                                                         </FormGroup>
                                                 }
-                                            </Col>
+                                            </Col> */}
                                         </Row>
                                         <FormGroup>
                                             <Label for="paymentMethod">Método de pago (de celuparts a ti)*</Label>
                                             <Input id="paymentMethod" name="paymentMethod" type="select">
                                                 <option>Contraentrega</option>
                                                 <option>Transferencia bancaria</option>
+                                                <option value={"Datafono"}>Datáfono</option>
                                             </Input>
                                         </FormGroup>
                                     </ComponentCard>
@@ -511,8 +525,11 @@ export default function RequestRetomaForm() {
                                                 type="select"
                                                 value={typeOfEquipment.typeOfEquipment}
                                                 onChange={(e) => {
-                                                    setEquipmentBrand('')
                                                     setTypeOfEquipment({ typeOfEquipment: e.target.value })
+                                                    e.target.value == "1" ? setEquipmentBrand(computersList[0].brandName) :
+                                                        e.target.value == "2" ? setEquipmentBrand(cellphoneList[0].brandName) :
+                                                            e.target.value == "3" ? setEquipmentBrand(tabletsList[0].brandName) :
+                                                                setEquipmentBrand(smartWatchesList[0].brandName)
                                                 }}
                                             >
                                                 {
@@ -526,7 +543,7 @@ export default function RequestRetomaForm() {
                                             typeOfEquipment.typeOfEquipment === '1' ?
                                                 <FormGroup>
                                                     <Label for="typeOfEquipment">Marca del computador*</Label>
-                                                    <Combobox
+                                                    {/* <Combobox
                                                         required
                                                         placeholder='Seleccione la marca del computador'
                                                         id="equipmentBrand"
@@ -535,13 +552,26 @@ export default function RequestRetomaForm() {
                                                         data={computersList.map(computerData => computerData.brandName)}
                                                         value={equipmentBrand}
                                                         onChange={brand => setEquipmentBrand(brand)}
-                                                    />
+                                                    /> */}
+                                                    <Input
+                                                        required
+                                                        id="equipmentBrand"
+                                                        name="equipmentBrand"
+                                                        type="select"
+                                                        value={equipmentBrand}
+                                                        onChange={(e) => setEquipmentBrand(e.target.value)}
+                                                    >
+                                                        {
+                                                            computersList.map((computerData, index) => (
+                                                                <option value={computerData.brandName} key={index}>{computerData.brandName}</option>
+                                                            ))
+                                                        }
+                                                    </Input>
                                                 </FormGroup>
-                                                :
-
-                                                <FormGroup>
-                                                    <Label for="typeOfEquipment">Marca del celular*</Label>
-                                                    <Combobox
+                                                : typeOfEquipment.typeOfEquipment === '2' ?
+                                                    <FormGroup>
+                                                        <Label for="typeOfEquipment">Marca del celular*</Label>
+                                                        {/* <Combobox
                                                         required
                                                         placeholder='Seleccione la marca del celular'
                                                         id="equipmentBrand"
@@ -550,8 +580,58 @@ export default function RequestRetomaForm() {
                                                         data={cellphoneList.map(cellphoneData => cellphoneData.brandName)}
                                                         value={equipmentBrand}
                                                         onChange={brand => setEquipmentBrand(brand)}
-                                                    />
-                                                </FormGroup>
+                                                    /> */}
+                                                        <Input
+                                                            required
+                                                            id="equipmentBrand"
+                                                            name="equipmentBrand"
+                                                            type="select"
+                                                            value={equipmentBrand}
+                                                            onChange={(e) => setEquipmentBrand(e.target.value)}
+                                                        >
+                                                            {
+                                                                cellphoneList.map((cellphoneData, index) => (
+                                                                    <option value={cellphoneData.brandName} key={index}>{cellphoneData.brandName}</option>
+                                                                ))
+                                                            }
+                                                        </Input>
+                                                    </FormGroup>
+                                                    : typeOfEquipment.typeOfEquipment === '3' ?
+                                                        <FormGroup>
+                                                            <Label for="typeOfEquipment">Marca de la tablet*</Label>
+                                                            <Input
+                                                                required
+                                                                id="equipmentBrand"
+                                                                name="equipmentBrand"
+                                                                type="select"
+                                                                value={equipmentBrand}
+                                                                onChange={(e) => setEquipmentBrand(e.target.value)}
+                                                            >
+                                                                {
+                                                                    tabletsList.map((tabletData, index) => (
+                                                                        <option value={tabletData.brandName} key={index}>{tabletData.brandName}</option>
+                                                                    ))
+                                                                }
+                                                            </Input>
+                                                        </FormGroup>
+                                                        :
+                                                        <FormGroup>
+                                                            <Label for="typeOfEquipment">Marca del smartWatch*</Label>
+                                                            <Input
+                                                                required
+                                                                id="equipmentBrand"
+                                                                name="equipmentBrand"
+                                                                type="select"
+                                                                value={equipmentBrand}
+                                                                onChange={(e) => setEquipmentBrand(e.target.value)}
+                                                            >
+                                                                {
+                                                                    smartWatchesList.map((smartWatchData, index) => (
+                                                                        <option value={smartWatchData.brandName} key={index}>{smartWatchData.brandName}</option>
+                                                                    ))
+                                                                }
+                                                            </Input>
+                                                        </FormGroup>
                                         }
                                         <FormGroup>
                                             <Label for="modelOrReference">Modelo o referencia dispositivo*</Label>
@@ -661,14 +741,9 @@ export default function RequestRetomaForm() {
                                                         <span className="sr-only">Cargando...</span>
                                                     </button>
                                                 ) : (
-                                                    computersList.some(e => e.brandName == equipmentBrand) || cellphoneList.some(e => e.brandName == equipmentBrand) ? (
-                                                        <Button color="celuparts-dark-blue " className='btn btn-primary'>
-                                                            Enviar
-                                                        </Button>
-                                                    ) :
-                                                        <Button color="celuparts-dark-blue " className='btn btn-primary' disabled>
-                                                            Enviar
-                                                        </Button>
+                                                    <Button color="celuparts-dark-blue " className='btn btn-primary'>
+                                                        Enviar
+                                                    </Button>
                                                 )
                                             }
                                             <Button className='btn btn-danger justify-content-end' onClick={handleCancel}>

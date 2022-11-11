@@ -4,6 +4,7 @@ import {
     Card,
     Row,
     Col,
+    Table,
     CardTitle,
     CardSubtitle,
     CardBody,
@@ -14,12 +15,21 @@ import {
     Input,
 } from "reactstrap";
 import DatePicker from 'react-datepicker';
+import Swal from 'sweetalert2'
 import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import getSingleRepair from '../../services/getSingleRepair';
 import putRepair from '../../services/putRepair';
 import getRequestNotification from '../../services/getRequestNotification';
 import putRequestNotification from '../../services/putRequestNotification';
+import getTechnicianByEmail from '../../services/getTechnicianByEmail';
+import getPartsInfo from '../../services/getPartsInfo';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import getSearchRepeatedPartsToRepair from '../../services/getSearchRepeatedPartsToRepair';
+import postPartsToRepair from '../../services/postPartsToRepair';
+import putPartsToRepair from '../../services/putPartsToRepair';
+import getPartsToRepairByIdRepair from '../../services/getPartsToRepairByIdRepair';
+import deletePartsToRepairByIdRequestAndPart from '../../services/deletePartsToRepairByIdRequestAndPart';
 
 export default function UpdateRepairForm() {
     const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
@@ -40,13 +50,107 @@ export default function UpdateRepairForm() {
     const [loading, setLoading] = useState(false);
     const [loadingPut, setLoadingPut] = useState(false);
 
+    const [isRepairStarted, setIsRepairStarted] = useState(false)
+    const [isRepairFinished, setIsRepairFinished] = useState(false)
+
+    //Control de los checkbox de la tabla de partes
+    const [listOfParts, setListOfParts] = useState([])
+    const [listOfReplaceCheckedParts, setListOfReplaceCheckedParts] = useState([])
+    const [listOfRepairCheckedParts, setListOfRepairCheckedParts] = useState([])
+    const [listOfUncheckedParts, setListOfUncheckedParts] = useState([])
+
     const params = useParams()
     const navigate = useNavigate()
 
+    /*
+    *   Usado para verificar que el usuario logeado sea tecnico, en caso que lo sea
+    *   no mostrara el input de "Id de tecnico asociado" dado que lo tomara automaticamente
+    */
+    const [isTechnician, setIsTechnician] = useState(false)
+
+    const postListOfRepairCheckedParts = () => {
+        listOfRepairCheckedParts.map((repariPart) => (
+            getSearchRepeatedPartsToRepair({
+                idRepair: params.id,
+                partName: repariPart
+            })
+                .then(responseSearchRepeated => {
+                    console.log("responseSearchRepeated status: ", responseSearchRepeated.status)
+                    if (responseSearchRepeated.status == 404) {
+                        postPartsToRepair({
+                            idRepair: params.id,
+                            part: repariPart,
+                            toReplace: false,
+                            toRepair: true
+                        })
+                            .catch(error => {
+                                console.log("Error post partToRepair", error)
+                            })
+                    } else {
+                        console.log("Es nueva registro ", responseSearchRepeated)
+                        putPartsToRepair({
+                            idPartsToRepair: responseSearchRepeated[0].idPartsToRepair,
+                            idRepair: responseSearchRepeated[0].idRepair,
+                            part: responseSearchRepeated[0].part,
+                            toReplace: false,
+                            toRepair: true
+                        })
+                            .catch(error => {
+                                console.log("Error put partsToRepair", error)
+                            })
+                    }
+                })
+        ))
+    }
+
+    const postListOfReplaceCheckedParts = () => {
+        listOfReplaceCheckedParts.map((repariPart) => (
+            getSearchRepeatedPartsToRepair({
+                idRepair: params.id,
+                partName: repariPart
+            })
+                .then(responseSearchRepeated => {
+                    console.log("responseSearchRepeated status: ", responseSearchRepeated.status)
+                    if (responseSearchRepeated.status == 404) {
+                        postPartsToRepair({
+                            idRepair: params.id,
+                            part: repariPart,
+                            toReplace: true,
+                            toRepair: false
+                        })
+                            .catch(error => {
+                                console.log("Error post partToRepair", error)
+                            })
+                    } else {
+                        console.log("Es nueva registro ", responseSearchRepeated)
+                        putPartsToRepair({
+                            idPartsToRepair: responseSearchRepeated[0].idPartsToRepair,
+                            idRepair: responseSearchRepeated[0].idRepair,
+                            part: responseSearchRepeated[0].part,
+                            toReplace: true,
+                            toRepair: false
+                        })
+                            .catch(error => {
+                                console.log("Error put partsToRepair", error)
+                            })
+                    }
+                })
+        ))
+    }
+
+    const postUnCheckedParts = () => {
+        listOfUncheckedParts.map((uncheckedPart) => (
+            deletePartsToRepairByIdRequestAndPart({
+                idRepair: params.id,
+                partName: uncheckedPart
+            })
+        ))
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log("lista de UNCHECKED", listOfUncheckedParts)
         setLoadingPut(true);
-        console.log(repairDate.repairDate)
         nullFinishDateArrived && nullStartDateArrived ? (
             //PRODUCTO REVISADO SIN SER ACEPTADA LA COTIZACION
             putRepair({
@@ -59,6 +163,9 @@ export default function UpdateRepairForm() {
                 repairQuote: repairQuote.repairQuote,
             })
                 .then(data => {
+                    postListOfRepairCheckedParts();
+                    postListOfReplaceCheckedParts();
+                    postUnCheckedParts();
                     notifications.map(tdata => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
@@ -104,6 +211,9 @@ export default function UpdateRepairForm() {
             })
                 .then(data => {
                     console.log(data)
+                    postListOfRepairCheckedParts();
+                    postListOfReplaceCheckedParts();
+                    postUnCheckedParts();
                     notifications.map(tdata => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
@@ -116,7 +226,7 @@ export default function UpdateRepairForm() {
                                 .then(response => {
                                     console.log("Exito!", response)
                                 })
-                                .then(finalResponse => {
+                                .finally(finalResponse => {
                                     Swal.fire({
                                         icon: 'success',
                                         title: 'Exito!',
@@ -137,7 +247,7 @@ export default function UpdateRepairForm() {
                     console.log(error);
                     setLoadingPut(false);
                 })
-        ) : nullStartDateArrived  && !nullFinishDateArrived ? (
+        ) : nullStartDateArrived && !nullFinishDateArrived ? (
             putRepair({
                 idRepair: params.id,
                 idRequest: idRequest.idRequest,
@@ -149,6 +259,9 @@ export default function UpdateRepairForm() {
             })
                 .then(data => {
                     console.log(data)
+                    postListOfRepairCheckedParts();
+                    postListOfReplaceCheckedParts();
+                    postUnCheckedParts();
                     notifications.map(tdata => (
                         tdata.idRequest === idRequest.idRequest ? (
                             putRequestNotification({
@@ -161,7 +274,7 @@ export default function UpdateRepairForm() {
                                 .then(response => {
                                     console.log("Exito!", response)
                                 })
-                                .then(finalResponse => {
+                                .finally(finalResponse => {
                                     Swal.fire({
                                         icon: 'success',
                                         title: 'Exito!',
@@ -194,9 +307,12 @@ export default function UpdateRepairForm() {
                 repairQuote: repairQuote.repairQuote,
             })
                 .then(data => {
+                    postListOfRepairCheckedParts();
+                    postListOfReplaceCheckedParts();
+                    postUnCheckedParts();
                     setLoadingPut(false);
                 })
-                .then(finalResponse => {
+                .finally(finalResponse => {
                     Swal.fire({
                         icon: 'success',
                         title: 'Exito!',
@@ -216,33 +332,66 @@ export default function UpdateRepairForm() {
         setLoading(true);
         getSingleRepair({ id: params.id })
             .then(response => {
-                setIdTechnician({ idTechnician: response.idTechnician })
-                setDeviceDiagnostic({ deviceDiagnostic: response.deviceDiagnostic })
-                setRepairQuote({ repairQuote: response.repairQuote })
-                setIdRequest({ idRequest: response.idRequest })
+                console.log("response single repair", response)
+                setIdTechnician({ idTechnician: response[0].idTechnician })
+                setDeviceDiagnostic({ deviceDiagnostic: response[0].deviceDiagnostic })
+                setRepairQuote({ repairQuote: response[0].repairQuote })
+                setIdRequest({ idRequest: response[0].idRequest })
 
-                if (response.repairDate === null) {
+                if (response[0].repairDate == null) {
                     setIsRepairDateNull({ isRepairDateNull: true })
                     setRepairDate({ repairDate: new Date() })
                     setNullFinishDateArrived(true)
                 }
                 else {
                     setIsRepairDateNull({ isRepairDateNull: false })
-                    setRepairDate({ repairDate: new Date(response.repairDate) })
+                    setRepairDate({ repairDate: new Date(response[0].repairDate) })
                 }
 
-                if (response.repairStartDate === null) {
+                if (response[0].repairStartDate == null) {
                     setIsRepairStartDateNull({ isRepairStartDateNull: true })
                     setRepairStartDate({ repairStartDate: new Date() })
                     setNullStartDateArrived(true)
                 } else {
                     setIsRepairStartDateNull({ isRepairStartDateNull: false })
-                    setRepairStartDate({ repairStartDate: new Date(response.repairStartDate) })
+                    setRepairStartDate({ repairStartDate: new Date(response[0].repairStartDate) })
                 }
+
+                if (JSON.parse(localStorage.getItem('user')).role == "tecnico") {
+                    getTechnicianByEmail({ email: JSON.parse(localStorage.getItem('user')).email })
+                        .then(responseTechnicianInfo => {
+                            setIdTechnician({ idTechnician: responseTechnicianInfo.idTechnician })
+                        })
+                    setIsTechnician(true)
+                } else {
+                    setIsTechnician(false)
+                }
+
                 getRequestNotification()
                     .then(response => {
                         setNotifications(response)
-                        setLoading(false);
+                        getPartsInfo()
+                            .then(responsePartsInfo => {
+                                setListOfParts(responsePartsInfo)
+                                console.log("parts info ", responsePartsInfo)
+                                getPartsToRepairByIdRepair({
+                                    id: params.id,
+                                })
+                                    .then(responsePartsToRepairByIdRepair => {
+                                        console.log(responsePartsToRepairByIdRepair)
+                                        responsePartsToRepairByIdRepair.map((part) => (
+                                            part.toRepair == true ? setListOfRepairCheckedParts(array => [...array, part.part]) : setListOfReplaceCheckedParts(array => [...array, part.part])
+                                        ))
+                                        setLoading(false)
+                                    })
+                                    .catch(error => {
+                                        console.log(error)
+                                    })
+                            })
+                            .catch(error => {
+                                console.log(error)
+                                setLoading(false)
+                            })
                     })
                     .catch(error => {
                         console.log(error)
@@ -277,6 +426,40 @@ export default function UpdateRepairForm() {
         }));
     }
 
+    const handleStartRepairCheck = (e) => {
+        setIsRepairStarted(!isRepairStarted)
+        setRepairStartDate({ repairStartDate: new Date() })
+        setNullStartDateArrived(!nullStartDateArrived)
+    }
+
+    const handleFinishRepairCheck = (e) => {
+        setIsRepairFinished(!isRepairFinished)
+        setRepairDate({ repairDate: new Date() })
+        setNullFinishDateArrived(!nullFinishDateArrived)
+    }
+
+    const handleAddReplace = (e, partName) => {
+        if (e.target.checked) {
+            setListOfReplaceCheckedParts(array => [...array, partName])
+            setListOfUncheckedParts(current => current.filter((name) => name != partName))
+        } else {
+            // console.log('⛔️ Checkbox is NOT checked');
+            setListOfReplaceCheckedParts(current => current.filter((name) => name != partName))
+            setListOfUncheckedParts(array => [...array, partName])
+        }
+    }
+
+    const handleAddRepair = (e, partName) => {
+        if (e.target.checked) {
+            setListOfRepairCheckedParts(array => [...array, partName])
+            setListOfUncheckedParts(current => current.filter((name) => name != partName))
+        } else {
+            // console.log('⛔️ Checkbox is NOT checked');
+            setListOfRepairCheckedParts(current => current.filter((name) => name != partName))
+            setListOfUncheckedParts(array => [...array, partName])
+        }
+    }
+
     const handleBackPage = (e) => {
         navigate(-1)
     }
@@ -300,18 +483,23 @@ export default function UpdateRepairForm() {
                                             <i className="bi bi-eyeglasses"> </i>
                                             <strong>Datos de la reparación</strong>
                                         </CardSubtitle>
-                                        <FormGroup>
-                                            <Label for="idTechnician">Id de tecnico asociado</Label>
-                                            <Input
-                                                id="idTechnician"
-                                                name="idTechnician"
-                                                placeholder="Ingrese el ID del técnico asociado a esta reparación"
-                                                type="number"
-                                                value={idTechnician.idTechnician}
-                                                onChange={handleIdTechnicianChange}
-                                                required
-                                            />
-                                        </FormGroup>
+                                        {
+                                            isTechnician ? null :
+                                                (
+                                                    <FormGroup>
+                                                        <Label for="idTechnician">Id de tecnico asociado</Label>
+                                                        <Input
+                                                            id="idTechnician"
+                                                            name="idTechnician"
+                                                            placeholder="Ingrese el ID del técnico asociado a esta reparación"
+                                                            type="number"
+                                                            value={idTechnician.idTechnician}
+                                                            onChange={handleIdTechnicianChange}
+                                                            required
+                                                        />
+                                                    </FormGroup>
+                                                )
+                                        }
                                         <FormGroup>
                                             <Label for="deviceDiagnostic">Diagnostico del dispositivo</Label>
                                             <Input
@@ -325,75 +513,54 @@ export default function UpdateRepairForm() {
                                             />
                                         </FormGroup>
 
-                                        {
-                                            isRepairStartDateNull.isRepairStartDateNull ? (
-                                                <FormGroup>
-                                                    <Label for="repairStartDate">Ingrese la fecha de inicio de la reparación</Label>
-                                                    <DatePicker
-                                                        id='repairStartDate'
-                                                        dateFormat="yyyy-MM-dd h:mm aa"
-                                                        showTimeSelect
-                                                        value={repairStartDate.repairStartDate}
-                                                        selected={repairStartDate.repairStartDate}
-                                                        onChange={(date) => {
-                                                            setRepairStartDate({ repairStartDate: date })
-                                                            setNullStartDateArrived(false)
-                                                        }}
-                                                        required
-                                                        timeFormat="HH:mm"
-                                                    />
-                                                </FormGroup>
-                                            ) : (
-                                                <FormGroup>
-                                                    <Label for="repairStartDate">Edite la fecha de inicio de la reparación</Label>
-                                                    <DatePicker
-                                                        id='repairStartDate'
-                                                        dateFormat="yyyy-MM-dd h:mm aa"
-                                                        showTimeSelect
-                                                        value={repairStartDate.repairStartDate}
-                                                        selected={repairStartDate.repairStartDate}
-                                                        onChange={(date) => setRepairStartDate({ repairStartDate: date })}
-                                                        required
-                                                        timeFormat="HH:mm"
-                                                    />
-                                                </FormGroup>
-                                            )
-                                        }
+                                        <FormGroup check>
+                                            <Input disabled={!isRepairStartDateNull.isRepairStartDateNull} type='checkbox' onClick={handleStartRepairCheck} />
+                                            <Label check>He empezado mi labor de reparación</Label>
+                                        </FormGroup>
 
-                                        {
-                                            isRepairDateNull.isRepairDateNull ? (
-                                                <FormGroup>
-                                                    <Label for="repairDate">Ingrese la fecha de finalización de la reparación</Label>
-                                                    <DatePicker
-                                                        id='repairDate'
-                                                        dateFormat="yyyy-MM-dd h:mm aa"
-                                                        showTimeSelect
-                                                        value={repairDate.repairDate}
-                                                        selected={repairDate.repairDate}
-                                                        onChange={(date) => {
-                                                            setRepairDate({ repairDate: date })
-                                                            setNullFinishDateArrived(false)
-                                                        }}
-                                                        required
-                                                        timeFormat="HH:mm"
-                                                    />
-                                                </FormGroup>
-                                            ) : (
-                                                <FormGroup>
-                                                    <Label for="repairDate">Edite la fecha de finalización de la reparación</Label>
-                                                    <DatePicker
-                                                        id='repairDate'
-                                                        dateFormat="yyyy-MM-dd h:mm aa"
-                                                        showTimeSelect
-                                                        value={repairDate.repairDate}
-                                                        selected={repairDate.repairDate}
-                                                        onChange={(date) => setRepairDate({ repairDate: date })}
-                                                        required
-                                                        timeFormat="HH:mm"
-                                                    />
-                                                </FormGroup>
-                                            )
-                                        }
+                                        <FormGroup check>
+                                            <Input disabled={!isRepairDateNull.isRepairDateNull || isRepairStartDateNull.isRepairStartDateNull} type='checkbox' onClick={handleFinishRepairCheck} />
+                                            <Label check>He terminado mi reparación exitosamente</Label>
+                                        </FormGroup>
+
+                                        <FormGroup>
+                                            {/* {
+                                                    listOfParts.map((part, index) => (
+                                                        <div key={index}>{part.partName}</div>
+                                                    ))
+                                                } */}
+                                            <Table striped responsive>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Parte</th>
+                                                        <th scope="col">Reemplazar</th>
+                                                        <th scope="col">Reparar</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        listOfParts.map((part, index) => (
+                                                            <tr key={index} className="border-top">
+                                                                <td>{part.partName}</td>
+                                                                <td>
+                                                                    <Input type='checkbox' 
+                                                                    checked={listOfReplaceCheckedParts.some(x => x == part.partName)} 
+                                                                    disabled={listOfRepairCheckedParts.some(x => x == part.partName)} 
+                                                                    onChange={(e) => handleAddReplace(e, part.partName)} 
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <Input type='checkbox'
+                                                                    checked={listOfRepairCheckedParts.some(x => x == part.partName)}
+                                                                    disabled={listOfReplaceCheckedParts.some(x => x == part.partName)} 
+                                                                    onChange={(e) => handleAddRepair(e, part.partName)} />
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    }
+                                                </tbody>
+                                            </Table>
+                                        </FormGroup>
 
                                         {
                                             JSON.parse(localStorage.getItem('user')).role == "admin" || JSON.parse(localStorage.getItem('user')).role == "aux_admin" ?

@@ -128,6 +128,7 @@ export default function RepairPaymentForm() {
                                         >
                                             <option>Contraentrega</option>
                                             <option>Transferencia bancaria</option>
+                                            <option value={"Datafono"}>Datáfono</option>
                                         </Input>
                                     </FormGroup>
                                     {/* <FormGroup>

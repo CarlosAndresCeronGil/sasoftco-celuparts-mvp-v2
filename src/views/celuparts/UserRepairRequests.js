@@ -12,6 +12,7 @@ import getSingleEquipment from '../../services/getSingleEquipment'
 import putRequestStatus from '../../services/putRequestStatus';
 import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import { Link } from "react-router-dom";
+import putHomeServiceByIdRequest from '../../services/putHomeServiceByIdRequest';
 
 export default function UserRepairRequests() {
     const [userInfo, setUserInfo] = useState([])
@@ -41,7 +42,11 @@ export default function UserRepairRequests() {
         });
     };
 
-
+    const addDays = (date, days) => {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
 
     useEffect(function () {
         setLoading(true);
@@ -75,7 +80,8 @@ export default function UserRepairRequests() {
                     requestType: response[0].requestType,
                     pickUpAddress: response[0].pickUpAddress,
                     deliveryAddress: response[0].deliveryAddress,
-                    statusQuote: "Aceptada"
+                    statusQuote: "Aceptada",
+                    autoDiagnosis: response[0].autoDiagnosis
                 })
                     .then(response => {
                         setShowButtons(false);
@@ -135,7 +141,8 @@ export default function UserRepairRequests() {
                             requestType: "Retoma",
                             pickUpAddress: response[0].pickUpAddress,
                             deliveryAddress: response[0].deliveryAddress,
-                            statusQuote: "Pendiente"
+                            statusQuote: "Pendiente",
+                            autoDiagnosis: response[0].autoDiagnosis
                         })
                             .then(data => {
                                 /* --- EMPIEZA NUEVA RETOMA --- */
@@ -218,7 +225,8 @@ export default function UserRepairRequests() {
                             requestType: response[0].requestType,
                             pickUpAddress: response[0].pickUpAddress,
                             deliveryAddress: response[0].deliveryAddress,
-                            statusQuote: "Rechazada"
+                            statusQuote: "Rechazada",
+                            autoDiagnosis: response[0].autoDiagnosis
                         })
                             .then(response2 => {
                                 console.log(response2);
@@ -232,12 +240,16 @@ export default function UserRepairRequests() {
                                                 putRequestNotification({
                                                     idRequestNotification: tdata.idRequestNotification,
                                                     idRequest: id,
-                                                    message: "El cliente del producto " + responseE.equipmentBrand + " " + responseE.modelOrReference + " rechazó el valor de reparación, devolver a la dirección: " + response[0].deliveryAddress,
+                                                    message: "El cliente del producto " + responseE.equipmentBrand + " " + responseE.modelOrReference + " rechazó el valor de reparación, devolver a la dirección: " + response[0].deliveryAddress + " el día: " + (addDays(new Date(), 1)).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }),
                                                     wasReviewed: false,
                                                     notificationType: "to_courier"
                                                 })
                                                     .then(response3 => {
                                                         console.log("exito put request notification", response3)
+                                                        putHomeServiceByIdRequest({
+                                                            idRequest: tdata.idRequest,
+                                                            deliveryDate: addDays(new Date(), 1)
+                                                        })
                                                     })
                                                     .catch(error => {
                                                         console.log(error)
@@ -267,11 +279,16 @@ export default function UserRepairRequests() {
                             .catch(error => {
                                 console.log(error)
                             })
+                            .finally(finalPutRequest => {
+                                Swal.fire('Cotización rechazada, tu producto será devuelto en las siguientes 24 horas', '', 'info')
+                            })
                     })
                     .catch(error => {
                         console.log(error);
                     })
-                Swal.fire('Cotización rechazada', '', 'info')
+                    .finally(final => {
+                        Swal.fire('Cotización rechazada, tu producto será devuelto en las siguientes 24 horas', '', 'info')
+                    })
             }
         })
     }
@@ -304,7 +321,7 @@ export default function UserRepairRequests() {
                                                 {tdata.equipment?.equipmentBrand} {tdata.equipment?.modelOrReference}
                                             </td>
                                             <td>{tdata.requestStatus[0].status}</td>
-                                            <td>{tdata.repairs[0].repairQuote}</td>
+                                            <td>{tdata.repairs[0].repairQuote == "0" ? "Pendiente" : tdata.repairs[0].repairQuote}</td>
                                             <td>
 
                                                 {

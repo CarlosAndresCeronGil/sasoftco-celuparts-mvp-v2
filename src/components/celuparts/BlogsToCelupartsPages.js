@@ -45,6 +45,12 @@ const cardsUser = [
     subtitle: 'El sitío perfecto donde podrás comprar al mejor precio los dispositivos que buscas!.',
     href: 'https://celuparts.co/'
   },
+  {
+    img: misNotificaciones,
+    title: 'Mis notificaciones',
+    subtitle: 'Página en donde podras ver tus notificaciones referentes a procesos nuevos o actualizaciones de tus solicitudes.',
+    href: '/home/user-alerts',
+  },
   // {
   //   img: blog2,
   //   title: 'Instagram.',

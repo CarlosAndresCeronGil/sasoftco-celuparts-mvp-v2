@@ -34,6 +34,7 @@ import getRequestRepairs from '../../services/getRequestRepairs';
 import ComponentCard from '../../components/ComponentCard';
 import getSingleRequest from '../../services/getSingleRequest';
 import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
+import getAllBrandsDistinct from '../../services/getAllBrandsDistinct';
 
 export default function RepairRequestsTable() {
     const [requests, setRequests] = useState([])
@@ -60,6 +61,7 @@ export default function RepairRequestsTable() {
     const [userDtoSurname, setUserDtoSurname] = useState('')
     const [equipmentBrand, setEquipmentBrand] = useState('')
     const [equipmentModel, setEquipmentModel] = useState('')
+    const [listOfBrands, setListOfBrands] = useState([])
 
     //Variables auxiliares
     const [formattedInitialDate, setFormattedInitialDate] = useState('0001-1-1')
@@ -71,7 +73,15 @@ export default function RepairRequestsTable() {
             .then((response) => {
                 console.log(response)
                 setRequests(response)
-                setLoading(false)
+                getAllBrandsDistinct()
+                    .then(responseAllBrandsDistinct => {
+                        setListOfBrands(responseAllBrandsDistinct)
+                        setLoading(false)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        setLoading(false)
+                    })
             })
             .catch(error => {
                 console.log(error)
@@ -84,9 +94,12 @@ export default function RepairRequestsTable() {
         //Se consulta desde una fecha inicial hasta una fecha final
         setLoading(true)
 
-        console.log("desde: " + formattedInitialDate + " hasta: " + formattedFinallDate)
-
-        getRequestRepairs({ page: 1, initialDate: formattedInitialDate, finalDate: formattedFinallDate, requestStatus: requestStatus, userDtoIdNumber: userDtoIdNumber, userDtoName: userDtoName, userDtoSurname: userDtoSurname, equipmentBrand: equipmentBrand, equipmentModel: equipmentModel })
+        getRequestRepairs({
+            page: 1,
+            initialDate: initialDate.initialDate != null ? `${initialDate.initialDate.getFullYear()}-${initialDate.initialDate.getMonth() + 1}-${initialDate.initialDate.getDate()}` : formattedInitialDate,
+            finalDate: finalDate.finalDate != null ? `${finalDate.finalDate.getFullYear()}-${finalDate.finalDate.getMonth() + 1}-${finalDate.finalDate.getDate()}` : formattedFinallDate,
+            requestStatus: requestStatus, userDtoIdNumber: userDtoIdNumber, userDtoName: userDtoName, userDtoSurname: userDtoSurname, equipmentBrand: equipmentBrand, equipmentModel: equipmentModel
+        })
             .then((response) => {
                 setRequests(response)
                 setLoading(false)
@@ -118,7 +131,30 @@ export default function RepairRequestsTable() {
         setCurrentImeiOrSerial(imeiOrSerial)
         setCurrentClientPhone(clientPhone)
         setCurrentRepairQuote(repairQuote)
-        setCurrentDeliveryDate(deliveryDate)
+        setCurrentDeliveryDate(deliveryDate != null ? deliveryDate : 'Sin definir')
+    }
+
+    const handleCleanFilters = () => {
+        setInitialDate({ initialDate: null })
+        setFinalDate({ finalDate: null })
+        setFormattedInitialDate('0001-1-1')
+        setFormattedFinalDate('0001-1-1')
+        setRequestStatus('')
+        setUserDtoIdNumber('')
+        setUserDtoName('')
+        setUserDtoSurname('')
+        setEquipmentBrand('')
+        setEquipmentModel('')
+    }
+
+    const handleChangeInitialDate = (date) => {
+        // setFormattedInitialDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
+        setInitialDate({ initialDate: date })
+    }
+
+    const handleChangeFinalDate = (date) => {
+        // setFormattedFinalDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
+        setFinalDate({ finalDate: date })
     }
 
     return (
@@ -140,10 +176,8 @@ export default function RepairRequestsTable() {
                                                 dateFormat="yyyy-MM-dd"
                                                 value={initialDate.initialDate}
                                                 selected={initialDate.initialDate}
-                                                onChange={(date) => {
-                                                    setFormattedInitialDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
-                                                    setInitialDate({ initialDate: date })
-                                                }}
+                                                onChange={(date) => handleChangeInitialDate(date)}
+                                                isClearable
                                                 showDisabledMonthNavigation
                                             />
                                         </div>
@@ -156,10 +190,8 @@ export default function RepairRequestsTable() {
                                             dateFormat="yyyy-MM-dd"
                                             value={finalDate.finalDate}
                                             selected={finalDate.finalDate}
-                                            onChange={(date) => {
-                                                setFormattedFinalDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
-                                                setFinalDate({ finalDate: date })
-                                            }}
+                                            onChange={(date) => handleChangeFinalDate(date)}
+                                            isClearable
                                             showDisabledMonthNavigation
                                         />
                                     </Col>
@@ -213,8 +245,15 @@ export default function RepairRequestsTable() {
                                                 id='equipmentBrand'
                                                 value={equipmentBrand}
                                                 onChange={(e) => setEquipmentBrand(e.target.value)}
-                                                type='text'
-                                            />
+                                                type='select'
+                                            >
+                                                <option value=''>SIN FILTRO</option>
+                                                {
+                                                    listOfBrands.map((brand, index) => (
+                                                        <option key={index}>{brand}</option>
+                                                    ))
+                                                }
+                                            </Input>
                                         </div>
                                     </Col>
                                     <Label sm="1">Modelo</Label>
@@ -264,6 +303,9 @@ export default function RepairRequestsTable() {
                             <Button>
                                 Consultar
                             </Button>
+                            <Button className='m-1' onClick={handleCleanFilters}>
+                                Limpiar
+                            </Button>
                         </div>
                     </Form>
                 </ComponentCard>
@@ -275,10 +317,13 @@ export default function RepairRequestsTable() {
                             <tr>
                                 <th>Nombre cliente</th>
                                 <th>Fecha solicitud</th>
+                                <th>Datos equipo</th>
                                 <th>Estado de cotización</th>
                                 <th>Estado de solicitud</th>
                                 <th>Técnico asociado</th>
+                                <th>Cuota de reparación</th>
                                 <th>Tiempo de servicio de reparación</th>
+                                <th>Fecha de entrega</th>
                                 <th>Actualizar estado Solicitud</th>
                                 {
                                     JSON.parse(localStorage.getItem('user')).role === "mensajero" ? (
@@ -303,16 +348,18 @@ export default function RepairRequestsTable() {
                                     <tr key={index} className="border-top">
                                         <td>{tdata.userDto.names} {tdata.userDto.surnames}</td>
                                         <td>{`${new Date(tdata.requestDate).getFullYear()}-${new Date(tdata.requestDate).getMonth() + 1}-${new Date(tdata.requestDate).getDate()}`}</td>
-                                        {/* <td>{tdata.equipment.equipmentBrand} {tdata.equipment.modelOrReference}</td>
-                                        <td>{tdata.pickUpAddress}</td>
+                                        <td>{tdata.equipment.equipmentBrand} {tdata.equipment.modelOrReference}</td>
+                                        {/* <td>{tdata.pickUpAddress}</td>
                                         <td>{tdata.deliveryAddress}</td> */}
                                         <td>{tdata.statusQuote}</td>
                                         <td>{tdata.requestStatus[0].status}</td>
-                                        <td>{ tdata.repairs[0].technician != null ? tdata.repairs[0].technician.names + " " + tdata.repairs[0].technician.surnames : "Sin técnico asociado" }</td>
-                                        <td>{ tdata.repairs[0].repairTime != null ? tdata.repairs[0].repairTime : "Sin registrar" }</td>
+                                        <td>{tdata.repairs[0].technician != null ? tdata.repairs[0].technician.names + " " + tdata.repairs[0].technician.surnames : "Sin técnico asociado"}</td>
+                                        <td>{tdata.repairs[0].repairQuote}</td>
+                                        <td>{tdata.repairs[0].repairTime != null ? tdata.repairs[0].repairTime : "Sin registrar"}</td>
+                                        <td>{tdata.homeServices[0].deliveryDate != null ? (new Date(tdata.homeServices[0].deliveryDate)).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }) : "Sin definir"}</td>
                                         <td>
                                             <Link to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}>
-                                                <Button type='button' className="btn" color='primary'>Actualizar</Button>
+                                                <Button type='button' className="btn" color='primary'><i className="bi bi-pencil-fill"></i></Button>
                                             </Link>
                                         </td>
                                         {
@@ -328,11 +375,12 @@ export default function RepairRequestsTable() {
                                                             tdata.requestStatus[0].status === 'Devuelto sin reparacion' ||
                                                             tdata.requestStatus[0].status === 'Abandonada' ||
                                                             tdata.requestStatus[0].status === 'Terminada' ||
+                                                            tdata.requestStatus[0].status === 'Anulado por IMEI' ||
                                                             tdata.requestStatus[0].status === 'En camino' ? (
-                                                            <button type='button' className="btn btn-secondary" disabled>Actualizar</button>
+                                                            <button type='button' className="btn btn-secondary" disabled><i className="bi bi-pencil-fill"></i></button>
                                                         ) : (
                                                             <Link to={`/home/update-repair-form/${tdata.repairs[0].idRepair}`}>
-                                                                <Button type='button' className="btn" color='primary'>Actualizar</Button>
+                                                                <Button type='button' className="btn" color='primary'><i className="bi bi-pencil-fill"></i></Button>
                                                             </Link>
                                                         )
                                                     }
@@ -352,12 +400,12 @@ export default function RepairRequestsTable() {
                                                             tdata.requestStatus[0].status === 'Terminada' ||
                                                             tdata.requestStatus[0].status === 'En camino' ? (
                                                             <button className='btn btn-secondary' type='button' disabled>
-                                                                Actualizar
+                                                                <i className="bi bi-pencil-fill"></i>
                                                             </button>
                                                         ) : (
                                                             <Link to={`/home/repair-payment-form/${tdata.repairs[0].repairPayments[0].idRepairPayment}`}>
                                                                 <Button className='btn' color='primary'>
-                                                                    Actualizar
+                                                                    <i className="bi bi-pencil-fill"></i>
                                                                 </Button>
                                                             </Link>
                                                         )
@@ -377,8 +425,8 @@ export default function RepairRequestsTable() {
                                                 clientPhone: tdata.userDto.phone,
                                                 repairQuote: tdata.repairs[0].repairQuote,
                                                 deliveryDate: tdata.homeServices[0].deliveryDate
-                                            }).bind(null)} >
-                                                Detalles
+                                            })} >
+                                                <i className="bi bi-search"></i>
                                             </Button>
                                         </td>
                                     </tr>
@@ -444,7 +492,11 @@ export default function RepairRequestsTable() {
                                     Fecha de entrega:
                                 </span>
                             </div>
-                            {new Date(currentDeliveryDate).toLocaleDateString('es', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric" })}
+                            {
+                                currentDeliveryDate != "Sin definir" ?
+                                    new Date(currentDeliveryDate).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" })
+                                    : "Sin definir"
+                            }
                             <hr />
                             <div>
                                 <span className='fw-bold'>
@@ -475,8 +527,5 @@ export default function RepairRequestsTable() {
                     </Modal>
                 </ComponentCard>
             </div>
-
-
-
     )
 }

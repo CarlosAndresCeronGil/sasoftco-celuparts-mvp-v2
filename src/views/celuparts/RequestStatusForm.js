@@ -22,9 +22,10 @@ import putRequestNotification from '../../services/putRequestNotification';
 import putRequestStatus from '../../services/putRequestStatus';
 import Swal from 'sweetalert2'
 import getCelupartsInfo from '../../services/getCelupartsInfo';
-import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import putRequestHistory from '../../services/putRequestHistory';
 import postRequestHistory from '../../services/postRequestHistory';
+import getRequestHistoryByIdRequest from '../../services/getRequestHistoryByIdRequest';
+import putHomeServiceByIdRequest from '../../services/putHomeServiceByIdRequest';
 
 export default function RequestStatusForm() {
     const [dataRequestStatus, setDataRequestStatus] = useState({});
@@ -40,13 +41,126 @@ export default function RequestStatusForm() {
     })
     const [deliveryAddress, setDeliveryAddress] = useState({ deliveryAddress: "" })
     const [deliveryDate, setDeliveryDate] = useState({ deliveryDate: new Date() })
-    console.log('Date: ', deliveryDate.deliveryDate.toLocaleDateString('es', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric" }))
+    console.log('Date: ', deliveryDate.deliveryDate.toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }))
 
     const [celupartsContactPhone, setCelupartsContactPhone] = useState("")
     const [celupartsContactEmail, setCelupartsContactEmail] = useState("")
 
     const [loading, setLoading] = useState(false);
     const [loadingPut, setLoadingPut] = useState(false);
+
+    //En caso de que sea una reparacion, el flujo no debe permitir seguir al estado "En reparacion"
+    const [isRepair, setIsRepair] = useState(false)
+
+    //Usado para filtrar cuales estados no mostrar
+    const [requestHistory, setRequestHistory] = useState([])
+
+    const [currentOption, setCurrentOption] = useState({
+        value: '',
+        toShow: '',
+        priority: 0
+    })
+
+    const options = [
+        {
+            value: "Elija una opcion",
+            toShow: "Elija una opción",
+            priority: -100,
+            showToCourier: true,
+            showToTechnician: true
+        },
+        {
+            value: "Iniciada",
+            toShow: 'Iniciada',
+            priority: 0,
+            showToCourier: true,
+            showToTechnician: true
+        },
+        {
+            value: "En proceso de recogida",
+            toShow: 'En proceso de recogida',
+            priority: 1,
+            showToCourier: true,
+            showToTechnician: false
+        },
+        {
+            value: "Recibida tecnico",
+            toShow: 'Recibida técnico',
+            priority: 2,
+            showToCourier: false,
+            showToTechnician: true
+        },
+        {
+            value: "Revisado",
+            toShow: 'Revisado',
+            priority: 3,
+            showToCourier: false,
+            showToTechnician: true
+        },
+        {
+            value: "En reparacion",
+            toShow: 'En reparación',
+            priority: 4,
+            showToCourier: false,
+            showToTechnician: true
+        },
+        {
+            value: "Reparado pendiente de pago",
+            toShow: 'Reparado, pendiente de pago',
+            priority: 5.1,
+            showToCourier: false,
+            showToTechnician: true
+        },
+        {
+            value: "En camino",
+            toShow: 'En camino',
+            priority: 6,
+            showToCourier: true,
+            showToTechnician: false
+        },
+        {
+            value: "Terminada",
+            toShow: 'Terminada',
+            priority: 7,
+            showToCourier: true,
+            showToTechnician: false
+        },
+        {
+            value: "En devolucion",
+            toShow: 'En devolución',
+            priority: 4,
+            showToCourier: true,
+            showToTechnician: false
+        },
+        {
+            value: "Devuelto sin reparacion",
+            toShow: 'Devuelto sin reparación',
+            priority: 5.2,
+            showToCourier: true,
+            showToTechnician: false
+        },
+        {
+            value: "Retoma",
+            toShow: 'Retoma',
+            priority: 4,
+            showToCourier: false,
+            showToTechnician: false
+        },
+        {
+            value: "Abandonada",
+            toShow: 'Abandonada',
+            priority: -1,
+            showToCourier: false,
+            showToTechnician: false
+        },
+        {
+            value: "Anulado por IMEI",
+            toShow: 'Anulado por IMEI',
+            priority: 2,
+            showToCourier: true,
+            showToTechnician: false
+        },
+    ]
 
     const params = useParams()
     const navigate = useNavigate()
@@ -169,12 +283,17 @@ export default function RequestStatusForm() {
                             putRequestNotification({
                                 idRequestNotification: tdata.idRequestNotification,
                                 idRequest: tdata.idRequest,
-                                message: "Producto " + equipmentData.equipmentBrand + " " + equipmentData.modelOrReference + " para devolución el día " + deliveryDate.deliveryDate.toLocaleDateString('es', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric" }) + " al barrio " + deliveryAddress.deliveryAddress,
+                                // message: "Producto " + equipmentData.equipmentBrand + " " + equipmentData.modelOrReference + " para devolución el día " + deliveryDate.deliveryDate.toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }) + " al barrio " + deliveryAddress.deliveryAddress,
+                                message: "Producto " + equipmentData.equipmentBrand + " " + equipmentData.modelOrReference + " para devolución el día " + (addDays(new Date(), 1)).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }) + " al barrio " + deliveryAddress.deliveryAddress,
                                 wasReviewed: false,
                                 notificationType: "to_courier"
                             })
                                 .then(response => {
                                     console.log("exito!", response)
+                                    putHomeServiceByIdRequest({
+                                        idRequest: tdata.idRequest,
+                                        deliveryDate: addDays(new Date(), 1)
+                                    })
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -273,6 +392,12 @@ export default function RequestStatusForm() {
 
     }
 
+    const addDays = (date, days) => {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
     const handleStatusChange = (e) => {
         setStatus((prev) => ({
             ...prev,
@@ -301,13 +426,19 @@ export default function RequestStatusForm() {
     useEffect(function () {
         setLoading(true);
         getSingleRequestStatus({ id: params.id })
-            .then((response) => {
-                console.log("request status response",response)
-                setDataRequestStatus(response)
-                setIdRequest({ idRequest: response.idRequest })
-                setStatus({ status: response.status })
-                setPaymentStatus({ paymentStatus: response.paymentStatus })
-                setProductReturned({ productReturned: response.productReturned })
+            .then((responseRequestStatus) => {
+                console.log("request status response", responseRequestStatus)
+                responseRequestStatus.request.requestType == "Reparacion" ? setIsRepair(true) : setIsRepair(false)
+                setDataRequestStatus(responseRequestStatus)
+                setIdRequest({ idRequest: responseRequestStatus.idRequest })
+                setStatus({ status: responseRequestStatus.status })
+                setCurrentOption({
+                    value: responseRequestStatus.status,
+                    toShow: options.find(n => n.value === responseRequestStatus.status).toShow,
+                    priority: options.find(n => n.value === responseRequestStatus.status).priority
+                })
+                setPaymentStatus({ paymentStatus: responseRequestStatus.paymentStatus })
+                setProductReturned({ productReturned: responseRequestStatus.productReturned })
                 // getRequestNotificationByIdRequest({idRequest: response.idRequest})
                 //     .then((response) => {
                 //         console.log("requestNotificationByIdRequest:", response)
@@ -315,12 +446,12 @@ export default function RequestStatusForm() {
                 //     .catch(error => {
                 //         console.log("Error in requestNotificationByIdRequest",error)
                 //     })
-                getRequestNotificationByIdRequest({ idRequest: response.idRequest })
+                getRequestNotificationByIdRequest({ idRequest: responseRequestStatus.idRequest })
                     .then(response2 => {
                         setNotifications(response2)
                         /*Esta parte se necesita para el mensaje final al mensajero donde necesita saber fecha, 
                         nombre del producto y direccion de entrega*/
-                        getSingleRequest({ id: response.idRequest })
+                        getSingleRequest({ id: responseRequestStatus.idRequest })
                             .then(response3 => {
                                 setDeliveryDate({ deliveryDate: new Date(response3[0].homeServices[0].deliveryDate) })
                                 setDeliveryAddress({ deliveryAddress: response3[0].deliveryAddress })
@@ -330,7 +461,19 @@ export default function RequestStatusForm() {
                                             equipmentBrand: response.equipmentBrand,
                                             modelOrReference: response.modelOrReference
                                         })
-                                        setLoading(false);
+                                        getRequestHistoryByIdRequest({ id: responseRequestStatus.idRequest })
+                                            .then(responseHistory => {
+                                                setRequestHistory(responseHistory)
+                                                setLoading(false);
+                                            })
+                                            .catch(error => {
+                                                console.log(error)
+                                                setLoading(false)
+                                            })
+                                    })
+                                    .catch(error => {
+                                        console.log(error)
+                                        setLoading(false)
                                     })
                             })
                             .catch(error => {
@@ -358,10 +501,10 @@ export default function RequestStatusForm() {
     }, [params.id, idRequest.idRequest])
 
     return (
-        loading ? <div>Cargando...</div> : 
+        loading ? <div>Cargando...</div> :
             <div>
                 <Button className='btn btn-danger' onClick={handleBackPage}>
-                   Atrás
+                    Atrás
                 </Button>
                 <div>
                     <Row>
@@ -387,16 +530,59 @@ export default function RequestStatusForm() {
                                                         value={status.status}
                                                         onChange={handleStatusChange}
                                                     >
-                                                        <option>Iniciada</option>
-                                                        <option>En proceso de recogida</option>
-                                                        <option>En camino</option>
-                                                        <option value="En devolucion">En devolución</option>
-                                                        <option value="Devuelto sin reparacion">Devuelto sin reparación</option>
-                                                        <option>Terminada</option>
-                                                        <option>Anulado por IMEI</option>
+                                                        {
+                                                            options.map((option, index) => (
+                                                                <option hidden={
+                                                                    (!option.showToCourier) ||
+                                                                    ((currentOption.priority != 4 && currentOption.priority != 5.1) && option.priority > currentOption.priority + 1 && currentOption.value != "En devolucion") ||
+                                                                    ((currentOption.value != "En devolucion" && currentOption.priority != 5.1 && option.priority < currentOption.priority + 1) && !requestHistory.some(n => n.status === option.value)) ||
+                                                                    (option.value == "Elija una opcion") ||
+                                                                    (requestHistory.some(n => n.status === option.value)) ||
+                                                                    (currentOption.priority == 2 && currentOption.value == "Anulado por IMEI" && option.priority >= 2) ||
+                                                                    (currentOption.priority == 4 && currentOption.value == "En reparacion" && option.priority >= 5.2) ||
+                                                                    (currentOption.priority == 4 && currentOption.value == "En devolucion" && ((option.priority == 5.1 || option.priority <= 4) || option.priority > currentOption.priority + 1.2)) ||
+                                                                    (currentOption.priority == 4 && currentOption.value == "Retoma") ||
+                                                                    (currentOption.priority == 5.1 && option.priority != 6)
+                                                                }
+                                                                    value={option.value} key={index}>{option.toShow}</option>
+                                                            ))
+                                                        }
                                                     </Input>
                                                 </FormGroup>
-                                                :
+                                                : JSON.parse(localStorage.getItem('user')).role === "tecnico" ?
+                                                <FormGroup>
+                                                    {
+                                                        !isRepair
+                                                    }
+                                                    <br></br>
+                                                    <Label for="status">Estado solicitud</Label>
+                                                    <Input
+                                                        type="select"
+                                                        name="status"
+                                                        id="status"
+                                                        value={status.status}
+                                                        onChange={handleStatusChange}
+                                                    >
+                                                        {
+                                                            options.map((option, index) => (
+                                                                <option hidden={
+                                                                    (!option.showToTechnician) ||
+                                                                    ((currentOption.priority != 4 && currentOption.priority != 5.1) && option.priority > currentOption.priority + 1 && currentOption.value != "En devolucion") ||
+                                                                    ((currentOption.value != "En devolucion" && currentOption.priority != 5.1 && option.priority < currentOption.priority + 1) && !requestHistory.some(n => n.status === option.value)) ||
+                                                                    (option.value == "Elija una opcion") ||
+                                                                    (requestHistory.some(n => n.status === option.value) && !(!isRepair && requestHistory.some(n => n.status == "Revisado") && option.priority > 2) ) ||
+                                                                    (currentOption.priority == 2 && currentOption.value == "Anulado por IMEI" && option.priority >= 2) ||
+                                                                    (currentOption.priority == 4 && currentOption.value == "En reparacion" && option.priority >= 5.2) ||
+                                                                    (currentOption.priority == 4 && currentOption.value == "En devolucion" && ((option.priority == 5.1 || option.priority <= 4) || option.priority > currentOption.priority + 1.2)) ||
+                                                                    (currentOption.priority == 4 && currentOption.value == "Retoma") ||
+                                                                    (currentOption.priority == 5.1 && option.priority != 6) ||
+                                                                    (!isRepair && option.priority > 3)
+                                                                }
+                                                                    value={option.value} key={index}>{option.toShow}</option>
+                                                            ))
+                                                        }
+                                                    </Input>
+                                                </FormGroup> :
                                                 <FormGroup>
                                                     <Label for="status">Estado solicitud</Label>
                                                     <Input
@@ -406,8 +592,24 @@ export default function RequestStatusForm() {
                                                         value={status.status}
                                                         onChange={handleStatusChange}
                                                     >
-                                                        <option>Iniciada</option>
-                                                        <option>En proceso de recogida</option>
+                                                        {
+                                                            options.map((option, index) => (
+                                                                <option hidden={
+                                                                    ((currentOption.priority != 4 && currentOption.priority != 5.1) && option.priority > currentOption.priority + 1 && currentOption.value != "En devolucion") ||
+                                                                    ((currentOption.value != "En devolucion" && currentOption.priority != 5.1 && option.priority < currentOption.priority + 1) && !requestHistory.some(n => n.status === option.value)) ||
+                                                                    (option.value == "Elija una opcion") ||
+                                                                    (requestHistory.some(n => n.status === option.value)  ) ||
+                                                                    (currentOption.priority == 2 && currentOption.value == "Anulado por IMEI" && option.priority >= 2) ||
+                                                                    (currentOption.priority == 4 && currentOption.value == "En reparacion" && option.priority >= 5.2) ||
+                                                                    (currentOption.priority == 4 && currentOption.value == "En devolucion" && ((option.priority == 5.1 || option.priority <= 4) || option.priority > currentOption.priority + 1.2)) ||
+                                                                    (currentOption.priority == 4 && currentOption.value == "Retoma") ||
+                                                                    (currentOption.priority == 5.1 && option.priority != 6) ||
+                                                                    (!isRepair && option.value == "En reparacion")
+                                                                }
+                                                                    value={option.value} key={index}>{option.toShow}</option>
+                                                            ))
+                                                        }
+                                                        {/* <option>En proceso de recogida</option>
                                                         <option value="Recibida tecnico">Recibida técnico</option>
                                                         <option>Revisado</option>
                                                         <option value="En reparacion">En reparación</option>
@@ -418,12 +620,12 @@ export default function RequestStatusForm() {
                                                         <option value="Devuelto sin reparacion">Devuelto sin reparación</option>
                                                         <option>Retoma</option>
                                                         <option>Abandonada</option>
-                                                        <option>Anulado por IMEI</option>
+                                                        <option>Anulado por IMEI</option> */}
                                                     </Input>
                                                 </FormGroup>
                                         }
                                         {
-                                            JSON.parse(localStorage.getItem('user')).role === "mensajero" ?
+                                            JSON.parse(localStorage.getItem('user')).role === "mensajero" || JSON.parse(localStorage.getItem('user')).role === "tecnico" ?
                                                 null :
                                                 <FormGroup>
                                                     <Label for="paymentStatus">Estado de pago</Label>
@@ -439,19 +641,24 @@ export default function RequestStatusForm() {
                                                     </Input>
                                                 </FormGroup>
                                         }
-                                        <FormGroup>
-                                            <Label for="productReturned">Producto devuelto</Label>
-                                            <Input
-                                                id="productReturned"
-                                                name="productReturned"
-                                                type="select"
-                                                defaultValue={productReturned.productReturned}
-                                                onChange={handleProductReturnedChange}
-                                            >
-                                                <option value={true}>Devuelto</option>
-                                                <option value={false}>No devuelto</option>
-                                            </Input>
-                                        </FormGroup>
+                                        {
+                                            JSON.parse(localStorage.getItem('user')).role === "tecnico" ?
+                                                null :
+                                                <FormGroup>
+                                                    <Label for="productReturned">Producto devuelto</Label>
+                                                    <Input
+                                                        id="productReturned"
+                                                        name="productReturned"
+                                                        type="select"
+                                                        defaultValue={productReturned.productReturned}
+                                                        onChange={handleProductReturnedChange}
+                                                    >
+                                                        <option value={true}>Devuelto</option>
+                                                        <option value={false}>No devuelto</option>
+                                                    </Input>
+                                                </FormGroup>
+
+                                        }
                                         {
                                             loadingPut ? (
                                                 <button className="btn btn-primary" type="button" disabled>
@@ -470,6 +677,5 @@ export default function RequestStatusForm() {
                     </Row>
                 </div>
             </div>
-        
     )
 }

@@ -314,13 +314,17 @@ const SidebarDatas = () => {
         icon: <MaterialIcon icon='speed' />,
         collapisble: true,
         children: [
+          // {
+          //   title: "Reparaciones",
+          //   href: "./repair-requests-table",
+          // },
+          // {
+          //   title: "Retomas",
+          //   href: "./retoma-requests-table",
+          // },
           {
-            title: "Reparaciones",
-            href: "./repair-requests-table",
-          },
-          {
-            title: "Retomas",
-            href: "./retoma-requests-table",
+            title: "Solicitudes",
+            href: "./all-requests-table",
           },
         ]
       }

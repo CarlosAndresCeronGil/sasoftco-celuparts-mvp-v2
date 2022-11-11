@@ -80,7 +80,7 @@ const LoginFormik = () => {
               })
             } else {
               const user = jwtDecode(response)
-              // console.log("user", user);
+              console.log("user", user);
               localStorage.setItem('user', JSON.stringify(user));
               setAuth(true);
               navigate('/home/dashboards/dashboard1');

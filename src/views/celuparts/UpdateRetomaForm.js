@@ -18,6 +18,7 @@ import getSingleRetoma from '../../services/getSingleRetoma';
 import putRetoma from '../../services/putRetoma';
 import getRequestNotification from '../../services/getRequestNotification';
 import putRequestNotification from '../../services/putRequestNotification';
+import getTechnicianByEmail from '../../services/getTechnicianByEmail';
 
 export default function UpdateRetomaForm() {
     const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
@@ -34,6 +35,12 @@ export default function UpdateRetomaForm() {
     const params = useParams()
     const navigate = useNavigate()
 
+    /*
+    *   Usado para verificar que el usuario logeado sea tecnico, en caso que lo sea
+    *   no mostrara el input de "Id de tecnico asociado" dado que lo tomara automaticamente
+    */
+    const [isTechnician, setIsTechnician] = useState(false)
+
     useEffect(function () {
         setLoading(true);
         getSingleRetoma({ id: params.id })
@@ -44,6 +51,16 @@ export default function UpdateRetomaForm() {
                 setRetomaQuote({ retomaQuote: response.retomaQuote })
                 setIdRetoma({ idRetoma: response.idRetoma })
                 setIdRequest({ idRequest: response.idRequest })
+
+                if (JSON.parse(localStorage.getItem('user')).role == "tecnico") {
+                    getTechnicianByEmail({ email: JSON.parse(localStorage.getItem('user')).email })
+                        .then(responseTechnicianInfo => {
+                            setIdTechnician({ idTechnician: responseTechnicianInfo.idTechnician})
+                        })
+                    setIsTechnician(true)
+                } else {
+                    setIsTechnician(false)
+                }
 
                 getRequestNotification()
                     .then(response => {
@@ -127,7 +144,7 @@ export default function UpdateRetomaForm() {
         loading ? <div>Loading...</div> : (
             <div>
                 <Button className='btn btn-danger' onClick={handleBackPage}>
-                   Atrás
+                    Atrás
                 </Button>
                 <div>
                     <Row>
@@ -142,18 +159,23 @@ export default function UpdateRetomaForm() {
                                             <i className="bi bi-eyeglasses"> </i>
                                             <strong>Datos de la reparación</strong>
                                         </CardSubtitle>
-                                        <FormGroup>
-                                            <Label for="idTechnician">Id de tecnico asociado</Label>
-                                            <Input
-                                                id="idTechnician"
-                                                name="idTechnician"
-                                                placeholder="Ingrese el ID del técnico asociado a esta reparación"
-                                                type="number"
-                                                value={idTechnician.idTechnician}
-                                                onChange={handleIdTechnicianChange}
-                                                required
-                                            />
-                                        </FormGroup>
+                                        {
+                                            isTechnician ? null :
+                                                (
+                                                    <FormGroup>
+                                                        <Label for="idTechnician">Id de tecnico asociado</Label>
+                                                        <Input
+                                                            id="idTechnician"
+                                                            name="idTechnician"
+                                                            placeholder="Ingrese el ID del técnico asociado a esta reparación"
+                                                            type="number"
+                                                            value={idTechnician.idTechnician}
+                                                            onChange={handleIdTechnicianChange}
+                                                            required
+                                                        />
+                                                    </FormGroup>
+                                                )
+                                        }
                                         <FormGroup>
                                             <Label for="deviceDiagnostic">Diagnostico del dispositivo</Label>
                                             <Input

@@ -1,31 +1,44 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
+// import { Button, Card, CardBody, CardTitle, Table, Form } from "reactstrap";
 import {
+    Card,
+    CardBody,
+    CardTitle,
     Row,
     Col,
     Form,
     FormGroup,
-    Input,
     Label,
+    Input,
     Table,
     FormText,
     Button,
+    InputGroup,
+    InputGroupText,
+    ButtonDropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem,
+    FormFeedback,
     Modal,
     ModalHeader,
     ModalBody,
     ModalFooter,
 } from 'reactstrap';
+// import getRequests from '../../services/getRequests';
 import { Link } from "react-router-dom";
 import DatePicker from 'react-datepicker';
-import getRequestRetomas from '../../services/getRequestRetomas';
 import 'react-datepicker/dist/react-datepicker.css';
+import getRequestRepairs from '../../services/getRequestRepairs';
 import ComponentCard from '../../components/ComponentCard';
+import getSingleRequest from '../../services/getSingleRequest';
 import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
+import getAllRequests from '../../services/getAllRequests';
 import getAllBrandsDistinct from '../../services/getAllBrandsDistinct';
-import getEquipmentInvoice from '../../services/getEquipmentInvoice';
 
-export default function RetomaRequestsTable() {
-    const [requests, setRequests] = useState([]);
+export default function AllRequestsTable() {
+    const [requests, setRequests] = useState([])
     const [loading, setLoading] = useState(true)
     const [page, setPage] = useState(1)
 
@@ -35,7 +48,9 @@ export default function RetomaRequestsTable() {
     const [currentEquipmentData, setCurrentEquipmentData] = useState('')
     const [currentImeiOrSerial, setCurrentImeiOrSerial] = useState('')
     const [currentClientPhone, setCurrentClientPhone] = useState('')
+    const [currentRepairQuote, setCurrentRepairQuote] = useState('')
     const [currentDeliveryDate, setCurrentDeliveryDate] = useState('')
+    const [listOfBrands, setListOfBrands] = useState([])
 
     const [modal, setModal] = useState(false);
 
@@ -48,7 +63,6 @@ export default function RetomaRequestsTable() {
     const [userDtoSurname, setUserDtoSurname] = useState('')
     const [equipmentBrand, setEquipmentBrand] = useState('')
     const [equipmentModel, setEquipmentModel] = useState('')
-    const [listOfBrands, setListOfBrands] = useState([])
 
     //Variables auxiliares
     const [formattedInitialDate, setFormattedInitialDate] = useState('0001-1-1')
@@ -56,13 +70,13 @@ export default function RetomaRequestsTable() {
 
     useEffect(function () {
         setLoading(true)
-        getRequestRetomas({ page })
+        getAllRequests({ page })
             .then((response) => {
-                console.log(response)
+                console.log("all requests", response)
                 setRequests(response)
                 getAllBrandsDistinct()
-                    .then(responseAllBrandDistinct => {
-                        setListOfBrands(responseAllBrandDistinct)
+                    .then(responseBrandsDistinct => {
+                        setListOfBrands(responseBrandsDistinct)
                         setLoading(false)
                     })
                     .catch(error => {
@@ -74,14 +88,14 @@ export default function RetomaRequestsTable() {
                 console.log(error)
                 setLoading(false)
             })
-    }, [setRequests, page])
+    }, [page, setRequests])
 
     const handleSubmit = (e) => {
         e.preventDefault()
         //Se consulta desde una fecha inicial hasta una fecha final
         setLoading(true)
 
-        getRequestRetomas({
+        getAllRequests({
             page: 1,
             initialDate: initialDate.initialDate != null ? `${initialDate.initialDate.getFullYear()}-${initialDate.initialDate.getMonth() + 1}-${initialDate.initialDate.getDate()}` : formattedInitialDate,
             finalDate: finalDate.finalDate != null ? `${finalDate.finalDate.getFullYear()}-${finalDate.finalDate.getMonth() + 1}-${finalDate.finalDate.getDate()}` : formattedFinallDate,
@@ -105,7 +119,11 @@ export default function RetomaRequestsTable() {
         setPage(currentPage => currentPage - 1);
     }
 
-    const handleViewClick = ({ autoDiagnosis, deliveryAddress, pickUpAddress, equipmentData, imeiOrSerial, clientPhone, deliveryDate }) => {
+    const toggle = () => {
+        setModal(!modal);
+    };
+
+    const handleViewClick = ({ autoDiagnosis, deliveryAddress, pickUpAddress, equipmentData, imeiOrSerial, clientPhone, repairQuote, deliveryDate }) => {
         setModal(!modal);
         setCurrentAutoDiagnosis(autoDiagnosis)
         setCurrentDeliveryAddress(deliveryAddress)
@@ -139,25 +157,11 @@ export default function RetomaRequestsTable() {
         setFinalDate({ finalDate: date })
     }
 
-    const handleViewEquipmentInvoice = (e, { idEquipment }) => {
-        e.preventDefault()
-        console.log(idEquipment)
-        getEquipmentInvoice({ id: idEquipment })
-            .then(response => {
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
-
     return (
-        loading ? (
-            <div>Cargando...</div>
-        ) :
+        loading ? <div>Cargando...</div> :
             <div>
                 <BreadCrumbsCeluparts />
-                <ComponentCard title="Lista de retomas registradas en el sistema">
+                <ComponentCard title="Lista de reparaciones registradas en el sistema">
                     <Form onSubmit={handleSubmit}>
                         <div className='container'>
                             <FormGroup>
@@ -165,22 +169,24 @@ export default function RetomaRequestsTable() {
                                     <Label sm="2">Consultar por fechas</Label>
                                     <Label sm="1">Desde</Label>
                                     <Col sm="4">
-                                        <DatePicker
-                                            className='form-control'
-                                            id='initialDate'
-                                            dateFormat="yyyy-MM-dd"
-                                            value={initialDate.initialDate}
-                                            selected={initialDate.initialDate}
-                                            onChange={(date) => handleChangeInitialDate(date)}
-                                            isClearable
-                                            showDisabledMonthNavigation
-                                        />
+                                        <div className="customDatePickerWidth">
+                                            <DatePicker
+                                                className='form-control'
+                                                id='initialDate'
+                                                dateFormat="yyyy-MM-dd"
+                                                value={initialDate.initialDate}
+                                                selected={initialDate.initialDate}
+                                                onChange={(date) => handleChangeInitialDate(date)}
+                                                isClearable
+                                                showDisabledMonthNavigation
+                                            />
+                                        </div>
                                     </Col>
                                     <Label sm="1">Hasta</Label>
                                     <Col sm="4">
                                         <DatePicker
-                                            id='finalDate'
                                             className='form-control'
+                                            id='finalDate'
                                             dateFormat="yyyy-MM-dd"
                                             value={finalDate.finalDate}
                                             selected={finalDate.finalDate}
@@ -302,162 +308,51 @@ export default function RetomaRequestsTable() {
                             </Button>
                         </div>
                     </Form>
-                    {/* <Form onSubmit={handleSubmit}>
-                        Consultar por fechas
-                        <div className='d-flex-column justify-content-start'>
-                            Desde:
-                            <DatePicker
-                                id='initialDate'
-                                dateFormat="yyyy-MM-dd"
-                                value={initialDate.initialDate}
-                                selected={initialDate.initialDate}
-                                onChange={(date) => setInitialDate({ initialDate: date })}
-                                showDisabledMonthNavigation
-                            />
-                            Hasta:
-                            <DatePicker
-                                id='finalDate'
-                                dateFormat="yyyy-MM-dd"
-                                value={finalDate.finalDate}
-                                selected={finalDate.finalDate}
-                                onChange={(date) => setFinalDate({ finalDate: date })}
-                                showDisabledMonthNavigation
-                            />
-                        </div>
-                        <Button>
-                            Consultar
-                        </Button>
-                    </Form> */}
                 </ComponentCard>
+                {/* <Card> */}
+                {/* <CardBody> */}
                 <ComponentCard title="Resultados">
                     <Table className="no-wrap mt-3 align-middle" responsive borderless>
                         <thead>
                             <tr>
                                 <th>Nombre cliente</th>
                                 <th>Fecha solicitud</th>
-                                <th>Datos equipo</th>
+                                <th>Datos del equipo</th>
                                 <th>Estado de cotización</th>
                                 <th>Estado de solicitud</th>
-                                <th>Valor de retoma</th>
                                 <th>Actualizar estado Solicitud</th>
-                                {
-                                    JSON.parse(localStorage.getItem('user')).role === "mensajero" ? (
-                                        null
-                                    ) : (
-                                        <th>Actualizar diagnostico para retoma</th>
-                                    )
-                                }
-                                {
-                                    JSON.parse(localStorage.getItem('user')).role === "admin" || JSON.parse(localStorage.getItem('user')).role === "aux_admin" ? (
-                                        <th>Actualizar pago retoma</th>
-                                    ) : (
-                                        null
-                                    )
-                                }
                                 <th>Detalles de la solicitud</th>
-                                <th>Ver factura</th>
                             </tr>
                         </thead>
                         <tbody>
                             {requests.requests.map((tdata, index) => (
-                                tdata.requestType === "Retoma" ? (
-                                    <tr key={index} className="border-top">
-                                        <td>{tdata.userDto.names} {tdata.userDto.surnames}</td>
-                                        <td>{`${new Date(tdata.requestDate).getFullYear()}-${new Date(tdata.requestDate).getMonth() + 1}-${new Date(tdata.requestDate).getDate()}`}</td>
-                                        <td>{tdata.equipment.equipmentBrand} {tdata.equipment.modelOrReference}</td>
-                                        {/*<td>{tdata.pickUpAddress}</td>
-                                        <td>{tdata.deliveryAddress}</td> */}
-                                        <td>{tdata.statusQuote}</td>
-                                        <td>{tdata.requestStatus[0].status}</td>
-                                        <td>{tdata.retoma[0].retomaQuote}</td>
-                                        <td>
-                                            <Link to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}>
-                                                <Button className="btn" color='primary'><i className="bi bi-pencil-fill"></i></Button>
-                                            </Link>
-                                        </td>
-                                        {
-                                            JSON.parse(localStorage.getItem('user')).role === "mensajero" ? (
-                                                null
-                                            ) : (
-                                                <td>
-                                                    {
-                                                        tdata.requestStatus[0].status === 'Iniciada' ||
-                                                            tdata.requestStatus[0].status === 'En proceso de recogida' ||
-                                                            tdata.requestStatus[0].status === 'Recibida tecnico' ||
-                                                            tdata.requestStatus[0].status === 'En devolucion' ||
-                                                            tdata.requestStatus[0].status === 'Devuelto sin reparacion' ||
-                                                            tdata.requestStatus[0].status === 'Abandonada' ||
-                                                            tdata.requestStatus[0].status === 'Terminada' ||
-                                                            tdata.requestStatus[0].status === 'En camino' ? (
-                                                            <button className="btn btn-secondary" disabled><i className="bi bi-pencil-fill"></i></button>
-                                                        ) : (
-                                                            <Link to={`/home/update-retoma-form/${tdata.retoma[0].idRetoma}`}>
-                                                                <Button className="btn" color='primary'><i className="bi bi-pencil-fill"></i></Button>
-                                                            </Link>
-                                                        )
-                                                    }
-                                                </td>
-                                            )
-                                        }
-                                        {
-                                            JSON.parse(localStorage.getItem('user')).role === "admin" || JSON.parse(localStorage.getItem('user')).role === "aux_admin" ? (
-                                                <td>
-                                                    {
-                                                        tdata.requestStatus[0].status === 'Iniciada' ||
-                                                            tdata.requestStatus[0].status === 'En proceso de recogida' ||
-                                                            tdata.requestStatus[0].status === 'Recibida tecnico' ||
-                                                            tdata.requestStatus[0].status === 'En devolucion' ||
-                                                            tdata.requestStatus[0].status === 'Devuelto sin reparacion' ||
-                                                            tdata.requestStatus[0].status === 'Abandonada' ||
-                                                            tdata.requestStatus[0].status === 'Terminada' ||
-                                                            tdata.requestStatus[0].status === 'Anulado por IMEI' ||
-                                                            tdata.requestStatus[0].status === 'En camino' ? (
-                                                            <button className='btn btn-secondary' type='button' disabled>
-                                                                <i className="bi bi-pencil-fill"></i>
-                                                            </button>
-                                                        ) : (
-                                                            <Link to={`/home/retoma-payment-form/${tdata.retoma[0].retomaPayments[0].idRetomaPayment}`}>
-                                                                <Button className='btn' color='primary' type='button'>
-                                                                    <i className="bi bi-pencil-fill"></i>
-                                                                </Button>
-                                                            </Link>
-                                                        )
-                                                    }
-                                                </td>
-                                            ) : (
-                                                null
-                                            )
-                                        }
-                                        <td>
-                                            <Button className='btn' color='info' type='button' onClick={() => handleViewClick({
-                                                autoDiagnosis: tdata.autoDiagnosis,
-                                                deliveryAddress: tdata.deliveryAddress,
-                                                pickUpAddress: tdata.pickUpAddress,
-                                                equipmentData: tdata.equipment.equipmentBrand + " " + tdata.equipment.modelOrReference,
-                                                imeiOrSerial: tdata.equipment.imeiOrSerial,
-                                                clientPhone: tdata.userDto.phone,
-                                                deliveryDate: tdata.homeServices[0].deliveryDate
-                                            })} >
-                                                <i className="bi bi-search"></i>
-                                            </Button>
-                                        </td>
-                                        <td>
-                                            <a href="#">
-                                                <button
-                                                    type="button"
-                                                    title={`Ver factura de ${tdata.equipment.equipmentBrand} ${tdata.equipment.modelOrReference}`}
-                                                    className="btn btn-outline-info"
-                                                    onClick={(e) => handleViewEquipmentInvoice(e, { idEquipment: tdata.equipment.idEquipment })}
-                                                >
-                                                    Ver Factura
-                                                </button>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    null
-                                )
+                                <tr key={index} className="border-top">
+                                    <td>{tdata.userDto.names} {tdata.userDto.surnames}</td>
+                                    <td>{`${new Date(tdata.requestDate).getFullYear()}-${new Date(tdata.requestDate).getMonth() + 1}-${new Date(tdata.requestDate).getDate()}`}</td>
+                                    <td>{tdata.equipment.equipmentBrand + " " + tdata.equipment.modelOrReference}</td>
+                                    <td>{tdata.statusQuote}</td>
+                                    <td>{tdata.requestStatus[0].status}</td>
+                                    <td>
+                                        <Link to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}>
+                                            <Button type='button' className="btn" color='primary'>Actualizar</Button>
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Button className='btn' color='info' type='button' onClick={() => handleViewClick({
+                                            autoDiagnosis: tdata.autoDiagnosis,
+                                            deliveryAddress: tdata.deliveryAddress,
+                                            pickUpAddress: tdata.pickUpAddress,
+                                            equipmentData: tdata.equipment.equipmentBrand + " " + tdata.equipment.modelOrReference,
+                                            imeiOrSerial: tdata.equipment.imeiOrSerial,
+                                            clientPhone: tdata.userDto.phone,
+                                            deliveryDate: tdata.homeServices[0].deliveryDate
+                                        })} >
+                                            Detalles
+                                        </Button>
+                                    </td>
+                                </tr>
                             ))}
+                            {/* TERMINA EL MAP */}
                         </tbody>
                     </Table>
                     {
@@ -472,7 +367,6 @@ export default function RetomaRequestsTable() {
                                 : <Button className="btn" color='primary' onClick={handlePrevious}>Anterior</Button>
                         }
                         {
-
                             requests.currentPage === requests.pages || requests.currentPage === requests.pages + 1 ?
                                 <button className="btn btn-celuparts-dark-blue" disabled>Siguiente</button>
                                 : <Button className="btn" color='primary' onClick={handleNext}>Siguiente</Button>
