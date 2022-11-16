@@ -41,7 +41,7 @@ export default function RequestStatusForm() {
     })
     const [deliveryAddress, setDeliveryAddress] = useState({ deliveryAddress: "" })
     const [deliveryDate, setDeliveryDate] = useState({ deliveryDate: new Date() })
-    console.log('Date: ', deliveryDate.deliveryDate.toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }))
+    // console.log('Date: ', deliveryDate.deliveryDate.toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }))
 
     const [celupartsContactPhone, setCelupartsContactPhone] = useState("")
     const [celupartsContactEmail, setCelupartsContactEmail] = useState("")
@@ -54,6 +54,8 @@ export default function RequestStatusForm() {
 
     //Usado para filtrar cuales estados no mostrar
     const [requestHistory, setRequestHistory] = useState([])
+
+    const [currentStatus, setCurrentStatus] = useState('')
 
     const [currentOption, setCurrentOption] = useState({
         value: '',
@@ -198,7 +200,7 @@ export default function RequestStatusForm() {
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
-                                    console.log("exito!", response)
+                                    // console.log("exito!", response)
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -216,7 +218,7 @@ export default function RequestStatusForm() {
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
-                                    console.log("exito!", response)
+                                    // console.log("exito!", response)
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -234,7 +236,7 @@ export default function RequestStatusForm() {
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
-                                    console.log("exito!", response)
+                                    // console.log("exito!", response)
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -252,7 +254,7 @@ export default function RequestStatusForm() {
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
-                                    console.log("exito!", response)
+                                    // console.log("exito!", response)
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -270,7 +272,7 @@ export default function RequestStatusForm() {
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
-                                    console.log("exito!", response)
+                                    // console.log("exito!", response)
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -289,7 +291,7 @@ export default function RequestStatusForm() {
                                 notificationType: "to_courier"
                             })
                                 .then(response => {
-                                    console.log("exito!", response)
+                                    // console.log("exito!", response)
                                     putHomeServiceByIdRequest({
                                         idRequest: tdata.idRequest,
                                         deliveryDate: addDays(new Date(), 1)
@@ -311,7 +313,7 @@ export default function RequestStatusForm() {
                                 notificationType: "to_none"
                             })
                                 .then(response => {
-                                    console.log("exito!", response)
+                                    // console.log("exito!", response)
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -329,7 +331,7 @@ export default function RequestStatusForm() {
                                 notificationType: "to_none"
                             })
                                 .then(response => {
-                                    console.log("exito!", response)
+                                    // console.log("exito!", response)
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -347,7 +349,7 @@ export default function RequestStatusForm() {
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
-                                    console.log("exito!", response)
+                                    // console.log("exito!", response)
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -365,7 +367,7 @@ export default function RequestStatusForm() {
                                 notificationType: "to_none"
                             })
                                 .then(response => {
-                                    console.log("exito!", response)
+                                    // console.log("exito!", response)
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -427,11 +429,12 @@ export default function RequestStatusForm() {
         setLoading(true);
         getSingleRequestStatus({ id: params.id })
             .then((responseRequestStatus) => {
-                console.log("request status response", responseRequestStatus)
+                // console.log("request status response", responseRequestStatus)
                 responseRequestStatus.request.requestType == "Reparacion" ? setIsRepair(true) : setIsRepair(false)
                 setDataRequestStatus(responseRequestStatus)
                 setIdRequest({ idRequest: responseRequestStatus.idRequest })
                 setStatus({ status: responseRequestStatus.status })
+                setCurrentStatus(responseRequestStatus.status)
                 setCurrentOption({
                     value: responseRequestStatus.status,
                     toShow: options.find(n => n.value === responseRequestStatus.status).toShow,
@@ -439,13 +442,6 @@ export default function RequestStatusForm() {
                 })
                 setPaymentStatus({ paymentStatus: responseRequestStatus.paymentStatus })
                 setProductReturned({ productReturned: responseRequestStatus.productReturned })
-                // getRequestNotificationByIdRequest({idRequest: response.idRequest})
-                //     .then((response) => {
-                //         console.log("requestNotificationByIdRequest:", response)
-                //     })
-                //     .catch(error => {
-                //         console.log("Error in requestNotificationByIdRequest",error)
-                //     })
                 getRequestNotificationByIdRequest({ idRequest: responseRequestStatus.idRequest })
                     .then(response2 => {
                         setNotifications(response2)
@@ -550,66 +546,66 @@ export default function RequestStatusForm() {
                                                     </Input>
                                                 </FormGroup>
                                                 : JSON.parse(localStorage.getItem('user')).role === "tecnico" ?
-                                                <FormGroup>
-                                                    {
-                                                        !isRepair
-                                                    }
-                                                    <br></br>
-                                                    <Label for="status">Estado solicitud</Label>
-                                                    <Input
-                                                        type="select"
-                                                        name="status"
-                                                        id="status"
-                                                        value={status.status}
-                                                        onChange={handleStatusChange}
-                                                    >
+                                                    <FormGroup>
                                                         {
-                                                            options.map((option, index) => (
-                                                                <option hidden={
-                                                                    (!option.showToTechnician) ||
-                                                                    ((currentOption.priority != 4 && currentOption.priority != 5.1) && option.priority > currentOption.priority + 1 && currentOption.value != "En devolucion") ||
-                                                                    ((currentOption.value != "En devolucion" && currentOption.priority != 5.1 && option.priority < currentOption.priority + 1) && !requestHistory.some(n => n.status === option.value)) ||
-                                                                    (option.value == "Elija una opcion") ||
-                                                                    (requestHistory.some(n => n.status === option.value) && !(!isRepair && requestHistory.some(n => n.status == "Revisado") && option.priority > 2) ) ||
-                                                                    (currentOption.priority == 2 && currentOption.value == "Anulado por IMEI" && option.priority >= 2) ||
-                                                                    (currentOption.priority == 4 && currentOption.value == "En reparacion" && option.priority >= 5.2) ||
-                                                                    (currentOption.priority == 4 && currentOption.value == "En devolucion" && ((option.priority == 5.1 || option.priority <= 4) || option.priority > currentOption.priority + 1.2)) ||
-                                                                    (currentOption.priority == 4 && currentOption.value == "Retoma") ||
-                                                                    (currentOption.priority == 5.1 && option.priority != 6) ||
-                                                                    (!isRepair && option.priority > 3)
-                                                                }
-                                                                    value={option.value} key={index}>{option.toShow}</option>
-                                                            ))
+                                                            !isRepair
                                                         }
-                                                    </Input>
-                                                </FormGroup> :
-                                                <FormGroup>
-                                                    <Label for="status">Estado solicitud</Label>
-                                                    <Input
-                                                        type="select"
-                                                        name="status"
-                                                        id="status"
-                                                        value={status.status}
-                                                        onChange={handleStatusChange}
-                                                    >
-                                                        {
-                                                            options.map((option, index) => (
-                                                                <option hidden={
-                                                                    ((currentOption.priority != 4 && currentOption.priority != 5.1) && option.priority > currentOption.priority + 1 && currentOption.value != "En devolucion") ||
-                                                                    ((currentOption.value != "En devolucion" && currentOption.priority != 5.1 && option.priority < currentOption.priority + 1) && !requestHistory.some(n => n.status === option.value)) ||
-                                                                    (option.value == "Elija una opcion") ||
-                                                                    (requestHistory.some(n => n.status === option.value)  ) ||
-                                                                    (currentOption.priority == 2 && currentOption.value == "Anulado por IMEI" && option.priority >= 2) ||
-                                                                    (currentOption.priority == 4 && currentOption.value == "En reparacion" && option.priority >= 5.2) ||
-                                                                    (currentOption.priority == 4 && currentOption.value == "En devolucion" && ((option.priority == 5.1 || option.priority <= 4) || option.priority > currentOption.priority + 1.2)) ||
-                                                                    (currentOption.priority == 4 && currentOption.value == "Retoma") ||
-                                                                    (currentOption.priority == 5.1 && option.priority != 6) ||
-                                                                    (!isRepair && option.value == "En reparacion")
-                                                                }
-                                                                    value={option.value} key={index}>{option.toShow}</option>
-                                                            ))
-                                                        }
-                                                        {/* <option>En proceso de recogida</option>
+                                                        <br></br>
+                                                        <Label for="status">Estado solicitud</Label>
+                                                        <Input
+                                                            type="select"
+                                                            name="status"
+                                                            id="status"
+                                                            value={status.status}
+                                                            onChange={handleStatusChange}
+                                                        >
+                                                            {
+                                                                options.map((option, index) => (
+                                                                    <option hidden={
+                                                                        (!option.showToTechnician) ||
+                                                                        ((currentOption.priority != 4 && currentOption.priority != 5.1) && option.priority > currentOption.priority + 1 && currentOption.value != "En devolucion") ||
+                                                                        ((currentOption.value != "En devolucion" && currentOption.priority != 5.1 && option.priority < currentOption.priority + 1) && !requestHistory.some(n => n.status === option.value)) ||
+                                                                        (option.value == "Elija una opcion") ||
+                                                                        (requestHistory.some(n => n.status === option.value) && !(!isRepair && requestHistory.some(n => n.status == "Revisado") && option.priority > 2)) ||
+                                                                        (currentOption.priority == 2 && currentOption.value == "Anulado por IMEI" && option.priority >= 2) ||
+                                                                        (currentOption.priority == 4 && currentOption.value == "En reparacion" && option.priority >= 5.2) ||
+                                                                        (currentOption.priority == 4 && currentOption.value == "En devolucion" && ((option.priority == 5.1 || option.priority <= 4) || option.priority > currentOption.priority + 1.2)) ||
+                                                                        (currentOption.priority == 4 && currentOption.value == "Retoma") ||
+                                                                        (currentOption.priority == 5.1 && option.priority != 6) ||
+                                                                        (!isRepair && option.priority > 3)
+                                                                    }
+                                                                        value={option.value} key={index}>{option.toShow}</option>
+                                                                ))
+                                                            }
+                                                        </Input>
+                                                    </FormGroup> :
+                                                    <FormGroup>
+                                                        <Label for="status">Estado solicitud</Label>
+                                                        <Input
+                                                            type="select"
+                                                            name="status"
+                                                            id="status"
+                                                            value={status.status}
+                                                            onChange={handleStatusChange}
+                                                        >
+                                                            {
+                                                                options.map((option, index) => (
+                                                                    <option hidden={
+                                                                        ((currentOption.priority != 4 && currentOption.priority != 5.1) && option.priority > currentOption.priority + 1 && currentOption.value != "En devolucion") ||
+                                                                        ((currentOption.value != "En devolucion" && currentOption.priority != 5.1 && option.priority < currentOption.priority + 1) && !requestHistory.some(n => n.status === option.value)) ||
+                                                                        (option.value == "Elija una opcion") ||
+                                                                        (requestHistory.some(n => n.status === option.value)) ||
+                                                                        (currentOption.priority == 2 && currentOption.value == "Anulado por IMEI" && option.priority >= 2) ||
+                                                                        (currentOption.priority == 4 && currentOption.value == "En reparacion" && option.priority >= 5.2) ||
+                                                                        (currentOption.priority == 4 && currentOption.value == "En devolucion" && ((option.priority == 5.1 || option.priority <= 4) || option.priority > currentOption.priority + 1.2)) ||
+                                                                        (currentOption.priority == 4 && currentOption.value == "Retoma") ||
+                                                                        (currentOption.priority == 5.1 && option.priority != 6) ||
+                                                                        (!isRepair && option.value == "En reparacion")
+                                                                    }
+                                                                        value={option.value} key={index}>{option.toShow}</option>
+                                                                ))
+                                                            }
+                                                            {/* <option>En proceso de recogida</option>
                                                         <option value="Recibida tecnico">Recibida técnico</option>
                                                         <option>Revisado</option>
                                                         <option value="En reparacion">En reparación</option>
@@ -621,43 +617,57 @@ export default function RequestStatusForm() {
                                                         <option>Retoma</option>
                                                         <option>Abandonada</option>
                                                         <option>Anulado por IMEI</option> */}
-                                                    </Input>
-                                                </FormGroup>
+                                                        </Input>
+                                                    </FormGroup>
                                         }
                                         {
                                             JSON.parse(localStorage.getItem('user')).role === "mensajero" || JSON.parse(localStorage.getItem('user')).role === "tecnico" ?
                                                 null :
-                                                <FormGroup>
-                                                    <Label for="paymentStatus">Estado de pago</Label>
-                                                    <Input
-                                                        type="select"
-                                                        name="paymentStatus"
-                                                        id="paymentStatus"
-                                                        defaultValue={paymentStatus.paymentStatus}
-                                                        onChange={handlePaymentStatusChange}
-                                                    >
-                                                        <option>Pago</option>
-                                                        <option>No pago</option>
-                                                    </Input>
-                                                </FormGroup>
+                                                currentStatus == "Iniciada" ||
+                                                    currentStatus == "En proceso de recogida" ||
+                                                    currentStatus == "Recibida tecnico" ||
+                                                    currentStatus == "Revisado" ||
+                                                    currentStatus == "En reparacion"
+                                                    ?
+                                                    null
+                                                    :
+                                                    <FormGroup>
+                                                        <Label for="paymentStatus">Estado de pago</Label>
+                                                        <Input
+                                                            type="select"
+                                                            name="paymentStatus"
+                                                            id="paymentStatus"
+                                                            defaultValue={paymentStatus.paymentStatus}
+                                                            onChange={handlePaymentStatusChange}
+                                                        >
+                                                            <option>Pago</option>
+                                                            <option>No pago</option>
+                                                        </Input>
+                                                    </FormGroup>
                                         }
                                         {
                                             JSON.parse(localStorage.getItem('user')).role === "tecnico" ?
                                                 null :
-                                                <FormGroup>
-                                                    <Label for="productReturned">Producto devuelto</Label>
-                                                    <Input
-                                                        id="productReturned"
-                                                        name="productReturned"
-                                                        type="select"
-                                                        defaultValue={productReturned.productReturned}
-                                                        onChange={handleProductReturnedChange}
-                                                    >
-                                                        <option value={true}>Devuelto</option>
-                                                        <option value={false}>No devuelto</option>
-                                                    </Input>
-                                                </FormGroup>
-
+                                                currentStatus == "Iniciada" ||
+                                                currentStatus == "Recibida tecnico" ||
+                                                currentStatus == "Revisado" ||
+                                                currentStatus == "En reparacion" ||
+                                                currentStatus == "Reparado pendiente de pago" ||
+                                                currentStatus == "Retoma"
+                                                ? null :
+                                                    <FormGroup>
+                                                        <Label for="productReturned">Producto devuelto</Label>
+                                                        <Input
+                                                            id="productReturned"
+                                                            name="productReturned"
+                                                            type="select"
+                                                            defaultValue={productReturned.productReturned}
+                                                            onChange={handleProductReturnedChange}
+                                                        >
+                                                            <option value={true}>Devuelto</option>
+                                                            <option value={false}>No devuelto</option>
+                                                        </Input>
+                                                    </FormGroup>
                                         }
                                         {
                                             loadingPut ? (

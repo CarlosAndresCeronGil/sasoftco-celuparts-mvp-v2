@@ -150,7 +150,7 @@ export default function RequestRepairForm() {
         e.preventDefault();
         setLoading(true);
 
-        console.log("Entro al handleSubmit")
+        // console.log("Entro al handleSubmit")
 
         const formData = new FormData()
         //formData.append("typeOfEquipment", e.target.elements.typeOfEquipment.value)
@@ -161,7 +161,7 @@ export default function RequestRepairForm() {
         // formData.append("equipmentInvoice", null)
 
         const deliveryAddress2 = isSameAddresses ? e.target.elements.pickUpAddress.value : e.target.elements.deliveryAddress.value
-        console.log('deliveryAddress: ', deliveryAddress2)
+        // console.log('deliveryAddress: ', deliveryAddress2)
 
         postEquipment(formData)
             .then(data => {
@@ -194,7 +194,7 @@ export default function RequestRepairForm() {
                             repairQuote: "0"
                         })
                             .then(data2 => {
-                                console.log("Entro al then de repair", data2);
+                                // console.log("Entro al then de repair", data2);
                                 postRepairPayment({
                                     idRepair: data2.idRepair,
                                     paymentMethod: e.target.elements.paymentMethod.value,
@@ -269,7 +269,7 @@ export default function RequestRepairForm() {
         e.preventDefault()
         getVerifyImei({ id: serial })
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setVerifyResponse(response)
             })
             .catch(error => {
@@ -281,7 +281,7 @@ export default function RequestRepairForm() {
         e.preventDefault()
         getVerifyImei({ id: imei })
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setVerifyResponse(response)
             })
             .catch(error => {

@@ -41,10 +41,10 @@ const LoginFormik = () => {
   const { setAuth } = useContext(AuthContext);
 
   const handleCallbackResponse = (response) => {
-    console.log("Google JWT", response.credential)
+    // console.log("Google JWT", response.credential)
     var userObject = jwtDecode(response.credential)
 
-    console.log(userObject)
+    // console.log(userObject)
   }
 
   // useEffect(function() {
@@ -80,7 +80,7 @@ const LoginFormik = () => {
               })
             } else {
               const user = jwtDecode(response)
-              console.log("user", user);
+              // console.log("user", user);
               localStorage.setItem('user', JSON.stringify(user));
               setAuth(true);
               navigate('/home/dashboards/dashboard1');

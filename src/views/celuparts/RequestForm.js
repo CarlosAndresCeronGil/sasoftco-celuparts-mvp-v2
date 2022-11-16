@@ -93,7 +93,7 @@ export default function RequestForm() {
                                 repairQuote: "0"
                             })
                                 .then(data2 => {
-                                    console.log("Entro al then de repair", data2);
+                                    // console.log("Entro al then de repair", data2);
                                     postRepairPayment({
                                         idRepair: data2.idRepair,
                                         paymentMethod: e.target.elements.paymentMethod.value,
@@ -196,7 +196,7 @@ export default function RequestForm() {
                                 deviceDiagnostic: ""
                             })
                                 .then(dataRetoma => {
-                                    console.log("Entro al then de retoma", dataRetoma);
+                                    // console.log("Entro al then de retoma", dataRetoma);
                                     postRetomaPayment({
                                         idRetoma: dataRetoma.idRetoma,
                                         paymentMethod: e.target.elements.paymentMethod.value

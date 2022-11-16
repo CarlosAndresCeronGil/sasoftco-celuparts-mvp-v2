@@ -99,8 +99,8 @@ export default function RetomaPaymentForm() {
         putRetomaPayment(formData)
             .then((response) => {
                 // console.log(response)
-                console.log(notifications)
-                console.log(idRequest.idRequest)
+                // console.log(notifications)
+                // console.log(idRequest.idRequest)
                 notifications.map(tdata => (
                     tdata.idRequest === idRequest.idRequest ? (
                         putRequestNotification({
@@ -111,7 +111,7 @@ export default function RetomaPaymentForm() {
                             notificationType: "to_none"
                         })
                             .then(response2 => {
-                                console.log("Exito!", response2)
+                                // console.log("Exito!", response2)
                             })
                             .catch(error => {
                                 console.log(error)

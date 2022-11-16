@@ -32,7 +32,7 @@ export default function SignIn() {
                 password
             })
                 .then(response => {
-                    console.log("Response from sign in:", response);
+                    // console.log("Response from sign in:", response);
                     if (response !== undefined) {
                         if (response === "Account disabled") {
                             Swal.fire({
@@ -42,7 +42,7 @@ export default function SignIn() {
                             })
                         } else {
                             const user = jwtDecode(response)
-                            console.log("user", user);
+                            // console.log("user", user);
                             localStorage.setItem('user', JSON.stringify(user));
                             setAuth(true);
                             navigate('/home');

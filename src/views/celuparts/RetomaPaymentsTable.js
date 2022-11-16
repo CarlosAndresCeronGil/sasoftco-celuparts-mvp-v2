@@ -15,7 +15,7 @@ export default function RetomaPaymentsTable() {
         setLoading(true)
         getRetomaPayments()
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 setRetomaPayments(response)
                 setLoading(false)
             })
@@ -27,10 +27,10 @@ export default function RetomaPaymentsTable() {
 
     const handleViewEquipmentInvoice = (e, { idRetomaPayment }) => {
         e.preventDefault()
-        console.log(idRetomaPayment)
+        // console.log(idRetomaPayment)
         getRetomaInvoice({ id: idRetomaPayment })
             .then(response => {
-                console.log(response)
+                // console.log(response)
             })
             .catch(error => {
                 console.log(error)

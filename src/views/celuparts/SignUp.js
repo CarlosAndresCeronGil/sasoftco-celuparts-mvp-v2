@@ -53,7 +53,7 @@ export default function SignUp() {
                     })
                         .then(data => {
                             setLoading(false);
-                            console.log(data.status)
+                            // console.log(data.status)
                             if(data.status === 200) {
                                 Swal.fire({ 
                                     icon: 'success',
@@ -68,7 +68,7 @@ export default function SignUp() {
                                         password
                                     })
                                         .then(response2 => {
-                                            console.log("Response from sign in:", response2);
+                                            // console.log("Response from sign in:", response2);
                                             if (response2 !== undefined) {
                                                 if (response2 === "Account disabled") {
                                                     Swal.fire({
@@ -78,7 +78,7 @@ export default function SignUp() {
                                                     })
                                                 } else {
                                                     const user = jwtDecode(response2)
-                                                    console.log("user", user);
+                                                    // console.log("user", user);
                                                     localStorage.setItem('user', JSON.stringify(user));
                                                     setAuth(true);
                                                     navigate('/home');

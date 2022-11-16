@@ -13,7 +13,7 @@ export default function EquipmentsTable() {
         setLoading(true)
         getEquipments()
             .then((response) => {
-                console.log("Response", response)
+                // console.log("Response", response)
                 setEquipments(response)
                 setLoading(false)
             })
@@ -25,10 +25,10 @@ export default function EquipmentsTable() {
 
     const handleViewEquipmentInvoice = (e, { idEquipment }) => {
         e.preventDefault()
-        console.log(idEquipment)
+        // console.log(idEquipment)
         getEquipmentInvoice({ id: idEquipment })
             .then(response => {
-                console.log(response)
+                // console.log(response)
             })
             .catch(error => {
                 console.log(error)

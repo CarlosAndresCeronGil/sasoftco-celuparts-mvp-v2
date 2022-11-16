@@ -71,7 +71,7 @@ export default function RepairRequestsTable() {
         setLoading(true)
         getRequestRepairs({ page })
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 setRequests(response)
                 getAllBrandsDistinct()
                     .then(responseAllBrandsDistinct => {

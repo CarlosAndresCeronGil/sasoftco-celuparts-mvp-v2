@@ -13,7 +13,7 @@ export default function RepairTable() {
         getRepairs()
             .then((response) => {
                 setRepairs(response)
-                console.log(response)
+                // console.log(response)
                 setLoading(false)
             })
             .catch(error => {

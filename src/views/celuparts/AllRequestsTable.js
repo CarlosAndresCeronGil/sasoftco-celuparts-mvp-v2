@@ -72,7 +72,7 @@ export default function AllRequestsTable() {
         setLoading(true)
         getAllRequests({ page })
             .then((response) => {
-                console.log("all requests", response)
+                // console.log("all requests", response)
                 setRequests(response)
                 getAllBrandsDistinct()
                     .then(responseBrandsDistinct => {

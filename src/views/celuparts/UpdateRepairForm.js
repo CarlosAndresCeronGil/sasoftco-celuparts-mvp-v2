@@ -75,7 +75,7 @@ export default function UpdateRepairForm() {
                 partName: repariPart
             })
                 .then(responseSearchRepeated => {
-                    console.log("responseSearchRepeated status: ", responseSearchRepeated.status)
+                    // console.log("responseSearchRepeated status: ", responseSearchRepeated.status)
                     if (responseSearchRepeated.status == 404) {
                         postPartsToRepair({
                             idRepair: params.id,
@@ -87,7 +87,7 @@ export default function UpdateRepairForm() {
                                 console.log("Error post partToRepair", error)
                             })
                     } else {
-                        console.log("Es nueva registro ", responseSearchRepeated)
+                        // console.log("Es nueva registro ", responseSearchRepeated)
                         putPartsToRepair({
                             idPartsToRepair: responseSearchRepeated[0].idPartsToRepair,
                             idRepair: responseSearchRepeated[0].idRepair,
@@ -110,7 +110,7 @@ export default function UpdateRepairForm() {
                 partName: repariPart
             })
                 .then(responseSearchRepeated => {
-                    console.log("responseSearchRepeated status: ", responseSearchRepeated.status)
+                    // console.log("responseSearchRepeated status: ", responseSearchRepeated.status)
                     if (responseSearchRepeated.status == 404) {
                         postPartsToRepair({
                             idRepair: params.id,
@@ -122,7 +122,7 @@ export default function UpdateRepairForm() {
                                 console.log("Error post partToRepair", error)
                             })
                     } else {
-                        console.log("Es nueva registro ", responseSearchRepeated)
+                        // console.log("Es nueva registro ", responseSearchRepeated)
                         putPartsToRepair({
                             idPartsToRepair: responseSearchRepeated[0].idPartsToRepair,
                             idRepair: responseSearchRepeated[0].idRepair,
@@ -149,7 +149,7 @@ export default function UpdateRepairForm() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("lista de UNCHECKED", listOfUncheckedParts)
+        // console.log("lista de UNCHECKED", listOfUncheckedParts)
         setLoadingPut(true);
         nullFinishDateArrived && nullStartDateArrived ? (
             //PRODUCTO REVISADO SIN SER ACEPTADA LA COTIZACION
@@ -176,7 +176,7 @@ export default function UpdateRepairForm() {
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
-                                    console.log("Exito!", response)
+                                    // console.log("Exito!", response)
                                 })
                                 .then(finalResponse => {
                                     Swal.fire({
@@ -210,7 +210,7 @@ export default function UpdateRepairForm() {
                 repairQuote: repairQuote.repairQuote,
             })
                 .then(data => {
-                    console.log(data)
+                    // console.log(data)
                     postListOfRepairCheckedParts();
                     postListOfReplaceCheckedParts();
                     postUnCheckedParts();
@@ -224,7 +224,7 @@ export default function UpdateRepairForm() {
                                 notificationType: "to_customer"
                             })
                                 .then(response => {
-                                    console.log("Exito!", response)
+                                    // console.log("Exito!", response)
                                 })
                                 .finally(finalResponse => {
                                     Swal.fire({
@@ -258,7 +258,7 @@ export default function UpdateRepairForm() {
                 repairQuote: repairQuote.repairQuote,
             })
                 .then(data => {
-                    console.log(data)
+                    // console.log(data)
                     postListOfRepairCheckedParts();
                     postListOfReplaceCheckedParts();
                     postUnCheckedParts();

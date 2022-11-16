@@ -22,7 +22,7 @@ const RegisterFormik = () => {
 
   const [email, setEmail] = useState('');
 
-  console.log(password);
+  // console.log(password);
 
   const togglePassword = () => {
     if (passwordType === 'password') {
@@ -72,7 +72,7 @@ const RegisterFormik = () => {
   const navigate = useNavigate()
 
   const handleSubmit = (fields) => {
-    console.log(fields)
+    // console.log(fields)
 
     const formData = new FormData();
     formData.append("email", fields.email)
@@ -81,8 +81,8 @@ const RegisterFormik = () => {
     setLoading(true);
     postValidateUniqueEmailAndId(formData)
       .then(response => {
-        console.log("Respuesta validate:", response)
-        console.log(response.status)
+        // console.log("Respuesta validate:", response)
+        // console.log(response.status)
         if (response.status != 404) {
           Swal.fire({
             title: 'Condiciones de servicio.',
@@ -111,7 +111,7 @@ const RegisterFormik = () => {
                       password: fields.password
                     })
                       .then(response2 => {
-                        console.log("Response from sign in:", response2);
+                        // console.log("Response from sign in:", response2);
                         if (response2 !== undefined) {
                           if (response2 === "Account disabled") {
                             Swal.fire({
@@ -121,7 +121,7 @@ const RegisterFormik = () => {
                             })
                           } else {
                             const user = jwtDecode(response2)
-                            console.log("user", user);
+                            // console.log("user", user);
                             localStorage.setItem('user', JSON.stringify(user));
                             setAuth(true);
                             navigate('/home/dashboards/dashboard1');
@@ -275,7 +275,6 @@ const RegisterFormik = () => {
                         // eslint-disable-next-line no-alert
                         // alert(`SUCCESS!! :-)\n\n${JSON.stringify(fields, null, 4)}`);
                         handleSubmit(fields)
-                        console.log(fields)
                       }}
                     >
                       {({ touched, errors }) => (

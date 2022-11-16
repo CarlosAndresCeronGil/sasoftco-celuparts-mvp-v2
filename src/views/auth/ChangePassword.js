@@ -71,7 +71,7 @@ const ChangePassword = () => {
                     postRecoverPassword(formData)
                       .then(response => {
                         setLoadingButton(false)
-                        console.log("respuesta recover password", response)
+                        // console.log("respuesta recover password", response)
                         Swal.fire({
                           icon: 'success',
                           title: 'Exito!',
@@ -82,7 +82,7 @@ const ChangePassword = () => {
                           })
                       })
                       .catch(error => {
-                        console.log("error del recover password", error)
+                        // console.log("error del recover password", error)
                         setLoadingButton(false)
                       })
                     // navigate('/');

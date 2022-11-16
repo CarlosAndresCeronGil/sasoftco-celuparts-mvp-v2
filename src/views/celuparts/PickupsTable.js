@@ -21,7 +21,7 @@ export default function PickupsTable() {
     }, [])
 
     let listPickups = alerts.filter(alert => alert.message.includes('domicilio ') === true)
-    console.log(listPickups)
+    // console.log(listPickups)
 
     return (
         <div>

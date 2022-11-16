@@ -58,7 +58,7 @@ export default function RetomaRequestsTable() {
         setLoading(true)
         getRequestRetomas({ page })
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 setRequests(response)
                 getAllBrandsDistinct()
                     .then(responseAllBrandDistinct => {
@@ -141,10 +141,10 @@ export default function RetomaRequestsTable() {
 
     const handleViewEquipmentInvoice = (e, { idEquipment }) => {
         e.preventDefault()
-        console.log(idEquipment)
+        // console.log(idEquipment)
         getEquipmentInvoice({ id: idEquipment })
             .then(response => {
-                console.log(response)
+                // console.log(response)
             })
             .catch(error => {
                 console.log(error)

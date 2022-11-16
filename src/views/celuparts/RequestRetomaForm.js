@@ -177,7 +177,7 @@ export default function RequestRetomaForm() {
             formData.append("equipmentInvoice", e.target.elements.equipmentInvoice.files[0])
 
             const deliveryAddress2 = isSameAddresses ? e.target.elements.pickUpAddress.value : e.target.elements.deliveryAddress.value
-            console.log('deliveryAddress: ', deliveryAddress2)
+            // console.log('deliveryAddress: ', deliveryAddress2)
 
             postEquipment(formData)
                 .then(dataEquipment => {
@@ -211,7 +211,7 @@ export default function RequestRetomaForm() {
                                 deviceDiagnostic: ""
                             })
                                 .then(dataRetoma => {
-                                    console.log("Entro al then de retoma", dataRetoma);
+                                    // console.log("Entro al then de retoma", dataRetoma);
                                     postRetomaPayment({
                                         idRetoma: dataRetoma.idRetoma,
                                         paymentMethod: e.target.elements.paymentMethod.value
@@ -301,7 +301,7 @@ export default function RequestRetomaForm() {
         e.preventDefault()
         getVerifyImei({ id: serial })
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setVerifyResponse(response)
             })
             .catch(error => {
@@ -313,7 +313,7 @@ export default function RequestRetomaForm() {
         e.preventDefault()
         getVerifyImei({ id: imei })
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setVerifyResponse(response)
             })
             .catch(error => {

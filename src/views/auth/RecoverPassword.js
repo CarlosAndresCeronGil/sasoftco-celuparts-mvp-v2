@@ -52,7 +52,7 @@ const RecoverPassword = () => {
                       .then(response => {
                         if (response.status == 200) {
                           setLoadingButton(false)
-                          console.log("start recovery response", response)
+                          // console.log("start recovery response", response)
                           Swal.fire({
                             icon: 'success',
                             title: 'Exito!',
