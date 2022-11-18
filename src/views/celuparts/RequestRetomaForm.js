@@ -92,8 +92,15 @@ export default function RequestRetomaForm() {
 
     //Variables para permitir que se haga un registro en una hora correcta
     const isSelectedDateToday = new Date().getDate() === startDate.getDate();
+    const isSelectedDateInFuture = +startDate > +new Date()
     let minTimeHour = new Date().getHours();
     if (!isSelectedDateToday) minTimeHour = 0;
+
+    const date = new Date();
+    let currentMins = date.getMinutes();
+    if(isSelectedDateInFuture) {
+        currentMins = 0;
+    }
 
     const navigate = useNavigate()
 
@@ -394,7 +401,7 @@ export default function RequestRetomaForm() {
                                                     className='form-control'
                                                     dateFormat="yyyy-MM-dd h:mm aa"
                                                     showTimeSelect
-                                                    minTime={new Date(new Date().setHours(minTimeHour, 0, 0, 0))}
+                                                    minTime={new Date(new Date().setHours(minTimeHour + 1, currentMins, 0, 0))}
                                                     maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
                                                     minDate={new Date()}
                                                     includeTimes={[

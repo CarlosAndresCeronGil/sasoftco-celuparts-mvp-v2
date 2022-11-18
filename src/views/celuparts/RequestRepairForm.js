@@ -363,7 +363,7 @@ export default function RequestRepairForm() {
                                                     id='PickUpTime'
                                                     className='form-control'
                                                     dateFormat="yyyy-MM-dd h:mm aa"
-                                                    minTime={new Date(new Date().setHours(minTimeHour, currentMins, 0, 0))}
+                                                    minTime={new Date(new Date().setHours(minTimeHour + 1, currentMins, 0, 0))}
                                                     // minTime={new Date(new Date().setHours(currentHour, currentMins, 0, 0))}
                                                     maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
                                                     minDate={new Date()}
