@@ -21,6 +21,8 @@ export default function UserRepairRequests() {
     const [showButtons, setShowButtons] = useState(true);
     const [loading, setLoading] = useState(false);
 
+    const [currentDeliveryDate, setCurrentDeliveryDate] = useState('')
+
     const [isOpenModal, setIsOpenModal] = useState(false);
     console.log(isOpenModal)
     const [viewDetails, setViewDetails] = useState({
@@ -31,15 +33,16 @@ export default function UserRepairRequests() {
         pickUpDate: ''
     });
 
-    const handleViewDetails = ({ autoDiagnosis, deliveryAddress, pickUpAddress, homeServices }) => {
+    const handleViewDetails = ({ autoDiagnosis, deliveryAddress, pickUpAddress, homeServices, deliveryDate }) => {
         setIsOpenModal(!isOpenModal);
         setViewDetails({
             autoDiagnosis,
             deliveryAddress,
             deliveryDate: homeServices[0].deliveryDate,
             pickUpAddress,
-            pickUpDate: homeServices[0].pickUpDate
+            pickUpDate: homeServices[0].pickUpDate,
         });
+        setCurrentDeliveryDate(homeServices[0].deliveryDate != null ? deliveryDate : 'Sin definir')
     };
 
     const addDays = (date, days) => {
@@ -321,11 +324,11 @@ export default function UserRepairRequests() {
                                                 {tdata.equipment?.equipmentBrand} {tdata.equipment?.modelOrReference}
                                             </td>
                                             <td>{tdata.requestStatus[0].status}</td>
-                                            <td>{tdata.repairs[0].repairQuote == "0" ? "Pendiente" : tdata.repairs[0].repairQuote}</td>
+                                            <td>{tdata.repairs[0].repairQuote == "0" && tdata.repairs[0].priceReviewedByAdmin == false ? "Pendiente" : tdata.repairs[0].repairQuote}</td>
                                             <td>
 
                                                 {
-                                                    tdata.statusQuote === 'Pendiente' && tdata.repairs[0].repairQuote !== "0" && showButtons ? (
+                                                    tdata.statusQuote === 'Pendiente' && tdata.repairs[0].priceReviewedByAdmin === true && showButtons ? (
                                                         <div className="text-danger">
                                                             <button type='button' onClick={() => handleAcceptClick(tdata.idRequest)} className="btn btn-primary">Aceptar</button>
                                                             <button type='button' onClick={() => handleRejectClick(tdata.idRequest)} className="btn btn-danger">Rechazar</button>
@@ -406,7 +409,11 @@ export default function UserRepairRequests() {
                                         Fecha de entrega:
                                     </span>
                                 </div>
-                                {new Date(viewDetails.deliveryDate).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" })}
+                                {
+                                    currentDeliveryDate != "Sin definir" ?
+                                    new Date(viewDetails.deliveryDate).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" })
+                                    : "Sin definir"
+                                }
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="secondary" onClick={handleViewDetails.bind(null)}>

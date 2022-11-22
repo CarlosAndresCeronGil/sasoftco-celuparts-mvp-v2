@@ -334,7 +334,9 @@ export default function AllRequestsTable() {
                                     <td>{tdata.requestStatus[0].status}</td>
                                     <td>
                                         <Link to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}>
-                                            <Button type='button' className="btn" color='primary'>Actualizar</Button>
+                                            <Button type='button' className="btn" color='primary'>
+                                                <i className="bi bi-pencil-fill"></i>
+                                            </Button>
                                         </Link>
                                     </td>
                                     <td>
@@ -347,7 +349,7 @@ export default function AllRequestsTable() {
                                             clientPhone: tdata.userDto.phone,
                                             deliveryDate: tdata.homeServices[0].deliveryDate
                                         })} >
-                                            Detalles
+                                            <i className="bi bi-search"></i>
                                         </Button>
                                     </td>
                                 </tr>

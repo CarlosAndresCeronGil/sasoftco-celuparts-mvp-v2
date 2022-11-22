@@ -14,7 +14,6 @@ import {
     Label,
     Input,
 } from "reactstrap";
-import DatePicker from 'react-datepicker';
 import Swal from 'sweetalert2'
 import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -38,6 +37,7 @@ export default function UpdateRepairForm() {
     const [repairDate, setRepairDate] = useState({ repairDate: new Date() });
     const [repairQuote, setRepairQuote] = useState({ repairQuote: 0 });
     const [idRequest, setIdRequest] = useState({ idRequest: 0 });
+    const [priceReviewedByAdmin, setPriceReviewedByAdmin] = useState({ priceReviewedByAdmin: false })
 
     const [isRepairDateNull, setIsRepairDateNull] = useState({ isRepairDateNull: false });
     const [isRepairStartDateNull, setIsRepairStartDateNull] = useState({ isRepairStartDateNull: false })
@@ -67,6 +67,7 @@ export default function UpdateRepairForm() {
     *   no mostrara el input de "Id de tecnico asociado" dado que lo tomara automaticamente
     */
     const [isTechnician, setIsTechnician] = useState(false)
+    const [isUserAdmin, setIsUserAdmin] = useState(false)
 
     const postListOfRepairCheckedParts = () => {
         listOfRepairCheckedParts.map((repariPart) => (
@@ -161,38 +162,41 @@ export default function UpdateRepairForm() {
                 repairStartDate: null,
                 deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
                 repairQuote: repairQuote.repairQuote,
+                priceReviewedByAdmin: isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false
             })
                 .then(data => {
                     postListOfRepairCheckedParts();
                     postListOfReplaceCheckedParts();
                     postUnCheckedParts();
-                    notifications.map(tdata => (
-                        tdata.idRequest === idRequest.idRequest ? (
-                            putRequestNotification({
-                                idRequestNotification: tdata.idRequestNotification,
-                                idRequest: tdata.idRequest,
-                                message: 'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
-                                wasReviewed: false,
-                                notificationType: "to_customer"
-                            })
-                                .then(response => {
-                                    // console.log("Exito!", response)
+                    isUserAdmin ? (
+                        notifications.map(tdata => (
+                            tdata.idRequest === idRequest.idRequest ? (
+                                putRequestNotification({
+                                    idRequestNotification: tdata.idRequestNotification,
+                                    idRequest: tdata.idRequest,
+                                    message: 'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
+                                    wasReviewed: false,
+                                    notificationType: "to_customer"
                                 })
-                                .then(finalResponse => {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Exito!',
-                                        text: 'Estado de reparación actualizadisimo!',
+                                    .then(response => {
+                                        // console.log("Exito!", response)
                                     })
-                                        .then(response => {
-                                            navigate(-1)
+                                    .then(finalResponse => {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Exito!',
+                                            text: 'Estado de reparación actualizadisimo!',
                                         })
-                                })
-                                .catch(error => {
-                                    console.log(error)
-                                })
-                        ) : null
-                    ))
+                                            .then(response => {
+                                                navigate(-1)
+                                            })
+                                    })
+                                    .catch(error => {
+                                        console.log(error)
+                                    })
+                            ) : null
+                        ))
+                    ) : null
                     setLoadingPut(false);
                 })
                 .catch(error => {
@@ -208,6 +212,7 @@ export default function UpdateRepairForm() {
                 repairStartDate: repairStartDate.repairStartDate,
                 deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
                 repairQuote: repairQuote.repairQuote,
+                priceReviewedByAdmin: isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false
             })
                 .then(data => {
                     // console.log(data)
@@ -256,6 +261,7 @@ export default function UpdateRepairForm() {
                 repairStartDate: null,
                 deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
                 repairQuote: repairQuote.repairQuote,
+                priceReviewedByAdmin: isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false
             })
                 .then(data => {
                     // console.log(data)
@@ -305,6 +311,7 @@ export default function UpdateRepairForm() {
                 repairStartDate: repairStartDate.repairStartDate,
                 deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
                 repairQuote: repairQuote.repairQuote,
+                priceReviewedByAdmin: isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false
             })
                 .then(data => {
                     postListOfRepairCheckedParts();
@@ -330,13 +337,16 @@ export default function UpdateRepairForm() {
 
     useEffect(function () {
         setLoading(true);
+        //admin aux_admin
+        JSON.parse(localStorage.getItem('user')).role === "admin" || JSON.parse(localStorage.getItem('user')).role === "aux_admin" ? setIsUserAdmin(true) : setIsUserAdmin(false);
         getSingleRepair({ id: params.id })
             .then(response => {
-                console.log("response single repair", response)
+                // console.log("response single repair", response)
                 setIdTechnician({ idTechnician: response[0].idTechnician })
                 setDeviceDiagnostic({ deviceDiagnostic: response[0].deviceDiagnostic })
                 setRepairQuote({ repairQuote: response[0].repairQuote })
                 setIdRequest({ idRequest: response[0].idRequest })
+                setPriceReviewedByAdmin({ priceReviewedByAdmin: response[0].priceReviewedByAdmin })
 
                 if (response[0].repairDate == null) {
                     setIsRepairDateNull({ isRepairDateNull: true })
@@ -513,10 +523,10 @@ export default function UpdateRepairForm() {
                                             />
                                         </FormGroup>
 
-                                        <FormGroup check>
+                                        {/* <FormGroup check>
                                             <Input disabled={!isRepairStartDateNull.isRepairStartDateNull} type='checkbox' onClick={handleStartRepairCheck} />
                                             <Label check>He empezado mi labor de reparación</Label>
-                                        </FormGroup>
+                                        </FormGroup> */}
 
                                         <FormGroup check>
                                             <Input disabled={!isRepairDateNull.isRepairDateNull || isRepairStartDateNull.isRepairStartDateNull} type='checkbox' onClick={handleFinishRepairCheck} />
@@ -543,10 +553,10 @@ export default function UpdateRepairForm() {
                                                             <tr key={index} className="border-top">
                                                                 <td>{part.partName}</td>
                                                                 <td>
-                                                                    <Input type='checkbox' 
+                                                                    <Input type='checkbox'
                                                                     checked={listOfReplaceCheckedParts.some(x => x == part.partName)} 
                                                                     disabled={listOfRepairCheckedParts.some(x => x == part.partName)} 
-                                                                    onChange={(e) => handleAddReplace(e, part.partName)} 
+                                                                    onChange={(e) => handleAddReplace(e, part.partName)}
                                                                     />
                                                                 </td>
                                                                 <td>

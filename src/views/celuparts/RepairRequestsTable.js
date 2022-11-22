@@ -159,7 +159,7 @@ export default function RepairRequestsTable() {
 
     return (
         loading ? <div>Cargando...</div> :
-            <div>
+            <div className='display-8 small'>
                 <BreadCrumbsCeluparts />
                 <ComponentCard title="Lista de reparaciones registradas en el sistema">
                     <Form onSubmit={handleSubmit}>

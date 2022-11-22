@@ -82,7 +82,8 @@ export default function RequestRetomaForm() {
     }
 
     //Variables para las fechas, finish date empieza en un día despues al día actual
-    const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16))
+    const [startDate, setStartDate] = useState(new Date())
+    // const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16))
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const [finishDate, setFinishDate] = useState(tomorrow);
@@ -106,6 +107,7 @@ export default function RequestRetomaForm() {
 
     useEffect(function () {
         setLoadingPage(true)
+        date.getHours() >= 17 && setStartDate(addDays(startDate, 1))
         getTypeOfEquipments()
             .then(typeOfEquipmentResponse => {
                 setTypeOfEquipmentList(typeOfEquipmentResponse)
@@ -304,6 +306,12 @@ export default function RequestRetomaForm() {
         return day !== 0 //solo ignora los domingos
     }
 
+    const addDays = (date, days) => {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
     const handleVerifySerial = (e) => {
         e.preventDefault()
         getVerifyImei({ id: serial })
@@ -424,7 +432,7 @@ export default function RequestRetomaForm() {
                                                         setHours(setMinutes(new Date(), 0), 18),
                                                     ]}
                                                     filterDate={isWeekDay}
-                                                    selected={startDate}
+                                                    selected={startDate.getDay() === 0 ? addDays(startDate, 1) : startDate}
                                                     onChange={(date) => setStartDate(date)}
                                                     timeFormat="HH:mm"
                                                 />

@@ -26,6 +26,7 @@ export default function UpdateRetomaForm() {
     const [retomaQuote, setRetomaQuote] = useState({ retomaQuote: 0 });
     const [idRetoma, setIdRetoma] = useState({ idRetoma: 0 });
     const [idRequest, setIdRequest] = useState({ idRequest: 0 });
+    const [priceReviewedByAdmin, setPriceReviewedByAdmin] = useState({ priceReviewedByAdmin: false })
 
     const [notifications, setNotifications] = useState([])
 
@@ -40,22 +41,25 @@ export default function UpdateRetomaForm() {
     *   no mostrara el input de "Id de tecnico asociado" dado que lo tomara automaticamente
     */
     const [isTechnician, setIsTechnician] = useState(false)
+    const [isUserAdmin, setIsUserAdmin] = useState(false)
 
     useEffect(function () {
         setLoading(true);
+        JSON.parse(localStorage.getItem('user')).role === "admin" || JSON.parse(localStorage.getItem('user')).role === "aux_admin" ? setIsUserAdmin(true) : setIsUserAdmin(false);
         getSingleRetoma({ id: params.id })
             .then(response => {
-                // console.log(response);
+                console.log(response);
                 setIdTechnician({ idTechnician: response.idTechnician })
                 setDeviceDiagnostic({ deviceDiagnostic: response.deviceDiagnostic })
                 setRetomaQuote({ retomaQuote: response.retomaQuote })
                 setIdRetoma({ idRetoma: response.idRetoma })
                 setIdRequest({ idRequest: response.idRequest })
+                setPriceReviewedByAdmin({ priceReviewedByAdmin: response.priceReviewedByAdmin })
 
                 if (JSON.parse(localStorage.getItem('user')).role == "tecnico") {
                     getTechnicianByEmail({ email: JSON.parse(localStorage.getItem('user')).email })
                         .then(responseTechnicianInfo => {
-                            setIdTechnician({ idTechnician: responseTechnicianInfo.idTechnician})
+                            setIdTechnician({ idTechnician: responseTechnicianInfo.idTechnician })
                         })
                     setIsTechnician(true)
                 } else {
@@ -88,25 +92,28 @@ export default function UpdateRetomaForm() {
             idTechnician: idTechnician.idTechnician,
             deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
             retomaQuote: retomaQuote.retomaQuote,
+            priceReviewedByAdmin: isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false
         })
             .then(() => {
-                notifications.map(tdata => (
-                    tdata.idRequest === idRequest.idRequest ? (
-                        putRequestNotification({
-                            idRequestNotification: tdata.idRequestNotification,
-                            idRequest: tdata.idRequest,
-                            message: 'Tu dispositivo ya tiene precio de retoma! haz click en "Mis retomas" para revisar',
-                            wasReviewed: false,
-                            notificationType: "to_customer"
-                        })
-                            .then(response => {
-                                console.log("Exito!", response)
+                isUserAdmin ? (
+                    notifications.map(tdata => (
+                        tdata.idRequest === idRequest.idRequest ? (
+                            putRequestNotification({
+                                idRequestNotification: tdata.idRequestNotification,
+                                idRequest: tdata.idRequest,
+                                message: 'Tu dispositivo ya tiene precio de retoma! haz click en "Mis retomas" para revisar',
+                                wasReviewed: false,
+                                notificationType: "to_customer"
                             })
-                            .catch(error => {
-                                console.log(error)
-                            })
-                    ) : null
-                ))
+                                .then(response => {
+                                    console.log("Exito!", response)
+                                })
+                                .catch(error => {
+                                    console.log(error)
+                                })
+                        ) : null
+                    ))
+                ) : null
                 setLoadingPut(false);
             })
             .catch(error => {
@@ -188,18 +195,23 @@ export default function UpdateRetomaForm() {
                                                 required
                                             />
                                         </FormGroup>
-                                        <FormGroup>
-                                            <Label for="retomaQuote">Precio de compra</Label>
-                                            <Input
-                                                id="retomaQuote"
-                                                name="retomaQuote"
-                                                placeholder="Ingrese la cuota de reparación del producto"
-                                                type="number"
-                                                value={retomaQuote.retomaQuote}
-                                                onChange={handleRepairQuoteChange}
-                                                required
-                                            />
-                                        </FormGroup>
+                                        {
+                                            isUserAdmin ? (
+                                                <FormGroup>
+                                                    <Label for="retomaQuote">Precio de compra</Label>
+                                                    <Input
+                                                        id="retomaQuote"
+                                                        name="retomaQuote"
+                                                        placeholder="Ingrese la cuota de reparación del producto"
+                                                        type="number"
+                                                        value={retomaQuote.retomaQuote}
+                                                        onChange={handleRepairQuoteChange}
+                                                        required
+                                                    />
+                                                </FormGroup>
+                                            ) : null
+                                        }
+
                                         {
                                             loadingPut ? (
                                                 <button className="btn btn-primary" type="button" disabled>

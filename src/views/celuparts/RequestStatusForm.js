@@ -26,6 +26,7 @@ import putRequestHistory from '../../services/putRequestHistory';
 import postRequestHistory from '../../services/postRequestHistory';
 import getRequestHistoryByIdRequest from '../../services/getRequestHistoryByIdRequest';
 import putHomeServiceByIdRequest from '../../services/putHomeServiceByIdRequest';
+import putRepairStartDateByIdRequest from '../../services/putRepairStartDateByIdRequest';
 
 export default function RequestStatusForm() {
     const [dataRequestStatus, setDataRequestStatus] = useState({});
@@ -255,6 +256,9 @@ export default function RequestStatusForm() {
                             })
                                 .then(response => {
                                     // console.log("exito!", response)
+                                    putRepairStartDateByIdRequest({
+                                        id: tdata.idRequest
+                                    })
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -445,7 +449,7 @@ export default function RequestStatusForm() {
                 getRequestNotificationByIdRequest({ idRequest: responseRequestStatus.idRequest })
                     .then(response2 => {
                         setNotifications(response2)
-                        /*Esta parte se necesita para el mensaje final al mensajero donde necesita saber fecha, 
+                        /*Esta parte se necesita para el mensaje final al mensajero donde necesita saber fecha,
                         nombre del producto y direccion de entrega*/
                         getSingleRequest({ id: responseRequestStatus.idRequest })
                             .then(response3 => {

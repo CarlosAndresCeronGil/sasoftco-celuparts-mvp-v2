@@ -25,6 +25,8 @@ export default function UserRetomaRequests() {
         pickUpDate: '',
     });
 
+    const [currentDeliveryDate, setCurrentDeliveryDate] = useState('')
+
     const handleViewDetails = ({ autoDiagnosis, deliveryAddress, pickUpAddress, homeServices }) => {
         setIsOpenModal(!isOpenModal);
         setViewDetails({
@@ -34,6 +36,7 @@ export default function UserRetomaRequests() {
             pickUpAddress,
             pickUpDate: homeServices[0]?.pickUpDate,
         });
+        setCurrentDeliveryDate(homeServices[0].deliveryDate != null ? deliveryDate : 'Sin definir')
     }
 
     const addDays = (date, days) => {
@@ -192,11 +195,11 @@ export default function UserRetomaRequests() {
                                                 {tdata.equipment.equipmentBrand} {tdata.equipment.modelOrReference}
                                             </td>
                                             <td>{tdata.requestStatus[0].status}</td>
-                                            <td>{tdata.retoma[0].retomaQuote == "0" ? "Pendiente" : tdata.retoma[0].retomaQuote}</td>
+                                            <td>{tdata.retoma[0].retomaQuote == "0" && tdata.retoma[0].priceReviewedByAdmin == false ? "Pendiente" : tdata.retoma[0].retomaQuote}</td>
                                             <td>
 
                                                 {
-                                                    tdata.statusQuote === 'Pendiente' && tdata.retoma[0].retomaQuote !== "0" && showButtons ? (
+                                                    tdata.statusQuote === 'Pendiente' && tdata.retoma[0].priceReviewedByAdmin === true && showButtons ? (
                                                         <div className="text-danger">
                                                             <button type='button' onClick={() => handleAcceptClick(tdata.idRequest)} className="btn btn-primary">Aceptar</button>
                                                             <button type='button' onClick={() => handleRejectClick(tdata.idRequest)} className="btn btn-danger">Rechazar</button>
@@ -266,8 +269,11 @@ export default function UserRetomaRequests() {
                                         Fecha de entrega:
                                     </span>
                                 </div>
-                                {/* {viewDetails.deliveryDate} */}
-                                {new Date(viewDetails.deliveryDate).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" })}
+                                {
+                                    currentDeliveryDate != "Sin definir" ?
+                                    new Date(viewDetails.deliveryDate).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" })
+                                    : "Sin definir"
+                                }
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="secondary" onClick={handleViewDetails.bind(null)}>
