@@ -142,10 +142,6 @@ const SidebarDatas = () => {
             href: "./siigo-journals-table"
           },
           {
-            title: "Grupos de inventario",
-            href: "./siigo-account-groups-table"
-          },
-          {
             title: "Impuestos",
             href: "./siigo-taxes-table"
           },
