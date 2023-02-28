@@ -346,11 +346,7 @@ export default function RequestRepairForm() {
                 <ComponentCard title="Datos de la solicitud">
                   <Row>
                     <Col>
-                      <Checkbox
-                        defaultChecked
-                        label=" Usar la misma dirección"
-                        onChange={handleSameAddresses}
-                      />
+                      <Checkbox label=" Usar la misma dirección" onChange={handleSameAddresses} />
                     </Col>
                   </Row>
                   <Row className="mt-3">
@@ -386,7 +382,6 @@ export default function RequestRepairForm() {
                           placeholder="Ingrese la dirección donde se entregara el producto"
                           label="Dirección de entrega"
                           required
-                          disabled
                           fullWidth
                           InputProps={{
                             startAdornment: (
@@ -407,6 +402,7 @@ export default function RequestRepairForm() {
                             label="Dirección de entrega"
                             placeholder="Ingrese la dirección donde se entregara el producto"
                             required
+                            disabled
                             InputProps={{
                               startAdornment: (
                                 <InputAdornment position="start">
@@ -431,7 +427,6 @@ export default function RequestRepairForm() {
                           onChange={(newValue) => {
                             setValue(newValue);
                           }}
-                          inputRef={(input) => input && input.focus()}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
@@ -794,13 +789,16 @@ export default function RequestRepairForm() {
                   {verifyResponse}
                   <Row className="my-3">
                     <Col>
-                      <Label for="autoDiagnosis">Describe brevemente en qué falla tu equipo*</Label>
-                      <Input
+                      <TextField
                         id="autoDiagnosis"
                         name="autoDiagnosis"
                         placeholder="Máximo 250 caracteres"
                         type="textarea"
                         maxLength={250}
+                        multiline
+                        fullWidth
+                        rows={2}
+                        label="Describe brevemente en qué falla tu equipo"
                         required
                       />
                     </Col>

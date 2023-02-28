@@ -18,3 +18,25 @@
   top: 50%;
   border-radius: 5px 0 0 5px;
 }
+
+upload-file-field > div > input {
+  cursor: pointer !important;
+}
+
+.upload-file-field label {
+  top: 15px !important;
+  left: 15px !important;
+}
+
+.upload-file-field > div > input::file-selector-button {
+  background: #eef5f9;
+  color: black !important;
+  padding: 0.3em 0.8em !important;
+  border: none;
+  font-size: 0.9em !important;
+  cursor: pointer !important;
+  border-radius: 10px;
+}
+.upload-file-field > div > input {
+  cursor: pointer !important;
+}
