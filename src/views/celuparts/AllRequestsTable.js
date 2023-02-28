@@ -69,10 +69,40 @@ export default function AllRequestsTable() {
     const [formattedFinallDate, setFormattedFinalDate] = useState('0001-1-1')
 
     useEffect(function () {
+        let initialDateString = localStorage.getItem("initialDateAll") || null;
+        var initialDateAux;
+        if(initialDateString != null) {
+            setInitialDate({ initialDate: new Date(initialDateString) });
+            initialDateAux = new Date(initialDateString);
+        }
+
+        let finalDateString = localStorage.getItem("finalDateAll") || null;
+        var finalDateAux;
+        if(finalDateString != null) {
+            setFinalDate({ finalDate: new Date(finalDateString) });
+            finalDateAux = new Date(finalDateString);
+        }
+
+        setRequestStatus(localStorage.getItem("requestStatusAll") || "");
+        setUserDtoIdNumber(localStorage.getItem("userDtoIdNumberAll") || "");
+        setUserDtoName(localStorage.getItem("userDtoNamesAll") || "");
+        setUserDtoSurname(localStorage.getItem("userDtoSurnamesAll") || "");
+        setEquipmentBrand(localStorage.getItem("equipmentBrandAll") || "");
+        setEquipmentModel(localStorage.getItem("equipmentModelAll") || "");
+
         setLoading(true)
-        getAllRequests({ page })
+        getAllRequests({
+            page,
+            initialDate: initialDateString != null ? `${initialDateAux.getFullYear()}-${initialDateAux.getMonth() + 1}-${initialDateAux.getDate()}` : '0001-1-1',
+            finalDate: finalDateString != null ? `${finalDateAux.getFullYear()}-${finalDateAux.getMonth() + 1}-${finalDateAux.getDate()}` : '0001-1-1',
+            requestStatus: localStorage.getItem("requestStatusAll") || "",
+            userDtoIdNumber: localStorage.getItem("userDtoIdNumberAll") || "",
+            userDtoName: localStorage.getItem("userDtoNamesAll") || "",
+            userDtoSurname: localStorage.getItem("userDtoSurnamesAll") || "",
+            equipmentBrand: localStorage.getItem("equipmentBrandAll") || "",
+            equipmentModel: localStorage.getItem("equipmentModelAll") || ""
+        })
             .then((response) => {
-                // console.log("all requests", response)
                 setRequests(response)
                 getAllBrandsDistinct()
                     .then(responseBrandsDistinct => {
@@ -94,6 +124,10 @@ export default function AllRequestsTable() {
         e.preventDefault()
         //Se consulta desde una fecha inicial hasta una fecha final
         setLoading(true)
+        localStorage.setItem("userDtoIdNumberAll", e.target.elements.userDtoIdNumber.value)
+        localStorage.setItem("userDtoNamesAll", e.target.elements.userDtoNames.value)
+        localStorage.setItem("userDtoSurnamesAll", e.target.elements.userDtoSurnames.value)
+        localStorage.setItem("equipmentModelAll", e.target.elements.equipmentModel.value)
 
         getAllRequests({
             page: 1,
@@ -135,26 +169,50 @@ export default function AllRequestsTable() {
     }
 
     const handleCleanFilters = () => {
-        setInitialDate({ initialDate: null })
-        setFinalDate({ finalDate: null })
-        setFormattedInitialDate('0001-1-1')
-        setFormattedFinalDate('0001-1-1')
-        setRequestStatus('')
-        setUserDtoIdNumber('')
-        setUserDtoName('')
-        setUserDtoSurname('')
-        setEquipmentBrand('')
-        setEquipmentModel('')
+        setInitialDate({ initialDate: null });
+        setFinalDate({ finalDate: null });
+        setFormattedInitialDate('0001-1-1');
+        setFormattedFinalDate('0001-1-1');
+        setRequestStatus('');
+        setUserDtoIdNumber('');
+        setUserDtoName('');
+        setUserDtoSurname('');
+        setEquipmentBrand('');
+        setEquipmentModel('');
+
+        setPage(1);
+
+        localStorage.removeItem("initialDateAll");
+        localStorage.removeItem("finalDateAll");
+
+        localStorage.removeItem("requestStatusAll")
+        localStorage.removeItem("userDtoIdNumberAll")
+        localStorage.removeItem("userDtoNamesAll")
+        localStorage.removeItem("userDtoSurnamesAll");
+        localStorage.removeItem("equipmentBrandAll");
+        localStorage.removeItem("equipmentModelAll");
     }
 
     const handleChangeInitialDate = (date) => {
         // setFormattedInitialDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
         setInitialDate({ initialDate: date })
+        if(date != null) {
+            let initialDateString = date.toISOString();
+            localStorage.setItem("initialDateAll", initialDateString);
+        } else {
+            localStorage.removeItem("initialDateAll")
+        }
     }
 
     const handleChangeFinalDate = (date) => {
         // setFormattedFinalDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
         setFinalDate({ finalDate: date })
+        if(date != null) {
+            let finalDateString = date.toISOString();
+            localStorage.setItem("finalDateAll", finalDateString);
+        } else {
+            localStorage.removeItem("finalDateAll");
+        }
     }
 
     return (
@@ -244,7 +302,10 @@ export default function AllRequestsTable() {
                                                 className='form-control'
                                                 id='equipmentBrand'
                                                 value={equipmentBrand}
-                                                onChange={(e) => setEquipmentBrand(e.target.value)}
+                                                onChange={(e) => {
+                                                    setEquipmentBrand(e.target.value)
+                                                    localStorage.setItem("equipmentBrandAll", e.target.value)
+                                                }}
                                                 type='select'
                                             >
                                                 <option value=''>SIN FILTRO</option>
@@ -278,7 +339,10 @@ export default function AllRequestsTable() {
                                                 className='form-control'
                                                 id='requestStatus'
                                                 value={requestStatus || ''}
-                                                onChange={(e) => setRequestStatus(e.target.value)}
+                                                onChange={(e) => {
+                                                    setRequestStatus(e.target.value)
+                                                    localStorage.setItem("requestStatusAll", e.target.value)
+                                                }}
                                                 type='select'
                                             >
                                                 <option value=''>SIN FILTRO</option>
