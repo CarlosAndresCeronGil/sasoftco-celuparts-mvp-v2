@@ -1,19 +1,24 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
-import {
-  Card,
-  Row,
-  Col,
-  CardTitle,
-  CardSubtitle,
-  CardBody,
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-} from 'reactstrap';
-import { FormControl, TextField, MenuItem } from '@mui/material';
+import dayjs from 'dayjs';
+import { Row, Col, CardTitle, CardBody, Button, Form, Label, Input } from 'reactstrap';
+import { TextField, MenuItem, Alert, InputAdornment } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
+
+import MyLocationIcon from '@mui/icons-material/MyLocation';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import PlaceIcon from '@mui/icons-material/Place';
+import AddCardIcon from '@mui/icons-material/AddCard';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import DevicesOtherIcon from '@mui/icons-material/DevicesOther';
+import ComputerIcon from '@mui/icons-material/Computer';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import TabletIcon from '@mui/icons-material/Tablet';
+import WatchIcon from '@mui/icons-material/Watch';
+import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
+import NumbersIcon from '@mui/icons-material/Numbers';
 
 import * as Yup from 'yup';
 import DatePicker from 'react-datepicker';
@@ -74,8 +79,10 @@ export default function RequestRepairForm() {
     setIsSameAddresses(!isSameAddresses);
   };
 
+  const [value, setValue] = React.useState(dayjs('2022-04-07'));
   //Variables para las fechas, finish date empieza en un día despues al día actual
   const [startDate, setStartDate] = useState(new Date());
+
   // const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16));
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -331,14 +338,23 @@ export default function RequestRepairForm() {
         <Row>
           <Col>
             {/* <Card className='container'> */}
-            <CardTitle tag="h4" className="border-bottom p-3 mb-0 justify-content-start">
-              Nueva solicitud de reparación
+            <CardTitle tag="h4" className="font-weight-bold p-3 mb-0 justify-content-start">
+              <NoteAddIcon /> Nueva solicitud de reparación
             </CardTitle>
             <CardBody>
               <Form onSubmit={handleSubmit}>
                 <ComponentCard title="Datos de la solicitud">
                   <Row>
-                    <Col md="6">
+                    <Col>
+                      <Checkbox
+                        defaultChecked
+                        label=" Usar la misma dirección"
+                        onChange={handleSameAddresses}
+                      />
+                    </Col>
+                  </Row>
+                  <Row className="mt-3">
+                    <Col md="6" className="mb-3">
                       <TextField
                         aria-describedby="my-helper-text"
                         id="pickUpAddress"
@@ -347,141 +363,196 @@ export default function RequestRepairForm() {
                         onChange={(e) => setPickUpAddress(e.target.value)}
                         placeholder="Ingrese la dirección donde se recogerá el producto"
                         type="text"
-                        label="Dirección Recogida"
+                        label="Dirección de recogida"
                         required
                         fullWidth
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <PlaceIcon />
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Col>
                     <Col md="6">
                       {!isSameAddresses ? (
-                        <FormGroup floating>
+                        <TextField
+                          id="deliveryAddress"
+                          name="deliveryAddress"
+                          value={deliveryAddress}
+                          onChange={(e) => setDeliveryAddress(e.target.value)}
+                          type="text"
+                          placeholder="Ingrese la dirección donde se entregara el producto"
+                          label="Dirección de entrega"
+                          required
+                          disabled
+                          fullWidth
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <MyLocationIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      ) : (
+                        <>
                           <TextField
                             id="deliveryAddress"
                             name="deliveryAddress"
-                            value={deliveryAddress}
-                            onChange={(e) => setDeliveryAddress(e.target.value)}
-                            placeholder="Ingrese la dirección donde se entregara el producto"
-                            type="text"
-                            label="Dirección de entrega"
-                            required
-                            fullWidth
-                          />
-                        </FormGroup>
-                      ) : (
-                        <FormGroup floating>
-                          <Label for="deliveryAddress">Dirección de entrega*</Label>
-                          <Input
-                            id="deliveryAddress"
-                            name="deliveryAddress"
                             value={pickUpAddress}
-                            placeholder="Ingrese la dirección donde se entregara el producto"
                             type="text"
-                            disabled
+                            fullWidth
+                            label="Dirección de entrega"
+                            placeholder="Ingrese la dirección donde se entregara el producto"
+                            required
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <MyLocationIcon />
+                                </InputAdornment>
+                              ),
+                            }}
                           />
-                        </FormGroup>
+                        </>
                       )}
                     </Col>
                   </Row>
 
-                  <Row>
-                    <Col md="6">
-                      <FormGroup floating>
-                        {/* <Label for="PickUpTime">Fecha y hora de recogida*</Label> */}
-
-                        <DatePicker
-                          id="PickUpTime"
-                          className="form-control"
-                          dateFormat="yyyy-MM-dd h:mm aa"
-                          minTime={
-                            new Date(new Date().setHours(minTimeHour + 1, currentMins, 0, 0))
-                          }
-                          // minTime={new Date(new Date().setHours(currentHour, currentMins, 0, 0))}
-                          maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
-                          minDate={new Date()}
-                          showTimeSelect
-                          placeholder="Fecha y Hora de recogida"
-                          includeTimes={[
-                            setHours(setMinutes(new Date(), 30), 8),
-                            setHours(setMinutes(new Date(), 0), 9),
-                            setHours(setMinutes(new Date(), 30), 9),
-                            setHours(setMinutes(new Date(), 0), 10),
-                            setHours(setMinutes(new Date(), 30), 10),
-                            setHours(setMinutes(new Date(), 0), 11),
-                            setHours(setMinutes(new Date(), 30), 11),
-                            setHours(setMinutes(new Date(), 0), 12),
-                            setHours(setMinutes(new Date(), 0), 14),
-                            setHours(setMinutes(new Date(), 30), 14),
-                            setHours(setMinutes(new Date(), 0), 15),
-                            setHours(setMinutes(new Date(), 30), 15),
-                            setHours(setMinutes(new Date(), 0), 16),
-                            setHours(setMinutes(new Date(), 30), 16),
-                            setHours(setMinutes(new Date(), 0), 17),
-                            setHours(setMinutes(new Date(), 30), 17),
-                            setHours(setMinutes(new Date(), 0), 18),
-                          ]}
-                          filterDate={isWeekDay}
-                          selected={startDate.getDay() === 0 ? addDays(startDate, 1) : startDate}
-                          onChange={(date) => setStartDate(date)}
-                          timeFormat="HH:mm"
+                  <Row className="mt-3">
+                    <Col md="6" className="mb-3">
+                      {/* <Label for="PickUpTime">Fecha y hora de recogida*</Label> */}
+                      <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ width: '100%' }}>
+                        <MobileDateTimePicker
+                          renderInput={(props) => <TextField {...props} fullWidth />}
+                          label="Fecha y hora de recogida"
+                          value={value}
+                          onChange={(newValue) => {
+                            setValue(newValue);
+                          }}
+                          inputRef={(input) => input && input.focus()}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <EventNoteIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                          helperText="Some important text"
                         />
-                      </FormGroup>
+                      </LocalizationProvider>
+                      <Alert sx={{ marginTop: 1 }} severity="info">
+                        El mensajero llegará en un estimado de 1 hora{' '}
+                      </Alert>
+
+                      {/* <DatePicker
+                        id="PickUpTime"
+                        className="form-control"
+                        dateFormat="yyyy-MM-dd h:mm aa"
+                        minTime={new Date(new Date().setHours(minTimeHour + 1, currentMins, 0, 0))}
+                        // minTime={new Date(new Date().setHours(currentHour, currentMins, 0, 0))}
+                        maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
+                        minDate={new Date()}
+                        showTimeSelect
+                        placeholder="Fecha y Hora de recogida"
+                        includeTimes={[
+                          setHours(setMinutes(new Date(), 30), 8),
+                          setHours(setMinutes(new Date(), 0), 9),
+                          setHours(setMinutes(new Date(), 30), 9),
+                          setHours(setMinutes(new Date(), 0), 10),
+                          setHours(setMinutes(new Date(), 30), 10),
+                          setHours(setMinutes(new Date(), 0), 11),
+                          setHours(setMinutes(new Date(), 30), 11),
+                          setHours(setMinutes(new Date(), 0), 12),
+                          setHours(setMinutes(new Date(), 0), 14),
+                          setHours(setMinutes(new Date(), 30), 14),
+                          setHours(setMinutes(new Date(), 0), 15),
+                          setHours(setMinutes(new Date(), 30), 15),
+                          setHours(setMinutes(new Date(), 0), 16),
+                          setHours(setMinutes(new Date(), 30), 16),
+                          setHours(setMinutes(new Date(), 0), 17),
+                          setHours(setMinutes(new Date(), 30), 17),
+                          setHours(setMinutes(new Date(), 0), 18),
+                        ]}
+                        filterDate={isWeekDay}
+                        selected={startDate.getDay() === 0 ? addDays(startDate, 1) : startDate}
+                        onChange={(date) => setStartDate(date)}
+                        timeFormat="HH:mm"
+                      /> */}
                     </Col>
                     <Col md="6">
-                      <FormGroup floating>
-                        <TextField
-                          id="paymentMethod"
-                          name="paymentMethod"
-                          type="select"
-                          select
-                          label="Metodo de pago"
-                          defaultValue="Contraentrega"
-                          required
-                          fullWidth
-                        >
-                          <MenuItem value="Contraentrega">Contraentrega</MenuItem>
-                          <MenuItem value="Transferencia bancaria">Transferencia bancaria</MenuItem>
-                          <MenuItem value={'Datafono'}>Dátafono</MenuItem>
-                        </TextField>
-                      </FormGroup>
+                      <TextField
+                        id="paymentMethod"
+                        name="paymentMethod"
+                        type="select"
+                        select
+                        label="Metodo de pago"
+                        defaultValue="Contraentrega"
+                        required
+                        fullWidth
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <AddCardIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                      >
+                        <MenuItem value="Contraentrega">Contraentrega</MenuItem>
+                        <MenuItem value="Transferencia bancaria">Transferencia bancaria</MenuItem>
+                        <MenuItem value={'Datafono'}>Dátafono</MenuItem>
+                      </TextField>
                     </Col>
                   </Row>
                 </ComponentCard>
 
                 <ComponentCard title="Datos del equipo">
                   {/* --------------- Datos equipo ---------------- */}
-                  {/* <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
+                  {/* <CardSubtitle tag="h6" className="border-bottom p-1 mb-3">
                                             <i className="bi bi-box-seam"> </i>
                                             <strong>Datos del equipo</strong>
                                         </CardSubtitle> */}
-                  <FormGroup>
-                    <Label for="typeOfEquipment">Tipo de dispositivo*</Label>
-                    <Input
-                      id="typeOfEquipment"
-                      name="select"
-                      type="select"
-                      value={typeOfEquipment.typeOfEquipment}
-                      onChange={(e) => {
-                        setTypeOfEquipment({ typeOfEquipment: e.target.value });
-                        e.target.value == '1'
-                          ? setEquipmentBrand(computersList[0].brandName)
-                          : e.target.value == '2'
-                          ? setEquipmentBrand(cellphoneList[0].brandName)
-                          : e.target.value == '3'
-                          ? setEquipmentBrand(tabletsList[0].brandName)
-                          : setEquipmentBrand(smartWatchesList[0].brandName);
-                      }}
-                    >
-                      {typeOfEquipmentList.map((typeOfEquipmentData, index) => (
-                        <option value={typeOfEquipmentData.idTypeOfEquipment} key={index}>
-                          {typeOfEquipmentData.equipmentTypeName}
-                        </option>
-                      ))}
-                    </Input>
-                  </FormGroup>
-                  {typeOfEquipment.typeOfEquipment === '1' ? (
-                    <FormGroup>
-                      <Label for="typeOfEquipment">Marca del computador*</Label>
-                      {/* <Combobox
+                  <Row className="mt-3">
+                    <Col md="6" className="mb-3">
+                      <TextField
+                        id="typeOfEquipment"
+                        name="select"
+                        type="select"
+                        select
+                        label="Tipo de Dispositivo"
+                        required
+                        fullWidth
+                        value={typeOfEquipment.typeOfEquipment}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <DevicesOtherIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                        onChange={(e) => {
+                          setTypeOfEquipment({ typeOfEquipment: e.target.value });
+                          e.target.value == '1'
+                            ? setEquipmentBrand(computersList[0].brandName)
+                            : e.target.value == '2'
+                            ? setEquipmentBrand(cellphoneList[0].brandName)
+                            : e.target.value == '3'
+                            ? setEquipmentBrand(tabletsList[0].brandName)
+                            : setEquipmentBrand(smartWatchesList[0].brandName);
+                        }}
+                      >
+                        {typeOfEquipmentList.map((typeOfEquipmentData, index) => (
+                          <MenuItem value={typeOfEquipmentData.idTypeOfEquipment} key={index}>
+                            {typeOfEquipmentData.equipmentTypeName}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Col>
+
+                    {typeOfEquipment.typeOfEquipment === '1' ? (
+                      <Col md="6">
+                        {/* <Combobox
                                                         required
                                                         placeholder='Seleccione la marca del computador'
                                                         id="equipmentBrand"
@@ -491,25 +562,34 @@ export default function RequestRepairForm() {
                                                         value={equipmentBrand}
                                                         onChange={brand => setEquipmentBrand(brand)}
                                                     /> */}
-                      <Input
-                        required
-                        id="equipmentBrand"
-                        name="equipmentBrand"
-                        type="select"
-                        value={equipmentBrand}
-                        onChange={(e) => setEquipmentBrand(e.target.value)}
-                      >
-                        {computersList.map((computerData, index) => (
-                          <option value={computerData.brandName} key={index}>
-                            {computerData.brandName}
-                          </option>
-                        ))}
-                      </Input>
-                    </FormGroup>
-                  ) : typeOfEquipment.typeOfEquipment === '2' ? (
-                    <FormGroup>
-                      <Label for="typeOfEquipment">Marca del celular*</Label>
-                      {/* <Combobox
+                        <TextField
+                          required
+                          id="equipmentBrand"
+                          name="equipmentBrand"
+                          type="select"
+                          select
+                          label="Marca del computador"
+                          fullWidth
+                          value={equipmentBrand}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <ComputerIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                          onChange={(e) => setEquipmentBrand(e.target.value)}
+                        >
+                          {computersList.map((computerData, index) => (
+                            <option value={computerData.brandName} key={index}>
+                              {computerData.brandName}
+                            </option>
+                          ))}
+                        </TextField>
+                      </Col>
+                    ) : typeOfEquipment.typeOfEquipment === '2' ? (
+                      <Col md="6">
+                        {/* <Combobox
                                                         required
                                                         placeholder='Seleccione la marca del celular'
                                                         id="equipmentBrand"
@@ -519,84 +599,133 @@ export default function RequestRepairForm() {
                                                         value={equipmentBrand}
                                                         onChange={brand => setEquipmentBrand(brand)}
                                                     /> */}
-                      <Input
-                        required
-                        id="equipmentBrand"
-                        name="equipmentBrand"
-                        type="select"
-                        value={equipmentBrand}
-                        onChange={(e) => setEquipmentBrand(e.target.value)}
-                      >
-                        {cellphoneList.map((cellphoneData, index) => (
-                          <option value={cellphoneData.brandName} key={index}>
-                            {cellphoneData.brandName}
-                          </option>
-                        ))}
-                      </Input>
-                    </FormGroup>
-                  ) : typeOfEquipment.typeOfEquipment === '3' ? (
-                    <FormGroup>
-                      <Label for="typeOfEquipment">Marca de la tablet*</Label>
-                      <Input
-                        required
-                        id="equipmentBrand"
-                        name="equipmentBrand"
-                        type="select"
-                        value={equipmentBrand}
-                        onChange={(e) => setEquipmentBrand(e.target.value)}
-                      >
-                        {tabletsList.map((tabletData, index) => (
-                          <option value={tabletData.brandName} key={index}>
-                            {tabletData.brandName}
-                          </option>
-                        ))}
-                      </Input>
-                    </FormGroup>
-                  ) : (
-                    <FormGroup>
-                      <Label for="typeOfEquipment">Marca del smartWatch*</Label>
-                      <Input
-                        required
-                        id="equipmentBrand"
-                        name="equipmentBrand"
-                        type="select"
-                        value={equipmentBrand}
-                        onChange={(e) => setEquipmentBrand(e.target.value)}
-                      >
-                        {smartWatchesList.map((smartWatchData, index) => (
-                          <option value={smartWatchData.brandName} key={index}>
-                            {smartWatchData.brandName}
-                          </option>
-                        ))}
-                      </Input>
-                    </FormGroup>
-                  )}
-
-                  <FormGroup>
-                    <Label for="modelOrReference">Modelo o referencia dispositivo*</Label>
-                    <Input
-                      id="modelOrReference"
-                      name="modelOrReference"
-                      placeholder="Ingrese el modelo o referencia del dispositivo"
-                      type="text"
-                      required
-                    />
-                  </FormGroup>
-                  {typeOfEquipment.typeOfEquipment === '1' ? (
-                    <div>
-                      <FormGroup>
-                        <Label for="imei">Serial del dispositivo*</Label>
-                        <Input
-                          id="imei"
-                          name="imei"
-                          value={serial}
-                          placeholder="Ingrese el imei dispositivo"
-                          type="text"
-                          onChange={(e) => setSerial(e.target.value)}
+                        <TextField
                           required
-                        />
-                      </FormGroup>
-                      {/* {
+                          id="equipmentBrand"
+                          name="equipmentBrand"
+                          type="select"
+                          value={equipmentBrand}
+                          select
+                          label="Marca del celular"
+                          fullWidth
+                          defaultValue=""
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <PhoneAndroidIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                          onChange={(e) => setEquipmentBrand(e.target.value)}
+                        >
+                          {cellphoneList.map((cellphoneData, index) => (
+                            <option value={cellphoneData.brandName} key={index}>
+                              {cellphoneData.brandName}
+                            </option>
+                          ))}
+                        </TextField>
+                      </Col>
+                    ) : typeOfEquipment.typeOfEquipment === '3' ? (
+                      <Col md="6">
+                        <TextField
+                          required
+                          id="equipmentBrand"
+                          name="equipmentBrand"
+                          type="select"
+                          select
+                          label="Marca de la tablet"
+                          fullWidth
+                          defaultValue=""
+                          value={equipmentBrand}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <TabletIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                          onChange={(e) => setEquipmentBrand(e.target.value)}
+                        >
+                          {tabletsList.map((tabletData, index) => (
+                            <option value={tabletData.brandName} key={index}>
+                              {tabletData.brandName}
+                            </option>
+                          ))}
+                        </TextField>
+                      </Col>
+                    ) : (
+                      <Col md="6">
+                        <TextField
+                          required
+                          id="equipmentBrand"
+                          name="equipmentBrand"
+                          type="select"
+                          select
+                          label="Marca del smartWatch"
+                          fullWidth
+                          defaultValue=""
+                          value={equipmentBrand}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <WatchIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                          onChange={(e) => setEquipmentBrand(e.target.value)}
+                        >
+                          {smartWatchesList.map((smartWatchData, index) => (
+                            <option value={smartWatchData.brandName} key={index}>
+                              {smartWatchData.brandName}
+                            </option>
+                          ))}
+                        </TextField>
+                      </Col>
+                    )}
+                  </Row>
+
+                  <Row className="mt-3">
+                    <Col md="6" className="mb-3">
+                      <TextField
+                        id="modelOrReference"
+                        name="modelOrReference"
+                        placeholder="Ingrese el modelo o referencia del dispositivo"
+                        type="text"
+                        required
+                        label="Modelo o referencia dispositivo"
+                        fullWidth
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <AppSettingsAltIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Col>
+                    {typeOfEquipment.typeOfEquipment === '1' ? (
+                      <>
+                        <Col md="6">
+                          <TextField
+                            id="imei"
+                            name="imei"
+                            value={serial}
+                            placeholder="Ingrese el imei dispositivo"
+                            type="text"
+                            onChange={(e) => setSerial(e.target.value)}
+                            required
+                            label="Serial del dispositivo"
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <NumbersIcon />
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                        </Col>
+                        {/* {
                                                         serial === '' && currentRole !== 'user' ?
                                                             <FormGroup>
                                                                 <Button disabled>
@@ -611,22 +740,23 @@ export default function RequestRepairForm() {
                                                                 </FormGroup>
                                                                 : null
                                                     } */}
-                    </div>
-                  ) : typeOfEquipment.typeOfEquipment === '2' ? (
-                    <div>
-                      <FormGroup>
-                        <Label for="imei">Imei del dispositivo*</Label>
-                        <Input
-                          id="imei"
-                          name="imei"
-                          value={imei}
-                          placeholder="Ingrese el imei dispositivo"
-                          type="text"
-                          onChange={(e) => setImei(e.target.value)}
-                          required
-                        />
-                      </FormGroup>
-                      {/* {
+                      </>
+                    ) : typeOfEquipment.typeOfEquipment === '2' ? (
+                      <>
+                        <Col md="6">
+                          <TextField
+                            id="imei"
+                            name="imei"
+                            value={imei}
+                            placeholder="Ingrese el imei dispositivo"
+                            type="text"
+                            onChange={(e) => setImei(e.target.value)}
+                            required
+                            label="Imei del dispositivo"
+                            fullWidth
+                          />
+                        </Col>
+                        {/* {
                                                         imei === '' && currentRole !== 'user' ?
                                                             <FormGroup>
                                                                 <Button disabled>
@@ -641,35 +771,40 @@ export default function RequestRepairForm() {
                                                                 </FormGroup>
                                                                 : null
                                                     } */}
-                    </div>
-                  ) : (
-                    <div>
-                      <FormGroup>
-                        <Label for="imei">Imei/Serial del dispositivo*</Label>
-                        <Input
-                          id="imei"
-                          name="imei"
-                          value={imei}
-                          placeholder="Ingrese el imei dispositivo"
-                          type="text"
-                          onChange={(e) => setImei(e.target.value)}
-                          required
-                        />
-                      </FormGroup>
-                    </div>
-                  )}
+                      </>
+                    ) : (
+                      <>
+                        <Col md="6">
+                          <Label for="imei">Imei/Serial del dispositivo*</Label>
+                          <TextField
+                            id="imei"
+                            name="imei"
+                            value={imei}
+                            placeholder="Ingrese el imei dispositivo"
+                            type="text"
+                            onChange={(e) => setImei(e.target.value)}
+                            required
+                            label="Imei/Serial del dispositivo"
+                            fullWidth
+                          />
+                        </Col>
+                      </>
+                    )}
+                  </Row>
                   {verifyResponse}
-                  <FormGroup>
-                    <Label for="autoDiagnosis">Describe brevemente en qué falla tu equipo*</Label>
-                    <Input
-                      id="autoDiagnosis"
-                      name="autoDiagnosis"
-                      placeholder="máximo 250 caracteres"
-                      type="textarea"
-                      maxLength={250}
-                      required
-                    />
-                  </FormGroup>
+                  <Row className="my-3">
+                    <Col>
+                      <Label for="autoDiagnosis">Describe brevemente en qué falla tu equipo*</Label>
+                      <Input
+                        id="autoDiagnosis"
+                        name="autoDiagnosis"
+                        placeholder="Máximo 250 caracteres"
+                        type="textarea"
+                        maxLength={250}
+                        required
+                      />
+                    </Col>
+                  </Row>
                   <div className="d-flex justify-content-between">
                     {loading ? (
                       <button className="btn btn-primary center" type="button" disabled>
@@ -685,6 +820,7 @@ export default function RequestRepairForm() {
                         Enviar
                       </Button>
                     )}
+
                     <Button className="btn btn-danger justify-content-end" onClick={handleCancel}>
                       Cancelar
                     </Button>

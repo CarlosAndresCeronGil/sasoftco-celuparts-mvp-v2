@@ -18,7 +18,7 @@ const ComponentCard = ({ children, title, subtitle }) => {
 ComponentCard.propTypes = {
   children: PropTypes.node,
   title: PropTypes.string,
-  subtitle: PropTypes.node
+  subtitle: PropTypes.node,
 };
 
 export default ComponentCard;
