@@ -17,17 +17,17 @@ const SidebarDatas = () => {
 
   if (JSON.parse(localStorage.getItem('user')).role === "user") {
 
-  useEffect(function () {
-    getRequestNotificationByIdUserDto({ idUserDto: JSON.parse(localStorage.getItem('user')).idUser })
+    useEffect(function () {
+      getRequestNotificationByIdUserDto({ idUserDto: JSON.parse(localStorage.getItem('user')).idUser })
         .then(response => {
-            setAlerts(response)
+          setAlerts(response)
         })
         .catch(error => {
-            console.log(error)
+          console.log(error)
         })
-}, [])
-  
-  countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+    }, [])
+
+    countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
 
     SidebarData.push(
       { caption: 'Actividad' },
@@ -38,21 +38,33 @@ const SidebarDatas = () => {
         icon: <MaterialIcon icon="notifications" />,
         suffix: countwasRevieweds == 0 ? null : countwasRevieweds,
         suffixColor: countwasRevieweds == 0 ? 'bg-success' : 'bg-danger',
+      },
+      {
+        title: "Mis reparaciones",
+        href: "./user-repair-requests",
+        id: 2,
+        icon: <MaterialIcon icon="visibility" />
+      },
+      {
+        title: "Mis retomas",
+        href: "./user-retoma-requests",
+        id: 3,
+        icon: <MaterialIcon icon="visibility" />
       }
     )
   } else if (JSON.parse(localStorage.getItem('user')).role === "admin") {
 
     useEffect(function () {
       getRequestNotificationToAdmin()
-          .then(response => {
-              setAlerts(response)
-          })
-          .catch(error => {
-              console.log(error)
-          })
-  }, [])
+        .then(response => {
+          setAlerts(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }, [])
 
-  countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+    countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
 
     SidebarData.push(
       {
@@ -175,15 +187,15 @@ const SidebarDatas = () => {
 
     useEffect(function () {
       getRequestNotificationToAdmin()
-          .then(response => {
-              setAlerts(response)
-          })
-          .catch(error => {
-              console.log(error)
-          })
-  }, [])
+        .then(response => {
+          setAlerts(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }, [])
 
-  countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+    countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
 
     SidebarData.push(
       {
@@ -231,15 +243,15 @@ const SidebarDatas = () => {
 
     useEffect(function () {
       getRequestNotificationToTechnician()
-          .then(response => {
-              setAlerts(response)
-          })
-          .catch(error => {
-              console.log(error)
-          })
-  }, [])
+        .then(response => {
+          setAlerts(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }, [])
 
-  countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+    countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
 
     SidebarData.push(
       {
@@ -281,16 +293,16 @@ const SidebarDatas = () => {
     )
   } else if (JSON.parse(localStorage.getItem('user')).role === "mensajero") {
 
-    
+
 
     useEffect(function () {
-        getRequestNotificationToCourier()
-            .then(response => {
-                setAlerts(response)
-            })
-            .catch(error => {
-                console.log(error)
-            })
+      getRequestNotificationToCourier()
+        .then(response => {
+          setAlerts(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }, [])
 
     countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length

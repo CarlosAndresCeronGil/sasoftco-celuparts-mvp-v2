@@ -46,7 +46,7 @@ const Header = () => {
       role: '',
       id: 0
     })
-    localStorage.removeItem('user');
+    localStorage.clear();
   }
 
   return (

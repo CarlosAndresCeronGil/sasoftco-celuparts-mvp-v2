@@ -68,11 +68,42 @@ export default function RepairRequestsTable() {
     const [formattedFinallDate, setFormattedFinalDate] = useState('0001-1-1')
 
     useEffect(function () {
+        let initialDateString = localStorage.getItem("initialDate") || null;
+        var initialDateAux;
+        if(initialDateString != null) {
+            setInitialDate({ initialDate: new Date(initialDateString) });
+            initialDateAux = new Date(initialDateString);
+        }
+
+        let finalDateString = localStorage.getItem("finalDate") || null;
+        var finalDateAux;
+        if(finalDateString != null) {
+            setFinalDate({ finalDate: new Date(finalDateString) });
+            finalDateAux = new Date(finalDateString);
+        }
+
+        setRequestStatus(localStorage.getItem("requestStatus") || "");
+        setUserDtoIdNumber(localStorage.getItem("userDtoIdNumber") || "");
+        setUserDtoName(localStorage.getItem("userDtoNames") || "");
+        setUserDtoSurname(localStorage.getItem("userDtoSurnames") || "");
+        setEquipmentBrand(localStorage.getItem("equipmentBrand") || "");
+        setEquipmentModel(localStorage.getItem("equipmentModel") || "");
+
+
         setLoading(true)
-        getRequestRepairs({ page })
+        getRequestRepairs({
+            page,
+            initialDate: initialDateString != null ? `${initialDateAux.getFullYear()}-${initialDateAux.getMonth() + 1}-${initialDateAux.getDate()}` : '0001-1-1',
+            finalDate: finalDateString != null ? `${finalDateAux.getFullYear()}-${finalDateAux.getMonth() + 1}-${finalDateAux.getDate()}` : '0001-1-1',
+            requestStatus: localStorage.getItem("requestStatus") || "",
+            userDtoIdNumber: localStorage.getItem("userDtoIdNumber") || "",
+            userDtoName: localStorage.getItem("userDtoNames") || "",
+            userDtoSurname: localStorage.getItem("userDtoSurnames") || "",
+            equipmentBrand: localStorage.getItem("equipmentBrand") || "",
+            equipmentModel: localStorage.getItem("equipmentModel") || "",
+         })
             .then((response) => {
-                // console.log(response)
-                setRequests(response)
+                setRequests(response);
                 getAllBrandsDistinct()
                     .then(responseAllBrandsDistinct => {
                         setListOfBrands(responseAllBrandsDistinct)
@@ -93,6 +124,10 @@ export default function RepairRequestsTable() {
         e.preventDefault()
         //Se consulta desde una fecha inicial hasta una fecha final
         setLoading(true)
+        localStorage.setItem("userDtoIdNumber", e.target.elements.userDtoIdNumber.value)
+        localStorage.setItem("userDtoNames", e.target.elements.userDtoNames.value)
+        localStorage.setItem("userDtoSurnames", e.target.elements.userDtoSurnames.value)
+        localStorage.setItem("equipmentModel", e.target.elements.equipmentModel.value)
 
         getRequestRepairs({
             page: 1,
@@ -135,26 +170,52 @@ export default function RepairRequestsTable() {
     }
 
     const handleCleanFilters = () => {
-        setInitialDate({ initialDate: null })
-        setFinalDate({ finalDate: null })
-        setFormattedInitialDate('0001-1-1')
-        setFormattedFinalDate('0001-1-1')
-        setRequestStatus('')
-        setUserDtoIdNumber('')
-        setUserDtoName('')
-        setUserDtoSurname('')
-        setEquipmentBrand('')
-        setEquipmentModel('')
+        setInitialDate({ initialDate: null });
+        setFinalDate({ finalDate: null });
+        setFormattedInitialDate('0001-1-1');
+        setFormattedFinalDate('0001-1-1');
+        setRequestStatus('');
+        setUserDtoIdNumber('');
+        setUserDtoName('');
+        setUserDtoSurname('');
+        setEquipmentBrand('');
+        setEquipmentModel('');
+
+        setPage(1);
+
+        localStorage.removeItem("initialDate");
+        localStorage.removeItem("finalDate");
+
+        localStorage.removeItem("requestStatus")
+        localStorage.removeItem("userDtoIdNumber")
+        localStorage.removeItem("userDtoNames")
+        localStorage.removeItem("userDtoSurnames");
+        localStorage.removeItem("equipmentBrand");
+        localStorage.removeItem("equipmentModel");
+
+        localStorage.removeItem("responseTable");
     }
 
     const handleChangeInitialDate = (date) => {
         // setFormattedInitialDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
         setInitialDate({ initialDate: date })
+        if(date != null) {
+            let initialDateString = date.toISOString();
+            localStorage.setItem("initialDate", initialDateString);
+        } else {
+            localStorage.removeItem("initialDate")
+        }
     }
 
     const handleChangeFinalDate = (date) => {
         // setFormattedFinalDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
         setFinalDate({ finalDate: date })
+        if(date != null) {
+            let finalDateString = date.toISOString();
+            localStorage.setItem("finalDate", finalDateString);
+        } else {
+            localStorage.removeItem("finalDate");
+        }
     }
 
     return (
@@ -244,7 +305,10 @@ export default function RepairRequestsTable() {
                                                 className='form-control'
                                                 id='equipmentBrand'
                                                 value={equipmentBrand}
-                                                onChange={(e) => setEquipmentBrand(e.target.value)}
+                                                onChange={(e) => {
+                                                    setEquipmentBrand(e.target.value)
+                                                    localStorage.setItem("equipmentBrand", e.target.value)
+                                                }}
                                                 type='select'
                                             >
                                                 <option value=''>SIN FILTRO</option>
@@ -278,7 +342,10 @@ export default function RepairRequestsTable() {
                                                 className='form-control'
                                                 id='requestStatus'
                                                 value={requestStatus || ''}
-                                                onChange={(e) => setRequestStatus(e.target.value)}
+                                                onChange={(e) => {
+                                                    setRequestStatus(e.target.value)
+                                                    localStorage.setItem("requestStatus", e.target.value)
+                                                }}
                                                 type='select'
                                             >
                                                 <option value=''>SIN FILTRO</option>

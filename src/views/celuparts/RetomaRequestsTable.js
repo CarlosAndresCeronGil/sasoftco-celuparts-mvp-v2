@@ -55,11 +55,46 @@ export default function RetomaRequestsTable() {
     const [formattedFinallDate, setFormattedFinalDate] = useState('0001-1-1')
 
     useEffect(function () {
+        let initialDateString = localStorage.getItem("initialDateRetoma") || null;
+        var initialDateAux;
+        if(initialDateString != null) {
+            setInitialDate({ initialDate: new Date(initialDateString) });
+            initialDateAux = new Date(initialDateString);
+        }
+
+        let finalDateString = localStorage.getItem("finalDateRetoma") || null;
+        var finalDateAux;
+        if(finalDateString != null) {
+            setFinalDate({ finalDate: new Date(finalDateString) });
+            finalDateAux = new Date(finalDateString);
+        }
+
+        setRequestStatus(localStorage.getItem("requestStatusRetoma") || "");
+        setUserDtoIdNumber(localStorage.getItem("userDtoIdNumberRetoma") || "");
+        setUserDtoName(localStorage.getItem("userDtoNamesRetoma") || "");
+        setUserDtoSurname(localStorage.getItem("userDtoSurnamesRetoma") || "");
+        setEquipmentBrand(localStorage.getItem("equipmentBrandRetoma") || "");
+        setEquipmentModel(localStorage.getItem("equipmentModelRetoma") || "");
+
         setLoading(true)
-        getRequestRetomas({ page })
+        getRequestRetomas({
+            page,
+            initialDate: initialDateString != null ? `${initialDateAux.getFullYear()}-${initialDateAux.getMonth() + 1}-${initialDateAux.getDate()}` : '0001-1-1',
+            finalDate: finalDateString != null ? `${finalDateAux.getFullYear()}-${finalDateAux.getMonth() + 1}-${finalDateAux.getDate()}` : '0001-1-1',
+            requestStatus: localStorage.getItem("requestStatusRetoma") || "",
+            userDtoIdNumber: localStorage.getItem("userDtoIdNumberRetoma") || "",
+            userDtoName: localStorage.getItem("userDtoNamesRetoma") || "",
+            userDtoSurname: localStorage.getItem("userDtoSurnamesRetoma") || "",
+            equipmentModel: localStorage.getItem("equipmentModelRetoma") || "",
+            equipmentBrand: localStorage.getItem("equipmentBrandRetoma") || ""
+        })
             .then((response) => {
-                // console.log(response)
-                setRequests(response)
+                // Se obtiene el ultimo resultado de la ultima busqueda
+                const responseGetItem = localStorage.getItem("responseTableRetoma")
+                const myResponse = JSON.parse(responseGetItem)
+
+                // Si la no hay ultima busqueda se devuelve la response, en caso contrario se deja la anterior busqueda
+                myResponse != null && page == 1 ? setRequests(myResponse) : setRequests(response);
                 getAllBrandsDistinct()
                     .then(responseAllBrandDistinct => {
                         setListOfBrands(responseAllBrandDistinct)
@@ -80,6 +115,10 @@ export default function RetomaRequestsTable() {
         e.preventDefault()
         //Se consulta desde una fecha inicial hasta una fecha final
         setLoading(true)
+        localStorage.setItem("userDtoIdNumberRetoma", e.target.elements.userDtoIdNumber.value)
+        localStorage.setItem("userDtoNamesRetoma", e.target.elements.userDtoNames.value)
+        localStorage.setItem("userDtoSurnamesRetoma", e.target.elements.userDtoSurnames.value)
+        localStorage.setItem("equipmentModelRetoma", e.target.elements.equipmentModel.value)
 
         getRequestRetomas({
             page: 1,
@@ -89,6 +128,11 @@ export default function RetomaRequestsTable() {
         })
             .then((response) => {
                 setRequests(response)
+
+                // Se manda el response al localstorage
+                const responseString = JSON.stringify(response)
+                localStorage.setItem("responseTableRetoma", responseString)
+
                 setLoading(false)
             })
             .catch(error => {
@@ -117,26 +161,52 @@ export default function RetomaRequestsTable() {
     }
 
     const handleCleanFilters = () => {
-        setInitialDate({ initialDate: null })
-        setFinalDate({ finalDate: null })
-        setFormattedInitialDate('0001-1-1')
-        setFormattedFinalDate('0001-1-1')
-        setRequestStatus('')
-        setUserDtoIdNumber('')
-        setUserDtoName('')
-        setUserDtoSurname('')
-        setEquipmentBrand('')
-        setEquipmentModel('')
+        setInitialDate({ initialDate: null });
+        setFinalDate({ finalDate: null });
+        setFormattedInitialDate('0001-1-1');
+        setFormattedFinalDate('0001-1-1');
+        setRequestStatus('');
+        setUserDtoIdNumber('');
+        setUserDtoName('');
+        setUserDtoSurname('');
+        setEquipmentBrand('');
+        setEquipmentModel('');
+
+        setPage(1);
+
+        localStorage.removeItem("initialDateRetoma");
+        localStorage.removeItem("finalDateRetoma");
+
+        localStorage.removeItem("requestStatusRetoma")
+        localStorage.removeItem("userDtoIdNumberRetoma")
+        localStorage.removeItem("userDtoNamesRetoma")
+        localStorage.removeItem("userDtoSurnamesRetoma");
+        localStorage.removeItem("equipmentBrandRetoma");
+        localStorage.removeItem("equipmentModelRetoma");
+
+        localStorage.removeItem("responseTableRetoma");
     }
 
     const handleChangeInitialDate = (date) => {
         // setFormattedInitialDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
         setInitialDate({ initialDate: date })
+        if(date != null) {
+            let initialDateString = date.toISOString();
+            localStorage.setItem("initialDateRetoma", initialDateString);
+        } else {
+            localStorage.removeItem("initialDateRetoma")
+        }
     }
 
     const handleChangeFinalDate = (date) => {
         // setFormattedFinalDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
         setFinalDate({ finalDate: date })
+        if(date != null) {
+            let finalDateString = date.toISOString();
+            localStorage.setItem("finalDateRetoma", finalDateString);
+        } else {
+            localStorage.removeItem("finalDateRetoma");
+        }
     }
 
     const handleViewEquipmentInvoice = (e, { idEquipment }) => {
@@ -238,7 +308,10 @@ export default function RetomaRequestsTable() {
                                                 className='form-control'
                                                 id='equipmentBrand'
                                                 value={equipmentBrand}
-                                                onChange={(e) => setEquipmentBrand(e.target.value)}
+                                                onChange={(e) => {
+                                                    setEquipmentBrand(e.target.value)
+                                                    localStorage.setItem("equipmentBrandRetoma", e.target.value)
+                                                }}
                                                 type='select'
                                             >
                                                 <option value=''>SIN FILTRO</option>
@@ -272,7 +345,10 @@ export default function RetomaRequestsTable() {
                                                 className='form-control'
                                                 id='requestStatus'
                                                 value={requestStatus || ''}
-                                                onChange={(e) => setRequestStatus(e.target.value)}
+                                                onChange={(e) => {
+                                                    setRequestStatus(e.target.value)
+                                                    localStorage.setItem("requestStatusRetoma", e.target.value)
+                                                }}
                                                 type='select'
                                             >
                                                 <option value=''>SIN FILTRO</option>

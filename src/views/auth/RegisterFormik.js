@@ -285,8 +285,8 @@ const RegisterFormik = () => {
                               <div >
                                 <Field id="idType" className="form-select mb-3" name="idType" as="select">
                                   <option value="CC">Cédula de ciudadania</option>
-                                  <option value="TI">Tarjeta de identidad</option>
                                   <option value="CE">Cédula de extranjeria</option>
+                                  <option value="PA">Pasaporte</option>
                                   <option value="NIP">Número de identificación tributaria</option>
                                 </Field>
                               </div>
