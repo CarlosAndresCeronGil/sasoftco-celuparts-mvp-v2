@@ -388,8 +388,7 @@ export default function RequestRepairForm() {
                   title="Datos de la solicitud"
                   styles={{
                     card: {
-                      border: '1px solid',
-                      borderRadius: '20px',
+                      boxShadow: '-0px 3rem 4rem 3px rgb(0 0 0 / 5%)',
                     },
                   }}
                 >
@@ -613,8 +612,7 @@ export default function RequestRepairForm() {
                   title="Datos del equipo"
                   styles={{
                     card: {
-                      border: '1px solid',
-                      borderRadius: '20px',
+                      boxShadow: '-0px 3rem 4rem 3px rgb(0 0 0 / 5%)',
                     },
                   }}
                 >
