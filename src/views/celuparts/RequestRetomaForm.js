@@ -1,6 +1,13 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
+import es from 'dayjs/locale/es';
+import utc from 'dayjs/plugin/utc';
+import calendar from 'dayjs/plugin/calendar';
+
+dayjs.extend(utc);
+dayjs.extend(calendar);
+
 import {
   Card,
   Row,
@@ -244,7 +251,6 @@ export default function RequestRetomaForm() {
       formData.append('imeiOrSerial', e.target.elements.imei.value);
       formData.append('equipmentInvoice', e.target.elements.equipmentInvoice.files[0]);
 
-      console.log(formData);
       const deliveryAddress2 = isSameAddresses
         ? e.target.elements.pickUpAddress.value
         : e.target.elements.deliveryAddress.value;
@@ -510,7 +516,11 @@ export default function RequestRetomaForm() {
                   <Row className="mt-3">
                     <Col md="6" className="mb-3">
                       {/* <Label for="PickUpTime">Fecha y hora de recogida*</Label> */}
-                      <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ width: '100%' }}>
+                      <LocalizationProvider
+                        adapterLocale={es}
+                        dateAdapter={AdapterDayjs}
+                        sx={{ width: '100%' }}
+                      >
                         <MobileDateTimePicker
                           sx={{ width: '100%' }}
                           renderInput={(props) => (
@@ -530,6 +540,7 @@ export default function RequestRetomaForm() {
                           onChange={(date) => {
                             setStartDate(date);
                           }}
+                          ampm
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
@@ -537,7 +548,7 @@ export default function RequestRetomaForm() {
                               </InputAdornment>
                             ),
                           }}
-                          minDate={startDate}
+                          minDate={minTimeUser}
                           minTime={(() => {
                             if (dayjs().date() == startDate.date()) {
                               return minTimeUser;

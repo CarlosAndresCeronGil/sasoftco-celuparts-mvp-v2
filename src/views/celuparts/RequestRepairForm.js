@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
+import es from 'dayjs/locale/es';
 import utc from 'dayjs/plugin/utc';
 import calendar from 'dayjs/plugin/calendar';
 
@@ -459,7 +460,11 @@ export default function RequestRepairForm() {
                   <Row className="mt-3">
                     <Col md="6" className="mb-3">
                       {/* <Label for="PickUpTime">Fecha y hora de recogida*</Label> */}
-                      <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ width: '100%' }}>
+                      <LocalizationProvider
+                        adapterLocale={es}
+                        dateAdapter={AdapterDayjs}
+                        sx={{ width: '100%' }}
+                      >
                         <MobileDateTimePicker
                           sx={{ width: '100%' }}
                           renderInput={(props) => (
@@ -474,6 +479,7 @@ export default function RequestRepairForm() {
                               error={false}
                             />
                           )}
+                          ampm
                           label="Fecha y hora de recogida"
                           value={startDate.day() === 0 ? addDays(startDate, 1) : startDate}
                           onChange={(date) => {
@@ -486,7 +492,7 @@ export default function RequestRepairForm() {
                               </InputAdornment>
                             ),
                           }}
-                          minDate={startDate}
+                          minDate={minTimeUser}
                           minTime={(() => {
                             if (dayjs().date() == startDate.date()) {
                               return minTimeUser;
