@@ -1,11 +1,28 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import calendar from 'dayjs/plugin/calendar';
+
+dayjs.extend(utc);
+dayjs.extend(calendar);
+
 import { Row, Col, CardTitle, CardBody, Button, Form, Label, Input } from 'reactstrap';
-import { TextField, MenuItem, Alert, InputAdornment } from '@mui/material';
+import {
+  TextField,
+  MenuItem,
+  Alert,
+  InputAdornment,
+  Select,
+  InputLabel,
+  FormControl,
+  Box,
+  SvgIcon,
+  OutlinedInput,
+} from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { DesktopDateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
@@ -55,7 +72,9 @@ import getTabletsBrands from '../../services/getTabletsBrands';
 
 export default function RequestRepairForm() {
   //Variables del formulario
-  const [typeOfEquipment, setTypeOfEquipment] = useState({ typeOfEquipment: '1' });
+  const [typeOfEquipment, setTypeOfEquipment] = useState({
+    typeOfEquipment: '',
+  });
   const [imei, setImei] = useState('');
   const [serial, setSerial] = useState('');
   const [verifyResponse, setVerifyResponse] = useState('');
@@ -67,39 +86,65 @@ export default function RequestRepairForm() {
   /*Datos donde iran la lista de marcas de celulares, computadoras, smartwatches y
     tabletas mas populares y tipos de dispositivo*/
   const [cellphoneList, setCellphoneList] = useState([]);
+  const [payMethodsList, setPayMethodsList] = useState([
+    { payMethodValue: 'Contraentrega', payMethodName: 'Contraentrega' },
+    {
+      payMethodValue: 'Transferencia bancaria',
+      payMethodName: 'Transferencia bancaria',
+    },
+    { payMethodValue: 'Datafono', payMethodName: 'Datáfono' },
+  ]);
   const [computersList, setComputersList] = useState([]);
   const [tabletsList, setTabletsList] = useState([]);
   const [smartWatchesList, setSmartWatchesList] = useState([]);
   const [typeOfEquipmentList, setTypeOfEquipmentList] = useState([]);
-
+  const [paymentMethod, setPaymentMethod] = useState('');
   /**Este objeto pondra la ultima direccion registrada por el cliente para que sea llenado este
    * campo automaticamente
    */
   const handleSameAddresses = () => {
     setIsSameAddresses(!isSameAddresses);
   };
+  const handleArriveDate = () => {
+    let date = dayjs(new Date());
+    let arriveHour = date.hour() + 1;
+    let minutes = 0;
+    if (date.minute() < 10) {
+      minutes = 0;
+    } else if (date.minute() <= 35) {
+      minutes = 30;
+    } else {
+      minutes = 0;
+      arriveHour += 1;
+    }
 
-  const [value, setValue] = React.useState(dayjs('2022-04-07'));
+    if (date.hour() < 8) {
+      return dayjs(dayjs().set('hour', 8).set('minute', 30).set('second', 0));
+    } else if (date.hour() >= 17 && date.minute() >= 10) {
+      let day = new Date();
+      let nextDay = dayjs(dayjs(new Date().setDate(day.getDate() + 1)));
+      return nextDay.set('hour', 8).set('minute', 30).set('second', 0);
+    }
+    return dayjs().set('hour', arriveHour).set('minute', minutes).set('second', 0);
+  };
   //Variables para las fechas, finish date empieza en un día despues al día actual
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(handleArriveDate());
+  const [minTimeUser, setMinTimeUser] = useState(handleArriveDate());
 
   // const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16));
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const [finishDate, setFinishDate] = useState(tomorrow);
-
   const [loading, setLoading] = useState(false);
   const [loadingPage, setLoadingPage] = useState(false);
 
-  //Variables para permitir que se haga un registro en una hora correcta
-  const isSelectedDateToday = new Date().getDate() === startDate.getDate();
-  const isSelectedDateInFuture = +startDate > +new Date();
-  let minTimeHour = new Date().getHours();
+  // //Variables para permitir que se haga un registro en una hora correcta
+  const isSelectedDateToday = dayjs().date() === startDate.date();
+  const isSelectedDateInFuture = +startDate > +dayjs();
+  let minTimeHour = dayjs().hour();
+
   if (!isSelectedDateToday) minTimeHour = 0;
 
-  const date = new Date();
-  let currentMins = date.getMinutes();
-  let currentHour = date.getHours();
+  const date = dayjs();
+  let currentMins = date.minute();
+  let currentHour = date.hour();
   if (isSelectedDateInFuture) {
     currentHour = 0;
     currentMins = 0;
@@ -109,7 +154,7 @@ export default function RequestRepairForm() {
 
   useEffect(function () {
     setLoadingPage(true);
-    date.getHours() >= 17 && setStartDate(addDays(startDate, 1));
+    date.hour() >= 17 && setStartDate(addDays(startDate, 1));
     getTypeOfEquipments()
       .then((typeOfEquipmentResponse) => {
         setTypeOfEquipmentList(typeOfEquipmentResponse);
@@ -159,8 +204,6 @@ export default function RequestRepairForm() {
     e.preventDefault();
     setLoading(true);
 
-    // console.log("Entro al handleSubmit")
-
     const formData = new FormData();
     //formData.append("typeOfEquipment", e.target.elements.typeOfEquipment.value)
     formData.append('idTypeOfEquipment', e.target.elements.typeOfEquipment.value);
@@ -172,7 +215,6 @@ export default function RequestRepairForm() {
     const deliveryAddress2 = isSameAddresses
       ? e.target.elements.pickUpAddress.value
       : e.target.elements.deliveryAddress.value;
-    // console.log('deliveryAddress: ', deliveryAddress2)
 
     postEquipment(formData)
       .then((data) => {
@@ -194,7 +236,7 @@ export default function RequestRepairForm() {
                   'Nueva solicitud de servicio a domicilio a la dirección: ' +
                   data.pickUpAddress +
                   ' para la fecha ' +
-                  startDate.toLocaleDateString('es', {
+                  startDate.toDate().toLocaleDateString('es', {
                     weekday: 'long',
                     year: 'numeric',
                     month: 'short',
@@ -226,7 +268,6 @@ export default function RequestRepairForm() {
               repairQuote: '0',
             })
               .then((data2) => {
-                // console.log("Entro al then de repair", data2);
                 postRepairPayment({
                   idRepair: data2.idRepair,
                   paymentMethod: e.target.elements.paymentMethod.value,
@@ -288,14 +329,14 @@ export default function RequestRepairForm() {
   };
 
   const isWeekDay = (date) => {
-    const day = date.getDay();
+    const day = date.day();
     // return day !== 0 && day !== 6; ignora sabados y domingos
-    return day !== 0; //solo ignora los domingos
+    return day == 0; //solo ignora los domingos
   };
 
   const addDays = (date, days) => {
-    var result = new Date(date);
-    result.setDate(result.getDate() + days);
+    var result = dayjs(date);
+    result.set('date', result.date() + days);
     return result;
   };
 
@@ -379,7 +420,7 @@ export default function RequestRepairForm() {
                           value={deliveryAddress}
                           onChange={(e) => setDeliveryAddress(e.target.value)}
                           type="text"
-                          placeholder="Ingrese la dirección donde se entregara el producto"
+                          placeholder="Ingrese la dirección donde se entregará el producto"
                           label="Dirección de entrega"
                           required
                           fullWidth
@@ -421,11 +462,23 @@ export default function RequestRepairForm() {
                       {/* <Label for="PickUpTime">Fecha y hora de recogida*</Label> */}
                       <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ width: '100%' }}>
                         <MobileDateTimePicker
-                          renderInput={(props) => <TextField {...props} fullWidth />}
+                          sx={{ width: '100%' }}
+                          renderInput={(props) => (
+                            <TextField
+                              {...props}
+                              inputProps={{
+                                ...props.inputProps,
+                                readOnly: true,
+                              }}
+                              required
+                              fullWidth
+                              error={false}
+                            />
+                          )}
                           label="Fecha y hora de recogida"
-                          value={value}
-                          onChange={(newValue) => {
-                            setValue(newValue);
+                          value={startDate.day() === 0 ? addDays(startDate, 1) : startDate}
+                          onChange={(date) => {
+                            setStartDate(date);
                           }}
                           InputProps={{
                             startAdornment: (
@@ -434,7 +487,34 @@ export default function RequestRepairForm() {
                               </InputAdornment>
                             ),
                           }}
+                          minDate={startDate}
+                          minTime={(() => {
+                            if (dayjs().date() == startDate.date()) {
+                              return minTimeUser;
+                            } else {
+                              return dayjs(
+                                dayjs().set('hour', 8).set('minute', 30).set('second', 0),
+                              );
+                            }
+                          })()}
+                          maxTime={dayjs(dayjs().set('hour', 18).set('minute', 0).set('second', 0))}
+                          shouldDisableDate={isWeekDay}
+                          shouldDisableTime={(time, clock) => {
+                            if (clock == 'hours') {
+                              return time == 13;
+                            }
+                            if (clock == 'minutes') {
+                              if (startDate.hour() == 12 && time == 30) {
+                                return true;
+                              }
+                              if (startDate.hour() == 18 && time == 30) {
+                                return true;
+                              }
+                            }
+                          }}
+                          inputFormat="YYYY/MM/DD hh:mm a"
                           helperText="Some important text"
+                          minutesStep={30}
                         />
                       </LocalizationProvider>
                       <Alert sx={{ marginTop: 1 }} severity="info">
@@ -477,27 +557,41 @@ export default function RequestRepairForm() {
                       /> */}
                     </Col>
                     <Col md="6">
-                      <TextField
-                        id="paymentMethod"
-                        name="paymentMethod"
-                        type="select"
-                        select
-                        label="Metodo de pago"
-                        defaultValue="Contraentrega"
-                        required
-                        fullWidth
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <AddCardIcon />
-                            </InputAdornment>
-                          ),
-                        }}
-                      >
-                        <MenuItem value="Contraentrega">Contraentrega</MenuItem>
-                        <MenuItem value="Transferencia bancaria">Transferencia bancaria</MenuItem>
-                        <MenuItem value={'Datafono'}>Dátafono</MenuItem>
-                      </TextField>
+                      <FormControl fullWidth>
+                        <InputLabel shrink id="paymentMethod">
+                          Metodo de Pago *
+                        </InputLabel>
+                        <Select
+                          labelId="paymentMethod"
+                          id="paymentMethod"
+                          name="paymentMethod"
+                          displayEmpty
+                          value={paymentMethod}
+                          required
+                          input={<OutlinedInput notched label="Metodo de Pago" required />}
+                          onChange={(e) => setPaymentMethod(e.target.value)}
+                          renderValue={(value) => {
+                            const items = payMethodsList.find((v) => v.payMethodValue == value);
+                            return (
+                              <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                                <SvgIcon>
+                                  <AddCardIcon />
+                                </SvgIcon>
+                                <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
+                                  {items ? items.payMethodValue : 'Selecciona un metodo de pago'}
+                                </Box>
+                              </Box>
+                            );
+                          }}
+                        >
+                          <MenuItem value="">Selecciona un metodo de pago</MenuItem>
+                          {payMethodsList.map((payMethod, index) => (
+                            <MenuItem value={payMethod.payMethodValue} key={index}>
+                              {payMethod.payMethodName}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                     </Col>
                   </Row>
                 </ComponentCard>
@@ -510,42 +604,67 @@ export default function RequestRepairForm() {
                                         </CardSubtitle> */}
                   <Row className="mt-3">
                     <Col md="6" className="mb-3">
-                      <TextField
-                        id="typeOfEquipment"
-                        name="select"
-                        type="select"
-                        select
-                        label="Tipo de Dispositivo"
-                        required
-                        fullWidth
-                        value={typeOfEquipment.typeOfEquipment}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <DevicesOtherIcon />
-                            </InputAdornment>
-                          ),
-                        }}
-                        onChange={(e) => {
-                          setTypeOfEquipment({ typeOfEquipment: e.target.value });
-                          e.target.value == '1'
-                            ? setEquipmentBrand(computersList[0].brandName)
-                            : e.target.value == '2'
-                            ? setEquipmentBrand(cellphoneList[0].brandName)
-                            : e.target.value == '3'
-                            ? setEquipmentBrand(tabletsList[0].brandName)
-                            : setEquipmentBrand(smartWatchesList[0].brandName);
-                        }}
-                      >
-                        {typeOfEquipmentList.map((typeOfEquipmentData, index) => (
-                          <MenuItem value={typeOfEquipmentData.idTypeOfEquipment} key={index}>
-                            {typeOfEquipmentData.equipmentTypeName}
-                          </MenuItem>
-                        ))}
-                      </TextField>
+                      <FormControl fullWidth>
+                        <InputLabel shrink id="typeOfEquipment">
+                          Tipo de Dispositivo *
+                        </InputLabel>
+                        <Select
+                          labelId="typeOfEquipment"
+                          id="typeOfEquipment"
+                          name="typeOfEquipment"
+                          displayEmpty
+                          defaultValue=""
+                          value={typeOfEquipment.typeOfEquipment}
+                          input={<OutlinedInput notched label="Tipo de dispositivo *" required />}
+                          onChange={(e) => {
+                            setEquipmentBrand('');
+                            setTypeOfEquipment({ typeOfEquipment: String(e.target.value) });
+                          }}
+                          renderValue={(value) => {
+                            const item = typeOfEquipmentList.find(
+                              (v) => v.idTypeOfEquipment == value,
+                            );
+                            return (
+                              <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                                <SvgIcon>
+                                  <DevicesOtherIcon />
+                                </SvgIcon>
+                                <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
+                                  {item
+                                    ? item.equipmentTypeName
+                                    : 'Seleccione un tipo de dispositivo'}
+                                </Box>
+                              </Box>
+                            );
+                          }}
+                        >
+                          <MenuItem value="">Seleccione un tipo de dispositivo</MenuItem>
+                          {typeOfEquipmentList.map((typeOfEquipmentData, index) => (
+                            <MenuItem value={typeOfEquipmentData.idTypeOfEquipment} key={index}>
+                              {typeOfEquipmentData.equipmentTypeName}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                     </Col>
-
-                    {typeOfEquipment.typeOfEquipment === '1' ? (
+                    {typeOfEquipment.typeOfEquipment === '' ? (
+                      <Col md="6">
+                        <TextField
+                          id="typeOfEquipment"
+                          name="select"
+                          required
+                          disabled
+                          fullWidth
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <DevicesOtherIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Col>
+                    ) : typeOfEquipment.typeOfEquipment === '1' ? (
                       <Col md="6">
                         {/* <Combobox
                                                         required
@@ -557,30 +676,46 @@ export default function RequestRepairForm() {
                                                         value={equipmentBrand}
                                                         onChange={brand => setEquipmentBrand(brand)}
                                                     /> */}
-                        <TextField
-                          required
-                          id="equipmentBrand"
-                          name="equipmentBrand"
-                          type="select"
-                          select
-                          label="Marca del computador"
-                          fullWidth
-                          value={equipmentBrand}
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <ComputerIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                          onChange={(e) => setEquipmentBrand(e.target.value)}
-                        >
-                          {computersList.map((computerData, index) => (
-                            <option value={computerData.brandName} key={index}>
-                              {computerData.brandName}
-                            </option>
-                          ))}
-                        </TextField>
+                        <FormControl fullWidth>
+                          <InputLabel shrink id="typeOfEquipment">
+                            Marca del computador *
+                          </InputLabel>
+                          <Select
+                            labelId="equipmentBrand"
+                            id="equipmentBrand"
+                            name="equipmentBrand"
+                            displayEmpty
+                            required
+                            defaultValue=""
+                            value={equipmentBrand}
+                            input={
+                              <OutlinedInput notched label="Marca del computador *" required />
+                            }
+                            onChange={(e) => setEquipmentBrand(e.target.value)}
+                            renderValue={(value) => {
+                              const item = computersList.find((v) => v.brandName === value);
+                              return (
+                                <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                                  <SvgIcon>
+                                    <ComputerIcon />
+                                  </SvgIcon>
+                                  <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
+                                    {item ? item.brandName : 'Seleccione marca de computador'}
+                                  </Box>
+                                </Box>
+                              );
+                            }}
+                          >
+                            <MenuItem defaultChecked value="">
+                              Seleccione una Marca de Computador
+                            </MenuItem>
+                            {computersList.map((computerData, index) => (
+                              <MenuItem value={computerData.brandName} key={index}>
+                                {computerData.brandName}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                       </Col>
                     ) : typeOfEquipment.typeOfEquipment === '2' ? (
                       <Col md="6">
@@ -594,87 +729,126 @@ export default function RequestRepairForm() {
                                                         value={equipmentBrand}
                                                         onChange={brand => setEquipmentBrand(brand)}
                                                     /> */}
-                        <TextField
-                          required
-                          id="equipmentBrand"
-                          name="equipmentBrand"
-                          type="select"
-                          value={equipmentBrand}
-                          select
-                          label="Marca del celular"
-                          fullWidth
-                          defaultValue=""
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <PhoneAndroidIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                          onChange={(e) => setEquipmentBrand(e.target.value)}
-                        >
-                          {cellphoneList.map((cellphoneData, index) => (
-                            <option value={cellphoneData.brandName} key={index}>
-                              {cellphoneData.brandName}
-                            </option>
-                          ))}
-                        </TextField>
+                        <FormControl fullWidth>
+                          <InputLabel shrink id="typeOfEquipment">
+                            Marca del celular *
+                          </InputLabel>
+                          <Select
+                            labelId="equipmentBrand"
+                            id="equipmentBrand"
+                            name="equipmentBrand"
+                            displayEmpty
+                            required
+                            defaultValue=""
+                            value={equipmentBrand}
+                            input={<OutlinedInput notched label="Marca del celular *" required />}
+                            onChange={(e) => setEquipmentBrand(e.target.value)}
+                            renderValue={(value) => {
+                              const item = cellphoneList.find((v) => v.brandName === value);
+                              return (
+                                <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                                  <SvgIcon>
+                                    <PhoneAndroidIcon />
+                                  </SvgIcon>
+                                  <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
+                                    {item ? item.brandName : 'Seleccione marca de celular'}
+                                  </Box>
+                                </Box>
+                              );
+                            }}
+                          >
+                            <MenuItem value="">Seleccione una marca de celular</MenuItem>
+                            {cellphoneList.map((cellphoneData, index) => (
+                              <MenuItem value={cellphoneData.brandName} key={index}>
+                                {cellphoneData.brandName}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                       </Col>
                     ) : typeOfEquipment.typeOfEquipment === '3' ? (
                       <Col md="6">
-                        <TextField
-                          required
-                          id="equipmentBrand"
-                          name="equipmentBrand"
-                          type="select"
-                          select
-                          label="Marca de la tablet"
-                          fullWidth
-                          defaultValue=""
-                          value={equipmentBrand}
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <TabletIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                          onChange={(e) => setEquipmentBrand(e.target.value)}
-                        >
-                          {tabletsList.map((tabletData, index) => (
-                            <option value={tabletData.brandName} key={index}>
-                              {tabletData.brandName}
-                            </option>
-                          ))}
-                        </TextField>
+                        <FormControl fullWidth>
+                          <InputLabel shrink id="typeOfEquipment">
+                            Marca de la tablet *
+                          </InputLabel>
+                          <Select
+                            labelId="equipmentBrand"
+                            id="equipmentBrand"
+                            name="equipmentBrand"
+                            displayEmpty
+                            required
+                            defaultValue=""
+                            value={equipmentBrand}
+                            input={<OutlinedInput notched label="Marca de la tablet *" required />}
+                            onChange={(e) => setEquipmentBrand(e.target.value)}
+                            renderValue={(value) => {
+                              const item = tabletsList.find((v) => v.brandName === value);
+                              return (
+                                <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                                  <SvgIcon>
+                                    <TabletIcon />
+                                  </SvgIcon>
+                                  <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
+                                    {item ? item.brandName : 'Seleccione marca de tablet'}
+                                  </Box>
+                                </Box>
+                              );
+                            }}
+                          >
+                            <MenuItem defaultChecked value="">
+                              Seleccione una marca de tablet
+                            </MenuItem>
+                            {tabletsList.map((tabletData, index) => (
+                              <MenuItem value={tabletData.brandName} key={index}>
+                                {tabletData.brandName}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                       </Col>
                     ) : (
                       <Col md="6">
-                        <TextField
-                          required
-                          id="equipmentBrand"
-                          name="equipmentBrand"
-                          type="select"
-                          select
-                          label="Marca del smartWatch"
-                          fullWidth
-                          defaultValue=""
-                          value={equipmentBrand}
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <WatchIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                          onChange={(e) => setEquipmentBrand(e.target.value)}
-                        >
-                          {smartWatchesList.map((smartWatchData, index) => (
-                            <option value={smartWatchData.brandName} key={index}>
-                              {smartWatchData.brandName}
-                            </option>
-                          ))}
-                        </TextField>
+                        <FormControl fullWidth>
+                          <InputLabel shrink id="typeOfEquipment">
+                            Marca del smartWatch *
+                          </InputLabel>
+                          <Select
+                            labelId="equipmentBrand"
+                            id="equipmentBrand"
+                            name="equipmentBrand"
+                            displayEmpty
+                            required
+                            defaultValue=""
+                            value={equipmentBrand}
+                            input={
+                              <OutlinedInput notched label="Marca del smartWatch *" required />
+                            }
+                            onChange={(e) => setEquipmentBrand(e.target.value)}
+                            renderValue={(value) => {
+                              const item = smartWatchesList.find((v) => v.brandName === value);
+                              return (
+                                <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                                  <SvgIcon>
+                                    <WatchIcon />
+                                  </SvgIcon>
+                                  <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
+                                    {item ? item.brandName : 'Seleccione marca de smartWatch'}
+                                  </Box>
+                                </Box>
+                              );
+                            }}
+                          >
+                            <MenuItem defaultChecked value="">
+                              Seleccione una marca de smartWatch
+                            </MenuItem>
+                            {smartWatchesList.map((smartWatchData, index) => (
+                              <MenuItem value={smartWatchData.brandName} key={index}>
+                                {smartWatchData.brandName}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                       </Col>
                     )}
                   </Row>
@@ -749,6 +923,13 @@ export default function RequestRepairForm() {
                             required
                             label="Imei del dispositivo"
                             fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <NumbersIcon />
+                                </InputAdornment>
+                              ),
+                            }}
                           />
                         </Col>
                         {/* {
@@ -770,7 +951,6 @@ export default function RequestRepairForm() {
                     ) : (
                       <>
                         <Col md="6">
-                          <Label for="imei">Imei/Serial del dispositivo*</Label>
                           <TextField
                             id="imei"
                             name="imei"
@@ -781,6 +961,13 @@ export default function RequestRepairForm() {
                             required
                             label="Imei/Serial del dispositivo"
                             fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <NumbersIcon />
+                                </InputAdornment>
+                              ),
+                            }}
                           />
                         </Col>
                       </>
