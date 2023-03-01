@@ -1,9 +1,9 @@
 import { Card, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-const ComponentCard = ({ children, title, subtitle }) => {
+const ComponentCard = ({ children, title, subtitle, styles }) => {
   return (
-    <Card>
+    <Card style={styles?.card}>
       <CardTitle tag="h4" className="border-bottom px-4 py-3 mb-0">
         {title}
       </CardTitle>
@@ -19,6 +19,7 @@ ComponentCard.propTypes = {
   children: PropTypes.node,
   title: PropTypes.string,
   subtitle: PropTypes.node,
+  styles: PropTypes.object,
 };
 
 export default ComponentCard;

@@ -384,7 +384,15 @@ export default function RequestRepairForm() {
             </CardTitle>
             <CardBody>
               <Form onSubmit={handleSubmit}>
-                <ComponentCard title="Datos de la solicitud">
+                <ComponentCard
+                  title="Datos de la solicitud"
+                  styles={{
+                    card: {
+                      border: '1px solid',
+                      borderRadius: '20px',
+                    },
+                  }}
+                >
                   <Row>
                     <Col>
                       <Checkbox label=" Usar la misma dirección" onChange={handleSameAddresses} />
@@ -578,12 +586,12 @@ export default function RequestRepairForm() {
                           renderValue={(value) => {
                             const items = payMethodsList.find((v) => v.payMethodValue == value);
                             return (
-                              <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                              <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
                                 <SvgIcon>
                                   <AddCardIcon />
                                 </SvgIcon>
                                 <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
-                                  {items ? items.payMethodValue : 'Selecciona un metodo de pago'}
+                                  {items ? items.payMethodValue : 'Selecciona metodo de pago'}
                                 </Box>
                               </Box>
                             );
@@ -601,7 +609,15 @@ export default function RequestRepairForm() {
                   </Row>
                 </ComponentCard>
 
-                <ComponentCard title="Datos del equipo">
+                <ComponentCard
+                  title="Datos del equipo"
+                  styles={{
+                    card: {
+                      border: '1px solid',
+                      borderRadius: '20px',
+                    },
+                  }}
+                >
                   {/* --------------- Datos equipo ---------------- */}
                   {/* <CardSubtitle tag="h6" className="border-bottom p-1 mb-3">
                                             <i className="bi bi-box-seam"> </i>
@@ -630,7 +646,7 @@ export default function RequestRepairForm() {
                               (v) => v.idTypeOfEquipment == value,
                             );
                             return (
-                              <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                              <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
                                 <SvgIcon>
                                   <DevicesOtherIcon />
                                 </SvgIcon>
@@ -700,12 +716,12 @@ export default function RequestRepairForm() {
                             renderValue={(value) => {
                               const item = computersList.find((v) => v.brandName === value);
                               return (
-                                <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                                <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
                                   <SvgIcon>
                                     <ComputerIcon />
                                   </SvgIcon>
                                   <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
-                                    {item ? item.brandName : 'Seleccione marca de computador'}
+                                    {item ? item.brandName : 'Seleccione marca de portatil'}
                                   </Box>
                                 </Box>
                               );
@@ -751,7 +767,7 @@ export default function RequestRepairForm() {
                             renderValue={(value) => {
                               const item = cellphoneList.find((v) => v.brandName === value);
                               return (
-                                <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                                <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
                                   <SvgIcon>
                                     <PhoneAndroidIcon />
                                   </SvgIcon>
@@ -790,7 +806,7 @@ export default function RequestRepairForm() {
                             renderValue={(value) => {
                               const item = tabletsList.find((v) => v.brandName === value);
                               return (
-                                <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                                <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
                                   <SvgIcon>
                                     <TabletIcon />
                                   </SvgIcon>
@@ -833,7 +849,7 @@ export default function RequestRepairForm() {
                             renderValue={(value) => {
                               const item = smartWatchesList.find((v) => v.brandName === value);
                               return (
-                                <Box color="#757575" sx={{ display: 'flex', gap: 2 }}>
+                                <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
                                   <SvgIcon>
                                     <WatchIcon />
                                   </SvgIcon>
