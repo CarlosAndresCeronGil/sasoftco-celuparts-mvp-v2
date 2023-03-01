@@ -168,7 +168,6 @@ export default function RequestRetomaForm() {
 
   useEffect(function () {
     setLoadingPage(true);
-    date.hour() >= 17 && setStartDate(addDays(startDate, 1));
     getTypeOfEquipments()
       .then((typeOfEquipmentResponse) => {
         setTypeOfEquipmentList(typeOfEquipmentResponse);
@@ -347,7 +346,7 @@ export default function RequestRetomaForm() {
               });
               postHomeService({
                 idRequest: dataRequest.idRequest,
-                pickUpDate: startDate,
+                pickUpDate: startDate.utc().format(),
               }).catch((error) => {
                 setLoading(false);
                 console.log(error);

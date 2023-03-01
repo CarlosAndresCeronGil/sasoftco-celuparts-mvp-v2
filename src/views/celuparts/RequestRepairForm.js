@@ -154,7 +154,6 @@ export default function RequestRepairForm() {
 
   useEffect(function () {
     setLoadingPage(true);
-    date.hour() >= 17 && setStartDate(addDays(startDate, 1));
     getTypeOfEquipments()
       .then((typeOfEquipmentResponse) => {
         setTypeOfEquipmentList(typeOfEquipmentResponse);
@@ -310,7 +309,7 @@ export default function RequestRepairForm() {
             });
             postHomeService({
               idRequest: data.idRequest,
-              pickUpDate: startDate,
+              pickUpDate: startDate.utc().format(),
             }).catch((error) => {
               setLoading(false);
               console.log(error);
