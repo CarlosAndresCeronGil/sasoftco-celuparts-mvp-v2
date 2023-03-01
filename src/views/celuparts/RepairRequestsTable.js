@@ -2,25 +2,12 @@
 import React, { useEffect, useState } from 'react';
 // import { Button, Card, CardBody, CardTitle, Table, Form } from "reactstrap";
 import {
-  Card,
-  CardBody,
-  CardTitle,
   Row,
   Col,
   Form,
   FormGroup,
-  Label,
-  Input,
   Table,
-  FormText,
   Button,
-  InputGroup,
-  InputGroupText,
-  ButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  FormFeedback,
   Modal,
   ModalHeader,
   ModalBody,
@@ -28,14 +15,33 @@ import {
 } from 'reactstrap';
 // import getRequests from '../../services/getRequests';
 import { Link } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+// import DatePicker from 'react-datepicker';
+import DatePickerActionBar from '../../components/DatePickerActionBar';
 import getRequestRepairs from '../../services/getRequestRepairs';
 import ComponentCard from '../../components/ComponentCard';
 import getSingleRequest from '../../services/getSingleRequest';
 import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
 import getAllBrandsDistinct from '../../services/getAllBrandsDistinct';
-import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider, MobileDatePicker, DatePicker, esES } from '@mui/x-date-pickers';
+
+import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import ScreenSearchDesktopIcon from '@mui/icons-material/ScreenSearchDesktop';
+import SavedSearchIcon from '@mui/icons-material/SavedSearch';
+
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import 'dayjs/locale/es';
+
+import {
+  InputLabel,
+  Menu,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  TextField,
+  FormControl,
+  SvgIcon,
+} from '@mui/material';
 
 export default function RepairRequestsTable() {
   const [requests, setRequests] = useState([]);
@@ -142,19 +148,22 @@ export default function RepairRequestsTable() {
     localStorage.setItem('userDtoSurnames', e.target.elements.userDtoSurnames.value);
     localStorage.setItem('equipmentModel', e.target.elements.equipmentModel.value);
 
+    const initialDateSubmit = { initialDate: initialDate.initialDate?.toDate() };
+    const finalDateSubmit = { finalDate: finalDate.finalDate?.toDate() };
+
     getRequestRepairs({
       page: 1,
       initialDate:
-        initialDate.initialDate != null
-          ? `${initialDate.initialDate.getFullYear()}-${
-              initialDate.initialDate.getMonth() + 1
-            }-${initialDate.initialDate.getDate()}`
+        initialDateSubmit.initialDate != null
+          ? `${initialDateSubmit.initialDate.getFullYear()}-${
+              initialDateSubmit.initialDate.getMonth() + 1
+            }-${initialDateSubmit.initialDate.getDate()}`
           : formattedInitialDate,
       finalDate:
-        finalDate.finalDate != null
-          ? `${finalDate.finalDate.getFullYear()}-${
-              finalDate.finalDate.getMonth() + 1
-            }-${finalDate.finalDate.getDate()}`
+        finalDateSubmit.finalDate != null
+          ? `${finalDateSubmit.finalDate.getFullYear()}-${
+              finalDateSubmit.finalDate.getMonth() + 1
+            }-${finalDateSubmit.finalDate.getDate()}`
           : formattedFinallDate,
       requestStatus: requestStatus,
       userDtoIdNumber: userDtoIdNumber,
@@ -264,144 +273,203 @@ export default function RepairRequestsTable() {
         <Form onSubmit={handleSubmit}>
           <div className="container">
             <FormGroup>
-              <Row>
-                <Label sm="2">Consultar por fechas</Label>
-                <Label sm="1">Desde</Label>
-                <Col sm="4">
-                  <div className="customDatePickerWidth">
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <MobileDatePicker
-                        label="For mobile"
-                        value={value}
-                        onChange={(newValue) => {
-                          setValue(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
+              <Row className="mb-3">
+                <Col md="6">
+                  <Row className="mb-3">
+                    <Col style={{ fontWeight: 'bold' }}>
+                      <SvgIcon>
+                        <SavedSearchIcon />
+                      </SvgIcon>
+                      Consultar por fechas
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md="6">
+                      <LocalizationProvider
+                        adapterLocale="es"
+                        dateAdapter={AdapterDayjs}
+                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
+                      >
+                        <DatePicker
+                          label="Desde"
+                          value={initialDate.initialDate}
+                          onChange={(newValue) => {
+                            setInitialDate({ initialDate: newValue });
+                          }}
+                          components={{
+                            ActionBar: DatePickerActionBar,
+                          }}
+                          componentsProps={{
+                            actionBar: {
+                              actions: ['clear'],
+                            },
+                          }}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </LocalizationProvider>
+                    </Col>
+                    <Col md="6">
+                      <LocalizationProvider adapterLocale="es" dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          sx={{ width: '100%' }}
+                          label="Hasta"
+                          components={{
+                            ActionBar: DatePickerActionBar,
+                          }}
+                          componentsProps={{
+                            actionBar: {
+                              actions: ['clear'],
+                            },
+                          }}
+                          value={finalDate.finalDate}
+                          onChange={(newValue) => {
+                            setFinalDate({ finalDate: newValue });
+                          }}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </LocalizationProvider>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col md="6">
+                  <Row className="mb-3">
+                    <Col style={{ fontWeight: 'bold' }}>
+                      <SvgIcon>
+                        <PersonSearchIcon />
+                      </SvgIcon>
+                      Consultar por clientes
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md="4">
+                      <TextField
+                        className="form-control"
+                        id="userDtoIdNumber"
+                        label="Id"
+                        value={userDtoIdNumber}
+                        onChange={(e) => setUserDtoIdNumber(e.target.value)}
                       />
-                    </LocalizationProvider>
-                  </div>
-                </Col>
-                <Label sm="1">Hasta</Label>
-                <Col sm="4">
-                  <DatePicker
-                    className="form-control"
-                    id="finalDate"
-                    dateFormat="yyyy-MM-dd"
-                    value={finalDate.finalDate}
-                    selected={finalDate.finalDate}
-                    onChange={(date) => handleChangeFinalDate(date)}
-                    isClearable
-                    showDisabledMonthNavigation
-                  />
-                </Col>
-              </Row>
-              <Row className="mt-2">
-                <Label sm="2">Consultar por clientes</Label>
-                <Label sm="1">Id</Label>
-                <Col sm="2">
-                  <div className="userDtoIdNumber">
-                    <Input
-                      className="form-control"
-                      id="userDtoIdNumber"
-                      value={userDtoIdNumber}
-                      onChange={(e) => setUserDtoIdNumber(e.target.value)}
-                      type="text"
-                    />
-                  </div>
-                </Col>
-                <Label sm="2">Nombres</Label>
-                <Col sm="2">
-                  <div className="userDtoNames">
-                    <Input
-                      className="form-control"
-                      id="userDtoNames"
-                      value={userDtoName}
-                      onChange={(e) => setUserDtoName(e.target.value)}
-                      type="text"
-                    />
-                  </div>
-                </Col>
-                <Label sm="1">Apellidos</Label>
-                <Col sm="2">
-                  <div className="userDtoSurnames">
-                    <Input
-                      className="form-control"
-                      id="userDtoSurnames"
-                      value={userDtoSurname}
-                      onChange={(e) => setUserDtoSurname(e.target.value)}
-                      type="text"
-                    />
-                  </div>
+                    </Col>
+                    <Col md="4">
+                      <div className="userDtoNames">
+                        <TextField
+                          className="form-control"
+                          id="userDtoNames"
+                          label="Nombres"
+                          value={userDtoName}
+                          onChange={(e) => setUserDtoName(e.target.value)}
+                        />
+                      </div>
+                    </Col>
+                    <Col md="4">
+                      <TextField
+                        fullWidth
+                        className="form-control"
+                        id="userDtoSurnames"
+                        label="Apellidos"
+                        value={userDtoSurname}
+                        onChange={(e) => setUserDtoSurname(e.target.value)}
+                        type="text"
+                      />
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
-              <Row className="mt-2">
-                <Label sm="2">Consultar por equipos</Label>
-                <Label sm="1">Marca</Label>
-                <Col sm="2">
-                  <div className="equipmentBrand">
-                    <Input
-                      className="form-control"
-                      id="equipmentBrand"
-                      value={equipmentBrand}
-                      onChange={(e) => {
-                        setEquipmentBrand(e.target.value);
-                        localStorage.setItem('equipmentBrand', e.target.value);
-                      }}
-                      type="select"
-                    >
-                      <option value="">SIN FILTRO</option>
-                      {listOfBrands.map((brand, index) => (
-                        <option key={index}>{brand}</option>
-                      ))}
-                    </Input>
-                  </div>
+              <Row>
+                <Col md="6">
+                  <Row className="mb-3">
+                    <Col style={{ fontWeight: 'bold' }}>
+                      <SvgIcon>
+                        <ScreenSearchDesktopIcon />
+                      </SvgIcon>
+                      Consultar por equipos
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md="6">
+                      <FormControl fullWidth>
+                        <InputLabel shrink id="equipmentBrand">
+                          Marca
+                        </InputLabel>
+                        <Select
+                          id="equipmentBrand"
+                          name="equipmentBrand"
+                          displayEmpty
+                          value={equipmentBrand}
+                          input={<OutlinedInput notched label="Marca" />}
+                          onChange={(e) => {
+                            setEquipmentBrand(e.target.value);
+                            localStorage.setItem('equipmentBrand', e.target.value);
+                          }}
+                        >
+                          <MenuItem value="">Sin Filtro</MenuItem>
+                          {listOfBrands.map((brand, index) => (
+                            <MenuItem value={brand} key={index}>
+                              {brand}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Col>
+                    <Col md="6">
+                      <TextField
+                        fullWidth
+                        label="Modelo"
+                        id="equipmentModel"
+                        value={equipmentModel}
+                        onChange={(e) => setEquipmentModel(e.target.value)}
+                      />
+                    </Col>
+                  </Row>
                 </Col>
-                <Label sm="1">Modelo</Label>
-                <Col sm="2">
-                  <div className="equipmentModel">
-                    <Input
-                      className="form-control"
-                      id="equipmentModel"
-                      value={equipmentModel}
-                      onChange={(e) => setEquipmentModel(e.target.value)}
-                      type="text"
-                    />
-                  </div>
-                </Col>
-              </Row>
-              <Row className="mt-2">
-                <Label sm="2">Consultar por estado de solicitud</Label>
-                <Label sm="1">Estado</Label>
-                <Col sm="2">
-                  <div className="requestStatus">
-                    <Input
-                      className="form-control"
-                      id="requestStatus"
-                      value={requestStatus || ''}
-                      onChange={(e) => {
-                        setRequestStatus(e.target.value);
-                        localStorage.setItem('requestStatus', e.target.value);
-                      }}
-                      type="select"
-                    >
-                      <option value="">SIN FILTRO</option>
-                      <option>Iniciada</option>
-                      <option>En proceso de recogida</option>
-                      <option value="Recibida tecnico">Recibida técnico</option>
-                      <option>Revisado</option>
-                      <option value="En reparacion">En reparación</option>
-                      <option value="Reparado pendiente de pago">
-                        Reparado, pendiente de pago
-                      </option>
-                      <option>En camino</option>
-                      <option>Terminada</option>
-                      <option value="En devolucion">En devolución</option>
-                      <option value="Devuelto sin reparacion">Devuelto sin reparación</option>
-                      <option>Retoma</option>
-                      <option>Abandonada</option>
-                      <option>Anulado por IMEI</option>
-                    </Input>
-                  </div>
+                <Col md="6">
+                  <Row className="mb-3">
+                    <Col style={{ fontWeight: 'bold' }}>
+                      <SvgIcon>
+                        <ContentPasteSearchIcon />
+                      </SvgIcon>
+                      Consultar por estado de solicitud
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md="6">
+                      <FormControl fullWidth>
+                        <InputLabel shrink id="equipmentBrand">
+                          Estado
+                        </InputLabel>
+                        <Select
+                          id="requestStatus"
+                          name="requestStatus"
+                          displayEmpty
+                          value={requestStatus || ''}
+                          input={<OutlinedInput notched label="Estado" />}
+                          onChange={(e) => {
+                            setRequestStatus(e.target.value);
+                            localStorage.setItem('requestStatus', e.target.value);
+                          }}
+                        >
+                          <MenuItem value="">Sin Filtro</MenuItem>
+                          <MenuItem value="Iniciada">Iniciada</MenuItem>
+                          <MenuItem value="En proceso de recogida">En proceso de recogida</MenuItem>
+                          <MenuItem value="Recibida tecnico">Recibida técnico</MenuItem>
+                          <MenuItem value="Revisado">Revisado</MenuItem>
+                          <MenuItem value="En reparacion">En reparación</MenuItem>
+                          <MenuItem value="Reparado pendiente de pago">
+                            Reparado, pendiente de pago
+                          </MenuItem>
+                          <MenuItem value="En camino">En camino</MenuItem>
+                          <MenuItem value="Terminada">Terminada</MenuItem>
+                          <MenuItem value="En devolucion">En devolución</MenuItem>
+                          <MenuItem value="Devuelto sin reparacion">
+                            Devuelto sin reparación
+                          </MenuItem>
+                          <MenuItem value="Retoma">Retoma</MenuItem>
+                          <MenuItem value="Abandonada">Abandonada</MenuItem>
+                          <MenuItem value="Anulado por IMEI">Anulado por IMEI</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
             </FormGroup>
