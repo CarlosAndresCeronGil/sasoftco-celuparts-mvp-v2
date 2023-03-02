@@ -10,3 +10,6 @@
   transition: ease-in 0.2s;
   zoom: revert;
 }
+.MuiPickersClock-minutes .MuiPickersClockNumber-clockNumberDisabled {
+  opacity: 0 !important;
+}

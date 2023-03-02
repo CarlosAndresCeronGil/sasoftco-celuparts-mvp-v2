@@ -127,6 +127,7 @@ export default function RequestRetomaForm() {
   const handleSameAddresses = () => {
     setIsSameAddresses(!isSameAddresses);
   };
+
   const handleArriveDate = () => {
     let date = dayjs(new Date());
     let arriveHour = date.hour() + 1;
@@ -142,7 +143,7 @@ export default function RequestRetomaForm() {
 
     if (date.hour() < 8) {
       return dayjs(dayjs().set('hour', 8).set('minute', 30).set('second', 0));
-    } else if (date.hour() >= 17 && date.minute() >= 10) {
+    } else if ((date.hour() >= 17 && date.minute() >= 10) || date.hour() >= 18) {
       let day = new Date();
       let nextDay = dayjs(dayjs(new Date().setDate(day.getDate() + 1)));
       return nextDay.set('hour', 8).set('minute', 30).set('second', 0);
@@ -545,7 +546,11 @@ export default function RequestRetomaForm() {
                           label="Fecha y hora de recogida"
                           value={startDate.day() === 0 ? addDays(startDate, 1) : startDate}
                           onChange={(date) => {
-                            setStartDate(date);
+                            if (date.hour() > 18 || date.hour() < 8) {
+                              setStartDate(startDate);
+                            } else {
+                              setStartDate(date);
+                            }
                           }}
                           ampm
                           InputProps={{

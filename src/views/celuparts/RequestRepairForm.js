@@ -23,7 +23,7 @@ import {
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DesktopDateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker, DesktopDateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
@@ -121,7 +121,7 @@ export default function RequestRepairForm() {
 
     if (date.hour() < 8) {
       return dayjs(dayjs().set('hour', 8).set('minute', 30).set('second', 0));
-    } else if (date.hour() >= 17 && date.minute() >= 10) {
+    } else if ((date.hour() >= 17 && date.minute() >= 10) || date.hour() >= 18) {
       let day = new Date();
       let nextDay = dayjs(dayjs(new Date().setDate(day.getDate() + 1)));
       return nextDay.set('hour', 8).set('minute', 30).set('second', 0);
@@ -472,7 +472,7 @@ export default function RequestRepairForm() {
                         dateAdapter={AdapterDayjs}
                         sx={{ width: '100%' }}
                       >
-                        <MobileDateTimePicker
+                        <DateTimePicker
                           sx={{ width: '100%' }}
                           renderInput={(props) => (
                             <TextField
@@ -490,7 +490,11 @@ export default function RequestRepairForm() {
                           label="Fecha y hora de recogida"
                           value={startDate.day() === 0 ? addDays(startDate, 1) : startDate}
                           onChange={(date) => {
-                            setStartDate(date);
+                            if (date.hour() > 18 || date.hour() < 8) {
+                              setStartDate(startDate);
+                            } else {
+                              setStartDate(date);
+                            }
                           }}
                           InputProps={{
                             startAdornment: (
