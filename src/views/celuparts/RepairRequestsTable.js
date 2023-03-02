@@ -284,7 +284,7 @@ export default function RepairRequestsTable() {
                     </Col>
                   </Row>
                   <Row>
-                    <Col md="6">
+                    <Col md="6" className="mb-2">
                       <LocalizationProvider
                         adapterLocale="es"
                         dateAdapter={AdapterDayjs}
@@ -304,11 +304,11 @@ export default function RepairRequestsTable() {
                               actions: ['clear'],
                             },
                           }}
-                          renderInput={(params) => <TextField {...params} />}
+                          renderInput={(params) => <TextField fullWidth {...params} />}
                         />
                       </LocalizationProvider>
                     </Col>
-                    <Col md="6">
+                    <Col md="6" className="mb-3">
                       <LocalizationProvider adapterLocale="es" dateAdapter={AdapterDayjs}>
                         <DatePicker
                           sx={{ width: '100%' }}
@@ -325,7 +325,7 @@ export default function RepairRequestsTable() {
                           onChange={(newValue) => {
                             setFinalDate({ finalDate: newValue });
                           }}
-                          renderInput={(params) => <TextField {...params} />}
+                          renderInput={(params) => <TextField fullWidth {...params} />}
                         />
                       </LocalizationProvider>
                     </Col>
@@ -341,7 +341,7 @@ export default function RepairRequestsTable() {
                     </Col>
                   </Row>
                   <Row>
-                    <Col md="4">
+                    <Col md="4" className="mb-2">
                       <TextField
                         className="form-control"
                         id="userDtoIdNumber"
@@ -350,16 +350,14 @@ export default function RepairRequestsTable() {
                         onChange={(e) => setUserDtoIdNumber(e.target.value)}
                       />
                     </Col>
-                    <Col md="4">
-                      <div className="userDtoNames">
-                        <TextField
-                          className="form-control"
-                          id="userDtoNames"
-                          label="Nombres"
-                          value={userDtoName}
-                          onChange={(e) => setUserDtoName(e.target.value)}
-                        />
-                      </div>
+                    <Col md="4" className="mb-2">
+                      <TextField
+                        className="form-control"
+                        id="userDtoNames"
+                        label="Nombres"
+                        value={userDtoName}
+                        onChange={(e) => setUserDtoName(e.target.value)}
+                      />
                     </Col>
                     <Col md="4">
                       <TextField
@@ -386,7 +384,7 @@ export default function RepairRequestsTable() {
                     </Col>
                   </Row>
                   <Row>
-                    <Col md="6">
+                    <Col md="6" className="mb-3">
                       <FormControl fullWidth>
                         <InputLabel shrink id="equipmentBrand">
                           Marca
@@ -411,7 +409,7 @@ export default function RepairRequestsTable() {
                         </Select>
                       </FormControl>
                     </Col>
-                    <Col md="6">
+                    <Col md="6" className="mb-3">
                       <TextField
                         fullWidth
                         label="Modelo"
@@ -422,7 +420,7 @@ export default function RepairRequestsTable() {
                     </Col>
                   </Row>
                 </Col>
-                <Col md="6">
+                <Col md="6" className="mb-3">
                   <Row className="mb-3">
                     <Col style={{ fontWeight: 'bold' }}>
                       <SvgIcon>
