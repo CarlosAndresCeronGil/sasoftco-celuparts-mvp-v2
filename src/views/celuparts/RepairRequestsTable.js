@@ -547,13 +547,23 @@ export default function RepairRequestsTable() {
                       : 'Sin definir'}
                   </td>
                   <td>
-                    <Link
-                      to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}
-                    >
-                      <Button type="button" className="btn" color="primary">
-                        <i className="bi bi-pencil-fill"></i>
-                      </Button>
-                    </Link>
+                    {tdata.statusQuote == 'Pendiente' ? (
+                      <td>
+                        <button type="button" className="btn btn-secondary" disabled>
+                          <i className="bi bi-pencil-fill"></i>
+                        </button>
+                      </td>
+                    ) : (
+                      <td>
+                        <Link
+                          to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}
+                        >
+                          <Button type="button" className="btn" color="primary">
+                            <i className="bi bi-pencil-fill"></i>
+                          </Button>
+                        </Link>
+                      </td>
+                    )}
                   </td>
                   {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : (
                     <td>

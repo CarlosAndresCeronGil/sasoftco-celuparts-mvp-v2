@@ -152,22 +152,22 @@ export default function RetomaRequestsTable() {
     localStorage.setItem('userDtoSurnamesRetoma', e.target.elements.userDtoSurnames.value);
     localStorage.setItem('equipmentModelRetoma', e.target.elements.equipmentModel.value);
 
-    const initialDateSubmit = { initialDate: initialDate.initialDate?.toDate() };
-    const finalDateSubmit = { finalDate: finalDate.finalDate?.toDate() };
+    console.log(initialDate);
+    console.log(finalDate);
 
     getRequestRetomas({
       page: 1,
       initialDate:
-        initialDateSubmit.initialDate != null
-          ? `${initialDateSubmit.initialDate.getFullYear()}-${
-              initialDateSubmit.initialDate.getMonth() + 1
-            }-${initialDateSubmit.initialDate.getDate()}`
+        initialDate.initialDate != null
+          ? `${initialDate.initialDate.getFullYear()}-${
+              initialDate.initialDate.getMonth() + 1
+            }-${initialDate.initialDate.getDate()}`
           : formattedInitialDate,
       finalDate:
-        finalDateSubmit.finalDate != null
-          ? `${finalDateSubmit.finalDate.getFullYear()}-${
-              finalDateSubmit.finalDate.getMonth() + 1
-            }-${finalDateSubmit.finalDate.getDate()}`
+        finalDate.finalDate != null
+          ? `${finalDate.finalDate.getFullYear()}-${
+              finalDate.finalDate.getMonth() + 1
+            }-${finalDate.finalDate.getDate()}`
           : formattedFinallDate,
       requestStatus: requestStatus,
       userDtoIdNumber: userDtoIdNumber,
