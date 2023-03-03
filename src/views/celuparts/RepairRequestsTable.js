@@ -547,22 +547,20 @@ export default function RepairRequestsTable() {
                       : 'Sin definir'}
                   </td>
                   <td>
-                    {tdata.statusQuote == 'Pendiente' ? (
-                      <td>
-                        <button type="button" className="btn btn-secondary" disabled>
-                          <i className="bi bi-pencil-fill"></i>
-                        </button>
-                      </td>
+                    {tdata.statusQuote == 'Pendiente' &&
+                    tdata.requestStatus[0].status == 'Revisado' &&
+                    JSON.parse(localStorage.getItem('user')).role == 'tecnico' ? (
+                      <button type="button" className="btn btn-secondary" disabled>
+                        <i className="bi bi-pencil-fill"></i>
+                      </button>
                     ) : (
-                      <td>
-                        <Link
-                          to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}
-                        >
-                          <Button type="button" className="btn" color="primary">
-                            <i className="bi bi-pencil-fill"></i>
-                          </Button>
-                        </Link>
-                      </td>
+                      <Link
+                        to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}
+                      >
+                        <Button type="button" className="btn" color="primary">
+                          <i className="bi bi-pencil-fill"></i>
+                        </Button>
+                      </Link>
                     )}
                   </td>
                   {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : (

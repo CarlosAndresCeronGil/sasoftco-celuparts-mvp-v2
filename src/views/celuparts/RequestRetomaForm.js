@@ -786,7 +786,7 @@ export default function RequestRetomaForm() {
                             }}
                           >
                             <MenuItem defaultChecked value="">
-                              Seleccione una Marca de Computador
+                              Seleccione marca de portatil
                             </MenuItem>
                             {computersList.map((computerData, index) => (
                               <MenuItem value={computerData.brandName} key={index}>
@@ -836,7 +836,7 @@ export default function RequestRetomaForm() {
                               );
                             }}
                           >
-                            <MenuItem value="">Seleccione una marca de celular</MenuItem>
+                            <MenuItem value="">Seleccione marca de celular</MenuItem>
                             {cellphoneList.map((cellphoneData, index) => (
                               <MenuItem value={cellphoneData.brandName} key={index}>
                                 {cellphoneData.brandName}
@@ -876,7 +876,7 @@ export default function RequestRetomaForm() {
                             }}
                           >
                             <MenuItem defaultChecked value="">
-                              Seleccione una marca de tablet
+                              Seleccione marca de tablet
                             </MenuItem>
                             {tabletsList.map((tabletData, index) => (
                               <MenuItem value={tabletData.brandName} key={index}>
@@ -919,7 +919,7 @@ export default function RequestRetomaForm() {
                             }}
                           >
                             <MenuItem defaultChecked value="">
-                              Seleccione una marca de smartWatch
+                              Seleccione marca de smartWatch
                             </MenuItem>
                             {smartWatchesList.map((smartWatchData, index) => (
                               <MenuItem value={smartWatchData.brandName} key={index}>
