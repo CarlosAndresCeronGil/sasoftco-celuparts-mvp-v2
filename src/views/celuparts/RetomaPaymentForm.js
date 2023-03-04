@@ -221,7 +221,7 @@ export default function RetomaPaymentForm() {
                     name="retomaBillPayment"
                     placeholder="Ingrese la factura de pago"
                     type="file"
-                    accept=".pdf"
+                    accept="image/png, image/jpeg,image/jpg,.pdf"
                     onChange={handleFileChange}
                     required
                   />

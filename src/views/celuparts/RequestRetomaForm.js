@@ -1026,7 +1026,7 @@ export default function RequestRetomaForm() {
                         name="equipmentInvoice"
                         placeholder="Ingrese la factura dispositivo"
                         type="file"
-                        accept=".pdf"
+                        accept=".png, .jpeg, .jpg, .pdf"
                         onChange={handleFileChange}
                         required
                         label="Factura del dispositivo"
