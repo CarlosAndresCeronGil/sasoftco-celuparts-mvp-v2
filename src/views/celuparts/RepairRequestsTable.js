@@ -484,6 +484,7 @@ export default function RepairRequestsTable() {
         <Table className="no-wrap mt-3 align-middle" responsive borderless>
           <thead>
             <tr>
+              <th>Id de Reparación</th>
               <th>Nombre cliente</th>
               <th>Fecha solicitud</th>
               <th>Datos equipo</th>
@@ -493,14 +494,14 @@ export default function RepairRequestsTable() {
               <th>Cuota de reparación</th>
               <th>Tiempo de servicio de reparación</th>
               <th>Fecha de entrega</th>
-              <th>Actualizar estado Solicitud</th>
-              {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : (
+              <th>Actualizar estado Proceso</th>
+              {/* {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : (
                 <th>Actualizar estado Reparación</th>
-              )}
-              {JSON.parse(localStorage.getItem('user')).role === 'admin' ||
+              )} */}
+              {/* {JSON.parse(localStorage.getItem('user')).role === 'admin' ||
               JSON.parse(localStorage.getItem('user')).role === 'aux_admin' ? (
                 <th>Actualizar pago reparación</th>
-              ) : null}
+              ) : null} */}
               <th>Detalles de la solicitud</th>
             </tr>
           </thead>
@@ -508,6 +509,7 @@ export default function RepairRequestsTable() {
             {requests.requests.map((tdata, index) =>
               tdata.requestType === 'Reparacion' ? (
                 <tr key={index} className="border-top">
+                  <td>{tdata.repairs[0].idRepair}</td>
                   <td>
                     {tdata.userDto.names} {tdata.userDto.surnames}
                   </td>
@@ -550,9 +552,35 @@ export default function RepairRequestsTable() {
                     {tdata.statusQuote == 'Pendiente' &&
                     tdata.requestStatus[0].status == 'Revisado' &&
                     JSON.parse(localStorage.getItem('user')).role == 'tecnico' ? (
+                      <td>
+                        <button type="button" className="btn btn-secondary" disabled>
+                          <i className="bi bi-pencil-fill"></i>
+                        </button>
+                      </td>
+                    ) : (
+                      <td>
+                        <Link
+                          to={`/home/update-state-repair`}
+                          state={{
+                            idStatus: tdata.requestStatus[0].idRequestStatus,
+                            idRepair: tdata.repairs[0].idRepair,
+                            idRepairPayment: tdata.repairs[0].repairPayments[0].idRepairPayment,
+                            status: tdata.requestStatus[0].status,
+                            statusQuote: tdata.statusQuote,
+                          }}
+                        >
+                          <Button className="btn" color="primary">
+                            <i className="bi bi-pencil-fill"></i>
+                          </Button>
+                        </Link>
+                      </td>
+                    )}
+                    {/* tStatus[0].status == 'Revisado' &&
+                    JSON.parse(localStorage.getItem('user')).role == 'tecnico' ? (
                       <button type="button" className="btn btn-secondary" disabled>
                         <i className="bi bi-pencil-fill"></i>
-                      </button>
+                      </button>{tdata.statusQuote == 'Pendiente' &&
+                    tdata.reques
                     ) : (
                       <Link
                         to={`/home/request-status-form/${tdata.requestStatus[0].idRequestStatus}`}
@@ -561,9 +589,9 @@ export default function RepairRequestsTable() {
                           <i className="bi bi-pencil-fill"></i>
                         </Button>
                       </Link>
-                    )}
+                    )} */}
                   </td>
-                  {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : (
+                  {/* {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : (
                     <td>
                       {tdata.requestStatus[0].status === 'Iniciada' ||
                       tdata.requestStatus[0].status === 'En proceso de recogida' ||
@@ -585,8 +613,8 @@ export default function RepairRequestsTable() {
                         </Link>
                       )}
                     </td>
-                  )}
-                  {JSON.parse(localStorage.getItem('user')).role === 'admin' ||
+                  )} */}
+                  {/* {JSON.parse(localStorage.getItem('user')).role === 'admin' ||
                   JSON.parse(localStorage.getItem('user')).role === 'aux_admin' ? (
                     <td>
                       {tdata.requestStatus[0].status === 'Iniciada' ||
@@ -610,7 +638,8 @@ export default function RepairRequestsTable() {
                         </Link>
                       )}
                     </td>
-                  ) : null}
+                      ) : null} */}
+
                   <td>
                     <Button
                       className="btn"

@@ -7,7 +7,9 @@ import Sidebar from './sidebars/vertical/Sidebar';
 import HorizontalHeader from './header/HorizontalHeader';
 import HorizontalSidebar from './sidebars/horizontal/HorizontalSidebar';
 
-const FullLayout = () => {
+const FullLayout = (props) => {
+  // eslint-disable-next-line react/prop-types
+  console.log(props);
   const customizerToggle = useSelector((state) => state.customizer.customizerSidebar);
   const toggleMiniSidebar = useSelector((state) => state.customizer.isMiniSidebar);
   const showMobileSidebar = useSelector((state) => state.customizer.isMobileSidebar);

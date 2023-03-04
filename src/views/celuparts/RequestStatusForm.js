@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import {
   Card,
   Row,
@@ -31,6 +31,8 @@ import putRequestUpdateTechnician from '../../services/putUpdateTechnician';
 import getTechnicianByEmail from '../../services/getTechnicianByEmail';
 
 export default function RequestStatusForm() {
+  const location = useLocation();
+
   const [dataRequestStatus, setDataRequestStatus] = useState({});
   const [status, setStatus] = useState({ status: '' });
   const [paymentStatus, setPaymentStatus] = useState({ paymentStatus: '' });
@@ -213,8 +215,6 @@ export default function RequestStatusForm() {
           : status.status === 'Recibida tecnico'
           ? notifications.map((tdata) => {
               if (JSON.parse(localStorage.getItem('user'))?.role == 'tecnico') {
-                console.log('reidTechnicianquest', idTechnician);
-
                 putRequestUpdateTechnician({
                   id: tdata.idRequest,
                   idTechnician: idTechnician.idTechnician,
@@ -468,8 +468,9 @@ export default function RequestStatusForm() {
           setIdTechnician({ idTechnician: responseTechnicianInfo.idTechnician });
         });
       }
-      getSingleRequestStatus({ id: params.id })
+      getSingleRequestStatus({ id: location.state.idStatus })
         .then((responseRequestStatus) => {
+          console.log(responseRequestStatus);
           // console.log("request status response", responseRequestStatus)
           responseRequestStatus.request.requestType == 'Reparacion'
             ? setIsRepair(true)
@@ -540,16 +541,13 @@ export default function RequestStatusForm() {
           setLoading(false);
         });
     },
-    [params.id, idRequest.idRequest],
+    [location.state?.idStatus, idRequest.idRequest],
   );
 
   return loading ? (
     <div>Cargando...</div>
   ) : (
     <div>
-      <Button className="btn btn-danger" onClick={handleBackPage}>
-        Atrás
-      </Button>
       <div>
         <Row>
           <Col>

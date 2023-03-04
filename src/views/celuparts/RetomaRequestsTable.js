@@ -523,6 +523,7 @@ export default function RetomaRequestsTable() {
         <Table className="no-wrap mt-3 align-middle" responsive borderless>
           <thead>
             <tr>
+              <th>Id de Retoma</th>
               <th>Nombre cliente</th>
               <th>Fecha solicitud</th>
               <th>Datos equipo</th>
@@ -530,13 +531,13 @@ export default function RetomaRequestsTable() {
               <th>Estado de solicitud</th>
               <th>Valor de retoma</th>
               <th>Actualizar estado Solicitud</th>
-              {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : (
+              {/* {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : (
                 <th>Actualizar diagnostico para retoma</th>
               )}
               {JSON.parse(localStorage.getItem('user')).role === 'admin' ||
               JSON.parse(localStorage.getItem('user')).role === 'aux_admin' ? (
                 <th>Actualizar pago retoma</th>
-              ) : null}
+              ) : null} */}
               <th>Detalles de la solicitud</th>
               <th>Ver factura</th>
             </tr>
@@ -545,6 +546,7 @@ export default function RetomaRequestsTable() {
             {requests.requests.map((tdata, index) =>
               tdata.requestType === 'Retoma' ? (
                 <tr key={index} className="border-top">
+                  <td>{tdata.retoma[0].idRetoma}</td>
                   <td>
                     {tdata.userDto.names} {tdata.userDto.surnames}
                   </td>
@@ -559,7 +561,7 @@ export default function RetomaRequestsTable() {
                   <td>{tdata.statusQuote}</td>
                   <td>{tdata.requestStatus[0].status}</td>
                   <td>{tdata.retoma[0].retomaQuote}</td>
-                  <td>
+                  {/* <td>
                     {tdata.statusQuote != 'Pendiente' &&
                     tdata.requestStatus[0].status == 'Revisado' &&
                     JSON.parse(localStorage.getItem('user')).role == 'tecnico' ? (
@@ -627,7 +629,34 @@ export default function RetomaRequestsTable() {
                         </Link>
                       )}
                     </td>
-                  ) : null}
+                  ) : null} */}
+                  {tdata.statusQuote == 'Pendiente' &&
+                  tdata.requestStatus[0].status == 'Revisado' &&
+                  JSON.parse(localStorage.getItem('user')).role == 'tecnico' ? (
+                    <td>
+                      <button type="button" className="btn btn-secondary" disabled>
+                        <i className="bi bi-pencil-fill"></i>
+                      </button>
+                    </td>
+                  ) : (
+                    <td>
+                      <Link
+                        to={`/home/update-state-retoma`}
+                        state={{
+                          idStatus: tdata.requestStatus[0].idRequestStatus,
+                          idRetoma: tdata.retoma[0].idRetoma,
+                          idRetomaPayment: tdata.retoma[0].retomaPayments[0].idRetomaPayment,
+                          status: tdata.requestStatus[0].status,
+                          statusQuote: tdata.statusQuote,
+                        }}
+                      >
+                        <Button className="btn" color="primary">
+                          <i className="bi bi-pencil-fill"></i>
+                        </Button>
+                      </Link>
+                    </td>
+                  )}
+
                   <td>
                     <Button
                       className="btn"
