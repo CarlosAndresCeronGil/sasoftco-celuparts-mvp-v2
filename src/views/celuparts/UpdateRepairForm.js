@@ -33,6 +33,7 @@ import deletePartsToRepairByIdRequestAndPart from '../../services/deletePartsToR
 export default function UpdateRepairForm() {
   const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
   const [deviceDiagnostic, setDeviceDiagnostic] = useState({ deviceDiagnostic: '' });
+  const [repairDiagnostic, setRepairDiagnostic] = useState({ repairDiagnostic: '' });
   const [repairStartDate, setRepairStartDate] = useState({ repairStartDate: new Date() });
   const [repairDate, setRepairDate] = useState({ repairDate: new Date() });
   const [repairQuote, setRepairQuote] = useState({ repairQuote: 0 });
@@ -308,6 +309,7 @@ export default function UpdateRepairForm() {
           repairDate: repairDate.repairDate,
           repairStartDate: repairStartDate.repairStartDate,
           deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
+          repairDiagnostic: repairDiagnostic.repairDiagnostic,
           repairQuote: repairQuote.repairQuote,
           priceReviewedByAdmin:
             isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false,
@@ -349,6 +351,7 @@ export default function UpdateRepairForm() {
           setRepairQuote({ repairQuote: response[0].repairQuote });
           setIdRequest({ idRequest: response[0].idRequest });
           setPriceReviewedByAdmin({ priceReviewedByAdmin: response[0].priceReviewedByAdmin });
+          setRepairDiagnostic({ repairDiagnostic: response[0].repairDiagnostic });
 
           if (response[0].repairDate == null) {
             setIsRepairDateNull({ isRepairDateNull: true });
@@ -433,7 +436,12 @@ export default function UpdateRepairForm() {
       [e.target.name]: e.target.value,
     }));
   };
-
+  const handleRepairDiagnosticChange = (e) => {
+    setRepairDiagnostic((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
   const handleRepairQuoteChange = (e) => {
     setRepairQuote((prev) => ({
       ...prev,
@@ -517,8 +525,23 @@ export default function UpdateRepairForm() {
                       onChange={handleDeviceDiagnosticChange}
                       required
                     />
+                    <FormGroup className="mt-3">
+                      <Label for="repairDiagnostic">Descripción de la reparación</Label>
+                      <Input
+                        id="repairDiagnostic"
+                        name="repairDiagnostic"
+                        placeholder="Ingrese una descripción del dispositivo reparado"
+                        type="textarea"
+                        value={repairDiagnostic.repairDiagnostic}
+                        onChange={handleRepairDiagnosticChange}
+                        required
+                        disabled={
+                          !isRepairDateNull.isRepairDateNull ||
+                          isRepairStartDateNull.isRepairStartDateNull
+                        }
+                      />
+                    </FormGroup>
                   </FormGroup>
-
                   {/* <FormGroup check>
                                             <Input disabled={!isRepairStartDateNull.isRepairStartDateNull} type='checkbox' onClick={handleStartRepairCheck} />
                                             <Label check>He empezado mi labor de reparación</Label>
