@@ -268,7 +268,7 @@ export default function RepairRequestsTable() {
     <div>Cargando...</div>
   ) : (
     <div className="display-8 small">
-      <BreadCrumbsCeluparts breadcrumbName="Lista de reparaciones registradas en el sistema"/>
+      <BreadCrumbsCeluparts breadcrumbName="Lista de reparaciones registradas en el sistema" />
       <ComponentCard title="Lista de reparaciones registradas en el sistema">
         <Form onSubmit={handleSubmit}>
           <div className="container">
