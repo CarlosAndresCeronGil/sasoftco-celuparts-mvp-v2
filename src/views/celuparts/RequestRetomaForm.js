@@ -430,7 +430,7 @@ export default function RequestRetomaForm() {
     <div>Cargando...</div>
   ) : (
     <div>
-      <BreadCrumbsCeluparts />
+      <BreadCrumbsCeluparts breadcrumbName="Nueva solicitud de retoma" />
       <div>
         <Row>
           <Col>

@@ -57,7 +57,7 @@ export default function TechnicianAlerts() {
 
     return (
         <div>
-            <BreadCrumbsCeluparts />
+            <BreadCrumbsCeluparts breadcrumbName="Alerta de Servicios a domicilio" />
             <Card>
                 <CardTitle tag="h6" className="border-bottom p-3 mb-0">
                     <i className="bi bi-bell me-2"> </i>

@@ -32,7 +32,7 @@ export default function SiigoJournalsTable() {
                         Nuevo comprobante contable
                     </button>
                 </Link> */}
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de comprobantes registrados en SIIGO"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de comprobantes contables registrados en el sistema SIIGO</CardTitle>

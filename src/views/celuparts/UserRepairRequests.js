@@ -299,7 +299,7 @@ export default function UserRepairRequests() {
     return (
         loading ? <div>Loading...</div> : (
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Solicitudes de reparación"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Solicitudes de reparación</CardTitle>

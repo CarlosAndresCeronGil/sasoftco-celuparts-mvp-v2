@@ -26,7 +26,7 @@ export default function SiigoAccountGroupsTable() {
     return (
         loading ? <div> Cargando... </div> : (
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de grupos de inventario registrados en SIIGO" />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de grupos de inventario registrados en el sistema SIIGO</CardTitle>

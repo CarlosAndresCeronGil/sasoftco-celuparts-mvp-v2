@@ -374,7 +374,7 @@ export default function RequestRepairForm() {
     <div>Cargando...</div>
   ) : (
     <div>
-      <BreadCrumbsCeluparts />
+      <BreadCrumbsCeluparts breadcrumbName="Nueva solicitud de reparación"/>
       <div>
         <Row>
           <Col>

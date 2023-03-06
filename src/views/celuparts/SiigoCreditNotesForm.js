@@ -88,7 +88,7 @@ export default function SiigoCreditNotesForm() {
 
     return (
         <div>
-            <BreadCrumbsCeluparts />
+            <BreadCrumbsCeluparts breadcrumbName="Nueva nota de credito en SIIGO"/>
             <Row>
                 <Col>
                     <Card className='container'>

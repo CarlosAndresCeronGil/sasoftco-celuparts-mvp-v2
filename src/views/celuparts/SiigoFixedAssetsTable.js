@@ -26,7 +26,7 @@ export default function SiigoFixedAssetsTable() {
     return (
         loading ? <div> Cargando... </div> : (
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de activos fijos registrados en SIIGO"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de activos fijos registrados en el sistema SIIGO</CardTitle>

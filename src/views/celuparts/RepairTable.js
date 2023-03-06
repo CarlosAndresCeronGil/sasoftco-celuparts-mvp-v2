@@ -25,7 +25,7 @@ export default function RepairTable() {
     return (
         loading ? <div>Loading...</div> : (
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de reparaciones" />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de reparaciones</CardTitle>

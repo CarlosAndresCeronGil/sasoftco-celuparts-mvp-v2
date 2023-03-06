@@ -25,7 +25,7 @@ export default function PickupsTable() {
 
     return (
         <div>
-            <BreadCrumbsCeluparts />
+            <BreadCrumbsCeluparts breadcrumbName="Lista de Domicilios"/>
             <Card>
                 <CardBody>
                     <CardTitle tag="h5">Lista de Domicilios</CardTitle>

@@ -171,7 +171,7 @@ export default function UserRetomaRequests() {
     return (
         loading ? <div>Loading...</div> : (
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Solicitudes de retoma"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Solicitudes de retoma</CardTitle>

@@ -83,7 +83,7 @@ export default function SiigoJournalsForm() {
 
     return (
         <div>
-            <BreadCrumbsCeluparts />
+            <BreadCrumbsCeluparts breadcrumbName="Nuevo comprobante contable SIIGO" />
             <Row>
                 <Col>
                     <Card className='container'>
