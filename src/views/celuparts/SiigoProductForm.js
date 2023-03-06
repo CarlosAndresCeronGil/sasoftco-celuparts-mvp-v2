@@ -74,7 +74,7 @@ export default function SiigoProductForm() {
 
     return (
         <div>
-            <BreadCrumbsCeluparts />
+            <BreadCrumbsCeluparts breadcrumbName="Nuevo producto SIIGO"/>
             <Row>
                 <Col>
                     <Card className='container'>

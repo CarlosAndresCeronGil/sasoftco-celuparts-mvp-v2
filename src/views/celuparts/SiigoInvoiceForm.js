@@ -86,7 +86,7 @@ export default function SiigoInvoiceForm() {
 
     return (
         <div>
-            <BreadCrumbsCeluparts />
+            <BreadCrumbsCeluparts breadcrumbName="Nueva factura SIIGO"/>
             <Row>
                 <Col>
                     <Card className='container'>

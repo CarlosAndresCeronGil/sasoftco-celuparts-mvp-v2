@@ -287,7 +287,7 @@ export default function RetomaRequestsTable() {
     <div>Cargando...</div>
   ) : (
     <div>
-      <BreadCrumbsCeluparts />
+      <BreadCrumbsCeluparts breadcrumbName="Lista de retomas registradas" />
       <ComponentCard title="Lista de retomas registradas en el sistema">
         <Form onSubmit={handleSubmit}>
           <div className="container">

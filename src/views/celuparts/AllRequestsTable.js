@@ -280,7 +280,7 @@ export default function AllRequestsTable() {
     <div>Cargando...</div>
   ) : (
     <div>
-      <BreadCrumbsCeluparts />
+      <BreadCrumbsCeluparts breadcrumbName="Lista de reparaciones en el sistema" />
       <ComponentCard title="Lista de reparaciones registradas en el sistema">
         <Form onSubmit={handleSubmit}>
           <div className="container">

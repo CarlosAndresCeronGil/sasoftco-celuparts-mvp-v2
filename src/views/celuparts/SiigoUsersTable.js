@@ -26,7 +26,7 @@ export default function SiigoUsersTable() {
     return (
         loading ? <div> Cargando... </div> : (
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de usuarios registrados en SIIGO"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de usuarios registrados en el sistema SIIGO</CardTitle>

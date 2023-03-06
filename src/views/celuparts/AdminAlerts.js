@@ -57,7 +57,7 @@ export default function AdminAlerts() {
 
     return (
         <div>
-            <BreadCrumbsCeluparts />
+            <BreadCrumbsCeluparts breadcrumbName="Alerta Administrador" />
             <Card>
                 <CardTitle tag="h6" className="border-bottom p-3 mb-0">
                     <i className="bi bi-bell me-2"> </i>

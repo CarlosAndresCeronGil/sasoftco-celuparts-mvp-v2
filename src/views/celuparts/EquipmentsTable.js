@@ -38,7 +38,7 @@ export default function EquipmentsTable() {
     return (
         loading ? <div>Cargando...</div> :
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de equipos registrados en el sistema"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de equipos registrados en el sistema</CardTitle>

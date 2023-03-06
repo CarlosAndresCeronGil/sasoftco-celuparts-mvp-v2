@@ -60,7 +60,7 @@ export default function CustomerAlerts() {
     return (
         loading ? <div>Cargando ...</div> :
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Alerta de Solicitudes"/>
                 <Card>
                     <CardTitle tag="h6" className="border-bottom p-3 mb-0">
                         <i className="bi bi-bell me-2"> </i>

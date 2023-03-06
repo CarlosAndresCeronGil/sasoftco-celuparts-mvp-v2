@@ -32,7 +32,7 @@ export default function SiigoVouchersTable() {
                         Nuevo recibo de caja
                     </button>
                 </Link> */}
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de recibos de caja en SIIGO"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de recibos de caja en el sistema SIIGO</CardTitle>

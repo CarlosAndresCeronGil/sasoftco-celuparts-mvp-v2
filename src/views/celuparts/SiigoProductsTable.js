@@ -25,7 +25,7 @@ export default function SiigoProductsTable() {
     return (
         loading ? <div> Cargando... </div> : (
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de productos registrados en SIIGO"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de productos registrados en el sistema SIIGO</CardTitle>

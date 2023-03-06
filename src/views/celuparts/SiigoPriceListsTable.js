@@ -26,7 +26,7 @@ export default function SiigoPriceListsTable() {
     return (
         loading ? <div> Cargando... </div> : (
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de precios"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de precios registrados en el sistema SIIGO</CardTitle>

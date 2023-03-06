@@ -25,7 +25,7 @@ export default function SiigoUsersTable() {
     return (
         loading ? <div> Cargando... </div> : (
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de centros de costos registrados en SIIGO" />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de centros de costo registrados en el sistema SIIGO</CardTitle>

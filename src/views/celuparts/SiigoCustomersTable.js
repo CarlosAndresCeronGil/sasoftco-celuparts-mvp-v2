@@ -31,7 +31,7 @@ export default function SiigoCustomersTable() {
                         Nuevo cliente
                     </button>
                 </Link> */}
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de clientes registrados en SIIGO"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de clientes registrados en el sistema SIIGO</CardTitle>

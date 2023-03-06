@@ -40,7 +40,7 @@ export default function RetomaPaymentsTable() {
     return (
         loading ? <div>Cargando...</div> :
             <div>
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de pagos y retomas registrados en el sistema" />
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de pagos a retomas registrados en el sistema</CardTitle>

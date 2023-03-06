@@ -32,7 +32,7 @@ export default function SiigoCreditNotesTable() {
                         Nueva nota de crédito
                     </button>
                 </Link> */}
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de notas de credito registradas en SIIGO"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de notas de crédito registradas en el sistema SIIGO</CardTitle>

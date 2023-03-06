@@ -1,8 +1,8 @@
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { useLocation, Link } from 'react-router-dom';
-//import SidebarData from '../sidebars/sidebardata/SidebarData';
+import PropTypes from 'prop-types';
 
-const BreadCrumbsCeluparts = () => {
+const BreadCrumbsCeluparts = ({ breadcrumbName = "" }) => {
   const location = useLocation();
   const firstUrl = location.pathname.split('/')[1];
   const secondUrl = location.pathname.split('/')[2];
@@ -12,13 +12,17 @@ const BreadCrumbsCeluparts = () => {
       {/* <h4 className="text-capitalize">{secondUrl ? `${secondUrl}` : `${firstUrl}`}</h4> */}
       <Breadcrumb>
         <BreadcrumbItem to="/home/dashboards/dashboard1" tag={Link} className="text-decoration-none">
-          Dashboard
+          Panel Principal
         </BreadcrumbItem>
         {/* {firstUrl ? <BreadcrumbItem active>{firstUrl}</BreadcrumbItem> : ''} */}
-        {secondUrl ? <BreadcrumbItem active>{secondUrl}</BreadcrumbItem> : ''}
+        {breadcrumbName ? <BreadcrumbItem active>{breadcrumbName}</BreadcrumbItem> : ''}
       </Breadcrumb>
     </>
   );
+};
+
+BreadCrumbsCeluparts.propTypes = {
+  breadcrumbName: PropTypes.string.isRequired,
 };
 
 export default BreadCrumbsCeluparts;

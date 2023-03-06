@@ -80,7 +80,7 @@ export default function SiigoVoucherForm() {
 
     return (
         <div>
-            <BreadCrumbsCeluparts />
+            <BreadCrumbsCeluparts breadcrumbName="Nuevo recibo de caja SIIGO"/>
             <Row>
                 <Col>
                     <Card className='container'>

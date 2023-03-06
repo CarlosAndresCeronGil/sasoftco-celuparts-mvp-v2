@@ -32,7 +32,7 @@ export default function UsersTable() {
     return (
         loading ? <div>Cargando...</div> :
         <div>
-            <BreadCrumbsCeluparts />
+            <BreadCrumbsCeluparts breadcrumbName="Lista de usuarios en el sistema"/>
             <Card>
                 <CardBody>
                     <CardTitle tag="h5">Lista de usuarios registrados en el sistema</CardTitle>

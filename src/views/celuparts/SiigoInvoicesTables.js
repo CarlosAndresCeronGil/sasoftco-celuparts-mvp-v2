@@ -32,7 +32,7 @@ export default function SiigoInvoicesTables() {
                         Nueva factura
                     </button>
                 </Link> */}
-                <BreadCrumbsCeluparts />
+                <BreadCrumbsCeluparts breadcrumbName="Lista de facturas registradas en SIIGO"/>
                 <Card>
                     <CardBody>
                         <CardTitle tag="h5">Lista de facturas registradas en el sistema SIIGO</CardTitle>
