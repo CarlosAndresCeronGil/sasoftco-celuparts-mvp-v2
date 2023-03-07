@@ -62,7 +62,7 @@ export default function UpdateStateRepair() {
       <Button className="btn btn-danger mb-4" onClick={handleBackPage}>
         Atrás
       </Button>
-      <AppBar position="static">
+      <AppBar position="relative" sx={{ paddingRight: 0, paddingLeft: 0 }}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -129,6 +129,7 @@ export default function UpdateStateRepair() {
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}
+        sx={{ paddingRight: 0, paddingLeft: 0 }}
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
@@ -138,7 +139,7 @@ export default function UpdateStateRepair() {
           <UpdateRepairForm />
         </TabPanel>
 
-        <TabPanel value={value} index={2} dir={theme.direction}>
+        <TabPanel value={value} index={2} dir={theme.direction} sx={{ zIndex: 3 }}>
           <RepairPaymentForm />
         </TabPanel>
       </SwipeableViews>

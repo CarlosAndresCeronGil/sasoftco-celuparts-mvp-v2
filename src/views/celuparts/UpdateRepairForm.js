@@ -15,6 +15,11 @@ import {
   Input,
 } from 'reactstrap';
 import Swal from 'sweetalert2';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import getSingleRepair from '../../services/getSingleRepair';
@@ -482,7 +487,11 @@ export default function UpdateRepairForm() {
       setListOfUncheckedParts((array) => [...array, partName]);
     }
   };
+  const [value, setValue] = useState('1');
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   return loading ? (
     <div>Loading...</div>
   ) : (
@@ -491,144 +500,178 @@ export default function UpdateRepairForm() {
         <Row>
           <Col>
             <Card className="container">
-              <CardTitle tag="h2" className="border-bottom p-3 mb-0 row justify-content-center">
-                Actualizar estado de reparación
-              </CardTitle>
-              <CardBody>
-                <Form onSubmit={handleSubmit}>
-                  <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
-                    <i className="bi bi-eyeglasses"> </i>
-                    <strong>Datos de la reparación</strong>
-                  </CardSubtitle>
-                  {isTechnician ? null : (
-                    <FormGroup>
-                      <Label for="idTechnician">Id de tecnico asociado</Label>
-                      <Input
-                        id="idTechnician"
-                        name="idTechnician"
-                        placeholder="Ingrese el ID del técnico asociado a esta reparación"
-                        type="number"
-                        value={idTechnician.idTechnician}
-                        onChange={handleIdTechnicianChange}
-                        required
-                      />
-                    </FormGroup>
-                  )}
-                  <FormGroup>
-                    <Label for="deviceDiagnostic">Diagnostico del dispositivo</Label>
-                    <Input
-                      id="deviceDiagnostic"
-                      name="deviceDiagnostic"
-                      placeholder="Ingrese el diagnostico del dispositivo reparado"
-                      type="textarea"
-                      value={deviceDiagnostic.deviceDiagnostic}
-                      onChange={handleDeviceDiagnosticChange}
-                      required
-                    />
-                    <FormGroup className="mt-3">
-                      <Label for="repairDiagnostic">Descripción de la reparación</Label>
-                      <Input
-                        id="repairDiagnostic"
-                        name="repairDiagnostic"
-                        placeholder="Ingrese una descripción del dispositivo reparado"
-                        type="textarea"
-                        value={repairDiagnostic.repairDiagnostic}
-                        onChange={handleRepairDiagnosticChange}
-                        required
-                        disabled={
-                          !isRepairDateNull.isRepairDateNull ||
-                          isRepairStartDateNull.isRepairStartDateNull
-                        }
-                      />
-                    </FormGroup>
-                  </FormGroup>
-                  {/* <FormGroup check>
+              <Box sx={{ width: '100%', typography: 'body1' }}>
+                <TabContext value={value}>
+                  <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <TabList
+                      onChange={handleChange}
+                      aria-label="lab API tabs example"
+                      allowScrollButtonsMobile
+                      scrollButtons="auto"
+                      variant="scrollable"
+                    >
+                      <Tab wrapped fullwidth label="Revisión Técnica" value="1" />
+                      <Tab wrapped fullwidth label="Reparación" value="2" />
+                    </TabList>
+                  </Box>
+                  <TabPanel value="1">
+                    <CardBody>
+                      <Form onSubmit={handleSubmit}>
+                        <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
+                          <i className="bi bi-eyeglasses"> </i>
+                          <strong>Datos de la reparación</strong>
+                        </CardSubtitle>
+
+                        <FormGroup>
+                          <Label for="deviceDiagnostic">Diagnostico del dispositivo</Label>
+                          <Input
+                            id="deviceDiagnostic"
+                            name="deviceDiagnostic"
+                            placeholder="Ingrese el diagnostico del dispositivo reparado"
+                            type="textarea"
+                            value={deviceDiagnostic.deviceDiagnostic}
+                            onChange={handleDeviceDiagnosticChange}
+                            required
+                          />
+                        </FormGroup>
+                        {/* <FormGroup check>
                                             <Input disabled={!isRepairStartDateNull.isRepairStartDateNull} type='checkbox' onClick={handleStartRepairCheck} />
                                             <Label check>He empezado mi labor de reparación</Label>
                                         </FormGroup> */}
 
-                  <FormGroup check>
-                    <Input
-                      disabled={
-                        !isRepairDateNull.isRepairDateNull ||
-                        isRepairStartDateNull.isRepairStartDateNull
-                      }
-                      type="checkbox"
-                      onClick={handleFinishRepairCheck}
-                    />
-                    <Label check>He terminado mi reparación exitosamente</Label>
-                  </FormGroup>
-
-                  <FormGroup>
-                    {/* {
+                        <FormGroup>
+                          {/* {
                                                     listOfParts.map((part, index) => (
                                                         <div key={index}>{part.partName}</div>
                                                     ))
                                                 } */}
-                    <Table striped responsive>
-                      <thead>
-                        <tr>
-                          <th scope="col">Parte</th>
-                          <th scope="col">Reemplazar</th>
-                          <th scope="col">Reparar</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {listOfParts.map((part, index) => (
-                          <tr key={index} className="border-top">
-                            <td>{part.partName}</td>
-                            <td>
-                              <Input
-                                type="checkbox"
-                                checked={listOfReplaceCheckedParts.some((x) => x == part.partName)}
-                                disabled={listOfRepairCheckedParts.some((x) => x == part.partName)}
-                                onChange={(e) => handleAddReplace(e, part.partName)}
-                              />
-                            </td>
-                            <td>
-                              <Input
-                                type="checkbox"
-                                checked={listOfRepairCheckedParts.some((x) => x == part.partName)}
-                                disabled={listOfReplaceCheckedParts.some((x) => x == part.partName)}
-                                onChange={(e) => handleAddRepair(e, part.partName)}
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </FormGroup>
+                          <Table striped responsive>
+                            <thead>
+                              <tr>
+                                <th scope="col">Parte</th>
+                                <th scope="col">Reemplazar</th>
+                                <th scope="col">Reparar</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {listOfParts.map((part, index) => (
+                                <tr key={index} className="border-top">
+                                  <td>{part.partName}</td>
+                                  <td>
+                                    <Input
+                                      type="checkbox"
+                                      checked={listOfReplaceCheckedParts.some(
+                                        (x) => x == part.partName,
+                                      )}
+                                      disabled={listOfRepairCheckedParts.some(
+                                        (x) => x == part.partName,
+                                      )}
+                                      onChange={(e) => handleAddReplace(e, part.partName)}
+                                    />
+                                  </td>
+                                  <td>
+                                    <Input
+                                      type="checkbox"
+                                      checked={listOfRepairCheckedParts.some(
+                                        (x) => x == part.partName,
+                                      )}
+                                      disabled={listOfReplaceCheckedParts.some(
+                                        (x) => x == part.partName,
+                                      )}
+                                      onChange={(e) => handleAddRepair(e, part.partName)}
+                                    />
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </FormGroup>
 
-                  {JSON.parse(localStorage.getItem('user')).role == 'admin' ||
-                  JSON.parse(localStorage.getItem('user')).role == 'aux_admin' ? (
-                    <FormGroup>
-                      <Label for="repairQuote">Cuota de reparación</Label>
-                      <Input
-                        id="repairQuote"
-                        name="repairQuote"
-                        placeholder="Ingrese la cuota de reparación del producto"
-                        type="number"
-                        value={repairQuote.repairQuote}
-                        onChange={handleRepairQuoteChange}
-                        required
-                      />
-                    </FormGroup>
-                  ) : null}
+                        {loadingPut ? (
+                          <button className="btn btn-primary" type="button" disabled>
+                            <span
+                              className="spinner-border spinner-border-sm"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            <span className="sr-only">Cargando...</span>
+                          </button>
+                        ) : (
+                          <Button color="primary">Guardar</Button>
+                        )}
+                      </Form>
+                    </CardBody>
+                  </TabPanel>
+                  <TabPanel value="2">
+                    <CardBody>
+                      <Form onSubmit={handleSubmit}>
+                        {/* <FormGroup check>
+                                            <Input disabled={!isRepairStartDateNull.isRepairStartDateNull} type='checkbox' onClick={handleStartRepairCheck} />
+                                            <Label check>He empezado mi labor de reparación</Label>
+                                        </FormGroup> */}
 
-                  {loadingPut ? (
-                    <button className="btn btn-primary" type="button" disabled>
-                      <span
-                        className="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      <span className="sr-only">Cargando...</span>
-                    </button>
-                  ) : (
-                    <Button color="primary">Guardar</Button>
-                  )}
-                </Form>
-              </CardBody>
+                        <FormGroup check>
+                          <Input
+                            disabled={
+                              !isRepairDateNull.isRepairDateNull ||
+                              isRepairStartDateNull.isRepairStartDateNull
+                            }
+                            type="checkbox"
+                            onClick={handleFinishRepairCheck}
+                          />
+                          <Label check>He terminado mi reparación exitosamente</Label>
+                        </FormGroup>
+
+                        <FormGroup className="mt-3">
+                          <Label for="repairDiagnostic">Descripción de la reparación</Label>
+                          <Input
+                            id="repairDiagnostic"
+                            name="repairDiagnostic"
+                            placeholder="Ingrese una descripción del dispositivo reparado"
+                            type="textarea"
+                            value={repairDiagnostic.repairDiagnostic}
+                            onChange={handleRepairDiagnosticChange}
+                            required
+                            disabled={
+                              !isRepairDateNull.isRepairDateNull ||
+                              isRepairStartDateNull.isRepairStartDateNull
+                            }
+                          />
+                        </FormGroup>
+
+                        {JSON.parse(localStorage.getItem('user')).role == 'admin' ||
+                        JSON.parse(localStorage.getItem('user')).role == 'aux_admin' ? (
+                          <FormGroup>
+                            <Label for="repairQuote">Cuota de reparación</Label>
+                            <Input
+                              id="repairQuote"
+                              name="repairQuote"
+                              placeholder="Ingrese la cuota de reparación del producto"
+                              type="number"
+                              value={repairQuote.repairQuote}
+                              onChange={handleRepairQuoteChange}
+                              required
+                            />
+                          </FormGroup>
+                        ) : null}
+
+                        {loadingPut ? (
+                          <button className="btn btn-primary" type="button" disabled>
+                            <span
+                              className="spinner-border spinner-border-sm"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            <span className="sr-only">Cargando...</span>
+                          </button>
+                        ) : (
+                          <Button color="primary">Guardar</Button>
+                        )}
+                      </Form>
+                    </CardBody>
+                  </TabPanel>
+                </TabContext>
+              </Box>
             </Card>
           </Col>
         </Row>

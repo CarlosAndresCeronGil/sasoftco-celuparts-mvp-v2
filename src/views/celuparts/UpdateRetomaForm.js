@@ -160,9 +160,6 @@ export default function UpdateRetomaForm() {
         <Row>
           <Col>
             <Card className="container">
-              <CardTitle tag="h2" className="border-bottom p-3 mb-0 row justify-content-center">
-                Actualizar diagnostico de retoma
-              </CardTitle>
               <CardBody>
                 <Form onSubmit={handleSubmit}>
                   <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">

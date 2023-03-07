@@ -96,7 +96,7 @@ export default function UpdateStateRetoma() {
           ) : (
             <Tab
               sx={{ textTransform: 'capitalize' }}
-              label="Actualizar Estado de Reparación"
+              label="Actualizar Diagnostico de Retoma"
               {...a11yProps(1)}
             />
           )}

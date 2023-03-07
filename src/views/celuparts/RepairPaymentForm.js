@@ -108,9 +108,6 @@ export default function RepairPaymentForm() {
       <Row>
         <Col>
           <Card className="container">
-            <CardTitle tag="h2" className="border-bottom p-3 mb-0 row justify-content-center">
-              Actualizar estado del pago de reparación
-            </CardTitle>
             <CardBody>
               <Form onSubmit={handleSubmit}>
                 <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
@@ -150,6 +147,8 @@ export default function RepairPaymentForm() {
                       selected={new Date()}
                       onChange={(date) => setPaymentDate({ paymentDate: date })}
                       timeFormat="HH:mm"
+                      withPortal
+                      portalId="root-portal"
                     />
                   </FormGroup>
                 ) : (
@@ -164,6 +163,8 @@ export default function RepairPaymentForm() {
                       onChange={(date) => setPaymentDate({ paymentDate: date })}
                       required
                       timeFormat="HH:mm"
+                      withPortal
+                      portalId="root-portal"
                     />
                   </FormGroup>
                 )}

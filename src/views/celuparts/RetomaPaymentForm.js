@@ -153,9 +153,6 @@ export default function RetomaPaymentForm() {
       <Row>
         <Col>
           <Card className="container">
-            <CardTitle tag="h2" className="border-bottom p-3 mb-0 row justify-content-center">
-              Actualizar estado del pago de retoma
-            </CardTitle>
             <CardBody>
               <Form onSubmit={handleSubmit}>
                 <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
@@ -187,6 +184,8 @@ export default function RetomaPaymentForm() {
                       selected={paymentDate}
                       onChange={(date) => setPaymentDate(date)}
                       timeFormat="HH:mm"
+                      withPortal
+                      portalId="root-portal"
                     />
                   </FormGroup>
                 ) : (
@@ -201,6 +200,8 @@ export default function RetomaPaymentForm() {
                       onChange={(date) => setPaymentDate(date)}
                       required
                       timeFormat="HH:mm"
+                      withPortal
+                      portalId="root-portal"
                     />
                   </FormGroup>
                 )}
