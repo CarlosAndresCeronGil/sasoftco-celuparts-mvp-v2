@@ -80,7 +80,6 @@ export default function UpdateStateRepair() {
           {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : location.state
               .status === 'Iniciada' ||
             location.state.status === 'En proceso de recogida' ||
-            location.state.status === 'Recibida tecnico' ||
             location.state.status === 'En devolucion' ||
             location.state.status === 'Devuelto sin reparacion' ||
             location.state.status === 'Abandonada' ||
@@ -104,7 +103,6 @@ export default function UpdateStateRepair() {
             JSON.parse(localStorage.getItem('user')).role === 'aux_admin') &&
             (location.state.status === 'Iniciada' ||
             location.state.status === 'En proceso de recogida' ||
-            location.state.status === 'Recibida tecnico' ||
             location.state.status === 'En devolucion' ||
             location.state.status === 'Devuelto sin reparacion' ||
             location.state.status === 'Abandonada' ||

@@ -34,6 +34,9 @@ import postPartsToRepair from '../../services/postPartsToRepair';
 import putPartsToRepair from '../../services/putPartsToRepair';
 import getPartsToRepairByIdRepair from '../../services/getPartsToRepairByIdRepair';
 import deletePartsToRepairByIdRequestAndPart from '../../services/deletePartsToRepairByIdRequestAndPart';
+import putRequestStatus from '../../services/putRequestStatus';
+import postRequestHistory from '../../services/postRequestHistory';
+import getSingleRequestStatus from '../../services/getSingleRequestStatus';
 
 export default function UpdateRepairForm() {
   const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
@@ -44,7 +47,6 @@ export default function UpdateRepairForm() {
   const [repairQuote, setRepairQuote] = useState({ repairQuote: 0 });
   const [idRequest, setIdRequest] = useState({ idRequest: 0 });
   const [priceReviewedByAdmin, setPriceReviewedByAdmin] = useState({ priceReviewedByAdmin: false });
-
   const [isRepairDateNull, setIsRepairDateNull] = useState({ isRepairDateNull: false });
   const [isRepairStartDateNull, setIsRepairStartDateNull] = useState({
     isRepairStartDateNull: false,
@@ -70,6 +72,8 @@ export default function UpdateRepairForm() {
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [status, setStatus] = useState(location.state.status);
 
   /*
    *   Usado para verificar que el usuario logeado sea tecnico, en caso que lo sea
@@ -172,6 +176,43 @@ export default function UpdateRepairForm() {
             postListOfRepairCheckedParts();
             postListOfReplaceCheckedParts();
             postUnCheckedParts();
+            putRequestStatus({
+              idRequestStatus: location.state.idStatus,
+              idRequest: idRequest.idRequest,
+              status: 'Revisado',
+              paymentStatus: 'No Pago',
+            })
+              .then((data) => {
+                // console.log("DATA", data);
+                /*Aqui se mira el estado de la solicitud, para asi, enviar un mensaje en la 
+                    notificacion a quien corresponda*/
+                postRequestHistory({
+                  idRequest: data.idRequest,
+                  status: 'Revisado',
+                  date: new Date(),
+                });
+                setStatus('Revisado');
+                notifications.map((tdata) =>
+                  tdata.idRequest === idRequest.idRequest
+                    ? putRequestNotification({
+                        idRequestNotification: tdata.idRequestNotification,
+                        idRequest: tdata.idRequest,
+                        message: 'Tu dispositivo ya ha sido revisado por uno de nuestros técnicos',
+                        wasReviewed: false,
+                        notificationType: 'to_customer',
+                      })
+                        .then((response) => {
+                          navigate(-1);
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        })
+                    : null,
+                );
+              })
+              .catch((error) => {
+                console.log(error);
+              });
             isUserAdmin
               ? notifications.map((tdata) =>
                   tdata.idRequest === idRequest.idRequest
@@ -357,7 +398,7 @@ export default function UpdateRepairForm() {
           setIdRequest({ idRequest: response[0].idRequest });
           setPriceReviewedByAdmin({ priceReviewedByAdmin: response[0].priceReviewedByAdmin });
           setRepairDiagnostic({ repairDiagnostic: response[0].repairDiagnostic });
-
+          console.log('repair', response);
           if (response[0].repairDate == null) {
             setIsRepairDateNull({ isRepairDateNull: true });
             setRepairDate({ repairDate: new Date() });
@@ -427,6 +468,14 @@ export default function UpdateRepairForm() {
     },
     [location.state.idRepair],
   );
+
+  useEffect(() => {
+    console.log();
+    getSingleRequestStatus({ id: idRequest.idRequest }).then((data) => {
+      console.log(data);
+      setStatus(data.status);
+    });
+  }, [idRequest.idRequest]);
 
   const handleIdTechnicianChange = (e) => {
     setIdTechnician((prev) => ({
@@ -511,7 +560,13 @@ export default function UpdateRepairForm() {
                       variant="scrollable"
                     >
                       <Tab wrapped fullwidth label="Revisión Técnica" value="1" />
-                      <Tab wrapped fullwidth label="Reparación" value="2" />
+                      {(status != 'Recibida tecnico' &&
+                        JSON.parse(localStorage.getItem('user')).role != 'admin') ||
+                      JSON.parse(localStorage.getItem('user')).role != 'aux_admin' ? (
+                        <Tab wrapped fullwidth label="Reparación" value="2" />
+                      ) : (
+                        <Tab wrapped fullwidth label="Reparación" value="2" disabled />
+                      )}
                     </TabList>
                   </Box>
                   <TabPanel value="1">
@@ -587,6 +642,22 @@ export default function UpdateRepairForm() {
                           </Table>
                         </FormGroup>
 
+                        {JSON.parse(localStorage.getItem('user')).role == 'admin' ||
+                        JSON.parse(localStorage.getItem('user')).role == 'aux_admin' ? (
+                          <FormGroup>
+                            <Label for="repairQuote">Cuota de reparación</Label>
+                            <Input
+                              id="repairQuote"
+                              name="repairQuote"
+                              placeholder="Ingrese la cuota de reparación del producto"
+                              type="number"
+                              value={repairQuote.repairQuote}
+                              onChange={handleRepairQuoteChange}
+                              required
+                            />
+                          </FormGroup>
+                        ) : null}
+
                         {loadingPut ? (
                           <button className="btn btn-primary" type="button" disabled>
                             <span
@@ -597,7 +668,21 @@ export default function UpdateRepairForm() {
                             <span className="sr-only">Cargando...</span>
                           </button>
                         ) : (
-                          <Button color="primary">Guardar</Button>
+                          <>
+                            {console.log(
+                              JSON.parse(localStorage.getItem('user')).role != 'admin' ||
+                                JSON.parse(localStorage.getItem('user')).role != 'aux_admin',
+                            )}
+                            {status != 'Recibida tecnico' &&
+                            JSON.parse(localStorage.getItem('user')).role != 'admin' &&
+                            JSON.parse(localStorage.getItem('user')).role != 'aux_admin' ? (
+                              <Button color="primary" disabled>
+                                Guardar
+                              </Button>
+                            ) : (
+                              <Button color="primary">Guardar</Button>
+                            )}
+                          </>
                         )}
                       </Form>
                     </CardBody>
@@ -638,22 +723,6 @@ export default function UpdateRepairForm() {
                             }
                           />
                         </FormGroup>
-
-                        {JSON.parse(localStorage.getItem('user')).role == 'admin' ||
-                        JSON.parse(localStorage.getItem('user')).role == 'aux_admin' ? (
-                          <FormGroup>
-                            <Label for="repairQuote">Cuota de reparación</Label>
-                            <Input
-                              id="repairQuote"
-                              name="repairQuote"
-                              placeholder="Ingrese la cuota de reparación del producto"
-                              type="number"
-                              value={repairQuote.repairQuote}
-                              onChange={handleRepairQuoteChange}
-                              required
-                            />
-                          </FormGroup>
-                        ) : null}
 
                         {loadingPut ? (
                           <button className="btn btn-primary" type="button" disabled>

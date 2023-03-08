@@ -103,7 +103,7 @@ export default function RequestStatusForm() {
       toShow: 'Revisado',
       priority: 3,
       showToCourier: false,
-      showToTechnician: true,
+      showToTechnician: false,
     },
     {
       value: 'En reparacion',
