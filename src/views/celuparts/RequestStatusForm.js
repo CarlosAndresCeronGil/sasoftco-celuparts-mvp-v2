@@ -117,7 +117,7 @@ export default function RequestStatusForm() {
       toShow: 'Reparado, pendiente de pago',
       priority: 5.1,
       showToCourier: false,
-      showToTechnician: true,
+      showToTechnician: false,
     },
     {
       value: 'En camino',

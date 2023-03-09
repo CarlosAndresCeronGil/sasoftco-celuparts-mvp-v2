@@ -32,6 +32,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import getSearchRepeatedPartsToRepair from '../../services/getSearchRepeatedPartsToRepair';
 import postPartsToRepair from '../../services/postPartsToRepair';
 import putPartsToRepair from '../../services/putPartsToRepair';
+import getCelupartsInfo from '../../services/getCelupartsInfo';
 import getPartsToRepairByIdRepair from '../../services/getPartsToRepairByIdRepair';
 import deletePartsToRepairByIdRequestAndPart from '../../services/deletePartsToRepairByIdRequestAndPart';
 import putRequestStatus from '../../services/putRequestStatus';
@@ -51,6 +52,9 @@ export default function UpdateRepairForm() {
   const [isRepairStartDateNull, setIsRepairStartDateNull] = useState({
     isRepairStartDateNull: false,
   });
+
+  const [celupartsContactPhone, setCelupartsContactPhone] = useState('');
+  const [celupartsContactEmail, setCelupartsContactEmail] = useState('');
 
   const [nullFinishDateArrived, setNullFinishDateArrived] = useState(false);
   const [nullStartDateArrived, setNullStartDateArrived] = useState(false);
@@ -159,6 +163,7 @@ export default function UpdateRepairForm() {
     e.preventDefault();
     // console.log("lista de UNCHECKED", listOfUncheckedParts)
     setLoadingPut(true);
+    console.log('update-date', nullFinishDateArrived, nullStartDateArrived);
     nullFinishDateArrived && nullStartDateArrived
       ? //PRODUCTO REVISADO SIN SER ACEPTADA LA COTIZACION
         putRepair({
@@ -192,23 +197,26 @@ export default function UpdateRepairForm() {
                   date: new Date(),
                 });
                 setStatus('Revisado');
-                notifications.map((tdata) =>
-                  tdata.idRequest === idRequest.idRequest
-                    ? putRequestNotification({
-                        idRequestNotification: tdata.idRequestNotification,
-                        idRequest: tdata.idRequest,
-                        message: 'Tu dispositivo ya ha sido revisado por uno de nuestros técnicos',
-                        wasReviewed: false,
-                        notificationType: 'to_customer',
-                      })
-                        .then((response) => {
-                          navigate(-1);
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        })
-                    : null,
-                );
+                !isUserAdmin
+                  ? notifications.map((tdata) =>
+                      tdata.idRequest === idRequest.idRequest
+                        ? putRequestNotification({
+                            idRequestNotification: tdata.idRequestNotification,
+                            idRequest: tdata.idRequest,
+                            message:
+                              'Tu dispositivo ya ha sido revisado por uno de nuestros técnicos',
+                            wasReviewed: false,
+                            notificationType: 'to_customer',
+                          })
+                            .then((response) => {
+                              navigate(-1);
+                            })
+                            .catch((error) => {
+                              console.log(error);
+                            })
+                        : null,
+                    )
+                  : null;
               })
               .catch((error) => {
                 console.log(error);
@@ -361,6 +369,41 @@ export default function UpdateRepairForm() {
             isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false,
         })
           .then((data) => {
+            putRequestStatus({
+              idRequestStatus: location.state.idStatus,
+              idRequest: idRequest.idRequest,
+              status: 'Reparado pendiente de pago',
+              paymentStatus: 'No Pago',
+            }).then((data) => {
+              postRequestHistory({
+                idRequest: data.idRequest,
+                status: 'Reparado pendiente de pago',
+                date: new Date(),
+              }).then(() => setStatus('Reparado pendiente de pago'));
+              notifications.map((tdata) =>
+                tdata.idRequest === idRequest.idRequest
+                  ? putRequestNotification({
+                      idRequestNotification: tdata.idRequestNotification,
+                      idRequest: tdata.idRequest,
+                      message:
+                        'Tú dispositivo ha sido reparado, contactate con el administrador al siguiente número: ' +
+                        celupartsContactPhone +
+                        ' o al siguiente correo ' +
+                        celupartsContactEmail +
+                        ' para confirmar pago',
+                      wasReviewed: false,
+                      notificationType: 'to_customer',
+                    })
+                      .then((response) => {
+                        navigate(-1);
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      })
+                  : null,
+              );
+            });
+
             postListOfRepairCheckedParts();
             postListOfReplaceCheckedParts();
             postUnCheckedParts();
@@ -476,6 +519,17 @@ export default function UpdateRepairForm() {
       setStatus(data.status);
     });
   }, [idRequest.idRequest]);
+
+  useEffect(() => {
+    getCelupartsInfo()
+      .then((response) => {
+        setCelupartsContactPhone(response[0].contactPhone);
+        setCelupartsContactEmail(response[0].contactEmail);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const handleIdTechnicianChange = (e) => {
     setIdTechnician((prev) => ({
@@ -698,6 +752,10 @@ export default function UpdateRepairForm() {
                         <FormGroup check>
                           <Input
                             disabled={
+                              !isRepairDateNull.isRepairDateNull ||
+                              isRepairStartDateNull.isRepairStartDateNull
+                            }
+                            checked={
                               !isRepairDateNull.isRepairDateNull ||
                               isRepairStartDateNull.isRepairStartDateNull
                             }

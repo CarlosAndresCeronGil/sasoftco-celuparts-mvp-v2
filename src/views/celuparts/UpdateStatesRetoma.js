@@ -80,7 +80,6 @@ export default function UpdateStateRetoma() {
           {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : location.state
               .status === 'Iniciada' ||
             location.state.status === 'En proceso de recogida' ||
-            location.state.status === 'Recibida tecnico' ||
             location.state.status === 'En devolucion' ||
             location.state.status === 'Devuelto sin reparacion' ||
             location.state.status === 'Abandonada' ||
@@ -90,7 +89,7 @@ export default function UpdateStateRetoma() {
             <Tab
               disabled
               sx={{ textTransform: 'capitalize' }}
-              label="Actualizar Estado de Reparación"
+              label="Actualizar Estado de Retoma"
               {...a11yProps(1)}
             />
           ) : (

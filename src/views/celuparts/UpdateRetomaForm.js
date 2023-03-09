@@ -19,6 +19,8 @@ import putRetoma from '../../services/putRetoma';
 import getRequestNotification from '../../services/getRequestNotification';
 import putRequestNotification from '../../services/putRequestNotification';
 import getTechnicianByEmail from '../../services/getTechnicianByEmail';
+import putRequestStatus from '../../services/putRequestStatus';
+import postRequestHistory from '../../services/postRequestHistory';
 
 export default function UpdateRetomaForm() {
   const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
@@ -103,6 +105,39 @@ export default function UpdateRetomaForm() {
       priceReviewedByAdmin: isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false,
     })
       .then(() => {
+        putRequestStatus({
+          idRequestStatus: location.state.idStatus,
+          idRequest: idRequest.idRequest,
+          status: 'Revisado',
+          paymentStatus: 'No Pago',
+        }).then((data) => {
+          postRequestHistory({
+            idRequest: data.idRequest,
+            status: 'Revisado',
+            date: new Date(),
+          }).then(() => {
+            !isUserAdmin
+              ? notifications.map((tdata) =>
+                  tdata.idRequest === idRequest.idRequest
+                    ? putRequestNotification({
+                        idRequestNotification: tdata.idRequestNotification,
+                        idRequest: tdata.idRequest,
+                        message: 'Tu dispositivo ya ha sido revisado por uno de nuestros técnicos',
+                        wasReviewed: false,
+                        notificationType: 'to_customer',
+                      })
+                        .then((response) => {
+                          navigate(-1);
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        })
+                    : null,
+                )
+              : null;
+          });
+        });
+
         isUserAdmin
           ? notifications.map((tdata) =>
               tdata.idRequest === idRequest.idRequest
@@ -116,6 +151,7 @@ export default function UpdateRetomaForm() {
                   })
                     .then((response) => {
                       console.log('Exito!', response);
+                      navigate(-1);
                     })
                     .catch((error) => {
                       console.log(error);
