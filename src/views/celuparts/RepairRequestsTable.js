@@ -615,41 +615,32 @@ export default function RepairRequestsTable() {
                         })
                       : "Sin definir"}
                   </td>
+
                   <td>
-                    {tdata.statusQuote == "Pendiente" &&
-                    tdata.requestStatus[0].status == "Revisado" &&
-                    JSON.parse(localStorage.getItem("user")).role ==
-                      "tecnico" ? (
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          disabled
-                        >
-                          <i className="bi bi-pencil-fill"></i>
-                        </button>
-                      </td>
-                    ) : (
-                      <td>
-                        <Link
-                          to={`/home/update-state-repair`}
-                          state={{
-                            idStatus: tdata.requestStatus[0].idRequestStatus,
-                            idRepair: tdata.repairs[0].idRepair,
-                            idRepairPayment:
-                              tdata.repairs[0].repairPayments[0]
-                                .idRepairPayment,
-                            status: tdata.requestStatus[0].status,
-                            statusQuote: tdata.statusQuote
-                          }}
-                        >
-                          <Button className="btn" color="primary">
-                            <i className="bi bi-pencil-fill"></i>
-                          </Button>
-                        </Link>
-                      </td>
-                    )}
-                    {/* tStatus[0].status == 'Revisado' &&
+                    <Link
+                      to={`/home/update-state-repair`}
+                      state={{
+                        idStatus: tdata.requestStatus[0].idRequestStatus,
+                        idRepair: tdata.repairs[0].idRepair,
+                        idRepairPayment:
+                          tdata.repairs[0].repairPayments[0].idRepairPayment,
+                        status: tdata.requestStatus[0].status,
+                        statusQuote: tdata.statusQuote,
+                        data: {
+                          equipmentData:
+                            tdata.equipment.equipmentBrand +
+                            " " +
+                            tdata.equipment.modelOrReference,
+                          imeiOrSerial: tdata.equipment.imeiOrSerial
+                        }
+                      }}
+                    >
+                      <Button className="btn" color="primary">
+                        <i className="bi bi-pencil-fill"></i>
+                      </Button>
+                    </Link>
+                  </td>
+                  {/* tStatus[0].status == 'Revisado' &&
                     JSON.parse(localStorage.getItem('user')).role == 'tecnico' ? (
                       <button type="button" className="btn btn-secondary" disabled>
                         <i className="bi bi-pencil-fill"></i>
@@ -664,7 +655,6 @@ export default function RepairRequestsTable() {
                         </Button>
                       </Link>
                     )} */}
-                  </td>
                   {/* {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : (
                     <td>
                       {tdata.requestStatus[0].status === 'Iniciada' ||

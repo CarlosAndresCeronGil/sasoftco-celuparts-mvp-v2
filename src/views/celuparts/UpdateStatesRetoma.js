@@ -1,16 +1,16 @@
-import * as React from 'react';
-import SwipeableViews from 'react-swipeable-views';
-import { useTheme } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Button } from 'reactstrap';
-import RequestStatusForm from './RequestStatusForm';
-import UpdateRetomaForm from './UpdateRetomaForm';
-import RetomaPaymentForm from './RetomaPaymentForm';
+import * as React from "react";
+import SwipeableViews from "react-swipeable-views";
+import { useTheme } from "@mui/material/styles";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Button } from "reactstrap";
+import RequestStatusForm from "./RequestStatusForm";
+import UpdateRetomaForm from "./UpdateRetomaForm";
+import RetomaPaymentForm from "./RetomaPaymentForm";
 
 // eslint-disable-next-line react/prop-types
 function TabPanel({ children, value, index, ...other }) {
@@ -34,7 +34,7 @@ function TabPanel({ children, value, index, ...other }) {
 function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
+    "aria-controls": `full-width-tabpanel-${index}`
   };
 }
 
@@ -49,7 +49,7 @@ export default function UpdateStateRetoma() {
     setValue(newValue);
   };
 
-  const handleChangeIndex = (index) => {
+  const handleChangeIndex = index => {
     setValue(index);
   };
 
@@ -58,10 +58,16 @@ export default function UpdateStateRetoma() {
   };
 
   return (
-    <Box sx={{ bgcolor: 'background.paper' }}>
+    <Box sx={{ bgcolor: "background.paper" }}>
       <Button className="btn btn-danger mb-4" onClick={handleBackPage}>
         Atrás
       </Button>
+      <Box sx={{ marginBottom: "1rem", display: "flex", fontSize: "0.8rem" }}>
+        <Box sx={{ marginRight: " 1rem" }}>
+          <strong>Id Retoma : </strong> {location.state.idRetoma}
+        </Box>
+        <strong>Equipo</strong> : {location.state.data.equipmentData}
+      </Box>
       <AppBar position="static">
         <Tabs
           value={value}
@@ -69,56 +75,56 @@ export default function UpdateStateRetoma() {
           indicatorColor="secondary"
           textColor="inherit"
           variant="fullWidth"
-          sx={{ textTransform: 'capitalize' }}
+          sx={{ textTransform: "capitalize" }}
           aria-label="full width tabs example"
         >
           <Tab
-            sx={{ textTransform: 'capitalize' }}
+            sx={{ textTransform: "capitalize" }}
             label="Actualizar Estado de solicitud"
             {...a11yProps(0)}
           />
-          {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : location.state
-              .status === 'Iniciada' ||
-            location.state.status === 'En proceso de recogida' ||
-            location.state.status === 'En devolucion' ||
-            location.state.status === 'Devuelto sin reparacion' ||
-            location.state.status === 'Abandonada' ||
-            location.state.status === 'Terminada' ||
-            location.state.status === 'Anulado por IMEI' ||
-            location.state.status === 'En camino' ? (
+          {JSON.parse(localStorage.getItem("user")).role ===
+          "mensajero" ? null : location.state.status === "Iniciada" ||
+            location.state.status === "En proceso de recogida" ||
+            location.state.status === "En devolucion" ||
+            location.state.status === "Devuelto sin reparacion" ||
+            location.state.status === "Abandonada" ||
+            location.state.status === "Terminada" ||
+            location.state.status === "Anulado por IMEI" ||
+            location.state.status === "En camino" ? (
             <Tab
               disabled
-              sx={{ textTransform: 'capitalize' }}
+              sx={{ textTransform: "capitalize" }}
               label="Actualizar Estado de Retoma"
               {...a11yProps(1)}
             />
           ) : (
             <Tab
-              sx={{ textTransform: 'capitalize' }}
+              sx={{ textTransform: "capitalize" }}
               label="Actualizar Diagnostico de Retoma"
               {...a11yProps(1)}
             />
           )}
-          {(JSON.parse(localStorage.getItem('user')).role === 'admin' ||
-            JSON.parse(localStorage.getItem('user')).role === 'aux_admin') &&
-            (location.state.status === 'Iniciada' ||
-            location.state.status === 'En proceso de recogida' ||
-            location.state.status === 'Recibida tecnico' ||
-            location.state.status === 'En devolucion' ||
-            location.state.status === 'Devuelto sin reparacion' ||
-            location.state.status === 'Abandonada' ||
-            location.state.status === 'Terminada' ||
-            location.state.status === 'Anulado por IMEI' ||
-            location.state.status === 'En camino' ? (
+          {(JSON.parse(localStorage.getItem("user")).role === "admin" ||
+            JSON.parse(localStorage.getItem("user")).role === "aux_admin") &&
+            (location.state.status === "Iniciada" ||
+            location.state.status === "En proceso de recogida" ||
+            location.state.status === "Recibida tecnico" ||
+            location.state.status === "En devolucion" ||
+            location.state.status === "Devuelto sin reparacion" ||
+            location.state.status === "Abandonada" ||
+            location.state.status === "Terminada" ||
+            location.state.status === "Anulado por IMEI" ||
+            location.state.status === "En camino" ? (
               <Tab
                 disabled
-                sx={{ textTransform: 'capitalize' }}
+                sx={{ textTransform: "capitalize" }}
                 label="Actualizar Pago Reparación"
                 {...a11yProps(2)}
               />
             ) : (
               <Tab
-                sx={{ textTransform: 'capitalize' }}
+                sx={{ textTransform: "capitalize" }}
                 label="Actualizar Pago Reparación"
                 {...a11yProps(2)}
               />
@@ -126,7 +132,7 @@ export default function UpdateStateRetoma() {
         </Tabs>
       </AppBar>
       <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
         index={value}
         onChangeIndex={handleChangeIndex}
       >

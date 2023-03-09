@@ -703,7 +703,14 @@ export default function RetomaRequestsTable() {
                           idRetomaPayment:
                             tdata.retoma[0].retomaPayments[0].idRetomaPayment,
                           status: tdata.requestStatus[0].status,
-                          statusQuote: tdata.statusQuote
+                          statusQuote: tdata.statusQuote,
+                          data: {
+                            equipmentData:
+                              tdata.equipment.equipmentBrand +
+                              " " +
+                              tdata.equipment.modelOrReference,
+                            imeiOrSerial: tdata.equipment.imeiOrSerial
+                          }
                         }}
                       >
                         <Button className="btn" color="primary">

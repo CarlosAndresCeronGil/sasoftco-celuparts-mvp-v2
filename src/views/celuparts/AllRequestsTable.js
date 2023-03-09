@@ -567,7 +567,14 @@ export default function AllRequestsTable() {
                   <Link
                     to={`/home/update-state-repair`}
                     state={{
-                      idStatus: tdata.requestStatus[0].idRequestStatus
+                      idStatus: tdata.requestStatus[0].idRequestStatus,
+                      data: {
+                        equipmentData:
+                          tdata.equipment.equipmentBrand +
+                          " " +
+                          tdata.equipment.modelOrReference,
+                        imeiOrSerial: tdata.equipment.imeiOrSerial
+                      }
                     }}
                   >
                     <Button className="btn" color="primary">
@@ -673,11 +680,6 @@ export default function AllRequestsTable() {
               <span className="fw-bold">Teléfono cliente:</span>
             </div>
             {currentClientPhone}
-            <hr />
-            <div>
-              <span className="fw-bold">Detalle de la solicitud:</span>
-            </div>
-            {currentAutoDiagnosis}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={handleViewClick.bind(null)}>

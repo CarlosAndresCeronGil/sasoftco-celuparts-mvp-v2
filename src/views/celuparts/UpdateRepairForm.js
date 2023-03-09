@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Card,
   Row,
@@ -12,49 +12,59 @@ import {
   Form,
   FormGroup,
   Label,
-  Input,
-} from 'reactstrap';
-import Swal from 'sweetalert2';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import 'react-datepicker/dist/react-datepicker.css';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import getSingleRepair from '../../services/getSingleRepair';
-import putRepair from '../../services/putRepair';
-import getRequestNotification from '../../services/getRequestNotification';
-import putRequestNotification from '../../services/putRequestNotification';
-import getTechnicianByEmail from '../../services/getTechnicianByEmail';
-import getPartsInfo from '../../services/getPartsInfo';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import getSearchRepeatedPartsToRepair from '../../services/getSearchRepeatedPartsToRepair';
-import postPartsToRepair from '../../services/postPartsToRepair';
-import putPartsToRepair from '../../services/putPartsToRepair';
-import getCelupartsInfo from '../../services/getCelupartsInfo';
-import getPartsToRepairByIdRepair from '../../services/getPartsToRepairByIdRepair';
-import deletePartsToRepairByIdRequestAndPart from '../../services/deletePartsToRepairByIdRequestAndPart';
-import putRequestStatus from '../../services/putRequestStatus';
-import postRequestHistory from '../../services/postRequestHistory';
-import getSingleRequestStatus from '../../services/getSingleRequestStatus';
+  Input
+} from "reactstrap";
+import Swal from "sweetalert2";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import getSingleRepair from "../../services/getSingleRepair";
+import putRepair from "../../services/putRepair";
+import getRequestNotification from "../../services/getRequestNotification";
+import putRequestNotification from "../../services/putRequestNotification";
+import getTechnicianByEmail from "../../services/getTechnicianByEmail";
+import getPartsInfo from "../../services/getPartsInfo";
+import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
+import getSearchRepeatedPartsToRepair from "../../services/getSearchRepeatedPartsToRepair";
+import postPartsToRepair from "../../services/postPartsToRepair";
+import putPartsToRepair from "../../services/putPartsToRepair";
+import getCelupartsInfo from "../../services/getCelupartsInfo";
+import getPartsToRepairByIdRepair from "../../services/getPartsToRepairByIdRepair";
+import deletePartsToRepairByIdRequestAndPart from "../../services/deletePartsToRepairByIdRequestAndPart";
+import putRequestStatus from "../../services/putRequestStatus";
+import postRequestHistory from "../../services/postRequestHistory";
+import getSingleRequestStatus from "../../services/getSingleRequestStatus";
 
 export default function UpdateRepairForm() {
   const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
-  const [deviceDiagnostic, setDeviceDiagnostic] = useState({ deviceDiagnostic: '' });
-  const [repairDiagnostic, setRepairDiagnostic] = useState({ repairDiagnostic: '' });
-  const [repairStartDate, setRepairStartDate] = useState({ repairStartDate: new Date() });
+  const [deviceDiagnostic, setDeviceDiagnostic] = useState({
+    deviceDiagnostic: ""
+  });
+  const [repairDiagnostic, setRepairDiagnostic] = useState({
+    repairDiagnostic: ""
+  });
+  const [repairStartDate, setRepairStartDate] = useState({
+    repairStartDate: new Date()
+  });
   const [repairDate, setRepairDate] = useState({ repairDate: new Date() });
   const [repairQuote, setRepairQuote] = useState({ repairQuote: 0 });
   const [idRequest, setIdRequest] = useState({ idRequest: 0 });
-  const [priceReviewedByAdmin, setPriceReviewedByAdmin] = useState({ priceReviewedByAdmin: false });
-  const [isRepairDateNull, setIsRepairDateNull] = useState({ isRepairDateNull: false });
+  const [priceReviewedByAdmin, setPriceReviewedByAdmin] = useState({
+    priceReviewedByAdmin: false
+  });
+  const [isRepairDateNull, setIsRepairDateNull] = useState({
+    isRepairDateNull: false
+  });
   const [isRepairStartDateNull, setIsRepairStartDateNull] = useState({
-    isRepairStartDateNull: false,
+    isRepairStartDateNull: false
   });
 
-  const [celupartsContactPhone, setCelupartsContactPhone] = useState('');
-  const [celupartsContactEmail, setCelupartsContactEmail] = useState('');
+  const [celupartsContactPhone, setCelupartsContactPhone] = useState("");
+  const [celupartsContactEmail, setCelupartsContactEmail] = useState("");
 
   const [nullFinishDateArrived, setNullFinishDateArrived] = useState(false);
   const [nullStartDateArrived, setNullStartDateArrived] = useState(false);
@@ -69,7 +79,9 @@ export default function UpdateRepairForm() {
 
   //Control de los checkbox de la tabla de partes
   const [listOfParts, setListOfParts] = useState([]);
-  const [listOfReplaceCheckedParts, setListOfReplaceCheckedParts] = useState([]);
+  const [listOfReplaceCheckedParts, setListOfReplaceCheckedParts] = useState(
+    []
+  );
   const [listOfRepairCheckedParts, setListOfRepairCheckedParts] = useState([]);
   const [listOfUncheckedParts, setListOfUncheckedParts] = useState([]);
 
@@ -78,7 +90,9 @@ export default function UpdateRepairForm() {
   const location = useLocation();
 
   const [status, setStatus] = useState(location.state.status);
-
+  const [checkRepair, setcheckRepair] = useState(
+    isRepairDateNull.isRepairDateNull ? "on" : "off"
+  );
   /*
    *   Usado para verificar que el usuario logeado sea tecnico, en caso que lo sea
    *   no mostrara el input de "Id de tecnico asociado" dado que lo tomara automaticamente
@@ -87,20 +101,20 @@ export default function UpdateRepairForm() {
   const [isUserAdmin, setIsUserAdmin] = useState(false);
 
   const postListOfRepairCheckedParts = () => {
-    listOfRepairCheckedParts.map((repariPart) =>
+    listOfRepairCheckedParts.map(repariPart =>
       getSearchRepeatedPartsToRepair({
         idRepair: location.state.idRepair,
-        partName: repariPart,
-      }).then((responseSearchRepeated) => {
+        partName: repariPart
+      }).then(responseSearchRepeated => {
         // console.log("responseSearchRepeated status: ", responseSearchRepeated.status)
         if (responseSearchRepeated.status == 404) {
           postPartsToRepair({
             idRepair: location.state.idRepair,
             part: repariPart,
             toReplace: false,
-            toRepair: true,
-          }).catch((error) => {
-            console.log('Error post partToRepair', error);
+            toRepair: true
+          }).catch(error => {
+            console.log("Error post partToRepair", error);
           });
         } else {
           // console.log("Es nueva registro ", responseSearchRepeated)
@@ -109,30 +123,30 @@ export default function UpdateRepairForm() {
             idRepair: responseSearchRepeated[0].idRepair,
             part: responseSearchRepeated[0].part,
             toReplace: false,
-            toRepair: true,
-          }).catch((error) => {
-            console.log('Error put partsToRepair', error);
+            toRepair: true
+          }).catch(error => {
+            console.log("Error put partsToRepair", error);
           });
         }
-      }),
+      })
     );
   };
 
   const postListOfReplaceCheckedParts = () => {
-    listOfReplaceCheckedParts.map((repariPart) =>
+    listOfReplaceCheckedParts.map(repariPart =>
       getSearchRepeatedPartsToRepair({
         idRepair: location.state.idRepair,
-        partName: repariPart,
-      }).then((responseSearchRepeated) => {
+        partName: repariPart
+      }).then(responseSearchRepeated => {
         // console.log("responseSearchRepeated status: ", responseSearchRepeated.status)
         if (responseSearchRepeated.status == 404) {
           postPartsToRepair({
             idRepair: location.state.idRepair,
             part: repariPart,
             toReplace: true,
-            toRepair: false,
-          }).catch((error) => {
-            console.log('Error post partToRepair', error);
+            toRepair: false
+          }).catch(error => {
+            console.log("Error post partToRepair", error);
           });
         } else {
           // console.log("Es nueva registro ", responseSearchRepeated)
@@ -141,29 +155,29 @@ export default function UpdateRepairForm() {
             idRepair: responseSearchRepeated[0].idRepair,
             part: responseSearchRepeated[0].part,
             toReplace: true,
-            toRepair: false,
-          }).catch((error) => {
-            console.log('Error put partsToRepair', error);
+            toRepair: false
+          }).catch(error => {
+            console.log("Error put partsToRepair", error);
           });
         }
-      }),
+      })
     );
   };
 
   const postUnCheckedParts = () => {
-    listOfUncheckedParts.map((uncheckedPart) =>
+    listOfUncheckedParts.map(uncheckedPart =>
       deletePartsToRepairByIdRequestAndPart({
         idRepair: location.state.idRepair,
-        partName: uncheckedPart,
-      }),
+        partName: uncheckedPart
+      })
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     // console.log("lista de UNCHECKED", listOfUncheckedParts)
     setLoadingPut(true);
-    console.log('update-date', nullFinishDateArrived, nullStartDateArrived);
+
     nullFinishDateArrived && nullStartDateArrived
       ? //PRODUCTO REVISADO SIN SER ACEPTADA LA COTIZACION
         putRepair({
@@ -175,54 +189,54 @@ export default function UpdateRepairForm() {
           deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
           repairQuote: repairQuote.repairQuote,
           priceReviewedByAdmin:
-            isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false,
+            isUserAdmin && Number(repairQuote.repairQuote) > 0 ? true : false
         })
-          .then((data) => {
+          .then(data => {
             postListOfRepairCheckedParts();
             postListOfReplaceCheckedParts();
             postUnCheckedParts();
             putRequestStatus({
               idRequestStatus: location.state.idStatus,
               idRequest: idRequest.idRequest,
-              status: 'Revisado',
-              paymentStatus: 'No Pago',
+              status: "Revisado",
+              paymentStatus: "No Pago"
             })
-              .then((data) => {
+              .then(data => {
                 // console.log("DATA", data);
                 /*Aqui se mira el estado de la solicitud, para asi, enviar un mensaje en la 
                     notificacion a quien corresponda*/
                 postRequestHistory({
                   idRequest: data.idRequest,
-                  status: 'Revisado',
-                  date: new Date(),
+                  status: "Revisado",
+                  date: new Date()
                 });
-                setStatus('Revisado');
+                setStatus("Revisado");
                 !isUserAdmin
-                  ? notifications.map((tdata) =>
+                  ? notifications.map(tdata =>
                       tdata.idRequest === idRequest.idRequest
                         ? putRequestNotification({
                             idRequestNotification: tdata.idRequestNotification,
                             idRequest: tdata.idRequest,
                             message:
-                              'Tu dispositivo ya ha sido revisado por uno de nuestros técnicos',
+                              "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
                             wasReviewed: false,
-                            notificationType: 'to_customer',
+                            notificationType: "to_customer"
                           })
-                            .then((response) => {
+                            .then(response => {
                               navigate(-1);
                             })
-                            .catch((error) => {
+                            .catch(error => {
                               console.log(error);
                             })
-                        : null,
+                        : null
                     )
                   : null;
               })
-              .catch((error) => {
+              .catch(error => {
                 console.log(error);
               });
             isUserAdmin
-              ? notifications.map((tdata) =>
+              ? notifications.map(tdata =>
                   tdata.idRequest === idRequest.idRequest
                     ? putRequestNotification({
                         idRequestNotification: tdata.idRequestNotification,
@@ -230,29 +244,29 @@ export default function UpdateRepairForm() {
                         message:
                           'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
                         wasReviewed: false,
-                        notificationType: 'to_customer',
+                        notificationType: "to_customer"
                       })
-                        .then((response) => {
+                        .then(response => {
                           // console.log("Exito!", response)
                         })
-                        .then((finalResponse) => {
+                        .then(finalResponse => {
                           Swal.fire({
-                            icon: 'success',
-                            title: 'Exito!',
-                            text: 'Estado de reparación actualizadisimo!',
-                          }).then((response) => {
+                            icon: "success",
+                            title: "Exito!",
+                            text: "Estado de reparación actualizadisimo!"
+                          }).then(response => {
                             navigate(-1);
                           });
                         })
-                        .catch((error) => {
+                        .catch(error => {
                           console.log(error);
                         })
-                    : null,
+                    : null
                 )
               : null;
             setLoadingPut(false);
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             setLoadingPut(false);
           })
@@ -266,14 +280,14 @@ export default function UpdateRepairForm() {
           deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
           repairQuote: repairQuote.repairQuote,
           priceReviewedByAdmin:
-            isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false,
+            isUserAdmin && Number(repairQuote.repairQuote) > 0 ? true : false
         })
-          .then((data) => {
+          .then(data => {
             // console.log(data)
             postListOfRepairCheckedParts();
             postListOfReplaceCheckedParts();
             postUnCheckedParts();
-            notifications.map((tdata) =>
+            notifications.map(tdata =>
               tdata.idRequest === idRequest.idRequest
                 ? putRequestNotification({
                     idRequestNotification: tdata.idRequestNotification,
@@ -281,28 +295,28 @@ export default function UpdateRepairForm() {
                     message:
                       'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
                     wasReviewed: false,
-                    notificationType: 'to_customer',
+                    notificationType: "to_customer"
                   })
-                    .then((response) => {
+                    .then(response => {
                       // console.log("Exito!", response)
                     })
-                    .finally((finalResponse) => {
+                    .finally(finalResponse => {
                       Swal.fire({
-                        icon: 'success',
-                        title: 'Exito!',
-                        text: 'Estado de reparación actualizadisimo!',
-                      }).then((response) => {
+                        icon: "success",
+                        title: "Exito!",
+                        text: "Estado de reparación actualizadisimo!"
+                      }).then(response => {
                         navigate(-1);
                       });
                     })
-                    .catch((error) => {
+                    .catch(error => {
                       console.log(error);
                     })
-                : null,
+                : null
             );
             setLoadingPut(false);
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             setLoadingPut(false);
           })
@@ -316,14 +330,14 @@ export default function UpdateRepairForm() {
           deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
           repairQuote: repairQuote.repairQuote,
           priceReviewedByAdmin:
-            isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false,
+            isUserAdmin && Number(repairQuote.repairQuote) > 0 ? true : false
         })
-          .then((data) => {
+          .then(data => {
             // console.log(data)
             postListOfRepairCheckedParts();
             postListOfReplaceCheckedParts();
             postUnCheckedParts();
-            notifications.map((tdata) =>
+            notifications.map(tdata =>
               tdata.idRequest === idRequest.idRequest
                 ? putRequestNotification({
                     idRequestNotification: tdata.idRequestNotification,
@@ -331,28 +345,28 @@ export default function UpdateRepairForm() {
                     message:
                       'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
                     wasReviewed: false,
-                    notificationType: 'to_customer',
+                    notificationType: "to_customer"
                   })
-                    .then((response) => {
-                      console.log('Exito!', response);
+                    .then(response => {
+                      console.log("Exito!", response);
                     })
-                    .finally((finalResponse) => {
+                    .finally(finalResponse => {
                       Swal.fire({
-                        icon: 'success',
-                        title: 'Exito!',
-                        text: 'Estado de reparación actualizadisimo!',
-                      }).then((response) => {
+                        icon: "success",
+                        title: "Exito!",
+                        text: "Estado de reparación actualizadisimo!"
+                      }).then(response => {
                         navigate(-1);
                       });
                     })
-                    .catch((error) => {
+                    .catch(error => {
                       console.log(error);
                     })
-                : null,
+                : null
             );
             setLoadingPut(false);
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             setLoadingPut(false);
           })
@@ -366,41 +380,41 @@ export default function UpdateRepairForm() {
           repairDiagnostic: repairDiagnostic.repairDiagnostic,
           repairQuote: repairQuote.repairQuote,
           priceReviewedByAdmin:
-            isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false,
+            isUserAdmin && Number(repairQuote.repairQuote) > 0 ? true : false
         })
-          .then((data) => {
+          .then(data => {
             putRequestStatus({
               idRequestStatus: location.state.idStatus,
               idRequest: idRequest.idRequest,
-              status: 'Reparado pendiente de pago',
-              paymentStatus: 'No Pago',
-            }).then((data) => {
+              status: "Reparado pendiente de pago",
+              paymentStatus: "No Pago"
+            }).then(data => {
               postRequestHistory({
                 idRequest: data.idRequest,
-                status: 'Reparado pendiente de pago',
-                date: new Date(),
-              }).then(() => setStatus('Reparado pendiente de pago'));
-              notifications.map((tdata) =>
+                status: "Reparado pendiente de pago",
+                date: new Date()
+              }).then(() => setStatus("Reparado pendiente de pago"));
+              notifications.map(tdata =>
                 tdata.idRequest === idRequest.idRequest
                   ? putRequestNotification({
                       idRequestNotification: tdata.idRequestNotification,
                       idRequest: tdata.idRequest,
                       message:
-                        'Tú dispositivo ha sido reparado, contactate con el administrador al siguiente número: ' +
+                        "Tú dispositivo ha sido reparado, contactate con el administrador al siguiente número: " +
                         celupartsContactPhone +
-                        ' o al siguiente correo ' +
+                        " o al siguiente correo " +
                         celupartsContactEmail +
-                        ' para confirmar pago',
+                        " para confirmar pago",
                       wasReviewed: false,
-                      notificationType: 'to_customer',
+                      notificationType: "to_customer"
                     })
-                      .then((response) => {
+                      .then(response => {
                         navigate(-1);
                       })
-                      .catch((error) => {
+                      .catch(error => {
                         console.log(error);
                       })
-                  : null,
+                  : null
               );
             });
 
@@ -409,16 +423,16 @@ export default function UpdateRepairForm() {
             postUnCheckedParts();
             setLoadingPut(false);
           })
-          .finally((finalResponse) => {
+          .finally(finalResponse => {
             Swal.fire({
-              icon: 'success',
-              title: 'Exito!',
-              text: 'Estado de reparación actualizadisimo!',
-            }).then((response) => {
+              icon: "success",
+              title: "Exito!",
+              text: "Estado de reparación actualizadisimo!"
+            }).then(response => {
               navigate(-1);
             });
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             setLoadingPut(false);
           });
@@ -428,20 +442,25 @@ export default function UpdateRepairForm() {
     function () {
       setLoading(true);
       //admin aux_admin
-      JSON.parse(localStorage.getItem('user')).role === 'admin' ||
-      JSON.parse(localStorage.getItem('user')).role === 'aux_admin'
+      JSON.parse(localStorage.getItem("user")).role === "admin" ||
+      JSON.parse(localStorage.getItem("user")).role === "aux_admin"
         ? setIsUserAdmin(true)
         : setIsUserAdmin(false);
       getSingleRepair({ id: location.state.idRepair })
-        .then((response) => {
+        .then(response => {
           // console.log("response single repair", response)
           setIdTechnician({ idTechnician: response[0].idTechnician });
-          setDeviceDiagnostic({ deviceDiagnostic: response[0].deviceDiagnostic });
+          setDeviceDiagnostic({
+            deviceDiagnostic: response[0].deviceDiagnostic
+          });
           setRepairQuote({ repairQuote: response[0].repairQuote });
           setIdRequest({ idRequest: response[0].idRequest });
-          setPriceReviewedByAdmin({ priceReviewedByAdmin: response[0].priceReviewedByAdmin });
-          setRepairDiagnostic({ repairDiagnostic: response[0].repairDiagnostic });
-          console.log('repair', response);
+          setPriceReviewedByAdmin({
+            priceReviewedByAdmin: response[0].priceReviewedByAdmin
+          });
+          setRepairDiagnostic({
+            repairDiagnostic: response[0].repairDiagnostic
+          });
           if (response[0].repairDate == null) {
             setIsRepairDateNull({ isRepairDateNull: true });
             setRepairDate({ repairDate: new Date() });
@@ -457,64 +476,74 @@ export default function UpdateRepairForm() {
             setNullStartDateArrived(true);
           } else {
             setIsRepairStartDateNull({ isRepairStartDateNull: false });
-            setRepairStartDate({ repairStartDate: new Date(response[0].repairStartDate) });
+            setRepairStartDate({
+              repairStartDate: new Date(response[0].repairStartDate)
+            });
           }
 
-          if (JSON.parse(localStorage.getItem('user')).role == 'tecnico') {
-            getTechnicianByEmail({ email: JSON.parse(localStorage.getItem('user')).email }).then(
-              (responseTechnicianInfo) => {
-                setIdTechnician({ idTechnician: responseTechnicianInfo.idTechnician });
-              },
-            );
+          if (JSON.parse(localStorage.getItem("user")).role == "tecnico") {
+            getTechnicianByEmail({
+              email: JSON.parse(localStorage.getItem("user")).email
+            }).then(responseTechnicianInfo => {
+              setIdTechnician({
+                idTechnician: responseTechnicianInfo.idTechnician
+              });
+            });
             setIsTechnician(true);
           } else {
             setIsTechnician(false);
           }
 
           getRequestNotification()
-            .then((response) => {
+            .then(response => {
               setNotifications(response);
               getPartsInfo()
-                .then((responsePartsInfo) => {
+                .then(responsePartsInfo => {
                   setListOfParts(responsePartsInfo);
-                  console.log('parts info ', responsePartsInfo);
+                  console.log("parts info ", responsePartsInfo);
                   getPartsToRepairByIdRepair({
-                    id: location.state.idRepair,
+                    id: location.state.idRepair
                   })
-                    .then((responsePartsToRepairByIdRepair) => {
+                    .then(responsePartsToRepairByIdRepair => {
                       console.log(responsePartsToRepairByIdRepair);
-                      responsePartsToRepairByIdRepair.map((part) =>
+                      responsePartsToRepairByIdRepair.map(part =>
                         part.toRepair == true
-                          ? setListOfRepairCheckedParts((array) => [...array, part.part])
-                          : setListOfReplaceCheckedParts((array) => [...array, part.part]),
+                          ? setListOfRepairCheckedParts(array => [
+                              ...array,
+                              part.part
+                            ])
+                          : setListOfReplaceCheckedParts(array => [
+                              ...array,
+                              part.part
+                            ])
                       );
                       setLoading(false);
                     })
-                    .catch((error) => {
+                    .catch(error => {
                       console.log(error);
                     });
                 })
-                .catch((error) => {
+                .catch(error => {
                   console.log(error);
                   setLoading(false);
                 });
             })
-            .catch((error) => {
+            .catch(error => {
               console.log(error);
               setLoading(false);
             });
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           setLoading(false);
         });
     },
-    [location.state.idRepair],
+    [location.state.idRepair]
   );
 
   useEffect(() => {
     console.log();
-    getSingleRequestStatus({ id: idRequest.idRequest }).then((data) => {
+    getSingleRequestStatus({ id: idRequest.idRequest }).then(data => {
       console.log(data);
       setStatus(data.status);
     });
@@ -522,75 +551,89 @@ export default function UpdateRepairForm() {
 
   useEffect(() => {
     getCelupartsInfo()
-      .then((response) => {
+      .then(response => {
         setCelupartsContactPhone(response[0].contactPhone);
         setCelupartsContactEmail(response[0].contactEmail);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   }, []);
 
-  const handleIdTechnicianChange = (e) => {
-    setIdTechnician((prev) => ({
+  const handleIdTechnicianChange = e => {
+    setIdTechnician(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
 
-  const handleDeviceDiagnosticChange = (e) => {
-    setDeviceDiagnostic((prev) => ({
+  const handleDeviceDiagnosticChange = e => {
+    setDeviceDiagnostic(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
-  const handleRepairDiagnosticChange = (e) => {
-    setRepairDiagnostic((prev) => ({
+  const handleRepairDiagnosticChange = e => {
+    setRepairDiagnostic(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
-  const handleRepairQuoteChange = (e) => {
-    setRepairQuote((prev) => ({
+  const handleRepairQuoteChange = e => {
+    setRepairQuote(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
 
-  const handleStartRepairCheck = (e) => {
+  const handleStartRepairCheck = e => {
     setIsRepairStarted(!isRepairStarted);
     setRepairStartDate({ repairStartDate: new Date() });
     setNullStartDateArrived(!nullStartDateArrived);
   };
 
-  const handleFinishRepairCheck = (e) => {
-    setIsRepairFinished(!isRepairFinished);
-    setRepairDate({ repairDate: new Date() });
-    setNullFinishDateArrived(!nullFinishDateArrived);
+  const handleFinishRepairCheck = e => {
+    if (e.target.value == "off") {
+      console.log("onnn");
+      setIsRepairFinished(!isRepairFinished);
+      setRepairDate({ repairDate: new Date() });
+      setNullFinishDateArrived(!nullFinishDateArrived);
+      setcheckRepair("off");
+    } else {
+      setcheckRepair("on");
+    }
   };
 
   const handleAddReplace = (e, partName) => {
     if (e.target.checked) {
-      setListOfReplaceCheckedParts((array) => [...array, partName]);
-      setListOfUncheckedParts((current) => current.filter((name) => name != partName));
+      setListOfReplaceCheckedParts(array => [...array, partName]);
+      setListOfUncheckedParts(current =>
+        current.filter(name => name != partName)
+      );
     } else {
       // console.log('⛔️ Checkbox is NOT checked');
-      setListOfReplaceCheckedParts((current) => current.filter((name) => name != partName));
-      setListOfUncheckedParts((array) => [...array, partName]);
+      setListOfReplaceCheckedParts(current =>
+        current.filter(name => name != partName)
+      );
+      setListOfUncheckedParts(array => [...array, partName]);
     }
   };
 
   const handleAddRepair = (e, partName) => {
     if (e.target.checked) {
-      setListOfRepairCheckedParts((array) => [...array, partName]);
-      setListOfUncheckedParts((current) => current.filter((name) => name != partName));
+      setListOfRepairCheckedParts(array => [...array, partName]);
+      setListOfUncheckedParts(current =>
+        current.filter(name => name != partName)
+      );
     } else {
       // console.log('⛔️ Checkbox is NOT checked');
-      setListOfRepairCheckedParts((current) => current.filter((name) => name != partName));
-      setListOfUncheckedParts((array) => [...array, partName]);
+      setListOfRepairCheckedParts(current =>
+        current.filter(name => name != partName)
+      );
+      setListOfUncheckedParts(array => [...array, partName]);
     }
   };
-  const [value, setValue] = useState('1');
+  const [value, setValue] = useState("1");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -603,9 +646,9 @@ export default function UpdateRepairForm() {
         <Row>
           <Col>
             <Card className="container">
-              <Box sx={{ width: '100%', typography: 'body1' }}>
+              <Box sx={{ width: "100%", typography: "body1" }}>
                 <TabContext value={value}>
-                  <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                     <TabList
                       onChange={handleChange}
                       aria-label="lab API tabs example"
@@ -613,26 +656,42 @@ export default function UpdateRepairForm() {
                       scrollButtons="auto"
                       variant="scrollable"
                     >
-                      <Tab wrapped fullwidth label="Revisión Técnica" value="1" />
-                      {(status != 'Recibida tecnico' &&
-                        JSON.parse(localStorage.getItem('user')).role != 'admin') ||
-                      JSON.parse(localStorage.getItem('user')).role != 'aux_admin' ? (
+                      <Tab
+                        wrapped
+                        fullwidth
+                        label="Revisión Técnica"
+                        value="1"
+                      />
+
+                      {location.state.statusQuote === "Aceptada" &&
+                      repairStartDate.repairStartDate ? (
                         <Tab wrapped fullwidth label="Reparación" value="2" />
                       ) : (
-                        <Tab wrapped fullwidth label="Reparación" value="2" disabled />
+                        <Tab
+                          wrapped
+                          fullwidth
+                          label="Reparación"
+                          value="2"
+                          disabled
+                        />
                       )}
                     </TabList>
                   </Box>
                   <TabPanel value="1">
                     <CardBody>
                       <Form onSubmit={handleSubmit}>
-                        <CardSubtitle tag="h6" className="border-bottom p-1 mb-2">
+                        <CardSubtitle
+                          tag="h6"
+                          className="border-bottom p-1 mb-2"
+                        >
                           <i className="bi bi-eyeglasses"> </i>
-                          <strong>Datos de la reparación</strong>
+                          <strong>Datos de la Revisión</strong>
                         </CardSubtitle>
 
                         <FormGroup>
-                          <Label for="deviceDiagnostic">Diagnostico del dispositivo</Label>
+                          <Label for="deviceDiagnostic">
+                            Diagnostico del dispositivo
+                          </Label>
                           <Input
                             id="deviceDiagnostic"
                             name="deviceDiagnostic"
@@ -670,24 +729,28 @@ export default function UpdateRepairForm() {
                                     <Input
                                       type="checkbox"
                                       checked={listOfReplaceCheckedParts.some(
-                                        (x) => x == part.partName,
+                                        x => x == part.partName
                                       )}
                                       disabled={listOfRepairCheckedParts.some(
-                                        (x) => x == part.partName,
+                                        x => x == part.partName
                                       )}
-                                      onChange={(e) => handleAddReplace(e, part.partName)}
+                                      onChange={e =>
+                                        handleAddReplace(e, part.partName)
+                                      }
                                     />
                                   </td>
                                   <td>
                                     <Input
                                       type="checkbox"
                                       checked={listOfRepairCheckedParts.some(
-                                        (x) => x == part.partName,
+                                        x => x == part.partName
                                       )}
                                       disabled={listOfReplaceCheckedParts.some(
-                                        (x) => x == part.partName,
+                                        x => x == part.partName
                                       )}
-                                      onChange={(e) => handleAddRepair(e, part.partName)}
+                                      onChange={e =>
+                                        handleAddRepair(e, part.partName)
+                                      }
                                     />
                                   </td>
                                 </tr>
@@ -696,8 +759,10 @@ export default function UpdateRepairForm() {
                           </Table>
                         </FormGroup>
 
-                        {JSON.parse(localStorage.getItem('user')).role == 'admin' ||
-                        JSON.parse(localStorage.getItem('user')).role == 'aux_admin' ? (
+                        {JSON.parse(localStorage.getItem("user")).role ==
+                          "admin" ||
+                        JSON.parse(localStorage.getItem("user")).role ==
+                          "aux_admin" ? (
                           <FormGroup>
                             <Label for="repairQuote">Cuota de reparación</Label>
                             <Input
@@ -713,7 +778,11 @@ export default function UpdateRepairForm() {
                         ) : null}
 
                         {loadingPut ? (
-                          <button className="btn btn-primary" type="button" disabled>
+                          <button
+                            className="btn btn-primary"
+                            type="button"
+                            disabled
+                          >
                             <span
                               className="spinner-border spinner-border-sm"
                               role="status"
@@ -723,13 +792,13 @@ export default function UpdateRepairForm() {
                           </button>
                         ) : (
                           <>
-                            {console.log(
-                              JSON.parse(localStorage.getItem('user')).role != 'admin' ||
-                                JSON.parse(localStorage.getItem('user')).role != 'aux_admin',
-                            )}
-                            {status != 'Recibida tecnico' &&
-                            JSON.parse(localStorage.getItem('user')).role != 'admin' &&
-                            JSON.parse(localStorage.getItem('user')).role != 'aux_admin' ? (
+                            {(JSON.parse(localStorage.getItem("user")).role ===
+                              "admin" ||
+                              JSON.parse(localStorage.getItem("user")).role ===
+                                "aux_admin") &&
+                            location.state.statusQuote != "Aceptada" ? (
+                              <Button color="primary">Guardar</Button>
+                            ) : priceReviewedByAdmin.priceReviewedByAdmin ? (
                               <Button color="primary" disabled>
                                 Guardar
                               </Button>
@@ -749,24 +818,22 @@ export default function UpdateRepairForm() {
                                             <Label check>He empezado mi labor de reparación</Label>
                                         </FormGroup> */}
 
-                        <FormGroup check>
+                        <FormGroup>
                           <Input
-                            disabled={
-                              !isRepairDateNull.isRepairDateNull ||
-                              isRepairStartDateNull.isRepairStartDateNull
-                            }
-                            checked={
-                              !isRepairDateNull.isRepairDateNull ||
-                              isRepairStartDateNull.isRepairStartDateNull
-                            }
+                            disabled={!isRepairDateNull.isRepairDateNull}
                             type="checkbox"
-                            onClick={handleFinishRepairCheck}
+                            value={checkRepair ? "off" : "on"}
+                            onChange={handleFinishRepairCheck}
                           />
-                          <Label check>He terminado mi reparación exitosamente</Label>
+                          <Label check>
+                            He terminado mi reparación exitosamente
+                          </Label>
                         </FormGroup>
 
                         <FormGroup className="mt-3">
-                          <Label for="repairDiagnostic">Descripción de la reparación</Label>
+                          <Label for="repairDiagnostic">
+                            Descripción de la reparación
+                          </Label>
                           <Input
                             id="repairDiagnostic"
                             name="repairDiagnostic"
@@ -783,7 +850,11 @@ export default function UpdateRepairForm() {
                         </FormGroup>
 
                         {loadingPut ? (
-                          <button className="btn btn-primary" type="button" disabled>
+                          <button
+                            className="btn btn-primary"
+                            type="button"
+                            disabled
+                          >
                             <span
                               className="spinner-border spinner-border-sm"
                               role="status"
@@ -791,8 +862,12 @@ export default function UpdateRepairForm() {
                             ></span>
                             <span className="sr-only">Cargando...</span>
                           </button>
-                        ) : (
+                        ) : isRepairDateNull.isRepairDateNull ? (
                           <Button color="primary">Guardar</Button>
+                        ) : (
+                          <Button color="primary" disabled>
+                            Guardar
+                          </Button>
                         )}
                       </Form>
                     </CardBody>
