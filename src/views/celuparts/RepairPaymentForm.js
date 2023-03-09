@@ -1,6 +1,6 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import {
   Card,
@@ -13,18 +13,20 @@ import {
   Form,
   FormGroup,
   Label,
-  Input,
-} from 'reactstrap';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import putRepairPayment from '../../services/putRepairPayment';
-import getSingleRepairPayment from '../../services/getSingleRepairPayment';
+  Input
+} from "reactstrap";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import putRepairPayment from "../../services/putRepairPayment";
+import getSingleRepairPayment from "../../services/getSingleRepairPayment";
 
 export default function RepairPaymentForm() {
-  const [paymentMethod, setPaymentMethod] = useState({ paymentMethod: '' });
-  const [billPayment, setBillPayment] = useState({ billPayment: '' });
+  const [paymentMethod, setPaymentMethod] = useState({ paymentMethod: "" });
+  const [billPayment, setBillPayment] = useState({ billPayment: "" });
   const [paymentDate, setPaymentDate] = useState({ paymentDate: new Date() });
-  const [isPaymentDateNull, setIsPaymentDateNull] = useState({ isPaymentDateNull: false });
+  const [isPaymentDateNull, setIsPaymentDateNull] = useState({
+    isPaymentDateNull: false
+  });
   const [idRpeair, setIdRpeair] = useState({ idRpeair: 0 });
 
   const [loading, setLoading] = useState(false);
@@ -38,7 +40,7 @@ export default function RepairPaymentForm() {
     function () {
       setLoading(true);
       getSingleRepairPayment({ id: location.state.idRepairPayment })
-        .then((response) => {
+        .then(response => {
           setPaymentMethod({ paymentMethod: response.paymentMethod });
           setBillPayment({ billPayment: response.billPayment });
           setIdRpeair({ idRpeair: response.idRepair });
@@ -51,15 +53,15 @@ export default function RepairPaymentForm() {
           }
           setLoading(false);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           setLoading(false);
         });
     },
-    [location.state.idRepairPayment],
+    [location.state.idRepairPayment]
   );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     setLoadingPut(true);
     const data = {
@@ -67,33 +69,33 @@ export default function RepairPaymentForm() {
       idRepair: idRpeair.idRpeair,
       paymentMethod: paymentMethod.paymentMethod,
       billPayment: billPayment.billPayment,
-      paymentDate: paymentDate.paymentDate,
+      paymentDate: paymentDate.paymentDate
     };
     putRepairPayment(data)
-      .then((response) => {
+      .then(response => {
         setLoadingPut(false);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         setLoadingPut(false);
       });
   };
 
-  const handlePaymentMethodChange = (e) => {
-    setPaymentMethod((prev) => ({
+  const handlePaymentMethodChange = e => {
+    setPaymentMethod(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
 
-  const handleBillPaymentChange = (e) => {
-    setBillPayment((prev) => ({
+  const handleBillPaymentChange = e => {
+    setBillPayment(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
 
-  const handleBackPage = (e) => {
+  const handleBackPage = e => {
     navigate(-1);
   };
 
@@ -125,7 +127,7 @@ export default function RepairPaymentForm() {
                   >
                     <option>Contraentrega</option>
                     <option>Transferencia bancaria</option>
-                    <option value={'Datafono'}>Datáfono</option>
+                    <option value={"Datafono"}>Datáfono</option>
                   </Input>
                 </FormGroup>
                 {/* <FormGroup>
@@ -139,13 +141,15 @@ export default function RepairPaymentForm() {
                                     </FormGroup> */}
                 {isPaymentDateNull.isPaymentDateNull ? (
                   <FormGroup>
-                    <Label for="paymentDate">Ingrese la fecha de realización del pago</Label>
+                    <Label for="paymentDate">
+                      Ingrese la fecha de realización del pago
+                    </Label>
                     <DatePicker
                       id="paymentDate"
                       dateFormat="yyyy-MM-dd h:mm aa"
                       showTimeSelect
                       selected={new Date()}
-                      onChange={(date) => setPaymentDate({ paymentDate: date })}
+                      onChange={date => setPaymentDate({ paymentDate: date })}
                       timeFormat="HH:mm"
                       withPortal
                       portalId="root-portal"
@@ -153,14 +157,16 @@ export default function RepairPaymentForm() {
                   </FormGroup>
                 ) : (
                   <FormGroup>
-                    <Label for="paymentDate">Edite la fecha de realización del pago</Label>
+                    <Label for="paymentDate">
+                      Edite la fecha de realización del pago
+                    </Label>
                     <DatePicker
                       id="paymentDate"
                       dateFormat="yyyy-MM-dd h:mm aa"
                       showTimeSelect
                       value={paymentDate.paymentDate}
                       selected={paymentDate.paymentDate}
-                      onChange={(date) => setPaymentDate({ paymentDate: date })}
+                      onChange={date => setPaymentDate({ paymentDate: date })}
                       required
                       timeFormat="HH:mm"
                       withPortal

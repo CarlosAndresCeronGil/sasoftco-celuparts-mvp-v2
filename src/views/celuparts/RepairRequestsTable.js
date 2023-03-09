@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 // import { Button, Card, CardBody, CardTitle, Table, Form } from "reactstrap";
 import {
   Row,
@@ -11,26 +11,31 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter,
-} from 'reactstrap';
+  ModalFooter
+} from "reactstrap";
 // import getRequests from '../../services/getRequests';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 // import DatePicker from 'react-datepicker';
-import DatePickerActionBar from '../../components/DatePickerActionBar';
-import getRequestRepairs from '../../services/getRequestRepairs';
-import ComponentCard from '../../components/ComponentCard';
-import getSingleRequest from '../../services/getSingleRequest';
-import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
-import getAllBrandsDistinct from '../../services/getAllBrandsDistinct';
-import { LocalizationProvider, MobileDatePicker, DatePicker, esES } from '@mui/x-date-pickers';
+import DatePickerActionBar from "../../components/DatePickerActionBar";
+import getRequestRepairs from "../../services/getRequestRepairs";
+import ComponentCard from "../../components/ComponentCard";
+import getSingleRequest from "../../services/getSingleRequest";
+import BreadCrumbsCeluparts from "../../layouts/breadcrumbs/BreadCrumbsCeluparts";
+import getAllBrandsDistinct from "../../services/getAllBrandsDistinct";
+import {
+  LocalizationProvider,
+  MobileDatePicker,
+  DatePicker,
+  esES
+} from "@mui/x-date-pickers";
 
-import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import ScreenSearchDesktopIcon from '@mui/icons-material/ScreenSearchDesktop';
-import SavedSearchIcon from '@mui/icons-material/SavedSearch';
+import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
+import ScreenSearchDesktopIcon from "@mui/icons-material/ScreenSearchDesktop";
+import SavedSearchIcon from "@mui/icons-material/SavedSearch";
 
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import 'dayjs/locale/es';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import "dayjs/locale/es";
 
 import {
   InputLabel,
@@ -40,62 +45,62 @@ import {
   Select,
   TextField,
   FormControl,
-  SvgIcon,
-} from '@mui/material';
+  SvgIcon
+} from "@mui/material";
 
 export default function RepairRequestsTable() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
 
-  const [currentAutoDiagnosis, setCurrentAutoDiagnosis] = useState('');
-  const [currentDeliveryAddress, setCurrentDeliveryAddress] = useState('');
-  const [currentPickUpAddress, setCurrentPickUpAdress] = useState('');
-  const [currentEquipmentData, setCurrentEquipmentData] = useState('');
-  const [currentImeiOrSerial, setCurrentImeiOrSerial] = useState('');
-  const [currentClientPhone, setCurrentClientPhone] = useState('');
-  const [currentRepairQuote, setCurrentRepairQuote] = useState('');
-  const [currentDeliveryDate, setCurrentDeliveryDate] = useState('');
+  const [currentAutoDiagnosis, setCurrentAutoDiagnosis] = useState("");
+  const [currentDeliveryAddress, setCurrentDeliveryAddress] = useState("");
+  const [currentPickUpAddress, setCurrentPickUpAdress] = useState("");
+  const [currentEquipmentData, setCurrentEquipmentData] = useState("");
+  const [currentImeiOrSerial, setCurrentImeiOrSerial] = useState("");
+  const [currentClientPhone, setCurrentClientPhone] = useState("");
+  const [currentRepairQuote, setCurrentRepairQuote] = useState("");
+  const [currentDeliveryDate, setCurrentDeliveryDate] = useState("");
 
   const [modal, setModal] = useState(false);
 
   //Variables para los filtrados
   const [initialDate, setInitialDate] = useState({ initialDate: null });
   const [finalDate, setFinalDate] = useState({ finalDate: null });
-  const [requestStatus, setRequestStatus] = useState('');
-  const [userDtoIdNumber, setUserDtoIdNumber] = useState('');
-  const [userDtoName, setUserDtoName] = useState('');
-  const [userDtoSurname, setUserDtoSurname] = useState('');
-  const [equipmentBrand, setEquipmentBrand] = useState('');
-  const [equipmentModel, setEquipmentModel] = useState('');
+  const [requestStatus, setRequestStatus] = useState("");
+  const [userDtoIdNumber, setUserDtoIdNumber] = useState("");
+  const [userDtoName, setUserDtoName] = useState("");
+  const [userDtoSurname, setUserDtoSurname] = useState("");
+  const [equipmentBrand, setEquipmentBrand] = useState("");
+  const [equipmentModel, setEquipmentModel] = useState("");
   const [listOfBrands, setListOfBrands] = useState([]);
 
   //Variables auxiliares
-  const [formattedInitialDate, setFormattedInitialDate] = useState('0001-1-1');
-  const [formattedFinallDate, setFormattedFinalDate] = useState('0001-1-1');
+  const [formattedInitialDate, setFormattedInitialDate] = useState("0001-1-1");
+  const [formattedFinallDate, setFormattedFinalDate] = useState("0001-1-1");
 
   useEffect(
     function () {
-      let initialDateString = localStorage.getItem('initialDate') || null;
+      let initialDateString = localStorage.getItem("initialDate") || null;
       var initialDateAux;
       if (initialDateString != null) {
         setInitialDate({ initialDate: new Date(initialDateString) });
         initialDateAux = new Date(initialDateString);
       }
 
-      let finalDateString = localStorage.getItem('finalDate') || null;
+      let finalDateString = localStorage.getItem("finalDate") || null;
       var finalDateAux;
       if (finalDateString != null) {
         setFinalDate({ finalDate: new Date(finalDateString) });
         finalDateAux = new Date(finalDateString);
       }
 
-      setRequestStatus(localStorage.getItem('requestStatus') || '');
-      setUserDtoIdNumber(localStorage.getItem('userDtoIdNumber') || '');
-      setUserDtoName(localStorage.getItem('userDtoNames') || '');
-      setUserDtoSurname(localStorage.getItem('userDtoSurnames') || '');
-      setEquipmentBrand(localStorage.getItem('equipmentBrand') || '');
-      setEquipmentModel(localStorage.getItem('equipmentModel') || '');
+      setRequestStatus(localStorage.getItem("requestStatus") || "");
+      setUserDtoIdNumber(localStorage.getItem("userDtoIdNumber") || "");
+      setUserDtoName(localStorage.getItem("userDtoNames") || "");
+      setUserDtoSurname(localStorage.getItem("userDtoSurnames") || "");
+      setEquipmentBrand(localStorage.getItem("equipmentBrand") || "");
+      setEquipmentModel(localStorage.getItem("equipmentModel") || "");
 
       setLoading(true);
       getRequestRepairs({
@@ -105,50 +110,61 @@ export default function RepairRequestsTable() {
             ? `${initialDateAux.getFullYear()}-${
                 initialDateAux.getMonth() + 1
               }-${initialDateAux.getDate()}`
-            : '0001-1-1',
+            : "0001-1-1",
         finalDate:
           finalDateString != null
             ? `${finalDateAux.getFullYear()}-${
                 finalDateAux.getMonth() + 1
               }-${finalDateAux.getDate()}`
-            : '0001-1-1',
-        requestStatus: localStorage.getItem('requestStatus') || '',
-        userDtoIdNumber: localStorage.getItem('userDtoIdNumber') || '',
-        userDtoName: localStorage.getItem('userDtoNames') || '',
-        userDtoSurname: localStorage.getItem('userDtoSurnames') || '',
-        equipmentBrand: localStorage.getItem('equipmentBrand') || '',
-        equipmentModel: localStorage.getItem('equipmentModel') || '',
+            : "0001-1-1",
+        requestStatus: localStorage.getItem("requestStatus") || "",
+        userDtoIdNumber: localStorage.getItem("userDtoIdNumber") || "",
+        userDtoName: localStorage.getItem("userDtoNames") || "",
+        userDtoSurname: localStorage.getItem("userDtoSurnames") || "",
+        equipmentBrand: localStorage.getItem("equipmentBrand") || "",
+        equipmentModel: localStorage.getItem("equipmentModel") || ""
       })
-        .then((response) => {
+        .then(response => {
           setRequests(response);
           getAllBrandsDistinct()
-            .then((responseAllBrandsDistinct) => {
+            .then(responseAllBrandsDistinct => {
               setListOfBrands(responseAllBrandsDistinct);
               setLoading(false);
             })
-            .catch((error) => {
+            .catch(error => {
               console.log(error);
               setLoading(false);
             });
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           setLoading(false);
         });
     },
-    [page, setRequests],
+    [page, setRequests]
   );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     //Se consulta desde una fecha inicial hasta una fecha final
     setLoading(true);
-    localStorage.setItem('userDtoIdNumber', e.target.elements.userDtoIdNumber.value);
-    localStorage.setItem('userDtoNames', e.target.elements.userDtoNames.value);
-    localStorage.setItem('userDtoSurnames', e.target.elements.userDtoSurnames.value);
-    localStorage.setItem('equipmentModel', e.target.elements.equipmentModel.value);
+    localStorage.setItem(
+      "userDtoIdNumber",
+      e.target.elements.userDtoIdNumber.value
+    );
+    localStorage.setItem("userDtoNames", e.target.elements.userDtoNames.value);
+    localStorage.setItem(
+      "userDtoSurnames",
+      e.target.elements.userDtoSurnames.value
+    );
+    localStorage.setItem(
+      "equipmentModel",
+      e.target.elements.equipmentModel.value
+    );
 
-    const initialDateSubmit = { initialDate: initialDate.initialDate?.toDate() };
+    const initialDateSubmit = {
+      initialDate: initialDate.initialDate?.toDate()
+    };
     const finalDateSubmit = { finalDate: finalDate.finalDate?.toDate() };
 
     getRequestRepairs({
@@ -170,24 +186,24 @@ export default function RepairRequestsTable() {
       userDtoName: userDtoName,
       userDtoSurname: userDtoSurname,
       equipmentBrand: equipmentBrand,
-      equipmentModel: equipmentModel,
+      equipmentModel: equipmentModel
     })
-      .then((response) => {
+      .then(response => {
         setRequests(response);
         setLoading(false);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         setLoading(false);
       });
   };
 
   const handleNext = () => {
-    setPage((currentPage) => currentPage + 1);
+    setPage(currentPage => currentPage + 1);
   };
 
   const handlePrevious = () => {
-    setPage((currentPage) => currentPage - 1);
+    setPage(currentPage => currentPage - 1);
   };
 
   const toggle = () => {
@@ -202,7 +218,7 @@ export default function RepairRequestsTable() {
     imeiOrSerial,
     clientPhone,
     repairQuote,
-    deliveryDate,
+    deliveryDate
   }) => {
     setModal(!modal);
     setCurrentAutoDiagnosis(autoDiagnosis);
@@ -212,55 +228,55 @@ export default function RepairRequestsTable() {
     setCurrentImeiOrSerial(imeiOrSerial);
     setCurrentClientPhone(clientPhone);
     setCurrentRepairQuote(repairQuote);
-    setCurrentDeliveryDate(deliveryDate != null ? deliveryDate : 'Sin definir');
+    setCurrentDeliveryDate(deliveryDate != null ? deliveryDate : "Sin definir");
   };
 
   const handleCleanFilters = () => {
     setInitialDate({ initialDate: null });
     setFinalDate({ finalDate: null });
-    setFormattedInitialDate('0001-1-1');
-    setFormattedFinalDate('0001-1-1');
-    setRequestStatus('');
-    setUserDtoIdNumber('');
-    setUserDtoName('');
-    setUserDtoSurname('');
-    setEquipmentBrand('');
-    setEquipmentModel('');
+    setFormattedInitialDate("0001-1-1");
+    setFormattedFinalDate("0001-1-1");
+    setRequestStatus("");
+    setUserDtoIdNumber("");
+    setUserDtoName("");
+    setUserDtoSurname("");
+    setEquipmentBrand("");
+    setEquipmentModel("");
 
     setPage(1);
 
-    localStorage.removeItem('initialDate');
-    localStorage.removeItem('finalDate');
+    localStorage.removeItem("initialDate");
+    localStorage.removeItem("finalDate");
 
-    localStorage.removeItem('requestStatus');
-    localStorage.removeItem('userDtoIdNumber');
-    localStorage.removeItem('userDtoNames');
-    localStorage.removeItem('userDtoSurnames');
-    localStorage.removeItem('equipmentBrand');
-    localStorage.removeItem('equipmentModel');
+    localStorage.removeItem("requestStatus");
+    localStorage.removeItem("userDtoIdNumber");
+    localStorage.removeItem("userDtoNames");
+    localStorage.removeItem("userDtoSurnames");
+    localStorage.removeItem("equipmentBrand");
+    localStorage.removeItem("equipmentModel");
 
-    localStorage.removeItem('responseTable');
+    localStorage.removeItem("responseTable");
   };
 
-  const handleChangeInitialDate = (date) => {
+  const handleChangeInitialDate = date => {
     // setFormattedInitialDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
     setInitialDate({ initialDate: date });
     if (date != null) {
       let initialDateString = date.toISOString();
-      localStorage.setItem('initialDate', initialDateString);
+      localStorage.setItem("initialDate", initialDateString);
     } else {
-      localStorage.removeItem('initialDate');
+      localStorage.removeItem("initialDate");
     }
   };
 
-  const handleChangeFinalDate = (date) => {
+  const handleChangeFinalDate = date => {
     // setFormattedFinalDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
     setFinalDate({ finalDate: date });
     if (date != null) {
       let finalDateString = date.toISOString();
-      localStorage.setItem('finalDate', finalDateString);
+      localStorage.setItem("finalDate", finalDateString);
     } else {
-      localStorage.removeItem('finalDate');
+      localStorage.removeItem("finalDate");
     }
   };
 
@@ -276,7 +292,7 @@ export default function RepairRequestsTable() {
               <Row className="mb-3">
                 <Col md="6">
                   <Row className="mb-3">
-                    <Col style={{ fontWeight: 'bold' }}>
+                    <Col style={{ fontWeight: "bold" }}>
                       <SvgIcon>
                         <SavedSearchIcon />
                       </SvgIcon>
@@ -288,44 +304,54 @@ export default function RepairRequestsTable() {
                       <LocalizationProvider
                         adapterLocale="es"
                         dateAdapter={AdapterDayjs}
-                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
+                        localeText={
+                          esES.components.MuiLocalizationProvider.defaultProps
+                            .localeText
+                        }
                       >
                         <DatePicker
                           label="Desde"
                           value={initialDate.initialDate}
-                          onChange={(newValue) => {
+                          onChange={newValue => {
                             setInitialDate({ initialDate: newValue });
                           }}
                           components={{
-                            ActionBar: DatePickerActionBar,
+                            ActionBar: DatePickerActionBar
                           }}
                           componentsProps={{
                             actionBar: {
-                              actions: ['clear'],
-                            },
+                              actions: ["clear"]
+                            }
                           }}
-                          renderInput={(params) => <TextField fullWidth {...params} />}
+                          renderInput={params => (
+                            <TextField fullWidth {...params} />
+                          )}
                         />
                       </LocalizationProvider>
                     </Col>
                     <Col md="6" className="mb-3">
-                      <LocalizationProvider adapterLocale="es" dateAdapter={AdapterDayjs}>
+                      <LocalizationProvider
+                        adapterLocale="es"
+                        dateAdapter={AdapterDayjs}
+                      >
                         <DatePicker
-                          sx={{ width: '100%' }}
+                          sx={{ width: "100%" }}
                           label="Hasta"
                           components={{
-                            ActionBar: DatePickerActionBar,
+                            ActionBar: DatePickerActionBar
                           }}
                           componentsProps={{
                             actionBar: {
-                              actions: ['clear'],
-                            },
+                              actions: ["clear"]
+                            }
                           }}
                           value={finalDate.finalDate}
-                          onChange={(newValue) => {
+                          onChange={newValue => {
                             setFinalDate({ finalDate: newValue });
                           }}
-                          renderInput={(params) => <TextField fullWidth {...params} />}
+                          renderInput={params => (
+                            <TextField fullWidth {...params} />
+                          )}
                         />
                       </LocalizationProvider>
                     </Col>
@@ -333,7 +359,7 @@ export default function RepairRequestsTable() {
                 </Col>
                 <Col md="6">
                   <Row className="mb-3">
-                    <Col style={{ fontWeight: 'bold' }}>
+                    <Col style={{ fontWeight: "bold" }}>
                       <SvgIcon>
                         <PersonSearchIcon />
                       </SvgIcon>
@@ -347,7 +373,7 @@ export default function RepairRequestsTable() {
                         id="userDtoIdNumber"
                         label="Id"
                         value={userDtoIdNumber}
-                        onChange={(e) => setUserDtoIdNumber(e.target.value)}
+                        onChange={e => setUserDtoIdNumber(e.target.value)}
                       />
                     </Col>
                     <Col md="4" className="mb-2">
@@ -356,7 +382,7 @@ export default function RepairRequestsTable() {
                         id="userDtoNames"
                         label="Nombres"
                         value={userDtoName}
-                        onChange={(e) => setUserDtoName(e.target.value)}
+                        onChange={e => setUserDtoName(e.target.value)}
                       />
                     </Col>
                     <Col md="4">
@@ -366,7 +392,7 @@ export default function RepairRequestsTable() {
                         id="userDtoSurnames"
                         label="Apellidos"
                         value={userDtoSurname}
-                        onChange={(e) => setUserDtoSurname(e.target.value)}
+                        onChange={e => setUserDtoSurname(e.target.value)}
                         type="text"
                       />
                     </Col>
@@ -376,7 +402,7 @@ export default function RepairRequestsTable() {
               <Row>
                 <Col md="6">
                   <Row className="mb-3">
-                    <Col style={{ fontWeight: 'bold' }}>
+                    <Col style={{ fontWeight: "bold" }}>
                       <SvgIcon>
                         <ScreenSearchDesktopIcon />
                       </SvgIcon>
@@ -395,9 +421,12 @@ export default function RepairRequestsTable() {
                           displayEmpty
                           value={equipmentBrand}
                           input={<OutlinedInput notched label="Marca" />}
-                          onChange={(e) => {
+                          onChange={e => {
                             setEquipmentBrand(e.target.value);
-                            localStorage.setItem('equipmentBrand', e.target.value);
+                            localStorage.setItem(
+                              "equipmentBrand",
+                              e.target.value
+                            );
                           }}
                         >
                           <MenuItem value="">Sin Filtro</MenuItem>
@@ -415,14 +444,14 @@ export default function RepairRequestsTable() {
                         label="Modelo"
                         id="equipmentModel"
                         value={equipmentModel}
-                        onChange={(e) => setEquipmentModel(e.target.value)}
+                        onChange={e => setEquipmentModel(e.target.value)}
                       />
                     </Col>
                   </Row>
                 </Col>
                 <Col md="6" className="mb-3">
                   <Row className="mb-3">
-                    <Col style={{ fontWeight: 'bold' }}>
+                    <Col style={{ fontWeight: "bold" }}>
                       <SvgIcon>
                         <ContentPasteSearchIcon />
                       </SvgIcon>
@@ -439,31 +468,44 @@ export default function RepairRequestsTable() {
                           id="requestStatus"
                           name="requestStatus"
                           displayEmpty
-                          value={requestStatus || ''}
+                          value={requestStatus || ""}
                           input={<OutlinedInput notched label="Estado" />}
-                          onChange={(e) => {
+                          onChange={e => {
                             setRequestStatus(e.target.value);
-                            localStorage.setItem('requestStatus', e.target.value);
+                            localStorage.setItem(
+                              "requestStatus",
+                              e.target.value
+                            );
                           }}
                         >
                           <MenuItem value="">Sin Filtro</MenuItem>
                           <MenuItem value="Iniciada">Iniciada</MenuItem>
-                          <MenuItem value="En proceso de recogida">En proceso de recogida</MenuItem>
-                          <MenuItem value="Recibida tecnico">Recibida técnico</MenuItem>
+                          <MenuItem value="En proceso de recogida">
+                            En proceso de recogida
+                          </MenuItem>
+                          <MenuItem value="Recibida tecnico">
+                            Recibida técnico
+                          </MenuItem>
                           <MenuItem value="Revisado">Revisado</MenuItem>
-                          <MenuItem value="En reparacion">En reparación</MenuItem>
+                          <MenuItem value="En reparacion">
+                            En reparación
+                          </MenuItem>
                           <MenuItem value="Reparado pendiente de pago">
                             Reparado, pendiente de pago
                           </MenuItem>
                           <MenuItem value="En camino">En camino</MenuItem>
                           <MenuItem value="Terminada">Terminada</MenuItem>
-                          <MenuItem value="En devolucion">En devolución</MenuItem>
+                          <MenuItem value="En devolucion">
+                            En devolución
+                          </MenuItem>
                           <MenuItem value="Devuelto sin reparacion">
                             Devuelto sin reparación
                           </MenuItem>
                           <MenuItem value="Retoma">Retoma</MenuItem>
                           <MenuItem value="Abandonada">Abandonada</MenuItem>
-                          <MenuItem value="Anulado por IMEI">Anulado por IMEI</MenuItem>
+                          <MenuItem value="Anulado por IMEI">
+                            Anulado por IMEI
+                          </MenuItem>
                         </Select>
                       </FormControl>
                     </Col>
@@ -485,14 +527,24 @@ export default function RepairRequestsTable() {
           <thead>
             <tr>
               <th>Id de Reparación</th>
-              <th>Nombre cliente</th>
+              {JSON.parse(localStorage.getItem("user")).role != "tecnico" && (
+                <th>Nombre cliente</th>
+              )}
               <th>Fecha solicitud</th>
               <th>Datos equipo</th>
-              <th>Estado de cotización</th>
+              {JSON.parse(localStorage.getItem("user")).role != "mensajero" && (
+                <th>Estado de cotización</th>
+              )}
               <th>Estado de solicitud</th>
-              <th>Técnico asociado</th>
-              <th>Cuota de reparación</th>
-              <th>Tiempo de servicio de reparación</th>
+              {JSON.parse(localStorage.getItem("user")).role != "mensajero" && (
+                <th>Técnico asociado</th>
+              )}
+              {JSON.parse(localStorage.getItem("user")).role != "tecnico" &&
+                JSON.parse(localStorage.getItem("user")).role !=
+                  "mensajero" && <th>Cuota de reparación</th>}
+              {JSON.parse(localStorage.getItem("user")).role != "mensajero" && (
+                <th>Tiempo de servicio de reparación</th>
+              )}
               <th>Fecha de entrega</th>
               <th>Actualizar estado Proceso</th>
               {/* {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : (
@@ -507,53 +559,73 @@ export default function RepairRequestsTable() {
           </thead>
           <tbody>
             {requests.requests.map((tdata, index) =>
-              tdata.requestType === 'Reparacion' ? (
+              tdata.requestType === "Reparacion" ? (
                 <tr key={index} className="border-top">
                   <td>{tdata.repairs[0].idRepair}</td>
-                  <td>
-                    {tdata.userDto.names} {tdata.userDto.surnames}
-                  </td>
+                  {JSON.parse(localStorage.getItem("user")).role !=
+                    "tecnico" && (
+                    <td>
+                      {tdata.userDto.names} {tdata.userDto.surnames}
+                    </td>
+                  )}
                   <td>{`${new Date(tdata.requestDate).getFullYear()}-${
                     new Date(tdata.requestDate).getMonth() + 1
                   }-${new Date(tdata.requestDate).getDate()}`}</td>
                   <td>
-                    {tdata.equipment.equipmentBrand} {tdata.equipment.modelOrReference}
+                    {tdata.equipment.equipmentBrand}{" "}
+                    {tdata.equipment.modelOrReference}
                   </td>
                   {/* <td>{tdata.pickUpAddress}</td>
                                         <td>{tdata.deliveryAddress}</td> */}
-                  <td>{tdata.statusQuote}</td>
+                  {JSON.parse(localStorage.getItem("user")).role !=
+                    "mensajero" && <td>{tdata.statusQuote}</td>}
                   <td>{tdata.requestStatus[0].status}</td>
-                  <td>
-                    {tdata.repairs[0].technician != null
-                      ? tdata.repairs[0].technician.names +
-                        ' ' +
-                        tdata.repairs[0].technician.surnames
-                      : 'Sin técnico asociado'}
-                  </td>
-                  <td>{tdata.repairs[0].repairQuote}</td>
-                  <td>
-                    {tdata.repairs[0].repairTime != null
-                      ? tdata.repairs[0].repairTime
-                      : 'Sin registrar'}
-                  </td>
+                  {JSON.parse(localStorage.getItem("user")).role !=
+                    "mensajero" && (
+                    <td>
+                      {tdata.repairs[0].technician != null
+                        ? tdata.repairs[0].technician.names +
+                          " " +
+                          tdata.repairs[0].technician.surnames
+                        : "Sin técnico asociado"}
+                    </td>
+                  )}
+                  {JSON.parse(localStorage.getItem("user")).role != "tecnico" &&
+                    JSON.parse(localStorage.getItem("user")).role !=
+                      "mensajero" && <td>{tdata.repairs[0].repairQuote}</td>}
+                  {JSON.parse(localStorage.getItem("user")).role !=
+                    "mensajero" && (
+                    <td>
+                      {tdata.repairs[0].repairTime != null
+                        ? tdata.repairs[0].repairTime
+                        : "Sin registrar"}
+                    </td>
+                  )}
                   <td>
                     {tdata.homeServices[0]?.deliveryDate != null
-                      ? new Date(tdata.homeServices[0].deliveryDate).toLocaleDateString('es', {
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: 'numeric',
-                          minute: 'numeric',
+                      ? new Date(
+                          tdata.homeServices[0].deliveryDate
+                        ).toLocaleDateString("es", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric"
                         })
-                      : 'Sin definir'}
+                      : "Sin definir"}
                   </td>
                   <td>
-                    {tdata.statusQuote == 'Pendiente' &&
-                    tdata.requestStatus[0].status == 'Revisado' &&
-                    JSON.parse(localStorage.getItem('user')).role == 'tecnico' ? (
+                    {tdata.statusQuote == "Pendiente" &&
+                    tdata.requestStatus[0].status == "Revisado" &&
+                    JSON.parse(localStorage.getItem("user")).role ==
+                      "tecnico" ? (
                       <td>
-                        <button type="button" className="btn btn-secondary" disabled>
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          disabled
+                        >
                           <i className="bi bi-pencil-fill"></i>
                         </button>
                       </td>
@@ -564,9 +636,11 @@ export default function RepairRequestsTable() {
                           state={{
                             idStatus: tdata.requestStatus[0].idRequestStatus,
                             idRepair: tdata.repairs[0].idRepair,
-                            idRepairPayment: tdata.repairs[0].repairPayments[0].idRepairPayment,
+                            idRepairPayment:
+                              tdata.repairs[0].repairPayments[0]
+                                .idRepairPayment,
                             status: tdata.requestStatus[0].status,
-                            statusQuote: tdata.statusQuote,
+                            statusQuote: tdata.statusQuote
                           }}
                         >
                           <Button className="btn" color="primary">
@@ -651,11 +725,13 @@ export default function RepairRequestsTable() {
                           deliveryAddress: tdata.deliveryAddress,
                           pickUpAddress: tdata.pickUpAddress,
                           equipmentData:
-                            tdata.equipment.equipmentBrand + ' ' + tdata.equipment.modelOrReference,
+                            tdata.equipment.equipmentBrand +
+                            " " +
+                            tdata.equipment.modelOrReference,
                           imeiOrSerial: tdata.equipment.imeiOrSerial,
                           clientPhone: tdata.userDto.phone,
                           repairQuote: tdata.repairs[0].repairQuote,
-                          deliveryDate: tdata.homeServices[0]?.deliveryDate,
+                          deliveryDate: tdata.homeServices[0]?.deliveryDate
                         })
                       }
                     >
@@ -663,14 +739,15 @@ export default function RepairRequestsTable() {
                     </Button>
                   </td>
                 </tr>
-              ) : null,
+              ) : null
             )}
             {/* TERMINA EL MAP */}
           </tbody>
         </Table>
         {
           <div>
-            Página número: {requests.currentPage} de {requests.pages === 0 ? 1 : requests.pages}
+            Página número: {requests.currentPage} de{" "}
+            {requests.pages === 0 ? 1 : requests.pages}
           </div>
         }
         <div className="d-flex justify-content-between">
@@ -695,7 +772,9 @@ export default function RepairRequestsTable() {
           )}
         </div>
         <Modal isOpen={modal} toggle={handleViewClick.bind(null)}>
-          <ModalHeader toggle={handleViewClick.bind(null)}>Detalles de la solicitud</ModalHeader>
+          <ModalHeader toggle={handleViewClick.bind(null)}>
+            Detalles de la solicitud
+          </ModalHeader>
           <ModalBody>
             <div>
               <span className="fw-bold">Dispositivo:</span>
@@ -707,44 +786,60 @@ export default function RepairRequestsTable() {
             </div>
             {currentImeiOrSerial}
             <hr />
-            <div>
-              <span className="fw-bold">Dirección de recogida:</span>
-            </div>
-            {currentPickUpAddress}
-            <hr />
-            <div>
-              <span className="fw-bold">Dirección de entrega:</span>
-            </div>
-            {currentDeliveryAddress}
-            <hr />
+            {JSON.parse(localStorage.getItem("user")).role != "tecnico" && (
+              <>
+                <div>
+                  <span className="fw-bold">Dirección de recogida:</span>
+                </div>
+                {currentPickUpAddress}
+                <hr />
+              </>
+            )}
+            {JSON.parse(localStorage.getItem("user")).role != "tecnico" && (
+              <>
+                <div>
+                  <span className="fw-bold">Dirección de entrega:</span>
+                </div>
+                {currentDeliveryAddress}
+                <hr />{" "}
+              </>
+            )}
             <div>
               <span className="fw-bold">Fecha de entrega:</span>
             </div>
-            {currentDeliveryDate != 'Sin definir'
-              ? new Date(currentDeliveryDate).toLocaleDateString('es', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
+            {currentDeliveryDate != "Sin definir"
+              ? new Date(currentDeliveryDate).toLocaleDateString("es", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric"
                 })
-              : 'Sin definir'}
+              : "Sin definir"}
             <hr />
-            <div>
-              <span className="fw-bold">Teléfono cliente:</span>
-            </div>
-            {currentClientPhone}
-            <hr />
+            {JSON.parse(localStorage.getItem("user")).role != "tecnico" && (
+              <>
+                <div>
+                  <span className="fw-bold">Teléfono cliente:</span>
+                </div>
+                {currentClientPhone}
+                <hr />{" "}
+              </>
+            )}
             <div>
               <span className="fw-bold">Detalle de la solicitud:</span>
             </div>
             {currentAutoDiagnosis}
-            <hr />
-            <div>
-              <span className="fw-bold">Cuota de reparación:</span>
-            </div>
-            {currentRepairQuote}
+            {JSON.parse(localStorage.getItem("user")).role != "tecnico" && (
+              <>
+                <hr />
+                <div>
+                  <span className="fw-bold">Cuota de reparación:</span>
+                </div>
+                {currentRepairQuote}
+              </>
+            )}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={handleViewClick.bind(null)}>

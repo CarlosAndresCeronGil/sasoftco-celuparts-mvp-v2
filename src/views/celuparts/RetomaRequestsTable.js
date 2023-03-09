@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -12,25 +12,25 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter,
-} from 'reactstrap';
-import { Link } from 'react-router-dom';
-import DatePickerActionBar from '../../components/DatePickerActionBar';
-import getRequestRetomas from '../../services/getRequestRetomas';
-import 'react-datepicker/dist/react-datepicker.css';
-import ComponentCard from '../../components/ComponentCard';
-import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
-import getAllBrandsDistinct from '../../services/getAllBrandsDistinct';
-import getEquipmentInvoice from '../../services/getEquipmentInvoice';
-import { LocalizationProvider, DatePicker, esES } from '@mui/x-date-pickers';
+  ModalFooter
+} from "reactstrap";
+import { Link } from "react-router-dom";
+import DatePickerActionBar from "../../components/DatePickerActionBar";
+import getRequestRetomas from "../../services/getRequestRetomas";
+import "react-datepicker/dist/react-datepicker.css";
+import ComponentCard from "../../components/ComponentCard";
+import BreadCrumbsCeluparts from "../../layouts/breadcrumbs/BreadCrumbsCeluparts";
+import getAllBrandsDistinct from "../../services/getAllBrandsDistinct";
+import getEquipmentInvoice from "../../services/getEquipmentInvoice";
+import { LocalizationProvider, DatePicker, esES } from "@mui/x-date-pickers";
 
-import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import ScreenSearchDesktopIcon from '@mui/icons-material/ScreenSearchDesktop';
-import SavedSearchIcon from '@mui/icons-material/SavedSearch';
+import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
+import ScreenSearchDesktopIcon from "@mui/icons-material/ScreenSearchDesktop";
+import SavedSearchIcon from "@mui/icons-material/SavedSearch";
 
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import 'dayjs/locale/es';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import "dayjs/locale/es";
 
 import {
   InputLabel,
@@ -40,61 +40,61 @@ import {
   Select,
   TextField,
   FormControl,
-  SvgIcon,
-} from '@mui/material';
+  SvgIcon
+} from "@mui/material";
 
 export default function RetomaRequestsTable() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
 
-  const [currentAutoDiagnosis, setCurrentAutoDiagnosis] = useState('');
-  const [currentDeliveryAddress, setCurrentDeliveryAddress] = useState('');
-  const [currentPickUpAddress, setCurrentPickUpAdress] = useState('');
-  const [currentEquipmentData, setCurrentEquipmentData] = useState('');
-  const [currentImeiOrSerial, setCurrentImeiOrSerial] = useState('');
-  const [currentClientPhone, setCurrentClientPhone] = useState('');
-  const [currentDeliveryDate, setCurrentDeliveryDate] = useState('');
+  const [currentAutoDiagnosis, setCurrentAutoDiagnosis] = useState("");
+  const [currentDeliveryAddress, setCurrentDeliveryAddress] = useState("");
+  const [currentPickUpAddress, setCurrentPickUpAdress] = useState("");
+  const [currentEquipmentData, setCurrentEquipmentData] = useState("");
+  const [currentImeiOrSerial, setCurrentImeiOrSerial] = useState("");
+  const [currentClientPhone, setCurrentClientPhone] = useState("");
+  const [currentDeliveryDate, setCurrentDeliveryDate] = useState("");
 
   const [modal, setModal] = useState(false);
 
   //Variables para los filtrados
   const [initialDate, setInitialDate] = useState({ initialDate: null });
   const [finalDate, setFinalDate] = useState({ finalDate: null });
-  const [requestStatus, setRequestStatus] = useState('');
-  const [userDtoIdNumber, setUserDtoIdNumber] = useState('');
-  const [userDtoName, setUserDtoName] = useState('');
-  const [userDtoSurname, setUserDtoSurname] = useState('');
-  const [equipmentBrand, setEquipmentBrand] = useState('');
-  const [equipmentModel, setEquipmentModel] = useState('');
+  const [requestStatus, setRequestStatus] = useState("");
+  const [userDtoIdNumber, setUserDtoIdNumber] = useState("");
+  const [userDtoName, setUserDtoName] = useState("");
+  const [userDtoSurname, setUserDtoSurname] = useState("");
+  const [equipmentBrand, setEquipmentBrand] = useState("");
+  const [equipmentModel, setEquipmentModel] = useState("");
   const [listOfBrands, setListOfBrands] = useState([]);
 
   //Variables auxiliares
-  const [formattedInitialDate, setFormattedInitialDate] = useState('0001-1-1');
-  const [formattedFinallDate, setFormattedFinalDate] = useState('0001-1-1');
+  const [formattedInitialDate, setFormattedInitialDate] = useState("0001-1-1");
+  const [formattedFinallDate, setFormattedFinalDate] = useState("0001-1-1");
 
   useEffect(
     function () {
-      let initialDateString = localStorage.getItem('initialDateRetoma') || null;
+      let initialDateString = localStorage.getItem("initialDateRetoma") || null;
       var initialDateAux;
       if (initialDateString != null) {
         setInitialDate({ initialDate: new Date(initialDateString) });
         initialDateAux = new Date(initialDateString);
       }
 
-      let finalDateString = localStorage.getItem('finalDateRetoma') || null;
+      let finalDateString = localStorage.getItem("finalDateRetoma") || null;
       var finalDateAux;
       if (finalDateString != null) {
         setFinalDate({ finalDate: new Date(finalDateString) });
         finalDateAux = new Date(finalDateString);
       }
 
-      setRequestStatus(localStorage.getItem('requestStatusRetoma') || '');
-      setUserDtoIdNumber(localStorage.getItem('userDtoIdNumberRetoma') || '');
-      setUserDtoName(localStorage.getItem('userDtoNamesRetoma') || '');
-      setUserDtoSurname(localStorage.getItem('userDtoSurnamesRetoma') || '');
-      setEquipmentBrand(localStorage.getItem('equipmentBrandRetoma') || '');
-      setEquipmentModel(localStorage.getItem('equipmentModelRetoma') || '');
+      setRequestStatus(localStorage.getItem("requestStatusRetoma") || "");
+      setUserDtoIdNumber(localStorage.getItem("userDtoIdNumberRetoma") || "");
+      setUserDtoName(localStorage.getItem("userDtoNamesRetoma") || "");
+      setUserDtoSurname(localStorage.getItem("userDtoSurnamesRetoma") || "");
+      setEquipmentBrand(localStorage.getItem("equipmentBrandRetoma") || "");
+      setEquipmentModel(localStorage.getItem("equipmentModelRetoma") || "");
 
       setLoading(true);
       getRequestRetomas({
@@ -104,53 +104,67 @@ export default function RetomaRequestsTable() {
             ? `${initialDateAux.getFullYear()}-${
                 initialDateAux.getMonth() + 1
               }-${initialDateAux.getDate()}`
-            : '0001-1-1',
+            : "0001-1-1",
         finalDate:
           finalDateString != null
             ? `${finalDateAux.getFullYear()}-${
                 finalDateAux.getMonth() + 1
               }-${finalDateAux.getDate()}`
-            : '0001-1-1',
-        requestStatus: localStorage.getItem('requestStatusRetoma') || '',
-        userDtoIdNumber: localStorage.getItem('userDtoIdNumberRetoma') || '',
-        userDtoName: localStorage.getItem('userDtoNamesRetoma') || '',
-        userDtoSurname: localStorage.getItem('userDtoSurnamesRetoma') || '',
-        equipmentModel: localStorage.getItem('equipmentModelRetoma') || '',
-        equipmentBrand: localStorage.getItem('equipmentBrandRetoma') || '',
+            : "0001-1-1",
+        requestStatus: localStorage.getItem("requestStatusRetoma") || "",
+        userDtoIdNumber: localStorage.getItem("userDtoIdNumberRetoma") || "",
+        userDtoName: localStorage.getItem("userDtoNamesRetoma") || "",
+        userDtoSurname: localStorage.getItem("userDtoSurnamesRetoma") || "",
+        equipmentModel: localStorage.getItem("equipmentModelRetoma") || "",
+        equipmentBrand: localStorage.getItem("equipmentBrandRetoma") || ""
       })
-        .then((response) => {
+        .then(response => {
           // Se obtiene el ultimo resultado de la ultima busqueda
-          const responseGetItem = localStorage.getItem('responseTableRetoma');
+          const responseGetItem = localStorage.getItem("responseTableRetoma");
           const myResponse = JSON.parse(responseGetItem);
 
           // Si la no hay ultima busqueda se devuelve la response, en caso contrario se deja la anterior busqueda
-          myResponse != null && page == 1 ? setRequests(myResponse) : setRequests(response);
+          myResponse != null && page == 1
+            ? setRequests(myResponse)
+            : setRequests(response);
           getAllBrandsDistinct()
-            .then((responseAllBrandDistinct) => {
+            .then(responseAllBrandDistinct => {
               setListOfBrands(responseAllBrandDistinct);
               setLoading(false);
             })
-            .catch((error) => {
+            .catch(error => {
               console.log(error);
               setLoading(false);
             });
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           setLoading(false);
         });
     },
-    [setRequests, page],
+    [setRequests, page]
   );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     //Se consulta desde una fecha inicial hasta una fecha final
     setLoading(true);
-    localStorage.setItem('userDtoIdNumberRetoma', e.target.elements.userDtoIdNumber.value);
-    localStorage.setItem('userDtoNamesRetoma', e.target.elements.userDtoNames.value);
-    localStorage.setItem('userDtoSurnamesRetoma', e.target.elements.userDtoSurnames.value);
-    localStorage.setItem('equipmentModelRetoma', e.target.elements.equipmentModel.value);
+    localStorage.setItem(
+      "userDtoIdNumberRetoma",
+      e.target.elements.userDtoIdNumber.value
+    );
+    localStorage.setItem(
+      "userDtoNamesRetoma",
+      e.target.elements.userDtoNames.value
+    );
+    localStorage.setItem(
+      "userDtoSurnamesRetoma",
+      e.target.elements.userDtoSurnames.value
+    );
+    localStorage.setItem(
+      "equipmentModelRetoma",
+      e.target.elements.equipmentModel.value
+    );
 
     console.log(initialDate);
     console.log(finalDate);
@@ -174,29 +188,29 @@ export default function RetomaRequestsTable() {
       userDtoName: userDtoName,
       userDtoSurname: userDtoSurname,
       equipmentBrand: equipmentBrand,
-      equipmentModel: equipmentModel,
+      equipmentModel: equipmentModel
     })
-      .then((response) => {
+      .then(response => {
         setRequests(response);
 
         // Se manda el response al localstorage
         const responseString = JSON.stringify(response);
-        localStorage.setItem('responseTableRetoma', responseString);
+        localStorage.setItem("responseTableRetoma", responseString);
 
         setLoading(false);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         setLoading(false);
       });
   };
 
   const handleNext = () => {
-    setPage((currentPage) => currentPage + 1);
+    setPage(currentPage => currentPage + 1);
   };
 
   const handlePrevious = () => {
-    setPage((currentPage) => currentPage - 1);
+    setPage(currentPage => currentPage - 1);
   };
 
   const handleViewClick = ({
@@ -206,7 +220,7 @@ export default function RetomaRequestsTable() {
     equipmentData,
     imeiOrSerial,
     clientPhone,
-    deliveryDate,
+    deliveryDate
   }) => {
     setModal(!modal);
     setCurrentAutoDiagnosis(autoDiagnosis);
@@ -215,58 +229,58 @@ export default function RetomaRequestsTable() {
     setCurrentEquipmentData(equipmentData);
     setCurrentImeiOrSerial(imeiOrSerial);
     setCurrentClientPhone(clientPhone);
-    setCurrentDeliveryDate(deliveryDate != null ? deliveryDate : 'Sin definir');
+    setCurrentDeliveryDate(deliveryDate != null ? deliveryDate : "Sin definir");
   };
 
   const handleCleanFilters = () => {
     setInitialDate({ initialDate: null });
     setFinalDate({ finalDate: null });
-    setFormattedInitialDate('0001-1-1');
-    setFormattedFinalDate('0001-1-1');
-    setRequestStatus('');
-    setUserDtoIdNumber('');
-    setUserDtoName('');
-    setUserDtoSurname('');
-    setEquipmentBrand('');
-    setEquipmentModel('');
+    setFormattedInitialDate("0001-1-1");
+    setFormattedFinalDate("0001-1-1");
+    setRequestStatus("");
+    setUserDtoIdNumber("");
+    setUserDtoName("");
+    setUserDtoSurname("");
+    setEquipmentBrand("");
+    setEquipmentModel("");
 
     setPage(1);
 
-    localStorage.removeItem('initialDateRetoma');
-    localStorage.removeItem('finalDateRetoma');
+    localStorage.removeItem("initialDateRetoma");
+    localStorage.removeItem("finalDateRetoma");
 
-    localStorage.removeItem('requestStatusRetoma');
-    localStorage.removeItem('userDtoIdNumberRetoma');
-    localStorage.removeItem('userDtoNamesRetoma');
-    localStorage.removeItem('userDtoSurnamesRetoma');
-    localStorage.removeItem('equipmentBrandRetoma');
-    localStorage.removeItem('equipmentModelRetoma');
+    localStorage.removeItem("requestStatusRetoma");
+    localStorage.removeItem("userDtoIdNumberRetoma");
+    localStorage.removeItem("userDtoNamesRetoma");
+    localStorage.removeItem("userDtoSurnamesRetoma");
+    localStorage.removeItem("equipmentBrandRetoma");
+    localStorage.removeItem("equipmentModelRetoma");
 
-    localStorage.removeItem('responseTableRetoma');
+    localStorage.removeItem("responseTableRetoma");
   };
 
-  const handleChangeInitialDate = (date) => {
+  const handleChangeInitialDate = date => {
     // setFormattedInitialDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
     date = date?.toDate();
     setInitialDate({ initialDate: date });
     if (date != null) {
       let initialDateString = date.toISOString();
-      localStorage.setItem('initialDateRetoma', initialDateString);
+      localStorage.setItem("initialDateRetoma", initialDateString);
     } else {
-      localStorage.removeItem('initialDateRetoma');
+      localStorage.removeItem("initialDateRetoma");
       setInitialDate({ initialDate: null });
     }
   };
 
-  const handleChangeFinalDate = (date) => {
+  const handleChangeFinalDate = date => {
     // setFormattedFinalDate(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
     date = date?.toDate();
     setFinalDate({ finalDate: date });
     if (date != null) {
       let finalDateString = date.toISOString();
-      localStorage.setItem('finalDateRetoma', finalDateString);
+      localStorage.setItem("finalDateRetoma", finalDateString);
     } else {
-      localStorage.removeItem('finalDateRetoma');
+      localStorage.removeItem("finalDateRetoma");
       setFinalDate({ finalDate: null });
     }
   };
@@ -275,10 +289,10 @@ export default function RetomaRequestsTable() {
     e.preventDefault();
     // console.log(idEquipment)
     getEquipmentInvoice({ id: idEquipment })
-      .then((response) => {
+      .then(response => {
         // console.log(response)
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -295,7 +309,7 @@ export default function RetomaRequestsTable() {
               <Row className="mb-3">
                 <Col md="6">
                   <Row className="mb-3">
-                    <Col style={{ fontWeight: 'bold' }}>
+                    <Col style={{ fontWeight: "bold" }}>
                       <SvgIcon>
                         <SavedSearchIcon />
                       </SvgIcon>
@@ -307,40 +321,50 @@ export default function RetomaRequestsTable() {
                       <LocalizationProvider
                         adapterLocale="es"
                         dateAdapter={AdapterDayjs}
-                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
+                        localeText={
+                          esES.components.MuiLocalizationProvider.defaultProps
+                            .localeText
+                        }
                       >
                         <DatePicker
                           label="Desde"
                           value={initialDate.initialDate}
-                          onChange={(date) => handleChangeInitialDate(date)}
+                          onChange={date => handleChangeInitialDate(date)}
                           components={{
-                            ActionBar: DatePickerActionBar,
+                            ActionBar: DatePickerActionBar
                           }}
                           componentsProps={{
                             actionBar: {
-                              actions: ['clear'],
-                            },
+                              actions: ["clear"]
+                            }
                           }}
-                          renderInput={(params) => <TextField fullWidth {...params} />}
+                          renderInput={params => (
+                            <TextField fullWidth {...params} />
+                          )}
                         />
                       </LocalizationProvider>
                     </Col>
                     <Col md="6" className="mb-3">
-                      <LocalizationProvider adapterLocale="es" dateAdapter={AdapterDayjs}>
+                      <LocalizationProvider
+                        adapterLocale="es"
+                        dateAdapter={AdapterDayjs}
+                      >
                         <DatePicker
-                          sx={{ width: '100%' }}
+                          sx={{ width: "100%" }}
                           label="Hasta"
                           components={{
-                            ActionBar: DatePickerActionBar,
+                            ActionBar: DatePickerActionBar
                           }}
                           componentsProps={{
                             actionBar: {
-                              actions: ['clear'],
-                            },
+                              actions: ["clear"]
+                            }
                           }}
                           value={finalDate.finalDate}
-                          onChange={(date) => handleChangeFinalDate(date)}
-                          renderInput={(params) => <TextField fullWidth {...params} />}
+                          onChange={date => handleChangeFinalDate(date)}
+                          renderInput={params => (
+                            <TextField fullWidth {...params} />
+                          )}
                         />
                       </LocalizationProvider>
                     </Col>
@@ -348,7 +372,7 @@ export default function RetomaRequestsTable() {
                 </Col>
                 <Col md="6">
                   <Row className="mb-3">
-                    <Col style={{ fontWeight: 'bold' }}>
+                    <Col style={{ fontWeight: "bold" }}>
                       <SvgIcon>
                         <PersonSearchIcon />
                       </SvgIcon>
@@ -362,7 +386,7 @@ export default function RetomaRequestsTable() {
                         id="userDtoIdNumber"
                         label="Id"
                         value={userDtoIdNumber}
-                        onChange={(e) => setUserDtoIdNumber(e.target.value)}
+                        onChange={e => setUserDtoIdNumber(e.target.value)}
                       />
                     </Col>
                     <Col md="4" className="mb-2">
@@ -371,7 +395,7 @@ export default function RetomaRequestsTable() {
                         id="userDtoNames"
                         label="Nombres"
                         value={userDtoName}
-                        onChange={(e) => setUserDtoName(e.target.value)}
+                        onChange={e => setUserDtoName(e.target.value)}
                       />
                     </Col>
                     <Col md="4">
@@ -381,7 +405,7 @@ export default function RetomaRequestsTable() {
                         id="userDtoSurnames"
                         label="Apellidos"
                         value={userDtoSurname}
-                        onChange={(e) => setUserDtoSurname(e.target.value)}
+                        onChange={e => setUserDtoSurname(e.target.value)}
                         type="text"
                       />
                     </Col>
@@ -391,7 +415,7 @@ export default function RetomaRequestsTable() {
               <Row>
                 <Col md="6">
                   <Row className="mb-3">
-                    <Col style={{ fontWeight: 'bold' }}>
+                    <Col style={{ fontWeight: "bold" }}>
                       <SvgIcon>
                         <ScreenSearchDesktopIcon />
                       </SvgIcon>
@@ -410,9 +434,12 @@ export default function RetomaRequestsTable() {
                           displayEmpty
                           value={equipmentBrand}
                           input={<OutlinedInput notched label="Marca" />}
-                          onChange={(e) => {
+                          onChange={e => {
                             setEquipmentBrand(e.target.value);
-                            localStorage.setItem('equipmentBrand', e.target.value);
+                            localStorage.setItem(
+                              "equipmentBrand",
+                              e.target.value
+                            );
                           }}
                         >
                           <MenuItem value="">Sin Filtro</MenuItem>
@@ -430,14 +457,14 @@ export default function RetomaRequestsTable() {
                         label="Modelo"
                         id="equipmentModel"
                         value={equipmentModel}
-                        onChange={(e) => setEquipmentModel(e.target.value)}
+                        onChange={e => setEquipmentModel(e.target.value)}
                       />
                     </Col>
                   </Row>
                 </Col>
                 <Col md="6" className="mb-3">
                   <Row className="mb-3">
-                    <Col style={{ fontWeight: 'bold' }}>
+                    <Col style={{ fontWeight: "bold" }}>
                       <SvgIcon>
                         <ContentPasteSearchIcon />
                       </SvgIcon>
@@ -454,31 +481,44 @@ export default function RetomaRequestsTable() {
                           id="requestStatus"
                           name="requestStatus"
                           displayEmpty
-                          value={requestStatus || ''}
+                          value={requestStatus || ""}
                           input={<OutlinedInput notched label="Estado" />}
-                          onChange={(e) => {
+                          onChange={e => {
                             setRequestStatus(e.target.value);
-                            localStorage.setItem('requestStatus', e.target.value);
+                            localStorage.setItem(
+                              "requestStatus",
+                              e.target.value
+                            );
                           }}
                         >
                           <MenuItem value="">Sin Filtro</MenuItem>
                           <MenuItem value="Iniciada">Iniciada</MenuItem>
-                          <MenuItem value="En proceso de recogida">En proceso de recogida</MenuItem>
-                          <MenuItem value="Recibida tecnico">Recibida técnico</MenuItem>
+                          <MenuItem value="En proceso de recogida">
+                            En proceso de recogida
+                          </MenuItem>
+                          <MenuItem value="Recibida tecnico">
+                            Recibida técnico
+                          </MenuItem>
                           <MenuItem value="Revisado">Revisado</MenuItem>
-                          <MenuItem value="En reparacion">En reparación</MenuItem>
+                          <MenuItem value="En reparacion">
+                            En reparación
+                          </MenuItem>
                           <MenuItem value="Reparado pendiente de pago">
                             Reparado, pendiente de pago
                           </MenuItem>
                           <MenuItem value="En camino">En camino</MenuItem>
                           <MenuItem value="Terminada">Terminada</MenuItem>
-                          <MenuItem value="En devolucion">En devolución</MenuItem>
+                          <MenuItem value="En devolucion">
+                            En devolución
+                          </MenuItem>
                           <MenuItem value="Devuelto sin reparacion">
                             Devuelto sin reparación
                           </MenuItem>
                           <MenuItem value="Retoma">Retoma</MenuItem>
                           <MenuItem value="Abandonada">Abandonada</MenuItem>
-                          <MenuItem value="Anulado por IMEI">Anulado por IMEI</MenuItem>
+                          <MenuItem value="Anulado por IMEI">
+                            Anulado por IMEI
+                          </MenuItem>
                         </Select>
                       </FormControl>
                     </Col>
@@ -524,12 +564,16 @@ export default function RetomaRequestsTable() {
           <thead>
             <tr>
               <th>Id de Retoma</th>
-              <th>Nombre cliente</th>
+              {JSON.parse(localStorage.getItem("user")).role != "tecnico" && (
+                <th>Nombre cliente</th>
+              )}
               <th>Fecha solicitud</th>
               <th>Datos equipo</th>
               <th>Estado de cotización</th>
               <th>Estado de solicitud</th>
-              <th>Valor de retoma</th>
+              {JSON.parse(localStorage.getItem("user")).role != "tecnico" && (
+                <th>Valor de retoma</th>
+              )}
               <th>Actualizar estado Solicitud</th>
               {/* {JSON.parse(localStorage.getItem('user')).role === 'mensajero' ? null : (
                 <th>Actualizar diagnostico para retoma</th>
@@ -539,28 +583,35 @@ export default function RetomaRequestsTable() {
                 <th>Actualizar pago retoma</th>
               ) : null} */}
               <th>Detalles de la solicitud</th>
-              <th>Ver factura</th>
+              {JSON.parse(localStorage.getItem("user")).role != "tecnico" && (
+                <th>Ver factura</th>
+              )}
             </tr>
           </thead>
           <tbody>
             {requests.requests.map((tdata, index) =>
-              tdata.requestType === 'Retoma' ? (
+              tdata.requestType === "Retoma" ? (
                 <tr key={index} className="border-top">
                   <td>{tdata.retoma[0].idRetoma}</td>
-                  <td>
-                    {tdata.userDto.names} {tdata.userDto.surnames}
-                  </td>
+                  {JSON.parse(localStorage.getItem("user")).role !=
+                    "tecnico" && (
+                    <td>
+                      {tdata.userDto.names} {tdata.userDto.surnames}
+                    </td>
+                  )}
                   <td>{`${new Date(tdata.requestDate).getFullYear()}-${
                     new Date(tdata.requestDate).getMonth() + 1
                   }-${new Date(tdata.requestDate).getDate()}`}</td>
                   <td>
-                    {tdata.equipment.equipmentBrand} {tdata.equipment.modelOrReference}
+                    {tdata.equipment.equipmentBrand}{" "}
+                    {tdata.equipment.modelOrReference}
                   </td>
                   {/*<td>{tdata.pickUpAddress}</td>
                                         <td>{tdata.deliveryAddress}</td> */}
                   <td>{tdata.statusQuote}</td>
                   <td>{tdata.requestStatus[0].status}</td>
-                  <td>{tdata.retoma[0].retomaQuote}</td>
+                  {JSON.parse(localStorage.getItem("user")).role !=
+                    "tecnico" && <td>{tdata.retoma[0].retomaQuote}</td>}
                   {/* <td>
                     {tdata.statusQuote != 'Pendiente' &&
                     tdata.requestStatus[0].status == 'Revisado' &&
@@ -630,11 +681,15 @@ export default function RetomaRequestsTable() {
                       )}
                     </td>
                   ) : null} */}
-                  {tdata.statusQuote == 'Pendiente' &&
-                  tdata.requestStatus[0].status == 'Revisado' &&
-                  JSON.parse(localStorage.getItem('user')).role == 'tecnico' ? (
+                  {tdata.statusQuote == "Pendiente" &&
+                  tdata.requestStatus[0].status == "Revisado" &&
+                  JSON.parse(localStorage.getItem("user")).role == "tecnico" ? (
                     <td>
-                      <button type="button" className="btn btn-secondary" disabled>
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        disabled
+                      >
                         <i className="bi bi-pencil-fill"></i>
                       </button>
                     </td>
@@ -645,9 +700,10 @@ export default function RetomaRequestsTable() {
                         state={{
                           idStatus: tdata.requestStatus[0].idRequestStatus,
                           idRetoma: tdata.retoma[0].idRetoma,
-                          idRetomaPayment: tdata.retoma[0].retomaPayments[0].idRetomaPayment,
+                          idRetomaPayment:
+                            tdata.retoma[0].retomaPayments[0].idRetomaPayment,
                           status: tdata.requestStatus[0].status,
-                          statusQuote: tdata.statusQuote,
+                          statusQuote: tdata.statusQuote
                         }}
                       >
                         <Button className="btn" color="primary">
@@ -668,40 +724,46 @@ export default function RetomaRequestsTable() {
                           deliveryAddress: tdata.deliveryAddress,
                           pickUpAddress: tdata.pickUpAddress,
                           equipmentData:
-                            tdata.equipment.equipmentBrand + ' ' + tdata.equipment.modelOrReference,
+                            tdata.equipment.equipmentBrand +
+                            " " +
+                            tdata.equipment.modelOrReference,
                           imeiOrSerial: tdata.equipment.imeiOrSerial,
                           clientPhone: tdata.userDto.phone,
-                          deliveryDate: tdata.homeServices[0].deliveryDate,
+                          deliveryDate: tdata.homeServices[0].deliveryDate
                         })
                       }
                     >
                       <i className="bi bi-search"></i>
                     </Button>
                   </td>
-                  <td>
-                    <a href="#">
-                      <button
-                        type="button"
-                        title={`Ver factura de ${tdata.equipment.equipmentBrand} ${tdata.equipment.modelOrReference}`}
-                        className="btn btn-outline-info"
-                        onClick={(e) =>
-                          handleViewEquipmentInvoice(e, {
-                            idEquipment: tdata.equipment.idEquipment,
-                          })
-                        }
-                      >
-                        Ver Factura
-                      </button>
-                    </a>
-                  </td>
+                  {JSON.parse(localStorage.getItem("user")).role !=
+                    "tecnico" && (
+                    <td>
+                      <a href="#">
+                        <button
+                          type="button"
+                          title={`Ver factura de ${tdata.equipment.equipmentBrand} ${tdata.equipment.modelOrReference}`}
+                          className="btn btn-outline-info"
+                          onClick={e =>
+                            handleViewEquipmentInvoice(e, {
+                              idEquipment: tdata.equipment.idEquipment
+                            })
+                          }
+                        >
+                          Ver Factura
+                        </button>
+                      </a>
+                    </td>
+                  )}
                 </tr>
-              ) : null,
+              ) : null
             )}
           </tbody>
         </Table>
         {
           <div>
-            Página número: {requests.currentPage} de {requests.pages === 0 ? 1 : requests.pages}
+            Página número: {requests.currentPage} de{" "}
+            {requests.pages === 0 ? 1 : requests.pages}
           </div>
         }
         <div className="d-flex justify-content-between">
@@ -726,7 +788,9 @@ export default function RetomaRequestsTable() {
           )}
         </div>
         <Modal isOpen={modal} toggle={handleViewClick.bind(null)}>
-          <ModalHeader toggle={handleViewClick.bind(null)}>Detalles de la solicitud</ModalHeader>
+          <ModalHeader toggle={handleViewClick.bind(null)}>
+            Detalles de la solicitud
+          </ModalHeader>
           <ModalBody>
             <div>
               <span className="fw-bold">Dispositivo:</span>
@@ -751,16 +815,16 @@ export default function RetomaRequestsTable() {
             <div>
               <span className="fw-bold">Fecha de entrega:</span>
             </div>
-            {currentDeliveryDate != 'Sin definir'
-              ? new Date(currentDeliveryDate).toLocaleDateString('es', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
+            {currentDeliveryDate != "Sin definir"
+              ? new Date(currentDeliveryDate).toLocaleDateString("es", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric"
                 })
-              : 'Sin definir'}
+              : "Sin definir"}
             <hr />
             <div>
               <span className="fw-bold">Teléfono cliente:</span>
