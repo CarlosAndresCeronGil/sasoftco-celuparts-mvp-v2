@@ -54,12 +54,12 @@ export default function UserRepairRequests() {
     setViewDetails({
       autoDiagnosis,
       deliveryAddress,
-      deliveryDate: homeServices[0].deliveryDate,
+      deliveryDate: homeServices[0]?.deliveryDate,
       pickUpAddress,
-      pickUpDate: homeServices[0].pickUpDate
+      pickUpDate: homeServices[0]?.pickUpDate
     });
     setCurrentDeliveryDate(
-      homeServices[0].deliveryDate != null ? deliveryDate : "Sin definir"
+      homeServices[0]?.deliveryDate != null ? deliveryDate : "Sin definir"
     );
   };
 
@@ -259,13 +259,13 @@ export default function UserRepairRequests() {
           .then(response => {
             putRequest({
               idRequest: id,
-              idUser: response[0].idUser,
-              idEquipment: response[0].idEquipment,
-              requestType: response[0].requestType,
-              pickUpAddress: response[0].pickUpAddress,
-              deliveryAddress: response[0].deliveryAddress,
+              idUser: response[0]?.idUser,
+              idEquipment: response[0]?.idEquipment,
+              requestType: response[0]?.requestType,
+              pickUpAddress: response[0]?.pickUpAddress,
+              deliveryAddress: response[0]?.deliveryAddress,
               statusQuote: "Rechazada",
-              autoDiagnosis: response[0].autoDiagnosis
+              autoDiagnosis: response[0]?.autoDiagnosis
             })
               .then(response2 => {
                 console.log(response2);

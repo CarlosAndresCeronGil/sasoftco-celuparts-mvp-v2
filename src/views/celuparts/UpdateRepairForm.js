@@ -14,6 +14,9 @@ import {
   Label,
   Input
 } from "reactstrap";
+
+import { NumberFormatBase } from "react-number-format";
+
 import Swal from "sweetalert2";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -38,8 +41,9 @@ import deletePartsToRepairByIdRequestAndPart from "../../services/deletePartsToR
 import putRequestStatus from "../../services/putRequestStatus";
 import postRequestHistory from "../../services/postRequestHistory";
 import getSingleRequestStatus from "../../services/getSingleRequestStatus";
+import MyCustomNumberFormat from "../../components/FormatValue";
 
-export default function UpdateRepairForm() {
+export default function UpdateRepairForm(props) {
   const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
   const [deviceDiagnostic, setDeviceDiagnostic] = useState({
     deviceDiagnostic: ""
@@ -616,10 +620,14 @@ export default function UpdateRepairForm() {
       [e.target.name]: e.target.value
     }));
   };
-  const handleRepairQuoteChange = e => {
+  const handleRepairQuoteChange = ({ value }, sourceInfo) => {
+    const { event } = sourceInfo;
+    if (!event) return;
+    console.log(value);
+    if (value == "0") return;
     setRepairQuote(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [event.target.name]: value
     }));
   };
 
@@ -665,6 +673,7 @@ export default function UpdateRepairForm() {
       setListOfUncheckedParts(array => [...array, partName]);
     }
   };
+
   const [value, setValue] = useState("1");
 
   const handleChange = (event, newValue) => {
@@ -796,15 +805,19 @@ export default function UpdateRepairForm() {
                         JSON.parse(localStorage.getItem("user")).role ==
                           "aux_admin" ? (
                           <FormGroup>
-                            <Label for="repairQuote">Cuota de reparación</Label>
-                            <Input
+                            <Label
+                              style={{ display: "block" }}
+                              for="repairQuote"
+                            >
+                              Cuota de reparación
+                            </Label>
+                            <MyCustomNumberFormat
                               id="repairQuote"
                               name="repairQuote"
-                              placeholder="Ingrese la cuota de reparación del producto"
-                              type="number"
-                              value={repairQuote.repairQuote}
-                              onChange={handleRepairQuoteChange}
                               required
+                              defaultValue={repairQuote.repairQuote}
+                              placeholder="Ingrese la cuota de reparación del producto"
+                              onValueChange={handleRepairQuoteChange}
                             />
                           </FormGroup>
                         ) : null}

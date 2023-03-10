@@ -21,6 +21,7 @@ import putRequestNotification from "../../services/putRequestNotification";
 import getTechnicianByEmail from "../../services/getTechnicianByEmail";
 import putRequestStatus from "../../services/putRequestStatus";
 import postRequestHistory from "../../services/postRequestHistory";
+import MyCustomNumberFormat from "../../components/FormatValue";
 
 export default function UpdateRetomaForm() {
   const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
@@ -194,10 +195,14 @@ export default function UpdateRetomaForm() {
     }));
   };
 
-  const handleRepairQuoteChange = e => {
+  const handleRepairQuoteChange = ({ value }, sourceInfo) => {
+    const { event } = sourceInfo;
+    if (!event) return;
+    console.log(value);
+    if (value == "0") return;
     setRetomaQuote(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [event.target.name]: value
     }));
   };
 
@@ -246,14 +251,13 @@ export default function UpdateRetomaForm() {
                   {isUserAdmin ? (
                     <FormGroup>
                       <Label for="retomaQuote">Precio de compra</Label>
-                      <Input
+                      <MyCustomNumberFormat
                         id="retomaQuote"
                         name="retomaQuote"
                         placeholder="Ingrese la cuota de reparación del producto"
-                        type="number"
-                        value={retomaQuote.retomaQuote}
-                        onChange={handleRepairQuoteChange}
                         required
+                        defaultValue={retomaQuote.retomaQuote}
+                        onValueChange={handleRepairQuoteChange}
                       />
                     </FormGroup>
                   ) : null}

@@ -1,14 +1,23 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
-import es from 'dayjs/locale/es';
-import utc from 'dayjs/plugin/utc';
-import calendar from 'dayjs/plugin/calendar';
+import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import es from "dayjs/locale/es";
+import utc from "dayjs/plugin/utc";
+import calendar from "dayjs/plugin/calendar";
 
 dayjs.extend(utc);
 dayjs.extend(calendar);
 
-import { Row, Col, CardTitle, CardBody, Button, Form, Label, Input } from 'reactstrap';
+import {
+  Row,
+  Col,
+  CardTitle,
+  CardBody,
+  Button,
+  Form,
+  Label,
+  Input
+} from "reactstrap";
 import {
   TextField,
   MenuItem,
@@ -19,87 +28,91 @@ import {
   FormControl,
   Box,
   SvgIcon,
-  OutlinedInput,
-} from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker, DesktopDateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
+  OutlinedInput
+} from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import {
+  DateTimePicker,
+  DesktopDateTimePicker,
+  MobileDateTimePicker
+} from "@mui/x-date-pickers";
 
-import MyLocationIcon from '@mui/icons-material/MyLocation';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import PlaceIcon from '@mui/icons-material/Place';
-import AddCardIcon from '@mui/icons-material/AddCard';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import DevicesOtherIcon from '@mui/icons-material/DevicesOther';
-import ComputerIcon from '@mui/icons-material/Computer';
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import TabletIcon from '@mui/icons-material/Tablet';
-import WatchIcon from '@mui/icons-material/Watch';
-import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
-import NumbersIcon from '@mui/icons-material/Numbers';
+import MyLocationIcon from "@mui/icons-material/MyLocation";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import PlaceIcon from "@mui/icons-material/Place";
+import AddCardIcon from "@mui/icons-material/AddCard";
+import EventNoteIcon from "@mui/icons-material/EventNote";
+import DevicesOtherIcon from "@mui/icons-material/DevicesOther";
+import ComputerIcon from "@mui/icons-material/Computer";
+import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
+import TabletIcon from "@mui/icons-material/Tablet";
+import WatchIcon from "@mui/icons-material/Watch";
+import AppSettingsAltIcon from "@mui/icons-material/AppSettingsAlt";
+import NumbersIcon from "@mui/icons-material/Numbers";
 
-import * as Yup from 'yup';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import setHours from 'date-fns/setHours';
-import setMinutes from 'date-fns/setMinutes';
-import Swal from 'sweetalert2';
+import * as Yup from "yup";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
+import Swal from "sweetalert2";
 
-import Combobox from 'react-widgets/Combobox';
-import 'react-widgets/styles.css';
+import Combobox from "react-widgets/Combobox";
+import "react-widgets/styles.css";
 
-import { useNavigate } from 'react-router-dom';
-import postRequest from '../../services/postRequest';
-import postEquipment from '../../services/postEquipment';
-import postRequestStatus from '../../services/postRequestStatus';
-import postRepair from '../../services/postRepair';
-import postRepairPayment from '../../services/postRepairPayment';
-import postHomeService from '../../services/postHomeService';
-import postRequestNotification from '../../services/postRequestNotification';
-import postRequestHistory from '../../services/postRequestHistory';
+import { useNavigate } from "react-router-dom";
+import postRequest from "../../services/postRequest";
+import postEquipment from "../../services/postEquipment";
+import postRequestStatus from "../../services/postRequestStatus";
+import postRepair from "../../services/postRepair";
+import postRepairPayment from "../../services/postRepairPayment";
+import postHomeService from "../../services/postHomeService";
+import postRequestNotification from "../../services/postRequestNotification";
+import postRequestHistory from "../../services/postRequestHistory";
 
-import getRequestWithUserInfo from '../../services/getRequestWithUserInfo';
-import getCellphoneBrands from '../../services/getCellphoneBrands';
-import getComputerBrands from '../../services/getComputerBrands';
-import getTypeOfEquipments from '../../services/getTypeOfEquipments';
-import getVerifyImei from '../../services/getVerifyImei';
+import getRequestWithUserInfo from "../../services/getRequestWithUserInfo";
+import getCellphoneBrands from "../../services/getCellphoneBrands";
+import getComputerBrands from "../../services/getComputerBrands";
+import getTypeOfEquipments from "../../services/getTypeOfEquipments";
+import getVerifyImei from "../../services/getVerifyImei";
 
-import { Checkbox } from '@blueprintjs/core';
-import BreadCrumbsCeluparts from '../../layouts/breadcrumbs/BreadCrumbsCeluparts';
-import getUserLastRepairRequestInfo from '../../services/getUserLastRepairRequestInfo';
-import ComponentCard from '../../components/ComponentCard';
-import getSmartWatchesBrands from '../../services/getSmartWatchesBrands';
-import getTabletsBrands from '../../services/getTabletsBrands';
+import { Checkbox } from "@blueprintjs/core";
+import BreadCrumbsCeluparts from "../../layouts/breadcrumbs/BreadCrumbsCeluparts";
+import getUserLastRepairRequestInfo from "../../services/getUserLastRepairRequestInfo";
+import ComponentCard from "../../components/ComponentCard";
+import getSmartWatchesBrands from "../../services/getSmartWatchesBrands";
+import getTabletsBrands from "../../services/getTabletsBrands";
 
 export default function RequestRepairForm() {
   //Variables del formulario
   const [typeOfEquipment, setTypeOfEquipment] = useState({
-    typeOfEquipment: '',
+    typeOfEquipment: ""
   });
-  const [imei, setImei] = useState('');
-  const [serial, setSerial] = useState('');
-  const [verifyResponse, setVerifyResponse] = useState('');
+  const [imei, setImei] = useState("");
+  const [serial, setSerial] = useState("");
+  const [verifyResponse, setVerifyResponse] = useState("");
   const [isSameAddresses, setIsSameAddresses] = useState(false);
-  const [pickUpAddress, setPickUpAddress] = useState('');
-  const [deliveryAddress, setDeliveryAddress] = useState('');
-  const [equipmentBrand, setEquipmentBrand] = useState('');
+  const [pickUpAddress, setPickUpAddress] = useState("");
+  const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [equipmentBrand, setEquipmentBrand] = useState("");
 
   /*Datos donde iran la lista de marcas de celulares, computadoras, smartwatches y
     tabletas mas populares y tipos de dispositivo*/
   const [cellphoneList, setCellphoneList] = useState([]);
   const [payMethodsList, setPayMethodsList] = useState([
-    { payMethodValue: 'Contraentrega', payMethodName: 'Contraentrega' },
+    { payMethodValue: "Contraentrega", payMethodName: "Contraentrega" },
     {
-      payMethodValue: 'Transferencia bancaria',
-      payMethodName: 'Transferencia bancaria',
+      payMethodValue: "Transferencia bancaria",
+      payMethodName: "Transferencia bancaria"
     },
-    { payMethodValue: 'Datafono', payMethodName: 'Datáfono' },
+    { payMethodValue: "Datafono", payMethodName: "Datáfono" }
   ]);
   const [computersList, setComputersList] = useState([]);
   const [tabletsList, setTabletsList] = useState([]);
   const [smartWatchesList, setSmartWatchesList] = useState([]);
   const [typeOfEquipmentList, setTypeOfEquipmentList] = useState([]);
-  const [paymentMethod, setPaymentMethod] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState("");
   /**Este objeto pondra la ultima direccion registrada por el cliente para que sea llenado este
    * campo automaticamente
    */
@@ -120,13 +133,19 @@ export default function RequestRepairForm() {
     }
 
     if (date.hour() < 8) {
-      return dayjs(dayjs().set('hour', 8).set('minute', 30).set('second', 0));
-    } else if ((date.hour() >= 17 && date.minute() >= 10) || date.hour() >= 18) {
+      return dayjs(dayjs().set("hour", 8).set("minute", 30).set("second", 0));
+    } else if (
+      (date.hour() >= 17 && date.minute() >= 10) ||
+      date.hour() >= 18
+    ) {
       let day = new Date();
       let nextDay = dayjs(dayjs(new Date().setDate(day.getDate() + 1)));
-      return nextDay.set('hour', 8).set('minute', 30).set('second', 0);
+      return nextDay.set("hour", 8).set("minute", 30).set("second", 0);
     }
-    return dayjs().set('hour', arriveHour).set('minute', minutes).set('second', 0);
+    return dayjs()
+      .set("hour", arriveHour)
+      .set("minute", minutes)
+      .set("second", 0);
   };
   //Variables para las fechas, finish date empieza en un día despues al día actual
   const [startDate, setStartDate] = useState(handleArriveDate());
@@ -156,60 +175,70 @@ export default function RequestRepairForm() {
   useEffect(function () {
     setLoadingPage(true);
     getTypeOfEquipments()
-      .then((typeOfEquipmentResponse) => {
+      .then(typeOfEquipmentResponse => {
         setTypeOfEquipmentList(typeOfEquipmentResponse);
         getCellphoneBrands()
-          .then((cellphonesResponse) => {
+          .then(cellphonesResponse => {
             setCellphoneList(cellphonesResponse);
             getComputerBrands()
-              .then((computersResponse) => {
+              .then(computersResponse => {
                 setComputersList(computersResponse);
                 setEquipmentBrand(computersResponse[0].brandName);
-                getTabletsBrands().then((tablestsResponse) => {
+                getTabletsBrands().then(tablestsResponse => {
                   setTabletsList(tablestsResponse);
-                  getSmartWatchesBrands().then((smartWatchesResponse) => {
+                  getSmartWatchesBrands().then(smartWatchesResponse => {
                     setSmartWatchesList(smartWatchesResponse);
                     getUserLastRepairRequestInfo({
-                      id: JSON.parse(localStorage.getItem('user')).idUser,
+                      id: JSON.parse(localStorage.getItem("user")).idUser
                     })
-                      .then((lastRequestInfoResponse) => {
-                        setPickUpAddress(lastRequestInfoResponse[0].requests[0].pickUpAddress);
-                        setDeliveryAddress(lastRequestInfoResponse[0].requests[0].deliveryAddress);
+                      .then(lastRequestInfoResponse => {
+                        setPickUpAddress(
+                          lastRequestInfoResponse[0].requests[0].pickUpAddress
+                        );
+                        setDeliveryAddress(
+                          lastRequestInfoResponse[0].requests[0].deliveryAddress
+                        );
                         setLoadingPage(false);
                       })
-                      .catch((error) => {
+                      .catch(error => {
                         console.log(error);
                         setLoadingPage(false);
                       });
                   });
                 });
               })
-              .catch((error) => {
+              .catch(error => {
                 console.log(error);
                 setLoadingPage(false);
               });
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             setLoadingPage(false);
           });
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         setLoadingPage(false);
       });
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     setLoading(true);
 
     const formData = new FormData();
     //formData.append("typeOfEquipment", e.target.elements.typeOfEquipment.value)
-    formData.append('idTypeOfEquipment', e.target.elements.typeOfEquipment.value);
-    formData.append('equipmentBrand', equipmentBrand);
-    formData.append('modelOrReference', e.target.elements.modelOrReference.value);
-    formData.append('imeiOrSerial', e.target.elements.imei.value);
+    formData.append(
+      "idTypeOfEquipment",
+      e.target.elements.typeOfEquipment.value
+    );
+    formData.append("equipmentBrand", equipmentBrand);
+    formData.append(
+      "modelOrReference",
+      e.target.elements.modelOrReference.value
+    );
+    formData.append("imeiOrSerial", e.target.elements.imei.value);
     // formData.append("equipmentInvoice", null)
 
     const deliveryAddress2 = isSameAddresses
@@ -217,118 +246,118 @@ export default function RequestRepairForm() {
       : e.target.elements.deliveryAddress.value;
 
     postEquipment(formData)
-      .then((data) => {
+      .then(data => {
         postRequest({
-          idUser: JSON.parse(localStorage.getItem('user')).idUser,
+          idUser: JSON.parse(localStorage.getItem("user")).idUser,
           idEquipment: data.idEquipment,
-          requestType: 'Reparacion',
+          requestType: "Reparacion",
           pickUpAddress: pickUpAddress,
           deliveryAddress: deliveryAddress2,
-          statusQuote: 'Pendiente',
-          autoDiagnosis: e.target.elements.autoDiagnosis.value,
+          statusQuote: "Pendiente",
+          autoDiagnosis: e.target.elements.autoDiagnosis.value
         })
-          .then((data) => {
-            getRequestWithUserInfo({ id: data.idRequest }).then((userInfo) => {
+          .then(data => {
+            getRequestWithUserInfo({ id: data.idRequest }).then(userInfo => {
               postRequestNotification({
                 idRequest: data.idRequest,
                 // message: "Nueva solicitud de servicio a domicilio a la dirección: " + data.pickUpAddress + " para la fecha " + startDate.getFullYear() + "/" + (startDate.getMonth() + 1) + "/" + startDate.getDate() + " a las " + startDate.getHours() + ":" + startDate.getMinutes() + " para recoger el dispositivo " + equipmentBrand + " " + e.target.elements.modelOrReference.value + " con imei o serial: " + e.target.elements.imei.value + " a nombre del señor/a " + JSON.parse(localStorage.getItem('user')).name + ", número de teléfono de contácto: " + userInfo[0].userDto.phone + ", el usuario decidió pagar por medio de " + e.target.elements.paymentMethod.value,
                 message:
-                  'Nueva solicitud de servicio a domicilio a la dirección: ' +
+                  "Nueva solicitud de servicio a domicilio a la dirección: " +
                   data.pickUpAddress +
-                  ' para la fecha ' +
-                  startDate.toDate().toLocaleDateString('es', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
+                  " para la fecha " +
+                  startDate.toDate().toLocaleDateString("es", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric"
                   }) +
-                  ' para recoger el dispositivo ' +
+                  " para recoger el dispositivo " +
                   equipmentBrand +
-                  ' ' +
+                  " " +
                   e.target.elements.modelOrReference.value +
-                  ' con imei o serial: ' +
+                  " con imei o serial: " +
                   e.target.elements.imei.value +
-                  ' a nombre del señor/a ' +
-                  JSON.parse(localStorage.getItem('user')).name +
-                  ', número de teléfono de contácto: ' +
+                  " a nombre del señor/a " +
+                  JSON.parse(localStorage.getItem("user")).name +
+                  ", número de teléfono de contácto: " +
                   userInfo[0].userDto.phone +
-                  ', el usuario decidió pagar por medio de ' +
+                  ", el usuario decidió pagar por medio de " +
                   e.target.elements.paymentMethod.value,
                 wasReviewed: false,
-                notificationType: 'to_courier',
-              }).catch((error) => {
+                notificationType: "to_courier"
+              }).catch(error => {
                 setLoading(false);
                 console.log(error);
               });
             });
             postRepair({
               idRequest: data.idRequest,
-              repairQuote: '0',
+              repairQuote: "0"
             })
-              .then((data2) => {
+              .then(data2 => {
                 postRepairPayment({
                   idRepair: data2.idRepair,
-                  paymentMethod: e.target.elements.paymentMethod.value,
+                  paymentMethod: e.target.elements.paymentMethod.value
                 })
-                  .then((finalResponse) => {
+                  .then(finalResponse => {
                     Swal.fire({
-                      icon: 'success',
-                      title: 'Exito!',
-                      text: 'Solicitud de reparación enviada!',
-                    }).then((response) => {
-                      navigate('/home/user-repair-requests');
+                      icon: "success",
+                      title: "Exito!",
+                      text: "Solicitud de reparación enviada!"
+                    }).then(response => {
+                      navigate("/home/user-repair-requests");
                     });
                   })
-                  .catch((error) => {
+                  .catch(error => {
                     console.log(error);
                     setLoading(false);
                   });
               })
-              .catch((error) => {
+              .catch(error => {
                 console.log(error);
                 setLoading(false);
               });
             postRequestStatus({
               idRequest: data.idRequest,
-              status: 'Iniciada',
-              paymentStatus: 'No pago',
+              status: "Iniciada",
+              paymentStatus: "No pago",
               productReturned: false,
-              productSold: false,
-            }).catch((error) => {
+              productSold: false
+            }).catch(error => {
               setLoading(false);
               console.log(error);
             });
             postRequestHistory({
               idRequest: data.idRequest,
-              status: 'Iniciada',
-              date: new Date(),
-            }).catch((error) => {
+              status: "Iniciada",
+              date: new Date()
+            }).catch(error => {
               setLoading(false);
               console.log(error);
             });
             postHomeService({
               idRequest: data.idRequest,
-              pickUpDate: startDate.utc().format(),
-            }).catch((error) => {
+              pickUpDate: startDate.utc().format()
+            }).catch(error => {
               setLoading(false);
               console.log(error);
             });
             setLoading(false);
           })
-          .catch((error) => {
+          .catch(error => {
             setLoading(false);
             console.log(error);
           });
       })
-      .catch((error) => {
+      .catch(error => {
         setLoading(false);
         console.log(error);
       });
   };
 
-  const isWeekDay = (date) => {
+  const isWeekDay = date => {
     const day = date.day();
     // return day !== 0 && day !== 6; ignora sabados y domingos
     return day == 0; //solo ignora los domingos
@@ -336,50 +365,53 @@ export default function RequestRepairForm() {
 
   const addDays = (date, days) => {
     var result = dayjs(date);
-    result.set('date', result.date() + days);
+    result.set("date", result.date() + days);
     return result;
   };
 
-  const handleVerifySerial = (e) => {
+  const handleVerifySerial = e => {
     e.preventDefault();
     getVerifyImei({ id: serial })
-      .then((response) => {
+      .then(response => {
         // console.log(response)
         setVerifyResponse(response);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
 
-  const handleVerifyImei = (e) => {
+  const handleVerifyImei = e => {
     e.preventDefault();
     getVerifyImei({ id: imei })
-      .then((response) => {
+      .then(response => {
         // console.log(response)
         setVerifyResponse(response);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
 
   const handleCancel = () => {
-    navigate('/home/dashboards/dashboard1');
+    navigate("/home/dashboards/dashboard1");
   };
 
-  const currentRole = JSON.parse(localStorage.getItem('user')).role;
+  const currentRole = JSON.parse(localStorage.getItem("user")).role;
 
   return loadingPage ? (
     <div>Cargando...</div>
   ) : (
     <div>
-      <BreadCrumbsCeluparts breadcrumbName="Nueva solicitud de reparación"/>
+      <BreadCrumbsCeluparts breadcrumbName="Nueva solicitud de reparación" />
       <div>
         <Row>
           <Col>
             {/* <Card className='container'> */}
-            <CardTitle tag="h4" className="font-weight-bold p-3 mb-0 justify-content-start">
+            <CardTitle
+              tag="h4"
+              className="font-weight-bold p-3 mb-0 justify-content-start"
+            >
               <NoteAddIcon /> Nueva solicitud de reparación
             </CardTitle>
             <CardBody>
@@ -388,13 +420,16 @@ export default function RequestRepairForm() {
                   title="Datos de la solicitud"
                   styles={{
                     card: {
-                      boxShadow: '-0px 3rem 4rem 3px rgb(0 0 0 / 5%)',
-                    },
+                      boxShadow: "-0px 3rem 4rem 3px rgb(0 0 0 / 5%)"
+                    }
                   }}
                 >
                   <Row>
                     <Col>
-                      <Checkbox label=" Usar la misma dirección" onChange={handleSameAddresses} />
+                      <Checkbox
+                        label=" Usar la misma dirección"
+                        onChange={handleSameAddresses}
+                      />
                     </Col>
                   </Row>
                   <Row className="mt-3">
@@ -404,7 +439,7 @@ export default function RequestRepairForm() {
                         id="pickUpAddress"
                         name="pickUpAddress"
                         value={pickUpAddress}
-                        onChange={(e) => setPickUpAddress(e.target.value)}
+                        onChange={e => setPickUpAddress(e.target.value)}
                         placeholder="Ingrese la dirección donde se recogerá el producto"
                         type="text"
                         label="Dirección de recogida"
@@ -415,7 +450,7 @@ export default function RequestRepairForm() {
                             <InputAdornment position="start">
                               <PlaceIcon />
                             </InputAdornment>
-                          ),
+                          )
                         }}
                       />
                     </Col>
@@ -425,7 +460,7 @@ export default function RequestRepairForm() {
                           id="deliveryAddress"
                           name="deliveryAddress"
                           value={deliveryAddress}
-                          onChange={(e) => setDeliveryAddress(e.target.value)}
+                          onChange={e => setDeliveryAddress(e.target.value)}
                           type="text"
                           placeholder="Ingrese la dirección donde se entregará el producto"
                           label="Dirección de entrega"
@@ -436,7 +471,7 @@ export default function RequestRepairForm() {
                               <InputAdornment position="start">
                                 <MyLocationIcon />
                               </InputAdornment>
-                            ),
+                            )
                           }}
                         />
                       ) : (
@@ -456,7 +491,7 @@ export default function RequestRepairForm() {
                                 <InputAdornment position="start">
                                   <MyLocationIcon />
                                 </InputAdornment>
-                              ),
+                              )
                             }}
                           />
                         </>
@@ -470,16 +505,16 @@ export default function RequestRepairForm() {
                       <LocalizationProvider
                         adapterLocale={es}
                         dateAdapter={AdapterDayjs}
-                        sx={{ width: '100%' }}
+                        sx={{ width: "100%" }}
                       >
                         <DateTimePicker
-                          sx={{ width: '100%' }}
-                          renderInput={(props) => (
+                          sx={{ width: "100%" }}
+                          renderInput={props => (
                             <TextField
                               {...props}
                               inputProps={{
                                 ...props.inputProps,
-                                readOnly: true,
+                                readOnly: true
                               }}
                               required
                               fullWidth
@@ -488,8 +523,12 @@ export default function RequestRepairForm() {
                           )}
                           ampm
                           label="Fecha y hora de recogida"
-                          value={startDate.day() === 0 ? addDays(startDate, 1) : startDate}
-                          onChange={(date) => {
+                          value={
+                            startDate.day() === 0
+                              ? addDays(startDate, 1)
+                              : startDate
+                          }
+                          onChange={date => {
                             if (date.hour() > 18 || date.hour() < 8) {
                               setStartDate(startDate);
                             } else {
@@ -501,7 +540,7 @@ export default function RequestRepairForm() {
                               <InputAdornment position="start">
                                 <EventNoteIcon />
                               </InputAdornment>
-                            ),
+                            )
                           }}
                           minDate={minTimeUser}
                           minTime={(() => {
@@ -509,17 +548,25 @@ export default function RequestRepairForm() {
                               return minTimeUser;
                             } else {
                               return dayjs(
-                                dayjs().set('hour', 8).set('minute', 30).set('second', 0),
+                                dayjs()
+                                  .set("hour", 8)
+                                  .set("minute", 30)
+                                  .set("second", 0)
                               );
                             }
                           })()}
-                          maxTime={dayjs(dayjs().set('hour', 18).set('minute', 0).set('second', 0))}
+                          maxTime={dayjs(
+                            dayjs()
+                              .set("hour", 18)
+                              .set("minute", 0)
+                              .set("second", 0)
+                          )}
                           shouldDisableDate={isWeekDay}
                           shouldDisableTime={(time, clock) => {
-                            if (clock == 'hours') {
+                            if (clock == "hours") {
                               return time == 13;
                             }
-                            if (clock == 'minutes') {
+                            if (clock == "minutes") {
                               if (startDate.hour() == 12 && time == 30) {
                                 return true;
                               }
@@ -534,7 +581,7 @@ export default function RequestRepairForm() {
                         />
                       </LocalizationProvider>
                       <Alert sx={{ marginTop: 1 }} severity="info">
-                        El mensajero llegará en un estimado de 1 hora{' '}
+                        El mensajero llegará en un estimado de 1 hora{" "}
                       </Alert>
 
                       {/* <DatePicker
@@ -584,25 +631,45 @@ export default function RequestRepairForm() {
                           displayEmpty
                           value={paymentMethod}
                           required
-                          input={<OutlinedInput notched label="Metodo de Pago" required />}
-                          onChange={(e) => setPaymentMethod(e.target.value)}
-                          renderValue={(value) => {
-                            const items = payMethodsList.find((v) => v.payMethodValue == value);
+                          input={
+                            <OutlinedInput
+                              notched
+                              label="Metodo de Pago"
+                              required
+                            />
+                          }
+                          onChange={e => setPaymentMethod(e.target.value)}
+                          renderValue={value => {
+                            const items = payMethodsList.find(
+                              v => v.payMethodValue == value
+                            );
                             return (
-                              <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
+                              <Box
+                                color="#757575"
+                                sx={{ display: "flex", gap: 1 }}
+                              >
                                 <SvgIcon>
                                   <AddCardIcon />
                                 </SvgIcon>
-                                <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
-                                  {items ? items.payMethodValue : 'Selecciona metodo de pago'}
+                                <Box
+                                  sx={{ color: "black", fontSize: "0.9rem" }}
+                                >
+                                  {items
+                                    ? items.payMethodValue
+                                    : "Selecciona metodo de pago"}
                                 </Box>
                               </Box>
                             );
                           }}
                         >
-                          <MenuItem value="">Selecciona un metodo de pago</MenuItem>
+                          <MenuItem value="">
+                            Selecciona un metodo de pago
+                          </MenuItem>
                           {payMethodsList.map((payMethod, index) => (
-                            <MenuItem value={payMethod.payMethodValue} key={index}>
+                            <MenuItem
+                              value={payMethod.payMethodValue}
+                              key={index}
+                            >
                               {payMethod.payMethodName}
                             </MenuItem>
                           ))}
@@ -616,8 +683,8 @@ export default function RequestRepairForm() {
                   title="Datos del equipo"
                   styles={{
                     card: {
-                      boxShadow: '-0px 3rem 4rem 3px rgb(0 0 0 / 5%)',
-                    },
+                      boxShadow: "-0px 3rem 4rem 3px rgb(0 0 0 / 5%)"
+                    }
                   }}
                 >
                   {/* --------------- Datos equipo ---------------- */}
@@ -638,39 +705,59 @@ export default function RequestRepairForm() {
                           displayEmpty
                           defaultValue=""
                           value={typeOfEquipment.typeOfEquipment}
-                          input={<OutlinedInput notched label="Tipo de dispositivo *" required />}
-                          onChange={(e) => {
-                            setEquipmentBrand('');
-                            setTypeOfEquipment({ typeOfEquipment: String(e.target.value) });
+                          input={
+                            <OutlinedInput
+                              notched
+                              label="Tipo de dispositivo *"
+                              required
+                            />
+                          }
+                          onChange={e => {
+                            setEquipmentBrand("");
+                            setTypeOfEquipment({
+                              typeOfEquipment: String(e.target.value)
+                            });
                           }}
-                          renderValue={(value) => {
+                          renderValue={value => {
                             const item = typeOfEquipmentList.find(
-                              (v) => v.idTypeOfEquipment == value,
+                              v => v.idTypeOfEquipment == value
                             );
                             return (
-                              <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
+                              <Box
+                                color="#757575"
+                                sx={{ display: "flex", gap: 1 }}
+                              >
                                 <SvgIcon>
                                   <DevicesOtherIcon />
                                 </SvgIcon>
-                                <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
+                                <Box
+                                  sx={{ color: "black", fontSize: "0.9rem" }}
+                                >
                                   {item
                                     ? item.equipmentTypeName
-                                    : 'Seleccione un tipo de dispositivo'}
+                                    : "Seleccione un tipo de dispositivo"}
                                 </Box>
                               </Box>
                             );
                           }}
                         >
-                          <MenuItem value="">Seleccione un tipo de dispositivo</MenuItem>
-                          {typeOfEquipmentList.map((typeOfEquipmentData, index) => (
-                            <MenuItem value={typeOfEquipmentData.idTypeOfEquipment} key={index}>
-                              {typeOfEquipmentData.equipmentTypeName}
-                            </MenuItem>
-                          ))}
+                          <MenuItem value="">
+                            Seleccione un tipo de dispositivo
+                          </MenuItem>
+                          {typeOfEquipmentList.map(
+                            (typeOfEquipmentData, index) => (
+                              <MenuItem
+                                value={typeOfEquipmentData.idTypeOfEquipment}
+                                key={index}
+                              >
+                                {typeOfEquipmentData.equipmentTypeName}
+                              </MenuItem>
+                            )
+                          )}
                         </Select>
                       </FormControl>
                     </Col>
-                    {typeOfEquipment.typeOfEquipment === '' ? (
+                    {typeOfEquipment.typeOfEquipment === "" ? (
                       <Col md="6">
                         <TextField
                           id="typeOfEquipment"
@@ -683,11 +770,11 @@ export default function RequestRepairForm() {
                               <InputAdornment position="start">
                                 <DevicesOtherIcon />
                               </InputAdornment>
-                            ),
+                            )
                           }}
                         />
                       </Col>
-                    ) : typeOfEquipment.typeOfEquipment === '1' ? (
+                    ) : typeOfEquipment.typeOfEquipment === "1" ? (
                       <Col md="6">
                         {/* <Combobox
                                                         required
@@ -712,18 +799,31 @@ export default function RequestRepairForm() {
                             defaultValue=""
                             value={equipmentBrand}
                             input={
-                              <OutlinedInput notched label="Marca del computador *" required />
+                              <OutlinedInput
+                                notched
+                                label="Marca del computador *"
+                                required
+                              />
                             }
-                            onChange={(e) => setEquipmentBrand(e.target.value)}
-                            renderValue={(value) => {
-                              const item = computersList.find((v) => v.brandName === value);
+                            onChange={e => setEquipmentBrand(e.target.value)}
+                            renderValue={value => {
+                              const item = computersList.find(
+                                v => v.brandName === value
+                              );
                               return (
-                                <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
+                                <Box
+                                  color="#757575"
+                                  sx={{ display: "flex", gap: 1 }}
+                                >
                                   <SvgIcon>
                                     <ComputerIcon />
                                   </SvgIcon>
-                                  <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
-                                    {item ? item.brandName : 'Seleccione marca de portatil'}
+                                  <Box
+                                    sx={{ color: "black", fontSize: "0.9rem" }}
+                                  >
+                                    {item
+                                      ? item.brandName
+                                      : "Seleccione marca de portatil"}
                                   </Box>
                                 </Box>
                               );
@@ -733,14 +833,17 @@ export default function RequestRepairForm() {
                               Seleccione marca de portatil
                             </MenuItem>
                             {computersList.map((computerData, index) => (
-                              <MenuItem value={computerData.brandName} key={index}>
+                              <MenuItem
+                                value={computerData.brandName}
+                                key={index}
+                              >
                                 {computerData.brandName}
                               </MenuItem>
                             ))}
                           </Select>
                         </FormControl>
                       </Col>
-                    ) : typeOfEquipment.typeOfEquipment === '2' ? (
+                    ) : typeOfEquipment.typeOfEquipment === "2" ? (
                       <Col md="6">
                         {/* <Combobox
                                                         required
@@ -764,32 +867,52 @@ export default function RequestRepairForm() {
                             required
                             defaultValue=""
                             value={equipmentBrand}
-                            input={<OutlinedInput notched label="Marca del celular *" required />}
-                            onChange={(e) => setEquipmentBrand(e.target.value)}
-                            renderValue={(value) => {
-                              const item = cellphoneList.find((v) => v.brandName === value);
+                            input={
+                              <OutlinedInput
+                                notched
+                                label="Marca del celular *"
+                                required
+                              />
+                            }
+                            onChange={e => setEquipmentBrand(e.target.value)}
+                            renderValue={value => {
+                              const item = cellphoneList.find(
+                                v => v.brandName === value
+                              );
                               return (
-                                <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
+                                <Box
+                                  color="#757575"
+                                  sx={{ display: "flex", gap: 1 }}
+                                >
                                   <SvgIcon>
                                     <PhoneAndroidIcon />
                                   </SvgIcon>
-                                  <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
-                                    {item ? item.brandName : 'Seleccione marca de celular'}
+                                  <Box
+                                    sx={{ color: "black", fontSize: "0.9rem" }}
+                                  >
+                                    {item
+                                      ? item.brandName
+                                      : "Seleccione marca de celular"}
                                   </Box>
                                 </Box>
                               );
                             }}
                           >
-                            <MenuItem value="">Seleccione marca de celular</MenuItem>
+                            <MenuItem value="">
+                              Seleccione marca de celular
+                            </MenuItem>
                             {cellphoneList.map((cellphoneData, index) => (
-                              <MenuItem value={cellphoneData.brandName} key={index}>
+                              <MenuItem
+                                value={cellphoneData.brandName}
+                                key={index}
+                              >
                                 {cellphoneData.brandName}
                               </MenuItem>
                             ))}
                           </Select>
                         </FormControl>
                       </Col>
-                    ) : typeOfEquipment.typeOfEquipment === '3' ? (
+                    ) : typeOfEquipment.typeOfEquipment === "3" ? (
                       <Col md="6">
                         <FormControl fullWidth>
                           <InputLabel shrink id="typeOfEquipment">
@@ -803,17 +926,32 @@ export default function RequestRepairForm() {
                             required
                             defaultValue=""
                             value={equipmentBrand}
-                            input={<OutlinedInput notched label="Marca de la tablet *" required />}
-                            onChange={(e) => setEquipmentBrand(e.target.value)}
-                            renderValue={(value) => {
-                              const item = tabletsList.find((v) => v.brandName === value);
+                            input={
+                              <OutlinedInput
+                                notched
+                                label="Marca de la tablet *"
+                                required
+                              />
+                            }
+                            onChange={e => setEquipmentBrand(e.target.value)}
+                            renderValue={value => {
+                              const item = tabletsList.find(
+                                v => v.brandName === value
+                              );
                               return (
-                                <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
+                                <Box
+                                  color="#757575"
+                                  sx={{ display: "flex", gap: 1 }}
+                                >
                                   <SvgIcon>
                                     <TabletIcon />
                                   </SvgIcon>
-                                  <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
-                                    {item ? item.brandName : 'Seleccione marca de tablet'}
+                                  <Box
+                                    sx={{ color: "black", fontSize: "0.9rem" }}
+                                  >
+                                    {item
+                                      ? item.brandName
+                                      : "Seleccione marca de tablet"}
                                   </Box>
                                 </Box>
                               );
@@ -823,7 +961,10 @@ export default function RequestRepairForm() {
                               Seleccione marca de tablet
                             </MenuItem>
                             {tabletsList.map((tabletData, index) => (
-                              <MenuItem value={tabletData.brandName} key={index}>
+                              <MenuItem
+                                value={tabletData.brandName}
+                                key={index}
+                              >
                                 {tabletData.brandName}
                               </MenuItem>
                             ))}
@@ -845,18 +986,31 @@ export default function RequestRepairForm() {
                             defaultValue=""
                             value={equipmentBrand}
                             input={
-                              <OutlinedInput notched label="Marca del smartWatch *" required />
+                              <OutlinedInput
+                                notched
+                                label="Marca del smartWatch *"
+                                required
+                              />
                             }
-                            onChange={(e) => setEquipmentBrand(e.target.value)}
-                            renderValue={(value) => {
-                              const item = smartWatchesList.find((v) => v.brandName === value);
+                            onChange={e => setEquipmentBrand(e.target.value)}
+                            renderValue={value => {
+                              const item = smartWatchesList.find(
+                                v => v.brandName === value
+                              );
                               return (
-                                <Box color="#757575" sx={{ display: 'flex', gap: 1 }}>
+                                <Box
+                                  color="#757575"
+                                  sx={{ display: "flex", gap: 1 }}
+                                >
                                   <SvgIcon>
                                     <WatchIcon />
                                   </SvgIcon>
-                                  <Box sx={{ color: 'black', fontSize: '0.9rem' }}>
-                                    {item ? item.brandName : 'Seleccione marca de smartWatch'}
+                                  <Box
+                                    sx={{ color: "black", fontSize: "0.9rem" }}
+                                  >
+                                    {item
+                                      ? item.brandName
+                                      : "Seleccione marca de smartWatch"}
                                   </Box>
                                 </Box>
                               );
@@ -866,7 +1020,10 @@ export default function RequestRepairForm() {
                               Seleccione marca de smartWatch
                             </MenuItem>
                             {smartWatchesList.map((smartWatchData, index) => (
-                              <MenuItem value={smartWatchData.brandName} key={index}>
+                              <MenuItem
+                                value={smartWatchData.brandName}
+                                key={index}
+                              >
                                 {smartWatchData.brandName}
                               </MenuItem>
                             ))}
@@ -891,11 +1048,11 @@ export default function RequestRepairForm() {
                             <InputAdornment position="start">
                               <AppSettingsAltIcon />
                             </InputAdornment>
-                          ),
+                          )
                         }}
                       />
                     </Col>
-                    {typeOfEquipment.typeOfEquipment === '1' ? (
+                    {typeOfEquipment.typeOfEquipment === "1" ? (
                       <>
                         <Col md="6">
                           <TextField
@@ -904,7 +1061,7 @@ export default function RequestRepairForm() {
                             value={serial}
                             placeholder="Ingrese el imei dispositivo"
                             type="text"
-                            onChange={(e) => setSerial(e.target.value)}
+                            onChange={e => setSerial(e.target.value)}
                             required
                             label="Serial del dispositivo"
                             fullWidth
@@ -913,7 +1070,7 @@ export default function RequestRepairForm() {
                                 <InputAdornment position="start">
                                   <NumbersIcon />
                                 </InputAdornment>
-                              ),
+                              )
                             }}
                           />
                         </Col>
@@ -933,7 +1090,7 @@ export default function RequestRepairForm() {
                                                                 : null
                                                     } */}
                       </>
-                    ) : typeOfEquipment.typeOfEquipment === '2' ? (
+                    ) : typeOfEquipment.typeOfEquipment === "2" ? (
                       <>
                         <Col md="6">
                           <TextField
@@ -942,7 +1099,7 @@ export default function RequestRepairForm() {
                             value={imei}
                             placeholder="Ingrese el imei dispositivo"
                             type="text"
-                            onChange={(e) => setImei(e.target.value)}
+                            onChange={e => setImei(e.target.value)}
                             required
                             label="Imei del dispositivo"
                             fullWidth
@@ -951,7 +1108,7 @@ export default function RequestRepairForm() {
                                 <InputAdornment position="start">
                                   <NumbersIcon />
                                 </InputAdornment>
-                              ),
+                              )
                             }}
                           />
                         </Col>
@@ -980,7 +1137,7 @@ export default function RequestRepairForm() {
                             value={imei}
                             placeholder="Ingrese el imei dispositivo"
                             type="text"
-                            onChange={(e) => setImei(e.target.value)}
+                            onChange={e => setImei(e.target.value)}
                             required
                             label="Imei/Serial del dispositivo"
                             fullWidth
@@ -989,7 +1146,7 @@ export default function RequestRepairForm() {
                                 <InputAdornment position="start">
                                   <NumbersIcon />
                                 </InputAdornment>
-                              ),
+                              )
                             }}
                           />
                         </Col>
@@ -1015,7 +1172,11 @@ export default function RequestRepairForm() {
                   </Row>
                   <div className="d-flex justify-content-between">
                     {loading ? (
-                      <button className="btn btn-primary center" type="button" disabled>
+                      <button
+                        className="btn btn-primary center"
+                        type="button"
+                        disabled
+                      >
                         <span
                           className="spinner-border spinner-border-sm"
                           role="status"
@@ -1024,12 +1185,18 @@ export default function RequestRepairForm() {
                         <span className="sr-only">Cargando...</span>
                       </button>
                     ) : (
-                      <Button color="celuparts-dark-blue " className="btn btn-primary">
+                      <Button
+                        color="celuparts-dark-blue "
+                        className="btn btn-primary"
+                      >
                         Enviar
                       </Button>
                     )}
 
-                    <Button className="btn btn-danger justify-content-end" onClick={handleCancel}>
+                    <Button
+                      className="btn btn-danger justify-content-end"
+                      onClick={handleCancel}
+                    >
                       Cancelar
                     </Button>
                   </div>
