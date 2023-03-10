@@ -91,7 +91,7 @@ export default function UpdateRepairForm() {
 
   const [status, setStatus] = useState(location.state.status);
   const [checkRepair, setcheckRepair] = useState(
-    isRepairDateNull.isRepairDateNull ? "on" : "off"
+    repairDate.repairDate ? "off" : "on"
   );
   /*
    *   Usado para verificar que el usuario logeado sea tecnico, en caso que lo sea
@@ -189,7 +189,10 @@ export default function UpdateRepairForm() {
           deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
           repairQuote: repairQuote.repairQuote,
           priceReviewedByAdmin:
-            isUserAdmin && Number(repairQuote.repairQuote) > 0 ? true : false
+            (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
+            Number(repairQuote.repairQuote) > 0
+              ? true
+              : false
         })
           .then(data => {
             postListOfRepairCheckedParts();
@@ -280,7 +283,10 @@ export default function UpdateRepairForm() {
           deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
           repairQuote: repairQuote.repairQuote,
           priceReviewedByAdmin:
-            isUserAdmin && Number(repairQuote.repairQuote) > 0 ? true : false
+            (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
+            Number(repairQuote.repairQuote) > 0
+              ? true
+              : false
         })
           .then(data => {
             // console.log(data)
@@ -330,7 +336,10 @@ export default function UpdateRepairForm() {
           deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
           repairQuote: repairQuote.repairQuote,
           priceReviewedByAdmin:
-            isUserAdmin && Number(repairQuote.repairQuote) > 0 ? true : false
+            (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
+            Number(repairQuote.repairQuote) > 0
+              ? true
+              : false
         })
           .then(data => {
             // console.log(data)
@@ -380,7 +389,10 @@ export default function UpdateRepairForm() {
           repairDiagnostic: repairDiagnostic.repairDiagnostic,
           repairQuote: repairQuote.repairQuote,
           priceReviewedByAdmin:
-            isUserAdmin && Number(repairQuote.repairQuote) > 0 ? true : false
+            (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
+            Number(repairQuote.repairQuote) > 0
+              ? true
+              : false
         })
           .then(data => {
             putRequestStatus({
@@ -593,15 +605,10 @@ export default function UpdateRepairForm() {
   };
 
   const handleFinishRepairCheck = e => {
-    if (e.target.value == "off") {
-      console.log("onnn");
-      setIsRepairFinished(!isRepairFinished);
-      setRepairDate({ repairDate: new Date() });
-      setNullFinishDateArrived(!nullFinishDateArrived);
-      setcheckRepair("off");
-    } else {
-      setcheckRepair("on");
-    }
+    setIsRepairFinished(!isRepairFinished);
+    setRepairDate({ repairDate: new Date() });
+    setNullFinishDateArrived(!nullFinishDateArrived);
+    setcheckRepair(checkRepair == "on" ? "off" : "on");
   };
 
   const handleAddReplace = (e, partName) => {
@@ -662,9 +669,9 @@ export default function UpdateRepairForm() {
                         label="Revisión Técnica"
                         value="1"
                       />
-
-                      {location.state.statusQuote === "Aceptada" &&
-                      repairStartDate.repairStartDate ? (
+                      {(location.state.statusQuote === "Aceptada" &&
+                        location.state.status == "En reparacion") ||
+                      !isRepairStartDateNull.isRepairStartDateNull ? (
                         <Tab wrapped fullwidth label="Reparación" value="2" />
                       ) : (
                         <Tab
@@ -819,15 +826,17 @@ export default function UpdateRepairForm() {
                                         </FormGroup> */}
 
                         <FormGroup>
+                          {console.log(checkRepair)}
                           <Input
                             disabled={!isRepairDateNull.isRepairDateNull}
                             type="checkbox"
-                            value={checkRepair ? "off" : "on"}
+                            value={checkRepair}
+                            defaultChecked={
+                              !isRepairDateNull.isRepairDateNull ? true : false
+                            }
                             onChange={handleFinishRepairCheck}
                           />
-                          <Label check>
-                            He terminado mi reparación exitosamente
-                          </Label>
+                          <Label>He terminado mi reparación exitosamente</Label>
                         </FormGroup>
 
                         <FormGroup className="mt-3">
@@ -842,10 +851,7 @@ export default function UpdateRepairForm() {
                             value={repairDiagnostic.repairDiagnostic}
                             onChange={handleRepairDiagnosticChange}
                             required
-                            disabled={
-                              !isRepairDateNull.isRepairDateNull ||
-                              isRepairStartDateNull.isRepairStartDateNull
-                            }
+                            disabled={!isRepairDateNull.isRepairDateNull}
                           />
                         </FormGroup>
 
@@ -862,7 +868,8 @@ export default function UpdateRepairForm() {
                             ></span>
                             <span className="sr-only">Cargando...</span>
                           </button>
-                        ) : isRepairDateNull.isRepairDateNull ? (
+                        ) : isRepairDateNull.isRepairDateNull &&
+                          checkRepair == "on" ? (
                           <Button color="primary">Guardar</Button>
                         ) : (
                           <Button color="primary" disabled>
