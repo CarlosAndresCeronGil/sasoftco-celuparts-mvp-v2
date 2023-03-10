@@ -681,44 +681,30 @@ export default function RetomaRequestsTable() {
                       )}
                     </td>
                   ) : null} */}
-                  {tdata.statusQuote == "Pendiente" &&
-                  tdata.requestStatus[0].status == "Revisado" &&
-                  JSON.parse(localStorage.getItem("user")).role == "tecnico" ? (
-                    <td>
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        disabled
-                      >
+                  <td>
+                    <Link
+                      to={`/home/update-state-retoma`}
+                      state={{
+                        idStatus: tdata.requestStatus[0].idRequestStatus,
+                        idRetoma: tdata.retoma[0].idRetoma,
+                        idRetomaPayment:
+                          tdata.retoma[0].retomaPayments[0].idRetomaPayment,
+                        status: tdata.requestStatus[0].status,
+                        statusQuote: tdata.statusQuote,
+                        data: {
+                          equipmentData:
+                            tdata.equipment.equipmentBrand +
+                            " " +
+                            tdata.equipment.modelOrReference,
+                          imeiOrSerial: tdata.equipment.imeiOrSerial
+                        }
+                      }}
+                    >
+                      <Button className="btn" color="primary">
                         <i className="bi bi-pencil-fill"></i>
-                      </button>
-                    </td>
-                  ) : (
-                    <td>
-                      <Link
-                        to={`/home/update-state-retoma`}
-                        state={{
-                          idStatus: tdata.requestStatus[0].idRequestStatus,
-                          idRetoma: tdata.retoma[0].idRetoma,
-                          idRetomaPayment:
-                            tdata.retoma[0].retomaPayments[0].idRetomaPayment,
-                          status: tdata.requestStatus[0].status,
-                          statusQuote: tdata.statusQuote,
-                          data: {
-                            equipmentData:
-                              tdata.equipment.equipmentBrand +
-                              " " +
-                              tdata.equipment.modelOrReference,
-                            imeiOrSerial: tdata.equipment.imeiOrSerial
-                          }
-                        }}
-                      >
-                        <Button className="btn" color="primary">
-                          <i className="bi bi-pencil-fill"></i>
-                        </Button>
-                      </Link>
-                    </td>
-                  )}
+                      </Button>
+                    </Link>
+                  </td>
 
                   <td>
                     <Button

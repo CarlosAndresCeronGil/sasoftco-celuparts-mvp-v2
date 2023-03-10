@@ -111,7 +111,10 @@ export default function UpdateRetomaForm() {
       deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
       retomaQuote: retomaQuote.retomaQuote,
       priceReviewedByAdmin:
-        isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin ? true : false
+        (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
+        Number(retomaQuote.retomaQuote) > 0
+          ? true
+          : false
     })
       .then(() => {
         putRequestStatus({
@@ -265,7 +268,22 @@ export default function UpdateRetomaForm() {
                       <span className="sr-only">Cargando...</span>
                     </button>
                   ) : (
-                    <Button color="primary">Guardar</Button>
+                    <>
+                      {console.log("s", location.state.statusQuote)}
+                      {(JSON.parse(localStorage.getItem("user")).role ===
+                        "admin" ||
+                        JSON.parse(localStorage.getItem("user")).role ===
+                          "aux_admin") &&
+                      location.state.statusQuote != "Aceptada" ? (
+                        <Button color="primary">Guardar</Button>
+                      ) : priceReviewedByAdmin.priceReviewedByAdmin ? (
+                        <Button color="primary" disabled>
+                          Guardar
+                        </Button>
+                      ) : (
+                        <Button color="primary">Guardar</Button>
+                      )}
+                    </>
                   )}
                 </Form>
               </CardBody>

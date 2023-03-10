@@ -173,9 +173,7 @@ export default function UpdateRepairForm() {
     );
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    // console.log("lista de UNCHECKED", listOfUncheckedParts)
+  const handleSubmitInfo = e => {
     setLoadingPut(true);
 
     nullFinishDateArrived && nullStartDateArrived
@@ -448,6 +446,33 @@ export default function UpdateRepairForm() {
             console.log(error);
             setLoadingPut(false);
           });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    let accept = false;
+    if (
+      listOfRepairCheckedParts.length == 0 &&
+      listOfReplaceCheckedParts.length == 0
+    ) {
+      Swal.fire({
+        title: "¿Estas seguro?",
+        text: "¿Deseas guardar los cambios sin asociar partes a reparar o reemplazar? ",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, Guardar cambios",
+        cancelButtonText: "Cancelar"
+      }).then(result => {
+        if (result.isConfirmed) {
+          handleSubmitInfo(e);
+        }
+      });
+    } else {
+      handleSubmitInfo(e);
+    }
   };
 
   useEffect(
