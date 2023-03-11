@@ -112,23 +112,24 @@ export default function RetomaPaymentForm() {
         // console.log(response)
         // console.log(notifications)
         // console.log(idRequest.idRequest)
-        notifications.map(tdata =>
-          tdata.idRequest === idRequest.idRequest
-            ? putRequestNotification({
-                idRequestNotification: tdata.idRequestNotification,
-                idRequest: tdata.idRequest,
-                message: "",
-                wasReviewed: false,
-                notificationType: "to_none"
-              })
-                .then(response2 => {
-                  // console.log("Exito!", response2)
-                })
-                .catch(error => {
-                  console.log(error);
-                })
-            : null
+        [
+          notifications.find(tdata => tdata.idRequest === idRequest.idRequest)
+        ].map(tdata =>
+          putRequestNotification({
+            idRequestNotification: tdata.idRequestNotification,
+            idRequest: tdata.idRequest,
+            message: "",
+            wasReviewed: false,
+            notificationType: "to_none"
+          })
+            .then(response2 => {
+              // console.log("Exito!", response2)
+            })
+            .catch(error => {
+              console.log(error);
+            })
         );
+
         setLoadingPut(false);
       })
       .catch(error => {

@@ -204,25 +204,31 @@ export default function RequestStatusForm() {
           console.log(error);
         });
         status.status === "En proceso de recogida"
-          ? notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message: "Tu dispositivo esta en proceso de recogida!",
-                    wasReviewed: false,
-                    notificationType: "to_customer"
-                  })
-                    .then(response => {
-                      // console.log("exito!", response)
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                : null
+          ? [
+              notifications.find(
+                tdata => tdata.idRequest === idRequest.idRequest
+              )
+            ].map(tdata =>
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                message: "Tu dispositivo esta en proceso de recogida!",
+                wasReviewed: false,
+                notificationType: "to_customer"
+              })
+                .then(response => {
+                  // console.log("exito!", response)
+                })
+                .catch(error => {
+                  console.log(error);
+                })
             )
           : status.status === "Recibida tecnico"
-          ? notifications.map(tdata => {
+          ? [
+              notifications.find(tdata => {
+                return tdata.idRequest === idRequest.idRequest;
+              })
+            ].map(tdata => {
               if (
                 JSON.parse(localStorage.getItem("user"))?.role == "tecnico" ||
                 JSON.parse(localStorage.getItem("user"))?.role == "admin" ||
@@ -240,155 +246,166 @@ export default function RequestStatusForm() {
                   });
                 }
               }
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message:
-                      "Tu dispositivo ya ha sido recibido por uno de nuestros tecnicos",
-                    wasReviewed: false,
-                    notificationType: "to_customer"
-                  })
-                    .then(response => {
-                      // console.log("exito!", response)
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                : null;
+              console.log("s", tdata.idRequestNotification);
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                message:
+                  "Tu dispositivo ya ha sido recibido por uno de nuestros tecnicos",
+                wasReviewed: false,
+                notificationType: "to_customer"
+              })
+                .then(response => {
+                  // console.log("exito!", response)
+                })
+                .catch(error => {
+                  console.log(error);
+                });
             })
           : status.status === "En reparacion"
-          ? notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message:
-                      "El técnico ha empezado con la reparación de tu producto",
-                    wasReviewed: false,
-                    notificationType: "to_customer"
-                  })
-                    .then(response => {
-                      // console.log("exito!", response)
-                      putRepairStartDateByIdRequest({
-                        id: tdata.idRequest
-                      });
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                : null
+          ? [
+              notifications.find(
+                tdata => tdata.idRequest === idRequest.idRequest
+              )
+            ].map(tdata =>
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                message:
+                  "El técnico ha empezado con la reparación de tu producto",
+                wasReviewed: false,
+                notificationType: "to_customer"
+              })
+                .then(response => {
+                  // console.log("exito!", response)
+                  putRepairStartDateByIdRequest({
+                    id: tdata.idRequest
+                  });
+                })
+                .catch(error => {
+                  console.log(error);
+                })
             )
           : status.status === "En camino"
-          ? notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
+          ? [
+              notifications.find(
+                tdata => tdata.idRequest === idRequest.idRequest
+              )
+            ].map(tdata =>
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                // message: "Producto " + equipmentData.equipmentBrand + " " + equipmentData.modelOrReference + " para devolución el día " + deliveryDate.deliveryDate.toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }) + " al barrio " + deliveryAddress.deliveryAddress,
+                message:
+                  "Producto " +
+                  equipmentData.equipmentBrand +
+                  " " +
+                  equipmentData.modelOrReference +
+                  " para devolución el día " +
+                  addDays(new Date(), 1).toLocaleDateString("es", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric"
+                  }) +
+                  " al barrio " +
+                  deliveryAddress.deliveryAddress,
+                wasReviewed: false,
+                notificationType: "to_courier"
+              })
+                .then(response => {
+                  // console.log("exito!", response)
+                  putHomeServiceByIdRequest({
                     idRequest: tdata.idRequest,
-                    // message: "Producto " + equipmentData.equipmentBrand + " " + equipmentData.modelOrReference + " para devolución el día " + deliveryDate.deliveryDate.toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }) + " al barrio " + deliveryAddress.deliveryAddress,
-                    message:
-                      "Producto " +
-                      equipmentData.equipmentBrand +
-                      " " +
-                      equipmentData.modelOrReference +
-                      " para devolución el día " +
-                      addDays(new Date(), 1).toLocaleDateString("es", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "numeric"
-                      }) +
-                      " al barrio " +
-                      deliveryAddress.deliveryAddress,
-                    wasReviewed: false,
-                    notificationType: "to_courier"
-                  })
-                    .then(response => {
-                      // console.log("exito!", response)
-                      putHomeServiceByIdRequest({
-                        idRequest: tdata.idRequest,
-                        deliveryDate: addDays(new Date(), 1)
-                      });
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                : null
+                    deliveryDate: addDays(new Date(), 1)
+                  });
+                })
+                .catch(error => {
+                  console.log(error);
+                })
             )
           : status.status === "Terminada"
-          ? notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message: "",
-                    wasReviewed: false,
-                    notificationType: "to_none"
-                  })
-                    .then(response => {
-                      // console.log("exito!", response)
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                : null
+          ? [
+              notifications.find(
+                tdata => tdata.idRequest === idRequest.idRequest
+              )
+            ].map(tdata =>
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                message: "",
+                wasReviewed: false,
+                notificationType: "to_none"
+              })
+                .then(response => {
+                  // console.log("exito!", response)
+                })
+                .catch(error => {
+                  console.log(error);
+                })
             )
           : status.status === "Devuelto sin reparacion"
-          ? notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message: "",
-                    wasReviewed: false,
-                    notificationType: "to_none"
-                  })
-                    .then(response => {
-                      // console.log("exito!", response)
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                : null
+          ? [
+              notifications.find(
+                tdata => tdata.idRequest === idRequest.idRequest
+              )
+            ].map(tdata =>
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                message: "",
+                wasReviewed: false,
+                notificationType: "to_none"
+              })
+                .then(response => {
+                  // console.log("exito!", response)
+                })
+                .catch(error => {
+                  console.log(error);
+                })
             )
           : status.status === "Retoma"
-          ? notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message:
-                      "Tu pago sobre tu retoma se realizara pronto! Revisa tu medio de pago registrado a celuparts para confirmarlo.",
-                    wasReviewed: false,
-                    notificationType: "to_customer"
-                  })
-                    .then(response => {
-                      // console.log("exito!", response)
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                : null
+          ? [
+              notifications.find(
+                tdata => tdata.idRequest === idRequest.idRequest
+              )
+            ].map(tdata =>
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                message:
+                  "Tu pago sobre tu retoma se realizara pronto! Revisa tu medio de pago registrado a celuparts para confirmarlo.",
+                wasReviewed: false,
+                notificationType: "to_customer"
+              })
+                .then(response => {
+                  // console.log("exito!", response)
+                })
+                .catch(error => {
+                  console.log(error);
+                })
             )
           : status.status === "Anulado por IMEI"
-          ? notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message: "Anulado por IMEI",
-                    wasReviewed: false,
-                    notificationType: "to_none"
-                  })
-                    .then(response => {
-                      // console.log("exito!", response)
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                : null
+          ? [
+              notifications.find(
+                tdata => tdata.idRequest === idRequest.idRequest
+              )
+            ].map(tdata =>
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                message: "Anulado por IMEI",
+                wasReviewed: false,
+                notificationType: "to_none"
+              })
+                .then(response => {
+                  // console.log("exito!", response)
+                })
+                .catch(error => {
+                  console.log(error);
+                })
             )
           : console.log("do nothing");
         setLoadingPut(false);

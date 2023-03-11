@@ -109,28 +109,26 @@ export default function UserRetomaRequests() {
         getSingleEquipment({ id: response[0].idEquipment }).then(response => {
           /*El cliente acepta el precio de venta, por lo tanto se envia una notificacion 
                         al tecnico para que empiece con la reparacion */
-          notifications.map(tdata =>
-            tdata.idRequest === id
-              ? putRequestNotification({
-                  idRequestNotification: tdata.idRequestNotification,
-                  idRequest: id,
-                  message:
-                    "El cliente del producto " +
-                    response.equipmentBrand +
-                    " " +
-                    response.modelOrReference +
-                    " aceptó el valor de venta.",
-                  wasReviewed: false,
-                  notificationType: "to_admin"
-                })
-                  .then(response2 => {
-                    console.log("exito put request notification", response2);
-                  })
-                  .catch(error => {
-                    console.log(error);
-                  })
-              : null
-          );
+          [notifications.find(tdata => tdata.idRequest === id)].map(tdata => {
+            putRequestNotification({
+              idRequestNotification: tdata.idRequestNotification,
+              idRequest: id,
+              message:
+                "El cliente del producto " +
+                response.equipmentBrand +
+                " " +
+                response.modelOrReference +
+                " aceptó el valor de venta.",
+              wasReviewed: false,
+              notificationType: "to_admin"
+            })
+              .then(response2 => {
+                console.log("exito put request notification", response2);
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          });
         });
       })
       .catch(error => {
@@ -161,44 +159,44 @@ export default function UserRetomaRequests() {
               responseE => {
                 /*Notificación al mensajero para decirle que debe devolver el producto
                                 a una determinada direccion*/
-                notifications.map(tdata =>
-                  tdata.idRequest === id
-                    ? putRequestNotification({
-                        idRequestNotification: tdata.idRequestNotification,
-                        idRequest: id,
-                        message:
-                          "Devolver el producto " +
-                          responseE.equipmentBrand +
-                          " " +
-                          responseE.modelOrReference +
-                          " a la dirección: " +
-                          response[0].deliveryAddress +
-                          " el día: " +
-                          addDays(new Date(), 1).toLocaleDateString("es", {
-                            weekday: "long",
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                            hour: "numeric",
-                            minute: "numeric"
-                          }),
-                        wasReviewed: false,
-                        notificationType: "to_courier"
+                [notifications.find(tdata => tdata.idRequest === id)].map(
+                  tdata => {
+                    putRequestNotification({
+                      idRequestNotification: tdata.idRequestNotification,
+                      idRequest: id,
+                      message:
+                        "Devolver el producto " +
+                        responseE.equipmentBrand +
+                        " " +
+                        responseE.modelOrReference +
+                        " a la dirección: " +
+                        response[0].deliveryAddress +
+                        " el día: " +
+                        addDays(new Date(), 1).toLocaleDateString("es", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric"
+                        }),
+                      wasReviewed: false,
+                      notificationType: "to_courier"
+                    })
+                      .then(response3 => {
+                        console.log(
+                          "exito put request notification",
+                          response3
+                        );
+                        putHomeServiceByIdRequest({
+                          idRequest: tdata.idRequest,
+                          deliveryDate: addDays(new Date(), 1)
+                        });
                       })
-                        .then(response3 => {
-                          console.log(
-                            "exito put request notification",
-                            response3
-                          );
-                          putHomeServiceByIdRequest({
-                            idRequest: tdata.idRequest,
-                            deliveryDate: addDays(new Date(), 1)
-                          });
-                        })
-                        .catch(error => {
-                          console.log(error);
-                        })
-                    : null
+                      .catch(error => {
+                        console.log(error);
+                      });
+                  }
                 );
               }
             );

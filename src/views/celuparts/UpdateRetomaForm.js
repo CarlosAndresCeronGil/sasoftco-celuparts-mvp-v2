@@ -130,48 +130,52 @@ export default function UpdateRetomaForm() {
             date: new Date()
           }).then(() => {
             !isUserAdmin
-              ? notifications.map(tdata =>
-                  tdata.idRequest === idRequest.idRequest
-                    ? putRequestNotification({
-                        idRequestNotification: tdata.idRequestNotification,
-                        idRequest: tdata.idRequest,
-                        message:
-                          "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
-                        wasReviewed: false,
-                        notificationType: "to_customer"
-                      })
-                        .then(response => {
-                          navigate(-1);
-                        })
-                        .catch(error => {
-                          console.log(error);
-                        })
-                    : null
-                )
+              ? [
+                  notifications.find(
+                    tdata => tdata.idRequest === idRequest.idRequest
+                  )
+                ].map(tdata => {
+                  putRequestNotification({
+                    idRequestNotification: tdata.idRequestNotification,
+                    idRequest: tdata.idRequest,
+                    message:
+                      "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
+                    wasReviewed: false,
+                    notificationType: "to_customer"
+                  })
+                    .then(response => {
+                      navigate(-1);
+                    })
+                    .catch(error => {
+                      console.log(error);
+                    });
+                })
               : null;
           });
         });
 
         isUserAdmin
-          ? notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message:
-                      'Tu dispositivo ya tiene precio de retoma! haz click en "Mis retomas" para revisar',
-                    wasReviewed: false,
-                    notificationType: "to_customer"
-                  })
-                    .then(response => {
-                      console.log("Exito!", response);
-                      navigate(-1);
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                : null
-            )
+          ? [
+              notifications.find(
+                tdata => tdata.idRequest === idRequest.idRequest
+              )
+            ].map(tdata => {
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                message:
+                  'Tu dispositivo ya tiene precio de retoma! haz click en "Mis retomas" para revisar',
+                wasReviewed: false,
+                notificationType: "to_customer"
+              })
+                .then(response => {
+                  console.log("Exito!", response);
+                  navigate(-1);
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            })
           : null;
         setLoadingPut(false);
       })

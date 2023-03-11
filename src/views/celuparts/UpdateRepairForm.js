@@ -243,19 +243,21 @@ export default function UpdateRepairForm(props) {
                   });
 
                 !isUserAdmin
-                  ? notifications.map(tdata =>
-                      tdata.idRequest === idRequest.idRequest
-                        ? putRequestNotification({
-                            idRequestNotification: tdata.idRequestNotification,
-                            idRequest: tdata.idRequest,
-                            message:
-                              "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
-                            wasReviewed: false,
-                            notificationType: "to_customer"
-                          }).catch(error => {
-                            console.log(error);
-                          })
-                        : null
+                  ? [
+                      notifications.find(
+                        tdata => tdata.idRequest === idRequest.idRequest
+                      )
+                    ].map(tdata =>
+                      putRequestNotification({
+                        idRequestNotification: tdata.idRequestNotification,
+                        idRequest: tdata.idRequest,
+                        message:
+                          "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
+                        wasReviewed: false,
+                        notificationType: "to_customer"
+                      }).catch(error => {
+                        console.log(error);
+                      })
                     )
                   : null;
               })
@@ -264,19 +266,21 @@ export default function UpdateRepairForm(props) {
               });
 
             isUserAdmin
-              ? notifications.map(tdata =>
-                  tdata.idRequest === idRequest.idRequest
-                    ? putRequestNotification({
-                        idRequestNotification: tdata.idRequestNotification,
-                        idRequest: tdata.idRequest,
-                        message:
-                          'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
-                        wasReviewed: false,
-                        notificationType: "to_customer"
-                      }).catch(error => {
-                        console.log(error);
-                      })
-                    : null
+              ? [
+                  notifications.find(
+                    tdata => tdata.idRequest === idRequest.idRequest
+                  )
+                ].map(tdata =>
+                  putRequestNotification({
+                    idRequestNotification: tdata.idRequestNotification,
+                    idRequest: tdata.idRequest,
+                    message:
+                      'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
+                    wasReviewed: false,
+                    notificationType: "to_customer"
+                  }).catch(error => {
+                    console.log(error);
+                  })
                 )
               : null;
 
@@ -314,19 +318,21 @@ export default function UpdateRepairForm(props) {
             postListOfRepairCheckedParts();
             postListOfReplaceCheckedParts();
             postUnCheckedParts();
-            notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message:
-                      'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
-                    wasReviewed: false,
-                    notificationType: "to_customer"
-                  }).catch(error => {
-                    console.log(error);
-                  })
-                : null
+            [
+              notifications.find(
+                tdata => tdata.idRequest === idRequest.idRequest
+              )
+            ].map(tdata =>
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                message:
+                  'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
+                wasReviewed: false,
+                notificationType: "to_customer"
+              }).catch(error => {
+                console.log(error);
+              })
             );
             Swal.fire({
               icon: "success",
@@ -361,19 +367,21 @@ export default function UpdateRepairForm(props) {
             postListOfRepairCheckedParts();
             postListOfReplaceCheckedParts();
             postUnCheckedParts();
-            notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message:
-                      'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
-                    wasReviewed: false,
-                    notificationType: "to_customer"
-                  }).catch(error => {
-                    console.log(error);
-                  })
-                : null
+            [
+              notifications.find(
+                tdata => tdata.idRequest === idRequest.idRequest
+              )
+            ].map(tdata =>
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                message:
+                  'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
+                wasReviewed: false,
+                notificationType: "to_customer"
+              }).catch(error => {
+                console.log(error);
+              })
             );
             Swal.fire({
               icon: "success",
@@ -415,27 +423,30 @@ export default function UpdateRepairForm(props) {
                 status: "Reparado pendiente de pago",
                 date: new Date()
               }).then(() => setStatus("Reparado pendiente de pago"));
-              notifications.map(tdata =>
-                tdata.idRequest === idRequest.idRequest
-                  ? putRequestNotification({
-                      idRequestNotification: tdata.idRequestNotification,
-                      idRequest: tdata.idRequest,
-                      message:
-                        "Tú dispositivo ha sido reparado, contactate con el administrador al siguiente número: " +
-                        celupartsContactPhone +
-                        " o al siguiente correo " +
-                        celupartsContactEmail +
-                        " para confirmar pago",
-                      wasReviewed: false,
-                      notificationType: "to_customer"
-                    })
-                      .then(response => {
-                        navigate(-1);
-                      })
-                      .catch(error => {
-                        console.log(error);
-                      })
-                  : null
+
+              [
+                notifications.find(
+                  tdata => tdata.idRequest === idRequest.idRequest
+                )
+              ].map(tdata =>
+                putRequestNotification({
+                  idRequestNotification: tdata.idRequestNotification,
+                  idRequest: tdata.idRequest,
+                  message:
+                    "Tú dispositivo ha sido reparado, contactate con el administrador al siguiente número: " +
+                    celupartsContactPhone +
+                    " o al siguiente correo " +
+                    celupartsContactEmail +
+                    " para confirmar pago",
+                  wasReviewed: false,
+                  notificationType: "to_customer"
+                })
+                  .then(response => {
+                    navigate(-1);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  })
               );
             });
 
