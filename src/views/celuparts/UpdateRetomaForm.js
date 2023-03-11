@@ -22,6 +22,7 @@ import getTechnicianByEmail from "../../services/getTechnicianByEmail";
 import putRequestStatus from "../../services/putRequestStatus";
 import postRequestHistory from "../../services/postRequestHistory";
 import MyCustomNumberFormat from "../../components/FormatValue";
+import postRequestNotification from "../../services/postRequestNotification";
 
 export default function UpdateRetomaForm() {
   const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
@@ -129,6 +130,25 @@ export default function UpdateRetomaForm() {
             status: "Revisado",
             date: new Date()
           }).then(() => {
+            !isUserAdmin &&
+              postRequestNotification({
+                idRequest: idRequest.idRequest,
+                message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData}`,
+                wasReviewed: false,
+                notificationType: "to_admin"
+              }).catch(error => {
+                console.log(error);
+              });
+            !isUserAdmin &&
+              postRequestNotification({
+                idRequest: idRequest.idRequest,
+                message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData}`,
+                wasReviewed: false,
+                notificationType: "to_aux_admin"
+              }).catch(error => {
+                console.log(error);
+              });
+
             !isUserAdmin
               ? [
                   notifications.find(

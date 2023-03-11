@@ -241,7 +241,7 @@ export default function UserRetomaRequests() {
                 tdata.requestType === "Retoma" ? (
                   <tr key={index} className="border-top">
                     <td>
-                      {tdata.equipment.equipmentBrand}{" "}
+                      {tdata.equipment?.equipmentBrand}{" "}
                       {tdata.equipment.modelOrReference}
                     </td>
                     <td>{tdata.requestStatus[0].status}</td>

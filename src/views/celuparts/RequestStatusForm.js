@@ -410,7 +410,7 @@ export default function RequestStatusForm() {
           : console.log("do nothing");
         setLoadingPut(false);
       })
-      .finally(finalResponse => {
+      .then(finalResponse => {
         console.log("sss 5");
         Swal.fire({
           icon: "success",

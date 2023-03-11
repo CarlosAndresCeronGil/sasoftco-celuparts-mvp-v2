@@ -440,13 +440,10 @@ export default function UpdateRepairForm(props) {
                     " para confirmar pago",
                   wasReviewed: false,
                   notificationType: "to_customer"
+                }).catch(error => {
+                  si;
+                  console.log(error);
                 })
-                  .then(response => {
-                    navigate(-1);
-                  })
-                  .catch(error => {
-                    console.log(error);
-                  })
               );
             });
 
@@ -488,13 +485,11 @@ export default function UpdateRepairForm(props) {
         cancelButtonText: "Cancelar"
       }).then(result => {
         if (result.isConfirmed) {
-          console.log("entre");
           handleSubmitInfo(e);
           return;
         }
       });
     } else {
-      console.log("entre 2");
       handleSubmitInfo(e);
       return;
     }
@@ -885,7 +880,6 @@ export default function UpdateRepairForm(props) {
                                         </FormGroup> */}
 
                         <FormGroup>
-                          {console.log(checkRepair)}
                           <Input
                             disabled={!isRepairDateNull.isRepairDateNull}
                             type="checkbox"
@@ -927,13 +921,23 @@ export default function UpdateRepairForm(props) {
                             ></span>
                             <span className="sr-only">Cargando...</span>
                           </button>
-                        ) : isRepairDateNull.isRepairDateNull &&
-                          checkRepair == "on" ? (
-                          <Button color="primary">Guardar</Button>
                         ) : (
-                          <Button color="primary" disabled>
-                            Guardar
-                          </Button>
+                          <>
+                            {(JSON.parse(localStorage.getItem("user")).role ===
+                              "admin" ||
+                              JSON.parse(localStorage.getItem("user")).role ===
+                                "aux_admin") &&
+                            location.state.statusQuote != "Aceptada" ? (
+                              <Button color="primary">Guardar</Button>
+                            ) : checkRepair == "on" ||
+                              !isRepairDateNull.isRepairDateNull ? (
+                              <Button color="primary" disabled>
+                                Guardar
+                              </Button>
+                            ) : (
+                              <Button color="primary">Guardar</Button>
+                            )}
+                          </>
                         )}
                       </Form>
                     </CardBody>

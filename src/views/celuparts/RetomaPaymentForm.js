@@ -24,6 +24,7 @@ import getSingleRetoma from "../../services/getSingleRetoma";
 import getRequestNotification from "../../services/getRequestNotification";
 import putRequestNotification from "../../services/putRequestNotification";
 import moment from "moment";
+import postRequestNotification from "../../services/postRequestNotification";
 
 export default function RetomaPaymentForm() {
   const [paymentMethod, setPaymentMethod] = useState({ paymentMethod: "" });
@@ -114,22 +115,28 @@ export default function RetomaPaymentForm() {
         // console.log(idRequest.idRequest)
         [
           notifications.find(tdata => tdata.idRequest === idRequest.idRequest)
-        ].map(tdata =>
+        ].map(tdata => {
           putRequestNotification({
             idRequestNotification: tdata.idRequestNotification,
             idRequest: tdata.idRequest,
-            message: "",
+            message: ``,
             wasReviewed: false,
             notificationType: "to_none"
+          });
+
+          postRequestNotification({
+            idRequest: tdata.idRequest,
+            message: `El pago de la retoma del producto ${location.state.data.equipmentData} fue realizado`,
+            wasReviewed: false,
+            notificationType: "to_customer"
           })
             .then(response2 => {
               // console.log("Exito!", response2)
             })
             .catch(error => {
               console.log(error);
-            })
-        );
-
+            });
+        });
         setLoadingPut(false);
       })
       .catch(error => {

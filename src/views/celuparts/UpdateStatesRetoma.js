@@ -119,13 +119,13 @@ export default function UpdateStateRetoma() {
               <Tab
                 disabled
                 sx={{ textTransform: "capitalize" }}
-                label="Actualizar Pago Reparación"
+                label="Actualizar Pago Retoma"
                 {...a11yProps(2)}
               />
             ) : (
               <Tab
                 sx={{ textTransform: "capitalize" }}
-                label="Actualizar Pago Reparación"
+                label="Actualizar Pago Retoma"
                 {...a11yProps(2)}
               />
             ))}
