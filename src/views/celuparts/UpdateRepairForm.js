@@ -736,7 +736,7 @@ export default function UpdateRepairForm(props) {
                       />
                       {(location.state.statusQuote === "Aceptada" &&
                         location.state.status == "En reparacion") ||
-                      !isRepairStartDateNull.isRepairStartDateNull ? (
+                      !isRepairDateNull.isRepairDateNull ? (
                         <Tab wrapped fullwidth label="Reparación" value="2" />
                       ) : (
                         <Tab
