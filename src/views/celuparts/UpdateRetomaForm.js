@@ -220,20 +220,6 @@ export default function UpdateRetomaForm() {
                     <i className="bi bi-eyeglasses"> </i>
                     <strong>Datos de la Revisión</strong>
                   </CardSubtitle>
-                  {isTechnician ? null : (
-                    <FormGroup>
-                      <Label for="idTechnician">Id de tecnico asociado</Label>
-                      <Input
-                        id="idTechnician"
-                        name="idTechnician"
-                        placeholder="Ingrese el ID del técnico asociado a esta reparación"
-                        type="number"
-                        value={idTechnician.idTechnician}
-                        onChange={handleIdTechnicianChange}
-                        required
-                      />
-                    </FormGroup>
-                  )}
                   <FormGroup>
                     <Label for="deviceDiagnostic">
                       Diagnostico del dispositivo

@@ -232,19 +232,16 @@ export default function UpdateRepairForm(props) {
                     message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData}`,
                     wasReviewed: false,
                     notificationType: "to_aux_admin"
-                  })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                    .finally(() => {
-                      Swal.fire({
-                        icon: "success",
-                        title: "Exito!",
-                        text: "Estado de reparación actualizadisimo!"
-                      }).then(response => {
-                        navigate(-1);
-                      });
-                    });
+                  }).catch(error => {
+                    console.log(error);
+                  });
+                !sUserAdmin &&
+                  Swal.fire({
+                    icon: "success",
+                    title: "Exito!",
+                    text: "Estado de reparación actualizadisimo!"
+                  });
+
                 !isUserAdmin
                   ? notifications.map(tdata =>
                       tdata.idRequest === idRequest.idRequest
@@ -276,27 +273,21 @@ export default function UpdateRepairForm(props) {
                           'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
                         wasReviewed: false,
                         notificationType: "to_customer"
+                      }).catch(error => {
+                        console.log(error);
                       })
-                        .then(response => {
-                          // console.log("Exito!", response)
-                        })
-                        .then(finalResponse => {
-                          console.log("entre en repair ultimo");
-
-                          Swal.fire({
-                            icon: "success",
-                            title: "Exito!",
-                            text: "Estado de reparación actualizadisimo!"
-                          }).then(response => {
-                            navigate(-1);
-                          });
-                        })
-                        .catch(error => {
-                          console.log(error);
-                        })
                     : null
                 )
               : null;
+
+            Swal.fire({
+              icon: "success",
+              title: "Exito!",
+              text: "Estado de reparación actualizadisimo!"
+            }).then(response => {
+              navigate(-1);
+            });
+
             setLoadingPut(false);
           })
           .catch(error => {
@@ -332,24 +323,18 @@ export default function UpdateRepairForm(props) {
                       'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
                     wasReviewed: false,
                     notificationType: "to_customer"
+                  }).catch(error => {
+                    console.log(error);
                   })
-                    .then(response => {
-                      // console.log("Exito!", response)
-                    })
-                    .finally(finalResponse => {
-                      Swal.fire({
-                        icon: "success",
-                        title: "Exito!",
-                        text: "Estado de reparación actualizadisimo!"
-                      }).then(response => {
-                        navigate(-1);
-                      });
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
                 : null
             );
+            Swal.fire({
+              icon: "success",
+              title: "Exito!",
+              text: "Estado de reparación actualizadisimo!"
+            }).then(response => {
+              navigate(-1);
+            });
             setLoadingPut(false);
           })
           .catch(error => {
@@ -385,24 +370,18 @@ export default function UpdateRepairForm(props) {
                       'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
                     wasReviewed: false,
                     notificationType: "to_customer"
+                  }).catch(error => {
+                    console.log(error);
                   })
-                    .then(response => {
-                      console.log("Exito!", response);
-                    })
-                    .finally(finalResponse => {
-                      Swal.fire({
-                        icon: "success",
-                        title: "Exito!",
-                        text: "Estado de reparación actualizadisimo!"
-                      }).then(response => {
-                        navigate(-1);
-                      });
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
                 : null
             );
+            Swal.fire({
+              icon: "success",
+              title: "Exito!",
+              text: "Estado de reparación actualizadisimo!"
+            }).then(response => {
+              navigate(-1);
+            });
             setLoadingPut(false);
           })
           .catch(error => {
@@ -614,11 +593,11 @@ export default function UpdateRepairForm(props) {
   );
 
   useEffect(() => {
-    console.log();
-    getSingleRequestStatus({ id: idRequest.idRequest }).then(data => {
-      console.log(data);
-      setStatus(data.status);
-    });
+    if (idRequest.idRequest !== 0) {
+      getSingleRequestStatus({ id: idRequest.idRequest }).then(data => {
+        setStatus(data.status);
+      });
+    }
   }, [idRequest.idRequest]);
 
   useEffect(() => {
