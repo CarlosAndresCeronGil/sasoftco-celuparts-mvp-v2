@@ -47,6 +47,7 @@ import {
   FormControl,
   SvgIcon
 } from "@mui/material";
+import dayjs from "dayjs";
 
 export default function RepairRequestsTable() {
   const [requests, setRequests] = useState([]);
@@ -76,8 +77,8 @@ export default function RepairRequestsTable() {
   const [listOfBrands, setListOfBrands] = useState([]);
 
   //Variables auxiliares
-  const [formattedInitialDate, setFormattedInitialDate] = useState("0001-1-1");
-  const [formattedFinallDate, setFormattedFinalDate] = useState("0001-1-1");
+  const [formattedInitialDate, setFormattedInitialDate] = useState("1900-1-1");
+  const [formattedFinallDate, setFormattedFinalDate] = useState("2099-01-01");
 
   useEffect(
     function () {
@@ -85,14 +86,14 @@ export default function RepairRequestsTable() {
       var initialDateAux;
       if (initialDateString != null) {
         setInitialDate({ initialDate: new Date(initialDateString) });
-        initialDateAux = new Date(initialDateString);
+        initialDateAux = initialDateString;
       }
 
       let finalDateString = localStorage.getItem("finalDate") || null;
       var finalDateAux;
       if (finalDateString != null) {
         setFinalDate({ finalDate: new Date(finalDateString) });
-        finalDateAux = new Date(finalDateString);
+        finalDateAux = finalDateString;
       }
 
       setRequestStatus(localStorage.getItem("requestStatus") || "");
@@ -103,6 +104,14 @@ export default function RepairRequestsTable() {
       setEquipmentModel(localStorage.getItem("equipmentModel") || "");
 
       setLoading(true);
+
+      if (initialDateAux) {
+        initialDateAux = dayjs(initialDateAux).toDate();
+      }
+      if (finalDateAux) {
+        finalDateAux = dayjs(finalDateAux).toDate();
+      }
+
       getRequestRepairs({
         page,
         initialDate:
@@ -110,13 +119,13 @@ export default function RepairRequestsTable() {
             ? `${initialDateAux.getFullYear()}-${
                 initialDateAux.getMonth() + 1
               }-${initialDateAux.getDate()}`
-            : "0001-1-1",
+            : "1900-1-1",
         finalDate:
           finalDateString != null
             ? `${finalDateAux.getFullYear()}-${
                 finalDateAux.getMonth() + 1
               }-${finalDateAux.getDate()}`
-            : "0001-1-1",
+            : "2099-01-01",
         requestStatus: localStorage.getItem("requestStatus") || "",
         userDtoIdNumber: localStorage.getItem("userDtoIdNumber") || "",
         userDtoName: localStorage.getItem("userDtoNames") || "",
@@ -163,9 +172,19 @@ export default function RepairRequestsTable() {
     );
 
     const initialDateSubmit = {
-      initialDate: initialDate.initialDate?.toDate()
+      initialDate: initialDate.initialDate
     };
-    const finalDateSubmit = { finalDate: finalDate.finalDate?.toDate() };
+    const finalDateSubmit = { finalDate: finalDate.finalDate };
+
+    if (initialDateSubmit.initialDate) {
+      localStorage.setItem("initialDate", initialDateSubmit.initialDate);
+
+      initialDateSubmit.initialDate = new Date(initialDateSubmit.initialDate);
+    }
+    if (finalDateSubmit.finalDate) {
+      localStorage.setItem("finalDate", finalDateSubmit.finalDate);
+      finalDateSubmit.finalDate = new Date(finalDateSubmit.finalDate);
+    }
 
     getRequestRepairs({
       page: 1,
@@ -174,13 +193,13 @@ export default function RepairRequestsTable() {
           ? `${initialDateSubmit.initialDate.getFullYear()}-${
               initialDateSubmit.initialDate.getMonth() + 1
             }-${initialDateSubmit.initialDate.getDate()}`
-          : formattedInitialDate,
+          : "1900-01-01",
       finalDate:
         finalDateSubmit.finalDate != null
           ? `${finalDateSubmit.finalDate.getFullYear()}-${
               finalDateSubmit.finalDate.getMonth() + 1
             }-${finalDateSubmit.finalDate.getDate()}`
-          : formattedFinallDate,
+          : "2099-01-01",
       requestStatus: requestStatus,
       userDtoIdNumber: userDtoIdNumber,
       userDtoName: userDtoName,
@@ -234,8 +253,8 @@ export default function RepairRequestsTable() {
   const handleCleanFilters = () => {
     setInitialDate({ initialDate: null });
     setFinalDate({ finalDate: null });
-    setFormattedInitialDate("0001-1-1");
-    setFormattedFinalDate("0001-1-1");
+    setFormattedInitialDate("1600-1-1");
+    setFormattedFinalDate("2099-01-01");
     setRequestStatus("");
     setUserDtoIdNumber("");
     setUserDtoName("");

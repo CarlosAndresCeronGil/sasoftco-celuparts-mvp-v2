@@ -42,6 +42,7 @@ import {
   FormControl,
   SvgIcon
 } from "@mui/material";
+import dayjs from "dayjs";
 
 export default function RetomaRequestsTable() {
   const [requests, setRequests] = useState([]);
@@ -79,14 +80,14 @@ export default function RetomaRequestsTable() {
       var initialDateAux;
       if (initialDateString != null) {
         setInitialDate({ initialDate: new Date(initialDateString) });
-        initialDateAux = new Date(initialDateString);
+        initialDateAux = initialDateString;
       }
 
       let finalDateString = localStorage.getItem("finalDateRetoma") || null;
       var finalDateAux;
       if (finalDateString != null) {
         setFinalDate({ finalDate: new Date(finalDateString) });
-        finalDateAux = new Date(finalDateString);
+        finalDateAux = finalDateString;
       }
 
       setRequestStatus(localStorage.getItem("requestStatusRetoma") || "");
@@ -97,6 +98,14 @@ export default function RetomaRequestsTable() {
       setEquipmentModel(localStorage.getItem("equipmentModelRetoma") || "");
 
       setLoading(true);
+
+      if (initialDateAux) {
+        initialDateAux = dayjs(initialDateAux).toDate();
+      }
+      if (finalDateAux) {
+        finalDateAux = dayjs(finalDateAux).toDate();
+      }
+
       getRequestRetomas({
         page,
         initialDate:
@@ -166,8 +175,20 @@ export default function RetomaRequestsTable() {
       e.target.elements.equipmentModel.value
     );
 
-    console.log(initialDate);
-    console.log(finalDate);
+    const initialDateSubmit = {
+      initialDate: initialDate.initialDate
+    };
+    const finalDateSubmit = { finalDate: finalDate.finalDate };
+
+    if (initialDateSubmit.initialDate) {
+      localStorage.setItem("initialDateRetoma", initialDateSubmit.initialDate);
+
+      initialDateSubmit.initialDate = new Date(initialDateSubmit.initialDate);
+    }
+    if (finalDateSubmit.finalDate) {
+      localStorage.setItem("finalDateRetoma", finalDateSubmit.finalDate);
+      finalDateSubmit.finalDate = new Date(finalDateSubmit.finalDate);
+    }
 
     getRequestRetomas({
       page: 1,
