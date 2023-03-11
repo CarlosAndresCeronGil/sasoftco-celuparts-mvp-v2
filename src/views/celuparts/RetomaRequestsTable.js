@@ -571,6 +571,7 @@ export default function RetomaRequestsTable() {
               <th>Datos equipo</th>
               <th>Estado de cotización</th>
               <th>Estado de solicitud</th>
+              <th>Técnico asociado</th>
               {JSON.parse(localStorage.getItem("user")).role != "tecnico" && (
                 <th>Valor de retoma</th>
               )}
@@ -589,6 +590,7 @@ export default function RetomaRequestsTable() {
             </tr>
           </thead>
           <tbody>
+            {console.log("retima", requests.requests)}
             {requests.requests.map((tdata, index) =>
               tdata.requestType === "Retoma" ? (
                 <tr key={index} className="border-top">
@@ -610,6 +612,16 @@ export default function RetomaRequestsTable() {
                                         <td>{tdata.deliveryAddress}</td> */}
                   <td>{tdata.statusQuote}</td>
                   <td>{tdata.requestStatus[0].status}</td>
+                  {JSON.parse(localStorage.getItem("user")).role !=
+                    "mensajero" && (
+                    <td>
+                      {tdata.retoma[0].technician != null
+                        ? tdata.retoma[0].technician.names +
+                          " " +
+                          tdata.retoma[0].technician.surnames
+                        : "Sin técnico asociado"}
+                    </td>
+                  )}
                   {JSON.parse(localStorage.getItem("user")).role !=
                     "tecnico" && <td>{tdata.retoma[0].retomaQuote}</td>}
                   {/* <td>
@@ -682,6 +694,7 @@ export default function RetomaRequestsTable() {
                     </td>
                   ) : null} */}
                   <td>
+                    {console.log("retoma", tdata)}
                     <Link
                       to={`/home/update-state-retoma`}
                       state={{
@@ -696,7 +709,8 @@ export default function RetomaRequestsTable() {
                             tdata.equipment.equipmentBrand +
                             " " +
                             tdata.equipment.modelOrReference,
-                          imeiOrSerial: tdata.equipment.imeiOrSerial
+                          imeiOrSerial: tdata.equipment.imeiOrSerial,
+                          technician: tdata.retoma[0].idTechnician
                         }
                       }}
                     >

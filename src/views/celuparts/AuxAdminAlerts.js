@@ -5,7 +5,7 @@ import BreadCrumbsCeluparts from "../../layouts/breadcrumbs/BreadCrumbsCeluparts
 import getRequestNotificationToAdmin from "../../services/getRequestNotificationToAdmin";
 import putRequestNotification from "../../services/putRequestNotification";
 
-export default function AdminAlerts() {
+export default function AuxAdminAlerts() {
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -14,7 +14,7 @@ export default function AdminAlerts() {
     getRequestNotificationToAdmin()
       .then(response => {
         setAlerts(
-          response.filter(alert => alert.notificationType === "to_admin")
+          response.filter(alert => alert.notificationType === "to_aux_admin")
         );
         setLoading(false);
       })
@@ -45,7 +45,9 @@ export default function AdminAlerts() {
     });
     getRequestNotificationToAdmin()
       .then(data => {
-        setAlerts(data.filter(alert => alert.notificationType === "to_admin"));
+        setAlerts(
+          data.filter(alert => alert.notificationType === "to_aux_admin")
+        );
       })
       .catch(error => console.log(error));
   }, [loading]);
@@ -53,7 +55,7 @@ export default function AdminAlerts() {
   return (
     <div>
       {console.log(alerts)}
-      <BreadCrumbsCeluparts breadcrumbName="Alerta Administrador" />
+      <BreadCrumbsCeluparts breadcrumbName="Alerta Auxiliar Administrativo" />
       <Card>
         <CardTitle tag="h6" className="border-bottom p-3 mb-0">
           <i className="bi bi-bell me-2"> </i>
@@ -66,7 +68,7 @@ export default function AdminAlerts() {
             </Alert>
           ) : (
             alerts.map((tdata, index) =>
-              tdata.notificationType === "to_admin" &&
+              tdata.notificationType === "to_aux_admin" &&
               tdata.wasReviewed === false ? (
                 <Alert color="success" key={index}>
                   {tdata.message}

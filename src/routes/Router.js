@@ -1,376 +1,816 @@
 /* eslint-disable */
-import { lazy } from 'react';
-import { Navigate } from 'react-router-dom';
-import Loadable from '../layouts/loader/Loadable';
+import { lazy } from "react";
+import { Navigate } from "react-router-dom";
+import Loadable from "../layouts/loader/Loadable";
+import AuxAdminAlerts from "../views/celuparts/AuxAdminAlerts";
 
 export function Router() {
   /****Layouts*****/
 
-  const FullLayout = Loadable(lazy(() => import('../layouts/FullLayout')));
-  const BlankLayout = Loadable(lazy(() => import('../layouts/BlankLayout')));
+  const FullLayout = Loadable(lazy(() => import("../layouts/FullLayout")));
+  const BlankLayout = Loadable(lazy(() => import("../layouts/BlankLayout")));
   /***** Pages ****/
 
-  const Dashboard1 = Loadable(lazy(() => import('../views/dashboards/Dashboard1')));
-  const Dashboard2 = Loadable(lazy(() => import('../views/dashboards/Dashboard2')));
-  const Dashboard3 = Loadable(lazy(() => import('../views/dashboards/Dashboard3')));
-  const Dashboard4 = Loadable(lazy(() => import('../views/dashboards/Dashboard4')));
-  const About = Loadable(lazy(() => import('../views/About')));
+  const Dashboard1 = Loadable(
+    lazy(() => import("../views/dashboards/Dashboard1"))
+  );
+  const Dashboard2 = Loadable(
+    lazy(() => import("../views/dashboards/Dashboard2"))
+  );
+  const Dashboard3 = Loadable(
+    lazy(() => import("../views/dashboards/Dashboard3"))
+  );
+  const Dashboard4 = Loadable(
+    lazy(() => import("../views/dashboards/Dashboard4"))
+  );
+  const About = Loadable(lazy(() => import("../views/About")));
 
   /***** Apps ****/
-  const Notes = Loadable(lazy(() => import('../views/apps/notes/Notes')));
-  const Chat = Loadable(lazy(() => import('../views/apps/chat/Chat')));
-  const Contacts = Loadable(lazy(() => import('../views/apps/contacts/Contacts')));
-  const Calendar = Loadable(lazy(() => import('../views/apps/calendar/CalendarApp')));
-  const Email = Loadable(lazy(() => import('../views/apps/email/Email')));
-  const Shop = Loadable(lazy(() => import('../views/apps/ecommerce/Shop')));
-  const ShopDetail = Loadable(lazy(() => import('../views/apps/ecommerce/ShopDetail')));
-  const Treeview = Loadable(lazy(() => import('../views/apps/treeview/TreeView')));
-  const TicketList = Loadable(lazy(() => import('../views/apps/ticket/TicketList')));
-  const TicketDetail = Loadable(lazy(() => import('../views/apps/ticket/TicketDetail')));
+  const Notes = Loadable(lazy(() => import("../views/apps/notes/Notes")));
+  const Chat = Loadable(lazy(() => import("../views/apps/chat/Chat")));
+  const Contacts = Loadable(
+    lazy(() => import("../views/apps/contacts/Contacts"))
+  );
+  const Calendar = Loadable(
+    lazy(() => import("../views/apps/calendar/CalendarApp"))
+  );
+  const Email = Loadable(lazy(() => import("../views/apps/email/Email")));
+  const Shop = Loadable(lazy(() => import("../views/apps/ecommerce/Shop")));
+  const ShopDetail = Loadable(
+    lazy(() => import("../views/apps/ecommerce/ShopDetail"))
+  );
+  const Treeview = Loadable(
+    lazy(() => import("../views/apps/treeview/TreeView"))
+  );
+  const TicketList = Loadable(
+    lazy(() => import("../views/apps/ticket/TicketList"))
+  );
+  const TicketDetail = Loadable(
+    lazy(() => import("../views/apps/ticket/TicketDetail"))
+  );
 
   /***** Ui Elements ****/
-  const Alerts = Loadable(lazy(() => import('../views/ui/Alerts')));
-  const Badges = Loadable(lazy(() => import('../views/ui/Badges')));
-  const Buttons = Loadable(lazy(() => import('../views/ui/Buttons')));
-  const Cards = Loadable(lazy(() => import('../views/ui/Cards')));
-  const Grid = Loadable(lazy(() => import('../views/ui/Grid')));
-  const Tables = Loadable(lazy(() => import('../views/ui/Tables')));
-  const Forms = Loadable(lazy(() => import('../views/ui/Forms')));
-  const Breadcrumbs = Loadable(lazy(() => import('../views/ui/Breadcrumbs')));
-  const Dropdowns = Loadable(lazy(() => import('../views/ui/DropDown')));
-  const BtnGroup = Loadable(lazy(() => import('../views/ui/BtnGroup')));
-  const Collapse = Loadable(lazy(() => import('../views/ui/Collapse')));
-  const ListGroup = Loadable(lazy(() => import('../views/ui/ListGroup')));
-  const Modal = Loadable(lazy(() => import('../views/ui/Modal')));
-  const Navbar = Loadable(lazy(() => import('../views/ui/Navbar')));
-  const Nav = Loadable(lazy(() => import('../views/ui/Nav')));
-  const Pagination = Loadable(lazy(() => import('../views/ui/Pagination')));
-  const Popover = Loadable(lazy(() => import('../views/ui/Popover')));
-  const Progress = Loadable(lazy(() => import('../views/ui/Progress')));
-  const Spinner = Loadable(lazy(() => import('../views/ui/Spinner')));
-  const Tabs = Loadable(lazy(() => import('../views/ui/Tabs')));
-  const Toasts = Loadable(lazy(() => import('../views/ui/Toasts')));
-  const Tooltip = Loadable(lazy(() => import('../views/ui/Tooltip')));
+  const Alerts = Loadable(lazy(() => import("../views/ui/Alerts")));
+  const Badges = Loadable(lazy(() => import("../views/ui/Badges")));
+  const Buttons = Loadable(lazy(() => import("../views/ui/Buttons")));
+  const Cards = Loadable(lazy(() => import("../views/ui/Cards")));
+  const Grid = Loadable(lazy(() => import("../views/ui/Grid")));
+  const Tables = Loadable(lazy(() => import("../views/ui/Tables")));
+  const Forms = Loadable(lazy(() => import("../views/ui/Forms")));
+  const Breadcrumbs = Loadable(lazy(() => import("../views/ui/Breadcrumbs")));
+  const Dropdowns = Loadable(lazy(() => import("../views/ui/DropDown")));
+  const BtnGroup = Loadable(lazy(() => import("../views/ui/BtnGroup")));
+  const Collapse = Loadable(lazy(() => import("../views/ui/Collapse")));
+  const ListGroup = Loadable(lazy(() => import("../views/ui/ListGroup")));
+  const Modal = Loadable(lazy(() => import("../views/ui/Modal")));
+  const Navbar = Loadable(lazy(() => import("../views/ui/Navbar")));
+  const Nav = Loadable(lazy(() => import("../views/ui/Nav")));
+  const Pagination = Loadable(lazy(() => import("../views/ui/Pagination")));
+  const Popover = Loadable(lazy(() => import("../views/ui/Popover")));
+  const Progress = Loadable(lazy(() => import("../views/ui/Progress")));
+  const Spinner = Loadable(lazy(() => import("../views/ui/Spinner")));
+  const Tabs = Loadable(lazy(() => import("../views/ui/Tabs")));
+  const Toasts = Loadable(lazy(() => import("../views/ui/Toasts")));
+  const Tooltip = Loadable(lazy(() => import("../views/ui/Tooltip")));
 
   /***** Form Layout Pages ****/
-  const FormBasic = Loadable(lazy(() => import('../views/form-layouts/FormBasic')));
-  const FormGrid = Loadable(lazy(() => import('../views/form-layouts/FormGrid')));
-  const FormGroup = Loadable(lazy(() => import('../views/form-layouts/FormGroup')));
-  const FormInput = Loadable(lazy(() => import('../views/form-layouts/FormInput')));
-  const FormEditor = Loadable(lazy(() => import('../views/form-editor/FormEditor')));
+  const FormBasic = Loadable(
+    lazy(() => import("../views/form-layouts/FormBasic"))
+  );
+  const FormGrid = Loadable(
+    lazy(() => import("../views/form-layouts/FormGrid"))
+  );
+  const FormGroup = Loadable(
+    lazy(() => import("../views/form-layouts/FormGroup"))
+  );
+  const FormInput = Loadable(
+    lazy(() => import("../views/form-layouts/FormInput"))
+  );
+  const FormEditor = Loadable(
+    lazy(() => import("../views/form-editor/FormEditor"))
+  );
 
   /***** Form Pickers Pages ****/
-  const Datepicker = Loadable(lazy(() => import('../views/form-pickers/DateTimePicker')));
-  const TagSelect = Loadable(lazy(() => import('../views/form-pickers/TagSelect')));
+  const Datepicker = Loadable(
+    lazy(() => import("../views/form-pickers/DateTimePicker"))
+  );
+  const TagSelect = Loadable(
+    lazy(() => import("../views/form-pickers/TagSelect"))
+  );
 
   /***** Form Validation Pages ****/
-  const FormValidate = Loadable(lazy(() => import('../views/form-validation/FormValidation')));
-  const FormSteps = Loadable(lazy(() => import('../views/form-steps/Steps')));
+  const FormValidate = Loadable(
+    lazy(() => import("../views/form-validation/FormValidation"))
+  );
+  const FormSteps = Loadable(lazy(() => import("../views/form-steps/Steps")));
 
   /***** Table Pages ****/
-  const Basictable = Loadable(lazy(() => import('../views/tables/TableBasic')));
-  const CustomReactTable = Loadable(lazy(() => import('../views/tables/CustomReactTable')));
-  const ReactBootstrapTable = Loadable(lazy(() => import('../views/tables/ReactBootstrapTable')));
+  const Basictable = Loadable(lazy(() => import("../views/tables/TableBasic")));
+  const CustomReactTable = Loadable(
+    lazy(() => import("../views/tables/CustomReactTable"))
+  );
+  const ReactBootstrapTable = Loadable(
+    lazy(() => import("../views/tables/ReactBootstrapTable"))
+  );
 
   /***** Chart Pages ****/
-  const ApexCharts = Loadable(lazy(() => import('../views/charts/ApexCharts')));
-  const ChartJs = Loadable(lazy(() => import('../views/charts/ChartJs')));
+  const ApexCharts = Loadable(lazy(() => import("../views/charts/ApexCharts")));
+  const ChartJs = Loadable(lazy(() => import("../views/charts/ChartJs")));
 
   /***** Sample Pages ****/
-  const StarterKit = Loadable(lazy(() => import('../views/sample-pages/StarterKit')));
-  const Profile = Loadable(lazy(() => import('../views/sample-pages/Profile')));
-  const Gallery = Loadable(lazy(() => import('../views/sample-pages/Gallery')));
-  const SearchResult = Loadable(lazy(() => import('../views/sample-pages/SearchResult')));
-  const HelperClass = Loadable(lazy(() => import('../views/sample-pages/HelperClass')));
+  const StarterKit = Loadable(
+    lazy(() => import("../views/sample-pages/StarterKit"))
+  );
+  const Profile = Loadable(lazy(() => import("../views/sample-pages/Profile")));
+  const Gallery = Loadable(lazy(() => import("../views/sample-pages/Gallery")));
+  const SearchResult = Loadable(
+    lazy(() => import("../views/sample-pages/SearchResult"))
+  );
+  const HelperClass = Loadable(
+    lazy(() => import("../views/sample-pages/HelperClass"))
+  );
 
   /***** Icon Pages ****/
-  const Bootstrap = Loadable(lazy(() => import('../views/icons/Bootstrap')));
-  const Feather = Loadable(lazy(() => import('../views/icons/Feather')));
+  const Bootstrap = Loadable(lazy(() => import("../views/icons/Bootstrap")));
+  const Feather = Loadable(lazy(() => import("../views/icons/Feather")));
 
   /***** Map Pages ****/
-  const CustomVectorMap = Loadable(lazy(() => import('../views/maps/CustomVectorMap')));
+  const CustomVectorMap = Loadable(
+    lazy(() => import("../views/maps/CustomVectorMap"))
+  );
 
   /***** Widget Pages ****/
-  const Widget = Loadable(lazy(() => import('../views/widget/Widget')));
+  const Widget = Loadable(lazy(() => import("../views/widget/Widget")));
 
   /***** CASL Access Control ****/
-  const CASL = Loadable(lazy(() => import('../views/apps/accessControlCASL/AccessControl')));
+  const CASL = Loadable(
+    lazy(() => import("../views/apps/accessControlCASL/AccessControl"))
+  );
 
   /***** Auth Pages ****/
-  const Error = Loadable(lazy(() => import('../views/auth/Error')));
-  const RegisterFormik = Loadable(lazy(() => import('../views/auth/RegisterFormik')));
-  const LoginFormik = Loadable(lazy(() => import('../views/auth/LoginFormik')));
-  const Maintanance = Loadable(lazy(() => import('../views/auth/Maintanance')));
-  const LockScreen = Loadable(lazy(() => import('../views/auth/LockScreen')));
-  const RecoverPassword = Loadable(lazy(() => import('../views/auth/RecoverPassword')));
-  const ChangePassword = Loadable(lazy(() => import('../views/auth/ChangePassword')));
+  const Error = Loadable(lazy(() => import("../views/auth/Error")));
+  const RegisterFormik = Loadable(
+    lazy(() => import("../views/auth/RegisterFormik"))
+  );
+  const LoginFormik = Loadable(lazy(() => import("../views/auth/LoginFormik")));
+  const Maintanance = Loadable(lazy(() => import("../views/auth/Maintanance")));
+  const LockScreen = Loadable(lazy(() => import("../views/auth/LockScreen")));
+  const RecoverPassword = Loadable(
+    lazy(() => import("../views/auth/RecoverPassword"))
+  );
+  const ChangePassword = Loadable(
+    lazy(() => import("../views/auth/ChangePassword"))
+  );
 
   /***** Celuparts Pages ****/
-  const SignIn = lazy(() => import('../views/celuparts/SignIn'));
-  const SignUp = lazy(() => import('../views/celuparts/SignUp'));
-  const UsersTable = lazy(() => import('../views/celuparts/UsersTable'));
-  const RepairRequestsTable = lazy(() => import('../views/celuparts/RepairRequestsTable'));
-  const RetomaRequestsTable = lazy(() => import('../views/celuparts/RetomaRequestsTable'));
-  const EquipmentsTable = lazy(() => import('../views/celuparts/EquipmentsTable'));
-  const PickupsTable = lazy(() => import('../views/celuparts/PickupsTable'));
-  const RequestStatusTable = lazy(() => import('../views/celuparts/RequestStatusTable'));
-  const TechniciansTable = lazy(() => import('../views/celuparts/TechniciansTable'));
-  const RepairTable = lazy(() => import('../views/celuparts/RepairTable'));
-  const RequestForm = lazy(() => import('../views/celuparts/RequestForm'));
-  const UpdateRepairForm = lazy(() => import('../views/celuparts/UpdateRepairForm'));
-  const UpdateStateRepair = lazy(() => import('../views/celuparts/UpdateStatesRepair'));
-  const UpdateStateRetoma = lazy(() => import('../views/celuparts/UpdateStatesRetoma'));
-  const UpdateRetomaForm = lazy(() => import('../views/celuparts/UpdateRetomaForm'));
-  const RequestStatusForm = lazy(() => import('../views/celuparts/RequestStatusForm'));
-  const UserRepairRequests = lazy(() => import('../views/celuparts/UserRepairRequests'));
-  const UserRetomaRequests = lazy(() => import('../views/celuparts/UserRetomaRequests'));
-  const RepairPaymentForm = lazy(() => import('../views/celuparts/RepairPaymentForm'));
-  const RetomaPaymentForm = lazy(() => import('../views/celuparts/RetomaPaymentForm'));
-  const SiigoProductsTable = lazy(() => import('../views/celuparts/SiigoProductsTable'));
-  const SiigoProductForm = lazy(() => import('../views/celuparts/SiigoProductForm'));
-  const SiigoCustomersTable = lazy(() => import('../views/celuparts/SiigoCustomersTable'));
-  const SiigoCustomerForm = lazy(() => import('../views/celuparts/SiigoCustomerForm'));
-  const SiigoInvoicesTables = lazy(() => import('../views/celuparts/SiigoInvoicesTables'));
-  const SiigoInvoiceForm = lazy(() => import('../views/celuparts/SiigoInvoiceForm'));
-  const SiigoCreditNotesTable = lazy(() => import('../views/celuparts/SiigoCreditNotesTable'));
-  const SiigoCreditNotesForm = lazy(() => import('../views/celuparts/SiigoCreditNotesForm'));
-  const SiigoVouchersTable = lazy(() => import('../views/celuparts/SiigoVouchersTable'));
-  const SiigoVoucherForm = lazy(() => import('../views/celuparts/SiigoVoucherForm'));
-  const SiigoJournalsTable = lazy(() => import('../views/celuparts/SiigoJournalsTable'));
-  const SiigoJournalsForm = lazy(() => import('../views/celuparts/SiigoJournalsForm'));
-  const SiigoAccountGroupsTable = lazy(() => import('../views/celuparts/SiigoAccountGroupsTable'));
-  const SiigoTaxesTable = lazy(() => import('../views/celuparts/SiigoTaxesTable'));
-  const SiigoPriceListsTable = lazy(() => import('../views/celuparts/SiigoPriceListsTable'));
-  const SiigoWareHousesTable = lazy(() => import('../views/celuparts/SiigoWareHousesTable'));
-  const SiigoUsersTable = lazy(() => import('../views/celuparts/SiigoUsersTable'));
-  const SiigoCostCentersTable = lazy(() => import('../views/celuparts/SiigoCostCentersTable'));
-  const SiigoFixedAssetsTable = lazy(() => import('../views/celuparts/SiigoFixedAssetsTable'));
+  const SignIn = lazy(() => import("../views/celuparts/SignIn"));
+  const SignUp = lazy(() => import("../views/celuparts/SignUp"));
+  const UsersTable = lazy(() => import("../views/celuparts/UsersTable"));
+  const RepairRequestsTable = lazy(() =>
+    import("../views/celuparts/RepairRequestsTable")
+  );
+  const RetomaRequestsTable = lazy(() =>
+    import("../views/celuparts/RetomaRequestsTable")
+  );
+  const EquipmentsTable = lazy(() =>
+    import("../views/celuparts/EquipmentsTable")
+  );
+  const PickupsTable = lazy(() => import("../views/celuparts/PickupsTable"));
+  const RequestStatusTable = lazy(() =>
+    import("../views/celuparts/RequestStatusTable")
+  );
+  const TechniciansTable = lazy(() =>
+    import("../views/celuparts/TechniciansTable")
+  );
+  const RepairTable = lazy(() => import("../views/celuparts/RepairTable"));
+  const RequestForm = lazy(() => import("../views/celuparts/RequestForm"));
+  const UpdateRepairForm = lazy(() =>
+    import("../views/celuparts/UpdateRepairForm")
+  );
+  const UpdateStateRepair = lazy(() =>
+    import("../views/celuparts/UpdateStatesRepair")
+  );
+  const UpdateStateRetoma = lazy(() =>
+    import("../views/celuparts/UpdateStatesRetoma")
+  );
+  const UpdateRetomaForm = lazy(() =>
+    import("../views/celuparts/UpdateRetomaForm")
+  );
+  const RequestStatusForm = lazy(() =>
+    import("../views/celuparts/RequestStatusForm")
+  );
+  const UserRepairRequests = lazy(() =>
+    import("../views/celuparts/UserRepairRequests")
+  );
+  const UserRetomaRequests = lazy(() =>
+    import("../views/celuparts/UserRetomaRequests")
+  );
+  const RepairPaymentForm = lazy(() =>
+    import("../views/celuparts/RepairPaymentForm")
+  );
+  const RetomaPaymentForm = lazy(() =>
+    import("../views/celuparts/RetomaPaymentForm")
+  );
+  const SiigoProductsTable = lazy(() =>
+    import("../views/celuparts/SiigoProductsTable")
+  );
+  const SiigoProductForm = lazy(() =>
+    import("../views/celuparts/SiigoProductForm")
+  );
+  const SiigoCustomersTable = lazy(() =>
+    import("../views/celuparts/SiigoCustomersTable")
+  );
+  const SiigoCustomerForm = lazy(() =>
+    import("../views/celuparts/SiigoCustomerForm")
+  );
+  const SiigoInvoicesTables = lazy(() =>
+    import("../views/celuparts/SiigoInvoicesTables")
+  );
+  const SiigoInvoiceForm = lazy(() =>
+    import("../views/celuparts/SiigoInvoiceForm")
+  );
+  const SiigoCreditNotesTable = lazy(() =>
+    import("../views/celuparts/SiigoCreditNotesTable")
+  );
+  const SiigoCreditNotesForm = lazy(() =>
+    import("../views/celuparts/SiigoCreditNotesForm")
+  );
+  const SiigoVouchersTable = lazy(() =>
+    import("../views/celuparts/SiigoVouchersTable")
+  );
+  const SiigoVoucherForm = lazy(() =>
+    import("../views/celuparts/SiigoVoucherForm")
+  );
+  const SiigoJournalsTable = lazy(() =>
+    import("../views/celuparts/SiigoJournalsTable")
+  );
+  const SiigoJournalsForm = lazy(() =>
+    import("../views/celuparts/SiigoJournalsForm")
+  );
+  const SiigoAccountGroupsTable = lazy(() =>
+    import("../views/celuparts/SiigoAccountGroupsTable")
+  );
+  const SiigoTaxesTable = lazy(() =>
+    import("../views/celuparts/SiigoTaxesTable")
+  );
+  const SiigoPriceListsTable = lazy(() =>
+    import("../views/celuparts/SiigoPriceListsTable")
+  );
+  const SiigoWareHousesTable = lazy(() =>
+    import("../views/celuparts/SiigoWareHousesTable")
+  );
+  const SiigoUsersTable = lazy(() =>
+    import("../views/celuparts/SiigoUsersTable")
+  );
+  const SiigoCostCentersTable = lazy(() =>
+    import("../views/celuparts/SiigoCostCentersTable")
+  );
+  const SiigoFixedAssetsTable = lazy(() =>
+    import("../views/celuparts/SiigoFixedAssetsTable")
+  );
 
-  const CourierAlerts = lazy(() => import('../views/celuparts/CourierAlerts'));
-  const CustomerAlerts = lazy(() => import('../views/celuparts/CustomerAlerts'));
-  const TechnicianAlerts = lazy(() => import('../views/celuparts/TechnicianAlerts'));
-  const AdminAlerts = lazy(() => import('../views/celuparts/AdminAlerts'));
-  const Home = lazy(() => import('../views/celuparts/Home'));
-  const RequestRepairForm = lazy(() => import('../views/celuparts/RequestRepairForm'));
-  const RequestRetomaForm = lazy(() => import('../views/celuparts/RequestRetomaForm'));
-  const EquipmentDetail = lazy(() => import('../views/celuparts/EquipmentDetail'));
-  const RequestHistoryTable = lazy(() => import('../views/celuparts/RequestHistoryTable'));
-  const RetomaPaymentsTable = lazy(() => import('../views/celuparts/RetomaPaymentsTable'));
-  const RepairStepts = lazy(() => import('../views/celuparts/RepariRequestSteps/RequestSteps'));
-  const AllRequestsTable = lazy(() => import('../views/celuparts/AllRequestsTable'));
+  const CourierAlerts = lazy(() => import("../views/celuparts/CourierAlerts"));
+  const CustomerAlerts = lazy(() =>
+    import("../views/celuparts/CustomerAlerts")
+  );
+  const TechnicianAlerts = lazy(() =>
+    import("../views/celuparts/TechnicianAlerts")
+  );
+  const AdminAlerts = lazy(() => import("../views/celuparts/AdminAlerts"));
+  const Home = lazy(() => import("../views/celuparts/Home"));
+  const RequestRepairForm = lazy(() =>
+    import("../views/celuparts/RequestRepairForm")
+  );
+  const RequestRetomaForm = lazy(() =>
+    import("../views/celuparts/RequestRetomaForm")
+  );
+  const EquipmentDetail = lazy(() =>
+    import("../views/celuparts/EquipmentDetail")
+  );
+  const RequestHistoryTable = lazy(() =>
+    import("../views/celuparts/RequestHistoryTable")
+  );
+  const RetomaPaymentsTable = lazy(() =>
+    import("../views/celuparts/RetomaPaymentsTable")
+  );
+  const RepairStepts = lazy(() =>
+    import("../views/celuparts/RepariRequestSteps/RequestSteps")
+  );
+  const AllRequestsTable = lazy(() =>
+    import("../views/celuparts/AllRequestsTable")
+  );
 
-  const DashboardCeluparts = lazy(() => import('../views/celuparts/DashboardCeluparts'));
+  const DashboardCeluparts = lazy(() =>
+    import("../views/celuparts/DashboardCeluparts")
+  );
 
   /*****Routes******/
   const ThemeRoutes = [
     {
-      path: '/',
+      path: "/",
       element: <BlankLayout />,
       children: [
-        { path: '', element: <LoginFormik /> },
-        { path: '404', element: <Error /> },
-        { path: '*', element: <Navigate to="/404" /> },
-        { path: 'registerformik', element: <RegisterFormik /> },
-        { path: 'maintanance', element: <Maintanance /> },
-        { path: 'lockscreen', element: <LockScreen /> },
-        { path: 'recoverpassword', element: <RecoverPassword /> },
-        { path: 'changepassword/:token', element: <ChangePassword /> },
-      ],
-    },
+        { path: "", element: <LoginFormik /> },
+        { path: "404", element: <Error /> },
+        { path: "*", element: <Navigate to="/404" /> },
+        { path: "registerformik", element: <RegisterFormik /> },
+        { path: "maintanance", element: <Maintanance /> },
+        { path: "lockscreen", element: <LockScreen /> },
+        { path: "recoverpassword", element: <RecoverPassword /> },
+        { path: "changepassword/:token", element: <ChangePassword /> }
+      ]
+    }
   ];
 
-  if (JSON.parse(localStorage.getItem('user')) !== null) {
-    JSON.parse(localStorage.getItem('user')).role === 'user'
+  if (JSON.parse(localStorage.getItem("user")) !== null) {
+    JSON.parse(localStorage.getItem("user")).role === "user"
       ? ThemeRoutes.push({
-          path: '/home',
+          path: "/home",
           element: <FullLayout />,
           children: [
-            { path: '/home', name: 'Home', element: <Navigate to="/dashboards/dashboard1" /> },
-            { path: '/home/login', name: 'login', exact: true, element: <SignIn /> },
             {
-              path: '/home/dashboards/dashboard1',
-              name: 'Dashboard Celuparts',
-              exact: true,
-              element: <DashboardCeluparts />,
+              path: "/home",
+              name: "Home",
+              element: <Navigate to="/dashboards/dashboard1" />
             },
             {
-              path: '/home/user-alerts',
-              name: 'Notificaciones',
+              path: "/home/login",
+              name: "login",
               exact: true,
-              element: <CustomerAlerts />,
+              element: <SignIn />
             },
-            { path: '/home/request-repair-form', exact: true, element: <RequestRepairForm /> },
+            {
+              path: "/home/dashboards/dashboard1",
+              name: "Dashboard Celuparts",
+              exact: true,
+              element: <DashboardCeluparts />
+            },
+            {
+              path: "/home/user-alerts",
+              name: "Notificaciones",
+              exact: true,
+              element: <CustomerAlerts />
+            },
+            {
+              path: "/home/request-repair-form",
+              exact: true,
+              element: <RequestRepairForm />
+            },
             // { path: "/home/request-repair-form", exact: true, element: <RepairStepts /> },
-            { path: '/home/request-retoma-form', exact: true, element: <RequestRetomaForm /> },
-            { path: '/home/user-repair-requests', exact: true, element: <UserRepairRequests /> },
-            { path: '/home/user-retoma-requests', exact: true, element: <UserRetomaRequests /> },
             {
-              path: '/home/request-history-table/:id',
+              path: "/home/request-retoma-form",
               exact: true,
-              element: <RequestHistoryTable />,
+              element: <RequestRetomaForm />
             },
-          ],
+            {
+              path: "/home/user-repair-requests",
+              exact: true,
+              element: <UserRepairRequests />
+            },
+            {
+              path: "/home/user-retoma-requests",
+              exact: true,
+              element: <UserRetomaRequests />
+            },
+            {
+              path: "/home/request-history-table/:id",
+              exact: true,
+              element: <RequestHistoryTable />
+            }
+          ]
         })
-      : JSON.parse(localStorage.getItem('user')).role === 'admin'
+      : JSON.parse(localStorage.getItem("user")).role === "admin"
       ? ThemeRoutes.push({
-          path: '/home',
+          path: "/home",
           exact: true,
           element: <FullLayout />,
           children: [
-            { path: '/home', exact: true, element: <Home /> },
+            { path: "/home", exact: true, element: <Home /> },
             {
-              path: '/home/dashboards/dashboard1',
-              name: 'Dashboard Celuparts',
+              path: "/home/dashboards/dashboard1",
+              name: "Dashboard Celuparts",
               exact: true,
-              element: <DashboardCeluparts />,
+              element: <DashboardCeluparts />
             },
-            { path: '/home/users-table', exact: true, element: <UsersTable /> },
-            { path: '/home/repair-requests-table', exact: true, element: <RepairRequestsTable /> },
-            { path: '/home/retoma-requests-table', exact: true, element: <RetomaRequestsTable /> },
-            { path: '/home/equipments-table', exact: true, element: <EquipmentsTable /> },
-            { path: '/home/request-status-table', exact: true, element: <RequestStatusTable /> },
-            { path: '/home/technicians-table', exact: true, element: <TechniciansTable /> },
-            { path: '/home/pickups-table', exact: true, element: <PickupsTable /> },
-            { path: '/home/repair-table', exact: true, element: <RepairTable /> },
-            { path: '/home/update-repair-form', exact: true, element: <UpdateRepairForm /> },
-            { path: '/home/update-state-repair', exact: true, element: <UpdateStateRepair /> },
-            { path: '/home/update-state-retoma', exact: true, element: <UpdateStateRetoma /> },
-            { path: '/home/request-status-form', exact: true, element: <RequestStatusForm /> },
-            { path: '/home/request-status-form/:id', exact: true, element: <RequestStatusForm /> },
-            { path: '/home/update-repair-form/:id', exact: true, element: <UpdateRepairForm /> },
-            { path: '/home/update-retoma-form/:id', exact: true, element: <UpdateRetomaForm /> },
-            { path: '/home/repair-payment-form/:id', exact: true, element: <RepairPaymentForm /> },
-            { path: '/home/retoma-payment-form/:id', exact: true, element: <RetomaPaymentForm /> },
-            { path: '/home/siigo-products-table', exact: true, element: <SiigoProductsTable /> },
-            { path: '/home/siigo-product-form', exact: true, element: <SiigoProductForm /> },
-            { path: '/home/siigo-customers-table', exact: true, element: <SiigoCustomersTable /> },
-            { path: '/home/siigo-customer-form', exact: true, element: <SiigoCustomerForm /> },
-            { path: '/home/siigo-invoices-table', exact: true, element: <SiigoInvoicesTables /> },
-            { path: '/home/siigo-invoices-form', exact: true, element: <SiigoInvoiceForm /> },
+            { path: "/home/users-table", exact: true, element: <UsersTable /> },
             {
-              path: '/home/siigo-credit-notes-table',
+              path: "/home/repair-requests-table",
               exact: true,
-              element: <SiigoCreditNotesTable />,
+              element: <RepairRequestsTable />
             },
             {
-              path: '/home/siigo-credit-notes-form',
+              path: "/home/retoma-requests-table",
               exact: true,
-              element: <SiigoCreditNotesForm />,
+              element: <RetomaRequestsTable />
             },
-            { path: '/home/siigo-vouchers-table', exact: true, element: <SiigoVouchersTable /> },
-            { path: '/home/siigo-voucher-form', exact: true, element: <SiigoVoucherForm /> },
-            { path: '/home/siigo-journals-table', exact: true, element: <SiigoJournalsTable /> },
-            { path: '/home/siigo-journal-form', exact: true, element: <SiigoJournalsForm /> },
+            {
+              path: "/home/equipments-table",
+              exact: true,
+              element: <EquipmentsTable />
+            },
+            {
+              path: "/home/request-status-table",
+              exact: true,
+              element: <RequestStatusTable />
+            },
+            {
+              path: "/home/technicians-table",
+              exact: true,
+              element: <TechniciansTable />
+            },
+            {
+              path: "/home/pickups-table",
+              exact: true,
+              element: <PickupsTable />
+            },
+            {
+              path: "/home/repair-table",
+              exact: true,
+              element: <RepairTable />
+            },
+            {
+              path: "/home/update-repair-form",
+              exact: true,
+              element: <UpdateRepairForm />
+            },
+            {
+              path: "/home/update-state-repair",
+              exact: true,
+              element: <UpdateStateRepair />
+            },
+            {
+              path: "/home/update-state-retoma",
+              exact: true,
+              element: <UpdateStateRetoma />
+            },
+            {
+              path: "/home/request-status-form",
+              exact: true,
+              element: <RequestStatusForm />
+            },
+            {
+              path: "/home/request-status-form/:id",
+              exact: true,
+              element: <RequestStatusForm />
+            },
+            {
+              path: "/home/update-repair-form/:id",
+              exact: true,
+              element: <UpdateRepairForm />
+            },
+            {
+              path: "/home/update-retoma-form/:id",
+              exact: true,
+              element: <UpdateRetomaForm />
+            },
+            {
+              path: "/home/repair-payment-form/:id",
+              exact: true,
+              element: <RepairPaymentForm />
+            },
+            {
+              path: "/home/retoma-payment-form/:id",
+              exact: true,
+              element: <RetomaPaymentForm />
+            },
+            {
+              path: "/home/siigo-products-table",
+              exact: true,
+              element: <SiigoProductsTable />
+            },
+            {
+              path: "/home/siigo-product-form",
+              exact: true,
+              element: <SiigoProductForm />
+            },
+            {
+              path: "/home/siigo-customers-table",
+              exact: true,
+              element: <SiigoCustomersTable />
+            },
+            {
+              path: "/home/siigo-customer-form",
+              exact: true,
+              element: <SiigoCustomerForm />
+            },
+            {
+              path: "/home/siigo-invoices-table",
+              exact: true,
+              element: <SiigoInvoicesTables />
+            },
+            {
+              path: "/home/siigo-invoices-form",
+              exact: true,
+              element: <SiigoInvoiceForm />
+            },
+            {
+              path: "/home/siigo-credit-notes-table",
+              exact: true,
+              element: <SiigoCreditNotesTable />
+            },
+            {
+              path: "/home/siigo-credit-notes-form",
+              exact: true,
+              element: <SiigoCreditNotesForm />
+            },
+            {
+              path: "/home/siigo-vouchers-table",
+              exact: true,
+              element: <SiigoVouchersTable />
+            },
+            {
+              path: "/home/siigo-voucher-form",
+              exact: true,
+              element: <SiigoVoucherForm />
+            },
+            {
+              path: "/home/siigo-journals-table",
+              exact: true,
+              element: <SiigoJournalsTable />
+            },
+            {
+              path: "/home/siigo-journal-form",
+              exact: true,
+              element: <SiigoJournalsForm />
+            },
             // { path: "/home/siigo-account-groups-table", exact: true, element: <SiigoAccountGroupsTable /> },
-            { path: '/home/siigo-taxes-table', exact: true, element: <SiigoTaxesTable /> },
             {
-              path: '/home/siigo-price-lists-table',
+              path: "/home/siigo-taxes-table",
               exact: true,
-              element: <SiigoPriceListsTable />,
+              element: <SiigoTaxesTable />
             },
             {
-              path: '/home/siigo-ware-houses-table',
+              path: "/home/siigo-price-lists-table",
               exact: true,
-              element: <SiigoWareHousesTable />,
-            },
-            { path: '/home/siigo-users-table', exact: true, element: <SiigoUsersTable /> },
-            {
-              path: '/home/siigo-cost-centers-table',
-              exact: true,
-              element: <SiigoCostCentersTable />,
+              element: <SiigoPriceListsTable />
             },
             {
-              path: '/home/siigo-fixed-assets-table',
+              path: "/home/siigo-ware-houses-table",
               exact: true,
-              element: <SiigoFixedAssetsTable />,
+              element: <SiigoWareHousesTable />
             },
-            { path: '/home/admin-alerts', exact: true, element: <AdminAlerts /> },
-            { path: '/home/equipment-detail/:id', exact: true, element: <EquipmentDetail /> },
-            { path: '/home/retoma-payments-table', exact: true, element: <RetomaPaymentsTable /> },
-          ],
+            {
+              path: "/home/siigo-users-table",
+              exact: true,
+              element: <SiigoUsersTable />
+            },
+            {
+              path: "/home/siigo-cost-centers-table",
+              exact: true,
+              element: <SiigoCostCentersTable />
+            },
+            {
+              path: "/home/siigo-fixed-assets-table",
+              exact: true,
+              element: <SiigoFixedAssetsTable />
+            },
+            {
+              path: "/home/admin-alerts",
+              exact: true,
+              element: <AdminAlerts />
+            },
+            {
+              path: "/home/equipment-detail/:id",
+              exact: true,
+              element: <EquipmentDetail />
+            },
+            {
+              path: "/home/retoma-payments-table",
+              exact: true,
+              element: <RetomaPaymentsTable />
+            }
+          ]
         })
-      : JSON.parse(localStorage.getItem('user')).role === 'aux_admin'
+      : JSON.parse(localStorage.getItem("user")).role === "aux_admin"
       ? ThemeRoutes.push({
-          path: '/home',
+          path: "/home",
           exact: true,
           element: <FullLayout />,
           children: [
-            { path: '/home', exact: true, element: <Home /> },
+            { path: "/home", exact: true, element: <Home /> },
             {
-              path: '/home/dashboards/dashboard1',
-              name: 'Dashboard Celuparts',
+              path: "/home/dashboards/dashboard1",
+              name: "Dashboard Celuparts",
               exact: true,
-              element: <DashboardCeluparts />,
+              element: <DashboardCeluparts />
             },
-            { path: '/home/users-table', exact: true, element: <UsersTable /> },
-            { path: '/home/repair-requests-table', exact: true, element: <RepairRequestsTable /> },
-            { path: '/home/retoma-requests-table', exact: true, element: <RetomaRequestsTable /> },
-            { path: '/home/equipments-table', exact: true, element: <EquipmentsTable /> },
-            { path: '/home/request-status-table', exact: true, element: <RequestStatusTable /> },
-            { path: '/home/technicians-table', exact: true, element: <TechniciansTable /> },
-            { path: '/home/repair-table', exact: true, element: <RepairTable /> },
-            { path: '/home/update-repair-form', exact: true, element: <UpdateRepairForm /> },
-            { path: '/home/request-status-form', exact: true, element: <RequestStatusForm /> },
-            { path: '/home/update-state-repair', exact: true, element: <UpdateStateRepair /> },
-            { path: '/home/update-state-retoma', exact: true, element: <UpdateStateRetoma /> },
-            { path: '/home/request-status-form/:id', exact: true, element: <RequestStatusForm /> },
-            { path: '/home/update-repair-form/:id', exact: true, element: <UpdateRepairForm /> },
-            { path: '/home/update-retoma-form/:id', exact: true, element: <UpdateRetomaForm /> },
-            { path: '/home/repair-payment-form/:id', exact: true, element: <RepairPaymentForm /> },
-            { path: '/home/retoma-payment-form/:id', exact: true, element: <RetomaPaymentForm /> },
-            { path: '/home/admin-alerts', exact: true, element: <AdminAlerts /> },
-            { path: '/home/equipment-detail/:id', exact: true, element: <EquipmentDetail /> },
-            { path: '/home/retoma-payments-table', exact: true, element: <RetomaPaymentsTable /> },
-          ],
+            { path: "/home/users-table", exact: true, element: <UsersTable /> },
+            {
+              path: "/home/repair-requests-table",
+              exact: true,
+              element: <RepairRequestsTable />
+            },
+            {
+              path: "/home/retoma-requests-table",
+              exact: true,
+              element: <RetomaRequestsTable />
+            },
+            {
+              path: "/home/equipments-table",
+              exact: true,
+              element: <EquipmentsTable />
+            },
+            {
+              path: "/home/request-status-table",
+              exact: true,
+              element: <RequestStatusTable />
+            },
+            {
+              path: "/home/technicians-table",
+              exact: true,
+              element: <TechniciansTable />
+            },
+            {
+              path: "/home/repair-table",
+              exact: true,
+              element: <RepairTable />
+            },
+            {
+              path: "/home/update-repair-form",
+              exact: true,
+              element: <UpdateRepairForm />
+            },
+            {
+              path: "/home/request-status-form",
+              exact: true,
+              element: <RequestStatusForm />
+            },
+            {
+              path: "/home/update-state-repair",
+              exact: true,
+              element: <UpdateStateRepair />
+            },
+            {
+              path: "/home/update-state-retoma",
+              exact: true,
+              element: <UpdateStateRetoma />
+            },
+            {
+              path: "/home/request-status-form/:id",
+              exact: true,
+              element: <RequestStatusForm />
+            },
+            {
+              path: "/home/update-repair-form/:id",
+              exact: true,
+              element: <UpdateRepairForm />
+            },
+            {
+              path: "/home/update-retoma-form/:id",
+              exact: true,
+              element: <UpdateRetomaForm />
+            },
+            {
+              path: "/home/repair-payment-form/:id",
+              exact: true,
+              element: <RepairPaymentForm />
+            },
+            {
+              path: "/home/retoma-payment-form/:id",
+              exact: true,
+              element: <RetomaPaymentForm />
+            },
+            {
+              path: "/home/admin-alerts",
+              exact: true,
+              element: <AuxAdminAlerts />
+            },
+            {
+              path: "/home/equipment-detail/:id",
+              exact: true,
+              element: <EquipmentDetail />
+            },
+            {
+              path: "/home/retoma-payments-table",
+              exact: true,
+              element: <RetomaPaymentsTable />
+            }
+          ]
         })
-      : JSON.parse(localStorage.getItem('user')).role === 'tecnico'
+      : JSON.parse(localStorage.getItem("user")).role === "tecnico"
       ? ThemeRoutes.push({
-          path: '/home',
+          path: "/home",
           exact: true,
           element: <FullLayout />,
           children: [
-            { path: '/home', exact: true, element: <Home /> },
+            { path: "/home", exact: true, element: <Home /> },
             {
-              path: '/home/dashboards/dashboard1',
-              name: 'Dashboard Celuparts',
+              path: "/home/dashboards/dashboard1",
+              name: "Dashboard Celuparts",
               exact: true,
-              element: <DashboardCeluparts />,
+              element: <DashboardCeluparts />
             },
-            { path: '/home/repair-requests-table', exact: true, element: <RepairRequestsTable /> },
-            { path: '/home/retoma-requests-table', exact: true, element: <RetomaRequestsTable /> },
-            { path: '/home/repair-table', exact: true, element: <RepairTable /> },
-            { path: '/home/update-repair-form', exact: true, element: <UpdateRepairForm /> },
-            { path: '/home/update-state-repair', exact: true, element: <UpdateStateRepair /> },
-            { path: '/home/update-state-retoma', exact: true, element: <UpdateStateRetoma /> },
-            { path: '/home/update-retoma-form/:id', exact: true, element: <UpdateRetomaForm /> },
-            { path: '/home/request-status-form/:id', exact: true, element: <RequestStatusForm /> },
-            { path: '/home/update-repair-form/:id', exact: true, element: <UpdateRepairForm /> },
-            { path: '/home/technician-alerts', exact: true, element: <TechnicianAlerts /> },
-          ],
+            {
+              path: "/home/repair-requests-table",
+              exact: true,
+              element: <RepairRequestsTable />
+            },
+            {
+              path: "/home/retoma-requests-table",
+              exact: true,
+              element: <RetomaRequestsTable />
+            },
+            {
+              path: "/home/repair-table",
+              exact: true,
+              element: <RepairTable />
+            },
+            {
+              path: "/home/update-repair-form",
+              exact: true,
+              element: <UpdateRepairForm />
+            },
+            {
+              path: "/home/update-state-repair",
+              exact: true,
+              element: <UpdateStateRepair />
+            },
+            {
+              path: "/home/update-state-retoma",
+              exact: true,
+              element: <UpdateStateRetoma />
+            },
+            {
+              path: "/home/update-retoma-form/:id",
+              exact: true,
+              element: <UpdateRetomaForm />
+            },
+            {
+              path: "/home/request-status-form/:id",
+              exact: true,
+              element: <RequestStatusForm />
+            },
+            {
+              path: "/home/update-repair-form/:id",
+              exact: true,
+              element: <UpdateRepairForm />
+            },
+            {
+              path: "/home/technician-alerts",
+              exact: true,
+              element: <TechnicianAlerts />
+            }
+          ]
         })
-      : JSON.parse(localStorage.getItem('user')).role === 'mensajero'
+      : JSON.parse(localStorage.getItem("user")).role === "mensajero"
       ? ThemeRoutes.push({
-          path: '/home',
+          path: "/home",
           exact: true,
           element: <FullLayout />,
           children: [
-            { path: '/home', exact: true, element: <Home /> },
+            { path: "/home", exact: true, element: <Home /> },
             {
-              path: '/home/dashboards/dashboard1',
-              name: 'Dashboard Celuparts',
+              path: "/home/dashboards/dashboard1",
+              name: "Dashboard Celuparts",
               exact: true,
-              element: <DashboardCeluparts />,
+              element: <DashboardCeluparts />
             },
-            { path: '/home/repair-requests-table', exact: true, element: <RepairRequestsTable /> },
-            { path: '/home/retoma-requests-table', exact: true, element: <RetomaRequestsTable /> },
-            { path: '/home/repair-table', exact: true, element: <RepairTable /> },
-            { path: '/home/update-repair-form', exact: true, element: <UpdateRepairForm /> },
-            { path: '/home/update-state-repair', exact: true, element: <UpdateStateRepair /> },
-            { path: '/home/update-state-retoma', exact: true, element: <UpdateStateRepair /> },
-            { path: '/home/request-status-form/:id', exact: true, element: <RequestStatusForm /> },
-            { path: '/home/courier-alerts', exact: true, element: <CourierAlerts /> },
-            { path: '/home/all-requests-table', exact: true, element: <AllRequestsTable /> },
-          ],
+            {
+              path: "/home/repair-requests-table",
+              exact: true,
+              element: <RepairRequestsTable />
+            },
+            {
+              path: "/home/retoma-requests-table",
+              exact: true,
+              element: <RetomaRequestsTable />
+            },
+            {
+              path: "/home/repair-table",
+              exact: true,
+              element: <RepairTable />
+            },
+            {
+              path: "/home/update-repair-form",
+              exact: true,
+              element: <UpdateRepairForm />
+            },
+            {
+              path: "/home/update-state-repair",
+              exact: true,
+              element: <UpdateStateRepair />
+            },
+            {
+              path: "/home/update-state-retoma",
+              exact: true,
+              element: <UpdateStateRepair />
+            },
+            {
+              path: "/home/request-status-form/:id",
+              exact: true,
+              element: <RequestStatusForm />
+            },
+            {
+              path: "/home/courier-alerts",
+              exact: true,
+              element: <CourierAlerts />
+            },
+            {
+              path: "/home/all-requests-table",
+              exact: true,
+              element: <AllRequestsTable />
+            }
+          ]
         })
       : ThemeRoutes.push();
   }

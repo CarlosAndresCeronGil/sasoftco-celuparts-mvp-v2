@@ -558,6 +558,8 @@ export default function RepairRequestsTable() {
             </tr>
           </thead>
           <tbody>
+            {console.log("retima", requests.requests)}
+
             {requests.requests.map((tdata, index) =>
               tdata.requestType === "Reparacion" ? (
                 <tr key={index} className="border-top">
@@ -631,7 +633,8 @@ export default function RepairRequestsTable() {
                             tdata.equipment.equipmentBrand +
                             " " +
                             tdata.equipment.modelOrReference,
-                          imeiOrSerial: tdata.equipment.imeiOrSerial
+                          imeiOrSerial: tdata.equipment.imeiOrSerial,
+                          technician: tdata.repairs[0].idTechnician
                         }
                       }}
                     >

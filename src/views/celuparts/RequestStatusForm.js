@@ -28,7 +28,9 @@ import getRequestHistoryByIdRequest from "../../services/getRequestHistoryByIdRe
 import putHomeServiceByIdRequest from "../../services/putHomeServiceByIdRequest";
 import putRepairStartDateByIdRequest from "../../services/putRepairStartDateByIdRequest";
 import putRequestUpdateTechnician from "../../services/putUpdateTechnician";
+import putRequestRetomaUpdateTechnician from "../../services/putUpdateRetomaTechnician";
 import getTechnicianByEmail from "../../services/getTechnicianByEmail";
+import getTechnicians from "../../services/getTechnicians";
 
 export default function RequestStatusForm() {
   const location = useLocation();
@@ -41,6 +43,7 @@ export default function RequestStatusForm() {
   });
   const [idRequest, setIdRequest] = useState({ idRequest: 0 });
   const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
+  const [technicians, setTechnicians] = useState([]);
 
   const [notifications, setNotifications] = useState([]);
   const [equipmentData, setEquipmentData] = useState({
@@ -220,11 +223,22 @@ export default function RequestStatusForm() {
             )
           : status.status === "Recibida tecnico"
           ? notifications.map(tdata => {
-              if (JSON.parse(localStorage.getItem("user"))?.role == "tecnico") {
-                putRequestUpdateTechnician({
-                  id: tdata.idRequest,
-                  idTechnician: idTechnician.idTechnician
-                });
+              if (
+                JSON.parse(localStorage.getItem("user"))?.role == "tecnico" ||
+                JSON.parse(localStorage.getItem("user"))?.role == "admin" ||
+                JSON.parse(localStorage.getItem("user"))?.role == "aux_admin"
+              ) {
+                if (dataRequestStatus.request.requestType === "Reparacion") {
+                  putRequestUpdateTechnician({
+                    id: tdata.idRequest,
+                    idTechnician: idTechnician.idTechnician
+                  });
+                } else {
+                  putRequestRetomaUpdateTechnician({
+                    id: tdata.idRequest,
+                    idTechnician: idTechnician.idTechnician
+                  });
+                }
               }
               tdata.idRequest === idRequest.idRequest
                 ? putRequestNotification({
@@ -243,25 +257,6 @@ export default function RequestStatusForm() {
                     })
                 : null;
             })
-          : status.status === "Revisado"
-          ? notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message:
-                      "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
-                    wasReviewed: false,
-                    notificationType: "to_customer"
-                  })
-                    .then(response => {
-                      // console.log("exito!", response)
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                : null
-            )
           : status.status === "En reparacion"
           ? notifications.map(tdata =>
               tdata.idRequest === idRequest.idRequest
@@ -278,29 +273,6 @@ export default function RequestStatusForm() {
                       putRepairStartDateByIdRequest({
                         id: tdata.idRequest
                       });
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    })
-                : null
-            )
-          : status.status === "Reparado pendiente de pago"
-          ? notifications.map(tdata =>
-              tdata.idRequest === idRequest.idRequest
-                ? putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message:
-                      "Tú dispositivo ha sido reparado, contactate con el administrador al siguiente número: " +
-                      celupartsContactPhone +
-                      " o al siguiente correo " +
-                      celupartsContactEmail +
-                      " para confirmar pago",
-                    wasReviewed: false,
-                    notificationType: "to_customer"
-                  })
-                    .then(response => {
-                      // console.log("exito!", response)
                     })
                     .catch(error => {
                       console.log(error);
@@ -481,7 +453,6 @@ export default function RequestStatusForm() {
       }
       getSingleRequestStatus({ id: location.state.idStatus })
         .then(responseRequestStatus => {
-          console.log(responseRequestStatus);
           // console.log("request status response", responseRequestStatus)
           responseRequestStatus.request.requestType == "Reparacion"
             ? setIsRepair(true)
@@ -569,6 +540,14 @@ export default function RequestStatusForm() {
     },
     [location.state?.idStatus, idRequest.idRequest]
   );
+
+  useEffect(() => {
+    if (status.status === "Recibida tecnico") {
+      getTechnicians().then(response => {
+        setTechnicians(response);
+      });
+    }
+  }, [status.status]);
 
   return loading ? (
     <div>Cargando...</div>
@@ -715,6 +694,7 @@ export default function RequestStatusForm() {
                         {options.map((option, index) => (
                           <option
                             hidden={
+                              option.value == "Revisado" ||
                               (currentOption.priority != 4 &&
                                 currentOption.priority != 5.1 &&
                                 option.priority > currentOption.priority + 1 &&
@@ -745,8 +725,7 @@ export default function RequestStatusForm() {
                                 currentOption.value == "Retoma") ||
                               (currentOption.priority == 5.1 &&
                                 option.priority != 6) ||
-                              (!isRepair && option.value == "En reparacion") ||
-                              currentOption.value == "Revisado"
+                              (!isRepair && option.value == "En reparacion")
                             }
                             value={option.value}
                             key={index}
@@ -772,11 +751,11 @@ export default function RequestStatusForm() {
                   {JSON.parse(localStorage.getItem("user")).role ===
                     "mensajero" ||
                   JSON.parse(localStorage.getItem("user")).role ===
-                    "tecnico" ? null : currentStatus == "Iniciada" ||
-                    currentStatus == "En proceso de recogida" ||
-                    currentStatus == "Recibida tecnico" ||
-                    currentStatus == "Revisado" ||
-                    currentStatus == "En reparacion" ? null : (
+                    "tecnico" ? null : status.status == "Iniciada" ||
+                    status.status == "En proceso de recogida" ||
+                    status.status == "Recibida tecnico" ||
+                    status.status == "Revisado" ||
+                    status.status == "En reparacion" ? null : (
                     <FormGroup>
                       <Label for="paymentStatus">Estado de pago</Label>
                       <Input
@@ -792,12 +771,12 @@ export default function RequestStatusForm() {
                     </FormGroup>
                   )}
                   {JSON.parse(localStorage.getItem("user")).role ===
-                  "tecnico" ? null : currentStatus == "Iniciada" ||
-                    currentStatus == "Recibida tecnico" ||
-                    currentStatus == "Revisado" ||
-                    currentStatus == "En reparacion" ||
-                    currentStatus == "Reparado pendiente de pago" ||
-                    currentStatus == "Retoma" ? null : (
+                  "tecnico" ? null : status.status == "Iniciada" ||
+                    status.status == "Recibida tecnico" ||
+                    status.status == "Revisado" ||
+                    status.status == "En reparacion" ||
+                    status.status == "Reparado pendiente de pago" ||
+                    status.status == "Retoma" ? null : (
                     <FormGroup>
                       <Label for="productReturned">Producto devuelto</Label>
                       <Input
@@ -812,6 +791,44 @@ export default function RequestStatusForm() {
                       </Input>
                     </FormGroup>
                   )}
+                  {(JSON.parse(localStorage.getItem("user")).role ===
+                    "aux_admin" ||
+                    JSON.parse(localStorage.getItem("user")).role ===
+                      "admin") &&
+                    status.status == "Recibida tecnico" && (
+                      <FormGroup>
+                        <Label for="productReturned">Técnico Asociado</Label>
+                        <Input
+                          id="tecnicoAsociado"
+                          name="tecnicoAsociado"
+                          type="select"
+                          required
+                          defaultValue={
+                            location.state.data.technician == 0
+                              ? ""
+                              : location.state.data.technician
+                          }
+                          onChange={e =>
+                            setIdTechnician({
+                              idTechnician: Number(e.target.value)
+                            })
+                          }
+                        >
+                          <option value="">Seleccione un técnico</option>
+                          {technicians.map(value => {
+                            return (
+                              <option
+                                key={value.idTechnician}
+                                value={value.idTechnician}
+                              >
+                                {value.names} {value.surnames}
+                              </option>
+                            );
+                          })}
+                        </Input>
+                      </FormGroup>
+                    )}
+
                   {loadingPut ? (
                     <button className="btn btn-primary" type="button" disabled>
                       <span

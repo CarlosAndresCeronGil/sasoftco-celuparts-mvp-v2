@@ -1,43 +1,43 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react'
-import getRequestNotificationToAdmin from '../../../services/getRequestNotificationToAdmin';
-import getRequestNotificationToCourier from '../../../services/getRequestNotificationToCourier';
-import getRequestNotificationToTechnician from '../../../services/getRequestNotificationToTechnician';
-import MaterialIcon from '@material/react-material-icon';
-import getRequestNotificationByIdUserDto from '../../../services/getRequestNotificationByIdUserDto'
-
-
+import React, { useEffect, useState } from "react";
+import getRequestNotificationToAdmin from "../../../services/getRequestNotificationToAdmin";
+import getRequestNotificationToCourier from "../../../services/getRequestNotificationToCourier";
+import getRequestNotificationToTechnician from "../../../services/getRequestNotificationToTechnician";
+import MaterialIcon from "@material/react-material-icon";
+import getRequestNotificationByIdUserDto from "../../../services/getRequestNotificationByIdUserDto";
 
 const SidebarDatas = () => {
-
-  const [alerts, setAlerts] = useState([])
-  let countwasRevieweds = 0
+  const [alerts, setAlerts] = useState([]);
+  let countwasRevieweds = 0;
 
   const SidebarData = [];
 
-  if (JSON.parse(localStorage.getItem('user')).role === "user") {
-
+  if (JSON.parse(localStorage.getItem("user")).role === "user") {
     useEffect(function () {
-      getRequestNotificationByIdUserDto({ idUserDto: JSON.parse(localStorage.getItem('user')).idUser })
+      getRequestNotificationByIdUserDto({
+        idUserDto: JSON.parse(localStorage.getItem("user")).idUser
+      })
         .then(response => {
-          setAlerts(response)
+          setAlerts(response);
         })
         .catch(error => {
-          console.log(error)
-        })
-    }, [])
+          console.log(error);
+        });
+    }, []);
 
-    countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+    countwasRevieweds = alerts.filter(
+      alert => alert.wasReviewed == false
+    ).length;
 
     SidebarData.push(
-      { caption: 'Actividad' },
+      { caption: "Actividad" },
       {
         title: "Notificaciones",
         href: "./user-alerts",
         id: 1,
         icon: <MaterialIcon icon="notifications" />,
         suffix: countwasRevieweds == 0 ? null : countwasRevieweds,
-        suffixColor: countwasRevieweds == 0 ? 'bg-success' : 'bg-danger',
+        suffixColor: countwasRevieweds == 0 ? "bg-success" : "bg-danger"
       },
       {
         title: "Mis reparaciones",
@@ -51,20 +51,23 @@ const SidebarDatas = () => {
         id: 3,
         icon: <MaterialIcon icon="visibility" />
       }
-    )
-  } else if (JSON.parse(localStorage.getItem('user')).role === "admin") {
-
+    );
+  } else if (JSON.parse(localStorage.getItem("user")).role === "admin") {
     useEffect(function () {
       getRequestNotificationToAdmin()
         .then(response => {
-          setAlerts(response)
+          setAlerts(
+            response.filter(alert => alert.notificationType === "to_admin")
+          );
         })
         .catch(error => {
-          console.log(error)
-        })
-    }, [])
+          console.log(error);
+        });
+    }, []);
 
-    countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+    countwasRevieweds = alerts.filter(
+      alert => alert.wasReviewed == false
+    ).length;
 
     SidebarData.push(
       {
@@ -73,60 +76,60 @@ const SidebarDatas = () => {
         href: "./admin-alerts",
         icon: <MaterialIcon icon="notifications" />,
         suffix: countwasRevieweds == 0 ? null : countwasRevieweds,
-        suffixColor: countwasRevieweds == 0 ? 'bg-success' : 'bg-danger',
+        suffixColor: countwasRevieweds == 0 ? "bg-success" : "bg-danger"
       },
       {
-        title: 'Acciones',
+        title: "Acciones",
         id: 1,
-        icon: <MaterialIcon icon='speed' />,
+        icon: <MaterialIcon icon="speed" />,
         collapisble: true,
         children: [
           {
             title: "Reparaciones",
-            href: "./repair-requests-table",
+            href: "./repair-requests-table"
           },
           {
             title: "Retomas",
-            href: "./retoma-requests-table",
-          },
+            href: "./retoma-requests-table"
+          }
         ]
       },
       {
-        title: 'Reportes',
+        title: "Reportes",
         id: 2,
-        icon: <MaterialIcon icon='summarize' />,
+        icon: <MaterialIcon icon="summarize" />,
         collapisble: true,
         children: [
           {
             title: "Clientes",
-            href: "./users-table",
+            href: "./users-table"
           },
           {
             title: "Equipos",
-            href: "./equipments-table",
+            href: "./equipments-table"
           },
           {
             title: "Técnicos",
-            href: "./technicians-table",
+            href: "./technicians-table"
           },
           {
             title: "Domicilios",
-            href: "./pickups-table",
+            href: "./pickups-table"
           },
           {
             title: "Tecnicos a reparaciones",
-            href: "./repair-table",
+            href: "./repair-table"
           },
           {
             title: "Pagos de retomas",
-            href: "./retoma-payments-table",
-          },
+            href: "./retoma-payments-table"
+          }
         ]
       },
       {
-        title: 'SIIGO',
+        title: "SIIGO",
         id: 3,
-        icon: <MaterialIcon icon='account_balance_wallet' />,
+        icon: <MaterialIcon icon="account_balance_wallet" />,
         collapisble: true,
         children: [
           {
@@ -182,20 +185,23 @@ const SidebarDatas = () => {
           }
         ]
       }
-    )
-  } else if (JSON.parse(localStorage.getItem('user')).role === "aux_admin") {
-
+    );
+  } else if (JSON.parse(localStorage.getItem("user")).role === "aux_admin") {
     useEffect(function () {
       getRequestNotificationToAdmin()
         .then(response => {
-          setAlerts(response)
+          setAlerts(
+            response.filter(alert => alert.notificationType === "to_aux_admin")
+          );
         })
         .catch(error => {
-          console.log(error)
-        })
-    }, [])
+          console.log(error);
+        });
+    }, []);
 
-    countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+    countwasRevieweds = alerts.filter(
+      alert => alert.wasReviewed == false
+    ).length;
 
     SidebarData.push(
       {
@@ -204,54 +210,55 @@ const SidebarDatas = () => {
         href: "./admin-alerts",
         icon: <MaterialIcon icon="notifications" />,
         suffix: countwasRevieweds == 0 ? null : countwasRevieweds,
-        suffixColor: countwasRevieweds == 0 ? 'bg-success' : 'bg-danger',
+        suffixColor: countwasRevieweds == 0 ? "bg-success" : "bg-danger"
       },
       {
-        title: 'Acciones',
+        title: "Acciones",
         id: 1,
-        icon: <MaterialIcon icon='speed' />,
+        icon: <MaterialIcon icon="speed" />,
         collapisble: true,
         children: [
           {
             title: "Reparaciones",
-            href: "./repair-requests-table",
+            href: "./repair-requests-table"
           },
           {
             title: "Retomas",
-            href: "./retoma-requests-table",
-          },
+            href: "./retoma-requests-table"
+          }
         ]
       },
       {
-        title: 'Reportes',
+        title: "Reportes",
         id: 2,
-        icon: <MaterialIcon icon='summarize' />,
+        icon: <MaterialIcon icon="summarize" />,
         collapisble: true,
         children: [
           {
             title: "Equipos",
-            href: "./equipments-table",
+            href: "./equipments-table"
           },
           {
             title: "Pagos de retomas",
-            href: "./retoma-payments-table",
-          },
+            href: "./retoma-payments-table"
+          }
         ]
-      },
-    )
-  } else if (JSON.parse(localStorage.getItem('user')).role === "tecnico") {
-
+      }
+    );
+  } else if (JSON.parse(localStorage.getItem("user")).role === "tecnico") {
     useEffect(function () {
       getRequestNotificationToTechnician()
         .then(response => {
-          setAlerts(response)
+          setAlerts(response);
         })
         .catch(error => {
-          console.log(error)
-        })
-    }, [])
+          console.log(error);
+        });
+    }, []);
 
-    countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+    countwasRevieweds = alerts.filter(
+      alert => alert.wasReviewed == false
+    ).length;
 
     SidebarData.push(
       {
@@ -260,52 +267,51 @@ const SidebarDatas = () => {
         href: "./technician-alerts",
         icon: <MaterialIcon icon="notifications" />,
         suffix: countwasRevieweds == 0 ? null : countwasRevieweds,
-        suffixColor: countwasRevieweds == 0 ? 'bg-success' : 'bg-danger',
+        suffixColor: countwasRevieweds == 0 ? "bg-success" : "bg-danger"
       },
       {
-        title: 'Acciones',
+        title: "Acciones",
         id: 1,
-        icon: <MaterialIcon icon='speed' />,
+        icon: <MaterialIcon icon="speed" />,
         collapisble: true,
         children: [
           {
             title: "Reparaciones",
-            href: "./repair-requests-table",
+            href: "./repair-requests-table"
           },
           {
             title: "Retomas",
-            href: "./retoma-requests-table",
-          },
+            href: "./retoma-requests-table"
+          }
         ]
       },
       {
-        title: 'Reportes',
+        title: "Reportes",
         id: 2,
-        icon: <MaterialIcon icon='summarize' />,
+        icon: <MaterialIcon icon="summarize" />,
         collapisble: true,
         children: [
           {
             title: "Técnicos a reparaciones",
-            href: "./repair-table",
-          },
+            href: "./repair-table"
+          }
         ]
       }
-    )
-  } else if (JSON.parse(localStorage.getItem('user')).role === "mensajero") {
-
-
-
+    );
+  } else if (JSON.parse(localStorage.getItem("user")).role === "mensajero") {
     useEffect(function () {
       getRequestNotificationToCourier()
         .then(response => {
-          setAlerts(response)
+          setAlerts(response);
         })
         .catch(error => {
-          console.log(error)
-        })
-    }, [])
+          console.log(error);
+        });
+    }, []);
 
-    countwasRevieweds = alerts.filter(alert => alert.wasReviewed == false).length
+    countwasRevieweds = alerts.filter(
+      alert => alert.wasReviewed == false
+    ).length;
 
     SidebarData.push(
       {
@@ -314,12 +320,12 @@ const SidebarDatas = () => {
         href: "./courier-alerts",
         icon: <MaterialIcon icon="notifications" />,
         suffix: countwasRevieweds == 0 ? null : countwasRevieweds,
-        suffixColor: countwasRevieweds == 0 ? 'bg-success' : 'bg-danger',
+        suffixColor: countwasRevieweds == 0 ? "bg-success" : "bg-danger"
       },
       {
-        title: 'Acciones',
+        title: "Acciones",
         id: 1,
-        icon: <MaterialIcon icon='speed' />,
+        icon: <MaterialIcon icon="speed" />,
         collapisble: true,
         children: [
           // {
@@ -332,11 +338,11 @@ const SidebarDatas = () => {
           // },
           {
             title: "Solicitudes",
-            href: "./all-requests-table",
-          },
+            href: "./all-requests-table"
+          }
         ]
       }
-    )
+    );
   }
 
   // const SidebarData = [
@@ -834,8 +840,7 @@ const SidebarDatas = () => {
   //   },
   // ];
 
-  return { SidebarData }
-
-}
+  return { SidebarData };
+};
 
 export default SidebarDatas;

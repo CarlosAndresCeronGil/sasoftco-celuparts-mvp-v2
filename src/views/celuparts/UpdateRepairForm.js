@@ -42,6 +42,7 @@ import putRequestStatus from "../../services/putRequestStatus";
 import postRequestHistory from "../../services/postRequestHistory";
 import getSingleRequestStatus from "../../services/getSingleRequestStatus";
 import MyCustomNumberFormat from "../../components/FormatValue";
+import postRequestNotification from "../../services/postRequestNotification";
 
 export default function UpdateRepairForm(props) {
   const [idTechnician, setIdTechnician] = useState({ idTechnician: 0 });
@@ -216,6 +217,34 @@ export default function UpdateRepairForm(props) {
                   date: new Date()
                 });
                 setStatus("Revisado");
+                !isUserAdmin &&
+                  postRequestNotification({
+                    idRequest: idRequest.idRequest,
+                    message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData}`,
+                    wasReviewed: false,
+                    notificationType: "to_admin"
+                  }).catch(error => {
+                    console.log(error);
+                  });
+                !isUserAdmin &&
+                  postRequestNotification({
+                    idRequest: idRequest.idRequest,
+                    message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData}`,
+                    wasReviewed: false,
+                    notificationType: "to_aux_admin"
+                  })
+                    .catch(error => {
+                      console.log(error);
+                    })
+                    .finally(() => {
+                      Swal.fire({
+                        icon: "success",
+                        title: "Exito!",
+                        text: "Estado de reparación actualizadisimo!"
+                      }).then(response => {
+                        navigate(-1);
+                      });
+                    });
                 !isUserAdmin
                   ? notifications.map(tdata =>
                       tdata.idRequest === idRequest.idRequest
@@ -226,13 +255,9 @@ export default function UpdateRepairForm(props) {
                               "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
                             wasReviewed: false,
                             notificationType: "to_customer"
+                          }).catch(error => {
+                            console.log(error);
                           })
-                            .then(response => {
-                              navigate(-1);
-                            })
-                            .catch(error => {
-                              console.log(error);
-                            })
                         : null
                     )
                   : null;
@@ -240,6 +265,7 @@ export default function UpdateRepairForm(props) {
               .catch(error => {
                 console.log(error);
               });
+
             isUserAdmin
               ? notifications.map(tdata =>
                   tdata.idRequest === idRequest.idRequest
@@ -255,6 +281,8 @@ export default function UpdateRepairForm(props) {
                           // console.log("Exito!", response)
                         })
                         .then(finalResponse => {
+                          console.log("entre en repair ultimo");
+
                           Swal.fire({
                             icon: "success",
                             title: "Exito!",
@@ -455,7 +483,6 @@ export default function UpdateRepairForm(props) {
   const handleSubmit = e => {
     e.preventDefault();
 
-    let accept = false;
     if (
       listOfRepairCheckedParts.length == 0 &&
       listOfReplaceCheckedParts.length == 0
@@ -471,11 +498,15 @@ export default function UpdateRepairForm(props) {
         cancelButtonText: "Cancelar"
       }).then(result => {
         if (result.isConfirmed) {
+          console.log("entre");
           handleSubmitInfo(e);
+          return;
         }
       });
     } else {
+      console.log("entre 2");
       handleSubmitInfo(e);
+      return;
     }
   };
 
