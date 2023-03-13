@@ -205,7 +205,7 @@ export default function UpdateRepairForm(props) {
               idRequestStatus: location.state.idStatus,
               idRequest: idRequest.idRequest,
               status: "Revisado",
-              paymentStatus: "No Pago"
+              paymentStatus: "No pago"
             })
               .then(data => {
                 // console.log("DATA", data);
@@ -416,7 +416,7 @@ export default function UpdateRepairForm(props) {
               idRequestStatus: location.state.idStatus,
               idRequest: idRequest.idRequest,
               status: "Reparado pendiente de pago",
-              paymentStatus: "No Pago"
+              paymentStatus: "No pago"
             }).then(data => {
               postRequestHistory({
                 idRequest: data.idRequest,

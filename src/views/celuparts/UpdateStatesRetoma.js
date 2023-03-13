@@ -110,6 +110,7 @@ export default function UpdateStateRetoma() {
             (location.state.status === "Iniciada" ||
             location.state.status === "En proceso de recogida" ||
             location.state.status === "Recibida tecnico" ||
+            location.state.status === "Revisado" ||
             location.state.status === "En devolucion" ||
             location.state.status === "Devuelto sin reparacion" ||
             location.state.status === "Abandonada" ||

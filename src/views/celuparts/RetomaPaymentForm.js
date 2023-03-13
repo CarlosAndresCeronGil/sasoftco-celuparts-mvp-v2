@@ -25,6 +25,7 @@ import getRequestNotification from "../../services/getRequestNotification";
 import putRequestNotification from "../../services/putRequestNotification";
 import moment from "moment";
 import postRequestNotification from "../../services/postRequestNotification";
+import putRequestStatus from "../../services/putRequestStatus";
 
 export default function RetomaPaymentForm() {
   const [paymentMethod, setPaymentMethod] = useState({ paymentMethod: "" });
@@ -138,6 +139,21 @@ export default function RetomaPaymentForm() {
             });
         });
         setLoadingPut(false);
+      })
+      .catch(error => {
+        console.log(error);
+        setLoadingPut(false);
+      });
+
+    putRequestStatus({
+      idRequestStatus: location.state.idStatus,
+      idRequest: location.state.idRequest,
+      status: location.state.status,
+      paymentStatus: "Pago"
+    })
+      .then(response => {
+        setLoadingPut(false);
+        navigate(-1);
       })
       .catch(error => {
         console.log(error);

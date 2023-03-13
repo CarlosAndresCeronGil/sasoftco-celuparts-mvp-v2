@@ -721,6 +721,7 @@ export default function RetomaRequestsTable() {
                       state={{
                         idStatus: tdata.requestStatus[0].idRequestStatus,
                         idRetoma: tdata.retoma[0].idRetoma,
+                        idRequest: tdata.idRequest,
                         idRetomaPayment:
                           tdata.retoma[0].retomaPayments[0].idRetomaPayment,
                         status: tdata.requestStatus[0].status,

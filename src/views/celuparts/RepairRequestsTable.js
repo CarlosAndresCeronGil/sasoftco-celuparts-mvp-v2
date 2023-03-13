@@ -641,6 +641,7 @@ export default function RepairRequestsTable() {
                       state={{
                         idStatus: tdata.requestStatus[0].idRequestStatus,
                         idRepair: tdata.repairs[0].idRepair,
+                        idRequest: tdata.idRequest,
                         idRepairPayment:
                           tdata.repairs[0].repairPayments[0].idRepairPayment,
                         status: tdata.requestStatus[0].status,

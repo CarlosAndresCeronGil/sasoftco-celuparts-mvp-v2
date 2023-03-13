@@ -123,7 +123,7 @@ export default function UpdateRetomaForm() {
           idRequestStatus: location.state.idStatus,
           idRequest: idRequest.idRequest,
           status: "Revisado",
-          paymentStatus: "No Pago"
+          paymentStatus: "No pago"
         }).then(data => {
           postRequestHistory({
             idRequest: data.idRequest,

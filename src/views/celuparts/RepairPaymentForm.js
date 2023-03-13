@@ -19,6 +19,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import putRepairPayment from "../../services/putRepairPayment";
 import getSingleRepairPayment from "../../services/getSingleRepairPayment";
+import putRequestStatus from "../../services/putRequestStatus";
 
 export default function RepairPaymentForm() {
   const [paymentMethod, setPaymentMethod] = useState({ paymentMethod: "" });
@@ -74,6 +75,21 @@ export default function RepairPaymentForm() {
     putRepairPayment(data)
       .then(response => {
         setLoadingPut(false);
+      })
+      .catch(error => {
+        console.log(error);
+        setLoadingPut(false);
+      });
+
+    putRequestStatus({
+      idRequestStatus: location.state.idStatus,
+      idRequest: location.state.idRequest,
+      status: location.state.status,
+      paymentStatus: "Pago"
+    })
+      .then(response => {
+        setLoadingPut(false);
+        navigate(-1);
       })
       .catch(error => {
         console.log(error);

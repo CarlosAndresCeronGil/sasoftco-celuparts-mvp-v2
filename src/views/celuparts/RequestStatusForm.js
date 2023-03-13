@@ -700,7 +700,9 @@ export default function RequestStatusForm() {
                                 currentOption.value == "Retoma") ||
                               (currentOption.priority == 5.1 &&
                                 option.priority != 6) ||
-                              (!isRepair && option.priority > 3)
+                              (!isRepair && option.priority > 3) ||
+                              (location.state.statusQuote !== "Aceptada" &&
+                                option.value === "En reparacion")
                             }
                             value={option.value}
                             key={index}
@@ -756,7 +758,12 @@ export default function RequestStatusForm() {
                                 option.priority != 6) ||
                               (!isRepair && option.value == "En reparacion") ||
                               (option.value === "En camino" &&
-                                dataRequestStatus.paymentStatus === "No pago")
+                                dataRequestStatus.paymentStatus ===
+                                  "No pago") ||
+                              (location.state.statusQuote !== "Aceptada" &&
+                                option.value === "En reparacion") ||
+                              (location.state.statusQuote !== "Aceptada" &&
+                                option.value === "Retoma")
                             }
                             value={option.value}
                             key={index}
@@ -785,8 +792,11 @@ export default function RequestStatusForm() {
                     "tecnico" ? null : status.status == "Iniciada" ||
                     status.status == "En proceso de recogida" ||
                     status.status == "Recibida tecnico" ||
+                    status.status == "En camino" ||
                     status.status == "Revisado" ||
                     status.status == "Anulado por IMEI" ||
+                    status.status == "En devolucion" ||
+                    status.status == "Terminada" ||
                     status.status == "En reparacion" ? null : (
                     <FormGroup>
                       <Label for="paymentStatus">Estado de pago</Label>
@@ -794,11 +804,15 @@ export default function RequestStatusForm() {
                         type="select"
                         name="paymentStatus"
                         id="paymentStatus"
+                        disabled={
+                          status.status == "Reparado pendiente de pago" ||
+                          status.status == "Retoma"
+                        }
                         defaultValue={paymentStatus.paymentStatus}
                         onChange={handlePaymentStatusChange}
                       >
-                        <option>Pago</option>
-                        <option>No pago</option>
+                        <option value={"Pago"}>Pago</option>
+                        <option value={"No pago"}>No pago</option>
                       </Input>
                     </FormGroup>
                   )}
@@ -808,7 +822,9 @@ export default function RequestStatusForm() {
                     status.status == "En proceso de recogida" ||
                     status.status == "Revisado" ||
                     status.status == "Anulado por IMEI" ||
+                    status.status == "En reparacion" ||
                     status.status == "Reparado pendiente de pago" ||
+                    status.status == "Terminada" ||
                     status.status == "Retoma" ? null : (
                     <FormGroup>
                       <Label for="productReturned">Producto devuelto</Label>
