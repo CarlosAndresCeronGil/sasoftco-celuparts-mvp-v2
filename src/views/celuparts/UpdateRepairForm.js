@@ -929,8 +929,7 @@ export default function UpdateRepairForm(props) {
                                 "aux_admin") &&
                             location.state.statusQuote != "Aceptada" ? (
                               <Button color="primary">Guardar</Button>
-                            ) : checkRepair == "on" ||
-                              !isRepairDateNull.isRepairDateNull ? (
+                            ) : checkRepair == "off" ? (
                               <Button color="primary" disabled>
                                 Guardar
                               </Button>

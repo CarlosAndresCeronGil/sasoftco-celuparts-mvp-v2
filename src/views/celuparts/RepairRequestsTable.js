@@ -577,8 +577,6 @@ export default function RepairRequestsTable() {
             </tr>
           </thead>
           <tbody>
-            {console.log("retima", requests.requests)}
-
             {requests.requests.map((tdata, index) =>
               tdata.requestType === "Reparacion" ? (
                 <tr key={index} className="border-top">

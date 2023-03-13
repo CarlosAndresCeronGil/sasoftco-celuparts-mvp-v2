@@ -183,14 +183,22 @@ export default function RequestStatusForm() {
   const navigate = useNavigate();
 
   const handleSubmit = e => {
+    console.log(paymentStatus);
     e.preventDefault();
     setLoadingPut(true);
+    console.log(status.status);
+    if (status.status == "Anulado por IMEI") {
+      productReturned.productReturned = true;
+    } else {
+      productReturned.productReturned =
+        productReturned.productReturned === "true" ? true : false;
+    }
     putRequestStatus({
       idRequestStatus: dataRequestStatus.idRequestStatus,
       idRequest: dataRequestStatus.idRequest,
       status: status.status,
       paymentStatus: paymentStatus.paymentStatus,
-      productReturned: productReturned.productReturned === "true" ? true : false
+      productReturned: productReturned.productReturned
     })
       .then(data => {
         // console.log("DATA", data);
@@ -567,6 +575,7 @@ export default function RequestStatusForm() {
     }
   }, [status.status]);
 
+  console.log("dataRequestStatus", dataRequestStatus);
   return loading ? (
     <div>Cargando...</div>
   ) : (
@@ -625,7 +634,9 @@ export default function RequestStatusForm() {
                               (currentOption.priority == 4 &&
                                 currentOption.value == "Retoma") ||
                               (currentOption.priority == 5.1 &&
-                                option.priority != 6)
+                                option.priority != 6) ||
+                              (option.value === "En camino" &&
+                                dataRequestStatus.paymentStatus === "No pago")
                             }
                             value={option.value}
                             key={index}
@@ -743,7 +754,9 @@ export default function RequestStatusForm() {
                                 currentOption.value == "Retoma") ||
                               (currentOption.priority == 5.1 &&
                                 option.priority != 6) ||
-                              (!isRepair && option.value == "En reparacion")
+                              (!isRepair && option.value == "En reparacion") ||
+                              (option.value === "En camino" &&
+                                dataRequestStatus.paymentStatus === "No pago")
                             }
                             value={option.value}
                             key={index}
@@ -773,6 +786,7 @@ export default function RequestStatusForm() {
                     status.status == "En proceso de recogida" ||
                     status.status == "Recibida tecnico" ||
                     status.status == "Revisado" ||
+                    status.status == "Anulado por IMEI" ||
                     status.status == "En reparacion" ? null : (
                     <FormGroup>
                       <Label for="paymentStatus">Estado de pago</Label>
@@ -791,8 +805,9 @@ export default function RequestStatusForm() {
                   {JSON.parse(localStorage.getItem("user")).role ===
                   "tecnico" ? null : status.status == "Iniciada" ||
                     status.status == "Recibida tecnico" ||
+                    status.status == "En proceso de recogida" ||
                     status.status == "Revisado" ||
-                    status.status == "En reparacion" ||
+                    status.status == "Anulado por IMEI" ||
                     status.status == "Reparado pendiente de pago" ||
                     status.status == "Retoma" ? null : (
                     <FormGroup>
