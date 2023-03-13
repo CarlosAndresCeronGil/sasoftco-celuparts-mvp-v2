@@ -16,6 +16,7 @@
     "@mui/styled-engine-sc": "^5.11.9",
     "@mui/utils": "^5.11.12",
     "@mui/x-date-pickers": "^5.0.20",
+    "@react-oauth/google": "^0.8.0",
     "@reduxjs/toolkit": "^1.8.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
