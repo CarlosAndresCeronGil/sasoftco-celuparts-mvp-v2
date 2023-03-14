@@ -857,7 +857,7 @@ export default function UpdateRepairForm(props) {
                               "admin" ||
                               JSON.parse(localStorage.getItem("user")).role ===
                                 "aux_admin") &&
-                            location.state.statusQuote != "Aceptada" ? (
+                            location.state.statusQuote == "Pendiente" ? (
                               <Button color="primary">Guardar</Button>
                             ) : priceReviewedByAdmin.priceReviewedByAdmin ? (
                               <Button color="primary" disabled>

@@ -183,15 +183,16 @@ export default function RequestStatusForm() {
   const navigate = useNavigate();
 
   const handleSubmit = e => {
-    console.log(paymentStatus);
     e.preventDefault();
     setLoadingPut(true);
-    console.log(status.status);
-    if (status.status == "Anulado por IMEI") {
+    if (
+      status.status == "Anulado por IMEI" ||
+      status.status == "Devuelto sin reparacion" ||
+      status.status == "Terminada"
+    ) {
       productReturned.productReturned = true;
     } else {
-      productReturned.productReturned =
-        productReturned.productReturned === "true" ? true : false;
+      productReturned.productReturned = false;
     }
     putRequestStatus({
       idRequestStatus: dataRequestStatus.idRequestStatus,
@@ -590,6 +591,7 @@ export default function RequestStatusForm() {
                     <i className="bi bi-card-list"> </i>
                     <strong>Datos del estado</strong>
                   </CardSubtitle>
+
                   {JSON.parse(localStorage.getItem("user")).role ===
                   "mensajero" ? (
                     <FormGroup>
@@ -636,7 +638,11 @@ export default function RequestStatusForm() {
                               (currentOption.priority == 5.1 &&
                                 option.priority != 6) ||
                               (option.value === "En camino" &&
-                                dataRequestStatus.paymentStatus === "No pago")
+                                dataRequestStatus.paymentStatus ===
+                                  "No pago") ||
+                              (currentOption.value === "Revisado" &&
+                                option.value === "En devolucion" &&
+                                location.state.statusQuote != "Rechazada")
                             }
                             value={option.value}
                             key={index}
@@ -763,7 +769,10 @@ export default function RequestStatusForm() {
                               (location.state.statusQuote !== "Aceptada" &&
                                 option.value === "En reparacion") ||
                               (location.state.statusQuote !== "Aceptada" &&
-                                option.value === "Retoma")
+                                option.value === "Retoma") ||
+                              (currentOption.value === "Revisado" &&
+                                option.value === "En devolucion" &&
+                                location.state.statusQuote != "Rechazada")
                             }
                             value={option.value}
                             key={index}
@@ -796,6 +805,7 @@ export default function RequestStatusForm() {
                     status.status == "Revisado" ||
                     status.status == "Anulado por IMEI" ||
                     status.status == "En devolucion" ||
+                    status.status == "Devuelto sin reparacion" ||
                     status.status == "Terminada" ||
                     status.status == "En reparacion" ? null : (
                     <FormGroup>
@@ -823,7 +833,10 @@ export default function RequestStatusForm() {
                     status.status == "Revisado" ||
                     status.status == "Anulado por IMEI" ||
                     status.status == "En reparacion" ||
+                    status.status == "En devolucion" ||
+                    status.status == "Devuelto sin reparacion" ||
                     status.status == "Reparado pendiente de pago" ||
+                    status.status == "En camino" ||
                     status.status == "Terminada" ||
                     status.status == "Retoma" ? null : (
                     <FormGroup>

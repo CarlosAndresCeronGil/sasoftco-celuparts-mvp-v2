@@ -304,9 +304,9 @@ const RegisterFormik = () => {
                     >
                       {({ touched, errors }) => (
                         <Form>
-                          <Row className="d-flex justify-content-center">
+                          {/* <Row className="d-flex justify-content-center">
                             <GoogleAuthentication style={{ width: "50%" }} />
-                          </Row>
+                          </Row> */}
 
                           <Row>
                             <Col lg="6">

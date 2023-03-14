@@ -568,6 +568,7 @@ export default function AllRequestsTable() {
                     to={`/home/update-state-repair`}
                     state={{
                       idStatus: tdata.requestStatus[0].idRequestStatus,
+                      statusQuote: tdata.statusQuote,
                       data: {
                         equipmentData:
                           tdata.equipment.equipmentBrand +

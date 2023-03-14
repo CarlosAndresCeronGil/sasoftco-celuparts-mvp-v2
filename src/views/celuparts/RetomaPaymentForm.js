@@ -242,7 +242,7 @@ export default function RetomaPaymentForm() {
                   </FormGroup>
                 )}
                 <FormGroup>
-                  <Label for="voucherNumber">Número del voucher</Label>
+                  <Label for="voucherNumber">Número del voucher*</Label>
                   <Input
                     type="number"
                     name="voucherNumber"
