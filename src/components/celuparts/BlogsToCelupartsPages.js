@@ -132,19 +132,32 @@ const BlogsToCelupartsPages = () => {
             <Col xl="4" lg="6" md="4" sm="6" key={title}>
               <Card
                 className="hover-zoom mt-3 img-wrapper"
-                style={{ height: "340px" }}
+                style={{
+                  height: "350px",
+                  border: "1px solid grey",
+                  paddingBottom: "0.3rem",
+                  borderRadius: "5%"
+                }}
               >
                 <img
                   src={img}
                   alt={img}
-                  className="mx-3 rounded mt-n3 img-fluid"
+                  className="mx-3  mt-n3 img-fluid"
+                  style={{ borderRadius: "1rem" }}
                 />
                 <Link
                   to={href[role.indexOf(currentRole)]}
                   style={{ textDecoration: "none" }}
                 >
                   <CardBody style={style}>
-                    <CardTitle className="mt-2" tag="h4">
+                    <CardTitle
+                      className="mt-2"
+                      tag="h4"
+                      style={{
+                        borderBottom: "1px solid grey",
+                        paddingBottom: "0.3rem"
+                      }}
+                    >
                       {title}
                     </CardTitle>
                     <CardSubtitle className="text-muted mt-1">
@@ -164,12 +177,17 @@ const BlogsToCelupartsPages = () => {
         <Col xl="4" lg="6" md="4" sm="6" key={title}>
           <Card
             className="hover-zoom mt-3 img-wrapper"
-            style={{ height: "350px" }}
+            style={{
+              height: "350px",
+              border: "1px solid grey",
+              borderRadius: "5%"
+            }}
           >
             <img
               src={img}
               alt={img}
-              className="mx-3  rounded mt-n3 img-fluid"
+              className="mx-3 mt-n3 img-fluid"
+              style={{ borderRadius: "1rem" }}
             />
             {href.includes("https") ? (
               <a
@@ -179,7 +197,14 @@ const BlogsToCelupartsPages = () => {
                 style={{ textDecoration: "none" }}
               >
                 <CardBody>
-                  <CardTitle className="mt-2" tag="h4">
+                  <CardTitle
+                    className="mt-2"
+                    tag="h4"
+                    style={{
+                      borderBottom: "1px solid grey",
+                      paddingBottom: "0.3rem"
+                    }}
+                  >
                     {title}
                   </CardTitle>
                   <CardSubtitle className="text-muted mt-1">
@@ -190,7 +215,14 @@ const BlogsToCelupartsPages = () => {
             ) : (
               <Link to={href} style={{ textDecoration: "none" }}>
                 <CardBody style={style}>
-                  <CardTitle className="mt-2" tag="h4">
+                  <CardTitle
+                    className="mt-2"
+                    tag="h4"
+                    style={{
+                      borderBottom: "1px solid grey",
+                      paddingBottom: "0.3rem"
+                    }}
+                  >
                     {title}
                   </CardTitle>
                   <CardSubtitle className="text-muted mt-1">
