@@ -56,6 +56,10 @@ import TabletIcon from "@mui/icons-material/Tablet";
 import WatchIcon from "@mui/icons-material/Watch";
 import AppSettingsAltIcon from "@mui/icons-material/AppSettingsAlt";
 import NumbersIcon from "@mui/icons-material/Numbers";
+import BadgeIcon from "@mui/icons-material/Badge";
+import PersonIcon from "@mui/icons-material/Person";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import Combobox from "react-widgets/Combobox";
@@ -83,11 +87,15 @@ import getUserLastRetomaRequestInfo from "../../services/getUserLastRetomaReques
 import ComponentCard from "../../components/ComponentCard";
 import getSmartWatchesBrands from "../../services/getSmartWatchesBrands";
 import getTabletsBrands from "../../services/getTabletsBrands";
+import getSingleUser from "../../services/getSingleUser";
+import putUserDto from "../../services/putUserDto";
 
 export default function RequestRetomaForm() {
   const [selectedFile, setSelectedFile] = useState();
   const [errorMsg, setErrorMsg] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isOwnRequest, setIsOwnRequest] = useState(true);
+  const [userInfo, setUserInfo] = useState({});
 
   const handleFileChange = event => {
     if (event.target.files.length > 0) {
@@ -106,7 +114,12 @@ export default function RequestRetomaForm() {
   const [pickUpAddress, setPickUpAddress] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [equipmentBrand, setEquipmentBrand] = useState("");
-
+  const [typeDocument, setTypeDocument] = useState("");
+  const [identificacionNumber, setIdentificationNumber] = useState("");
+  const [username, setUsername] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [phone, setPhone] = useState("");
+  const [alternativePhone, setAlternativePhone] = useState("");
   /*Datos donde iran la lista de marcas de celulares, computadoras mas populares y tipops de
     dispositivo*/
   const [cellphoneList, setCellphoneList] = useState([]);
@@ -123,6 +136,13 @@ export default function RequestRetomaForm() {
   const [smartWatchesList, setSmartWatchesList] = useState([]);
   const [typeOfEquipmentList, setTypeOfEquipmentList] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [typeDocumentList, setTypeDocumentList] = useState([
+    { label: "Seleccione el tipo de documento", value: "" },
+    { label: "Cédula de Ciudadania", value: "CC" },
+    { label: "Cédula de extranjeria", value: "CE" },
+    { label: "Pasaporte", value: "PA" },
+    { label: "Número de identificación", value: "NIP" }
+  ]);
 
   const handleSameAddresses = () => {
     setIsSameAddresses(!isSameAddresses);
@@ -231,7 +251,7 @@ export default function RequestRetomaForm() {
       });
   }, []);
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     const MAX_FILE_SIZE = 1024; // 1MB
@@ -276,9 +296,37 @@ export default function RequestRetomaForm() {
         : e.target.elements.deliveryAddress.value;
       // console.log('deliveryAddress: ', deliveryAddress2)
 
+      const userDtoInfo = userInfo;
+      delete userDtoInfo.requests;
+
+      if (isOwnRequest && !userInfo?.idNumber) {
+        try {
+          await putUserDto({
+            ...userDtoInfo,
+            names: username,
+            surnames: lastname,
+            phone,
+            alternativePhone,
+            idNumber: identificacionNumber,
+            idType: typeDocument
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      } else if (isOwnRequest) {
+        try {
+          await putUserDto({
+            ...userDtoInfo,
+            phone,
+            alternativePhone
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
       postEquipment(formData)
         .then(dataEquipment => {
-          console.log("data", dataEquipment);
           postRequest({
             idUser: JSON.parse(localStorage.getItem("user")).idUser,
             idEquipment: dataEquipment.idEquipment,
@@ -286,7 +334,13 @@ export default function RequestRetomaForm() {
             pickUpAddress: pickUpAddress,
             deliveryAddress: deliveryAddress2,
             statusQuote: "Pendiente",
-            autoDiagnosis: e.target.elements.autoDiagnosis.value
+            autoDiagnosis: e.target.elements.autoDiagnosis.value,
+            names: username,
+            surnames: lastname,
+            phone,
+            alternativePhone,
+            idNumber: identificacionNumber,
+            idType: typeDocument
           })
             .then(dataRequest => {
               getRequestWithUserInfo({ id: dataRequest.idRequest }).then(
@@ -313,7 +367,9 @@ export default function RequestRetomaForm() {
                       " con imei o serial: " +
                       e.target.elements.imei.value +
                       " a nombre del señor/a " +
-                      JSON.parse(localStorage.getItem("user")).name +
+                      dataRequest.names +
+                      " " +
+                      dataRequest.surnames +
                       ", número de teléfono de contácto: " +
                       userInfo[0].userDto.phone +
                       ", el usuario decidió pagar por medio de " +
@@ -407,6 +463,42 @@ export default function RequestRetomaForm() {
     }
   };
 
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const response = await getSingleUser({ id: user?.idUser });
+      setUserInfo(response[0]);
+    };
+    getUserInfo();
+  }, []);
+
+  const changeUserInfo = () => {
+    setTypeDocument(userInfo?.idType);
+    setIdentificationNumber(userInfo?.idNumber);
+    setUsername(userInfo?.names);
+    setLastname(userInfo?.surnames);
+    setPhone(userInfo?.phone);
+    setAlternativePhone(userInfo?.alternativePhone);
+  };
+
+  useEffect(() => {
+    changeUserInfo();
+  }, [userInfo]);
+
+  const handleOwnRequest = () => {
+    if (isOwnRequest) {
+      setTypeDocument("");
+      setIdentificationNumber("");
+      setUsername("");
+      setLastname("");
+      setPhone("");
+      setAlternativePhone("");
+    } else {
+      changeUserInfo();
+    }
+    setIsOwnRequest(!isOwnRequest);
+  };
+
   const isWeekDay = date => {
     const day = date.day();
     // return day !== 0 && day !== 6; ignora sabados y domingos
@@ -471,7 +563,356 @@ export default function RequestRetomaForm() {
                     }
                   }}
                 >
-                  <Row>
+                  <Row className="mb-4">
+                    <Col>
+                      <Checkbox
+                        label=" Es para otra persona"
+                        value={isOwnRequest ? "off" : "on"}
+                        onChange={handleOwnRequest}
+                      />
+                    </Col>
+                  </Row>
+                  {isOwnRequest && userInfo?.idType && userInfo?.idNumber ? (
+                    <>
+                      <Row>
+                        <Col md="6" className="mb-3">
+                          <FormControl fullWidth>
+                            <InputLabel shrink id="typeDocument">
+                              Tipo de documento *
+                            </InputLabel>
+                            <Select
+                              id="typeDocument"
+                              name="typeDocument"
+                              disabled
+                              displayEmpty
+                              value={typeDocument}
+                              required
+                              input={
+                                <OutlinedInput
+                                  notched
+                                  label="Tipo de documento *"
+                                />
+                              }
+                              onChange={e => setTypeDocument(e.target.value)}
+                              renderValue={value => {
+                                const items = typeDocumentList.find(
+                                  v => v.value == value
+                                );
+                                return (
+                                  <Box
+                                    color="#757575"
+                                    sx={{ display: "flex", gap: 1 }}
+                                  >
+                                    <SvgIcon>
+                                      <AssignmentIndIcon />
+                                    </SvgIcon>
+                                    <Box
+                                      sx={{
+                                        color: "black",
+                                        fontSize: "0.9rem"
+                                      }}
+                                    >
+                                      {items
+                                        ? items.label
+                                        : "Seleccione el tipo de documento"}
+                                    </Box>
+                                  </Box>
+                                );
+                              }}
+                            >
+                              {typeDocumentList.map((document, index) => (
+                                <MenuItem value={document.value} key={index}>
+                                  {document.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Col>
+                        <Col md="6">
+                          <TextField
+                            aria-describedby="my-helper-text"
+                            id="identificationNumber"
+                            disabled
+                            name="identificationNumber"
+                            value={identificacionNumber}
+                            onChange={e =>
+                              setIdentificationNumber(e.target.value)
+                            }
+                            placeholder="Ingrese número de identificacion"
+                            type="number"
+                            label="Número de identificacion"
+                            required
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <BadgeIcon />
+                                </InputAdornment>
+                              )
+                            }}
+                          />
+                        </Col>
+                      </Row>
+                      <Row className="mt-3">
+                        <Col md="6" className="mb-3">
+                          <TextField
+                            aria-describedby="userName"
+                            id="userName"
+                            name="userName"
+                            value={username}
+                            disabled
+                            onChange={e => setUsername(e.target.value)}
+                            placeholder="Nombres del solicitante"
+                            type="text"
+                            label="Nombres"
+                            required
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <PersonIcon />
+                                </InputAdornment>
+                              )
+                            }}
+                          />
+                        </Col>
+                        <Col md="6">
+                          <TextField
+                            aria-describedby="lastname"
+                            id="lastname"
+                            name="lastname"
+                            value={lastname}
+                            disabled
+                            onChange={e => setLastname(e.target.value)}
+                            placeholder="Apellidos del solicitante"
+                            type="text"
+                            label="Apellidos"
+                            required
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <PersonIcon />
+                                </InputAdornment>
+                              )
+                            }}
+                          />
+                        </Col>
+                      </Row>
+                      <Row className="mt-3">
+                        <Col md="6" className="mb-3">
+                          <TextField
+                            aria-describedby="Teléfono"
+                            id="phone"
+                            name="phone"
+                            value={phone}
+                            onChange={e => setPhone(e.target.value)}
+                            placeholder="Ingrese un numero de teléfono"
+                            type="text"
+                            label="Telefono"
+                            required
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <ContactPhoneIcon />
+                                </InputAdornment>
+                              )
+                            }}
+                          />
+                        </Col>
+                        <Col md="6">
+                          <TextField
+                            aria-describedby="Telefono opcional"
+                            id="alternativePhone"
+                            name="alternativePhone"
+                            value={alternativePhone}
+                            onChange={e => setAlternativePhone(e.target.value)}
+                            placeholder="Ingrese telefono alternativo"
+                            type="text"
+                            label="Teléfono Opcional"
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <ContactPhoneIcon />
+                                </InputAdornment>
+                              )
+                            }}
+                          />
+                        </Col>
+                      </Row>
+                    </>
+                  ) : (
+                    <>
+                      <Row>
+                        <Col md="6" className="mb-3">
+                          <FormControl fullWidth>
+                            <InputLabel shrink id="typeDocument">
+                              Tipo de documento *
+                            </InputLabel>
+                            <Select
+                              id="typeDocument"
+                              name="typeDocument"
+                              displayEmpty
+                              value={typeDocument}
+                              required
+                              input={
+                                <OutlinedInput
+                                  notched
+                                  label="Tipo de documento *"
+                                />
+                              }
+                              onChange={e => setTypeDocument(e.target.value)}
+                              renderValue={value => {
+                                const items = typeDocumentList.find(
+                                  v => v.value == value
+                                );
+                                return (
+                                  <Box
+                                    color="#757575"
+                                    sx={{ display: "flex", gap: 1 }}
+                                  >
+                                    <SvgIcon>
+                                      <AssignmentIndIcon />
+                                    </SvgIcon>
+                                    <Box
+                                      sx={{
+                                        color: "black",
+                                        fontSize: "0.9rem"
+                                      }}
+                                    >
+                                      {items
+                                        ? items.label
+                                        : "Seleccione el tipo de documento"}
+                                    </Box>
+                                  </Box>
+                                );
+                              }}
+                            >
+                              {typeDocumentList.map((document, index) => (
+                                <MenuItem value={document.value} key={index}>
+                                  {document.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Col>
+                        <Col md="6">
+                          <TextField
+                            aria-describedby="my-helper-text"
+                            id="identificationNumber"
+                            name="identificationNumber"
+                            value={identificacionNumber}
+                            onChange={e =>
+                              setIdentificationNumber(e.target.value)
+                            }
+                            placeholder="Ingrese número de identificacion"
+                            type="number"
+                            label="Número de identificacion"
+                            required
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <BadgeIcon />
+                                </InputAdornment>
+                              )
+                            }}
+                          />
+                        </Col>
+                      </Row>
+                      <Row className="mt-3">
+                        <Col md="6" className="mb-3">
+                          <TextField
+                            aria-describedby="userName"
+                            id="userName"
+                            name="userName"
+                            value={username}
+                            onChange={e => setUsername(e.target.value)}
+                            placeholder="Nombres del solicitante"
+                            type="text"
+                            label="Nombres"
+                            required
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <PersonIcon />
+                                </InputAdornment>
+                              )
+                            }}
+                          />
+                        </Col>
+                        <Col md="6">
+                          <TextField
+                            aria-describedby="lastname"
+                            id="lastname"
+                            name="lastname"
+                            value={lastname}
+                            onChange={e => setLastname(e.target.value)}
+                            placeholder="Apellidos del solicitante"
+                            type="text"
+                            label="Apellidos"
+                            required
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <PersonIcon />
+                                </InputAdornment>
+                              )
+                            }}
+                          />
+                        </Col>
+                      </Row>
+                      <Row className="mt-3">
+                        <Col md="6" className="mb-3">
+                          <TextField
+                            aria-describedby="Teléfono"
+                            id="phone"
+                            name="phone"
+                            value={phone}
+                            onChange={e => setPhone(e.target.value)}
+                            placeholder="Ingrese un numero de teléfono"
+                            type="text"
+                            label="Telefono"
+                            required
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <ContactPhoneIcon />
+                                </InputAdornment>
+                              )
+                            }}
+                          />
+                        </Col>
+                        <Col md="6">
+                          <TextField
+                            aria-describedby="Telefono opcional"
+                            id="alternativePhone"
+                            name="alternativePhone"
+                            value={alternativePhone}
+                            onChange={e => setAlternativePhone(e.target.value)}
+                            placeholder="Ingrese telefono alternativo"
+                            type="text"
+                            label="Teléfono Opcional"
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <ContactPhoneIcon />
+                                </InputAdornment>
+                              )
+                            }}
+                          />
+                        </Col>
+                      </Row>
+                    </>
+                  )}
+
+                  <Row className="mt-2 mb-4">
                     <Col>
                       <Checkbox
                         label=" Usar la misma dirección"

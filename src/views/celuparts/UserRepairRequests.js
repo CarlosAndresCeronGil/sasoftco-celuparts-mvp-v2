@@ -252,7 +252,6 @@ export default function UserRepairRequests() {
           });
         Swal.fire("Saved!", "", "success");
       } else if (result.isDenied) {
-        console.log("Entro al rechazar");
         getSingleRequest({ id })
           .then(response => {
             putRequest({

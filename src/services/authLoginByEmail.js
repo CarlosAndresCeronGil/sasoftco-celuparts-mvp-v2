@@ -1,8 +1,8 @@
 // import Swal from 'sweetalert2'
 import { API_URL } from "./settings";
 
-export default function authLogin(data) {
-  const apiURL = `${API_URL}/Auth/login`;
+export default function authLoginByEmail(data) {
+  const apiURL = `${API_URL}/Auth/LoginGoogle`;
 
   return fetch(apiURL, {
     method: "POST",

@@ -3,6 +3,8 @@ import React, { useState, useContext } from "react";
 import jwtDecode from "jwt-decode";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import randomstring from "randomstring";
+
 import {
   Button,
   Label,
@@ -22,6 +24,7 @@ import authLogin from "../../services/authLogin";
 import AuthContext from "../../context/AuthProvider";
 import postValidateUniqueEmailAndId from "../../services/postValidateUniqueEmailAndId";
 import GoogleAuthentication from "../../components/GoogleAuthentication";
+import authLoginByEmail from "../../services/authLoginByEmail";
 
 const RegisterFormik = () => {
   const [passwordType, setPasswordType] = useState("password");
@@ -82,9 +85,63 @@ const RegisterFormik = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = fields => {
-    // console.log(fields)
+  const handleSubmitGoogle = ({ data }) => {
+    const formData = new FormData();
+    formData.append("email", data?.email);
+    formData.append("id", "0");
 
+    postValidateUniqueEmailAndId(formData).then(response => {
+      // console.log("Respuesta validate:", response)
+      // console.log(response.status)
+      if (response?.status != 404) {
+        Swal.fire({
+          title: "Condiciones de servicio.",
+          text: "Las condiciones de uso y servicio de Celuparts incluyen el uso y tratamiento de datos requeridos para ofrecer el servicio.",
+          input: "checkbox",
+          showCancelButton: true,
+          cancelButtonText: "Cancelar",
+          inputPlaceholder:
+            "Acepto las condiciones de servicio y política de privacidad de Celuparts."
+        }).then(result => {
+          if (result.isConfirmed) {
+            if (result.value) {
+              authRegister({
+                names: data.given_name,
+                surnames: data.family_name,
+                email: data.email,
+                accountStatus: "Habilitada",
+                password: randomstring.generate(7)
+              }).then(() => {
+                authLoginByEmail({
+                  email: data?.email
+                }).then(response => {
+                  const user = jwtDecode(response);
+                  localStorage.setItem("user", JSON.stringify(user));
+                  setAuth(true);
+                  navigate("/home/dashboards/dashboard1");
+                });
+              });
+            }
+          } else {
+            Swal.fire({
+              icon: "error",
+              text: "Debes aceptar los términos y condiciones para registrarte en el sistema."
+            });
+            setLoading(false);
+          }
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          text: "El email o número de identificación que estas intentando ingresar ya esta registrado"
+        }).then(responseError => {
+          setLoading(false);
+        });
+      }
+    });
+  };
+
+  const handleSubmit = fields => {
     const formData = new FormData();
     formData.append("email", fields.email);
     formData.append("id", fields.idNumber);
@@ -304,10 +361,6 @@ const RegisterFormik = () => {
                     >
                       {({ touched, errors }) => (
                         <Form>
-                          {/* <Row className="d-flex justify-content-center">
-                            <GoogleAuthentication style={{ width: "50%" }} />
-                          </Row> */}
-
                           <Row>
                             <Col lg="6">
                               <Label htmlFor="idType">Tipo de documento</Label>
@@ -539,7 +592,7 @@ const RegisterFormik = () => {
                             </Col>
                           </Row>
 
-                          <FormGroup className="d-flex align-items-center justify-content-center pt-5">
+                          <FormGroup className="d-flex align-items-center justify-content-center pt-4">
                             <Button
                               className="btn btn-outline-secondary me-2"
                               type="reset"
@@ -573,6 +626,14 @@ const RegisterFormik = () => {
                         </Form>
                       )}
                     </Formik>
+                    <hr />
+                    <Row className="mt-2">
+                      <Col md="12" className="d-flex justify-content-center">
+                        <GoogleAuthentication
+                          onAuthenticated={handleSubmitGoogle}
+                        />
+                      </Col>
+                    </Row>
                   </div>
                 </div>
               </div>

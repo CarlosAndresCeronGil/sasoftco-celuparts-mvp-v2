@@ -550,7 +550,7 @@ export default function AllRequestsTable() {
             {requests.requests.map((tdata, index) => (
               <tr key={index} className="border-top">
                 <td>
-                  {tdata.userDto.names} {tdata.userDto.surnames}
+                  {tdata.names} {tdata.surnames}
                 </td>
                 <td>{`${new Date(tdata.requestDate).getFullYear()}-${
                   new Date(tdata.requestDate).getMonth() + 1

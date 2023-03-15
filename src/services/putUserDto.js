@@ -1,7 +1,7 @@
 import { API_URL } from "./settings";
 
-export default function putRequest(data) {
-  const apiURL = `${API_URL}/Request`;
+export default function putUserDto(data) {
+  const apiURL = `${API_URL}/UserDto`;
 
   return fetch(apiURL, {
     method: "PUT",

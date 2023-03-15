@@ -1,17 +1,17 @@
 import React from "react";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import jwtDecode from "jwt-decode";
 
-const GoogleAuthentication = () => {
+/* eslint-disable react/prop-types */
+
+const GoogleAuthentication = ({ onAuthenticated }) => {
   const responseMessage = response => {
-    console.log(response);
-    console.log(jwtDecode(response.credential));
+    const userInfo = jwtDecode(response.credential);
+    onAuthenticated({ data: userInfo });
   };
   const errorMessage = error => {
     console.log(error);
   };
-
-  googleLogout();
 
   return (
     <GoogleLogin

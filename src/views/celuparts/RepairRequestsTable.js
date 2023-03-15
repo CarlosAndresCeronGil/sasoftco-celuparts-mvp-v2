@@ -577,6 +577,7 @@ export default function RepairRequestsTable() {
             </tr>
           </thead>
           <tbody>
+            {console.log(requests)}
             {requests.requests.map((tdata, index) =>
               tdata.requestType === "Reparacion" ? (
                 <tr key={index} className="border-top">
@@ -584,7 +585,7 @@ export default function RepairRequestsTable() {
                   {JSON.parse(localStorage.getItem("user")).role !=
                     "tecnico" && (
                     <td>
-                      {tdata.userDto.names} {tdata.userDto.surnames}
+                      {tdata.names} {tdata.surnames}
                     </td>
                   )}
                   <td>{`${new Date(tdata.requestDate).getFullYear()}-${

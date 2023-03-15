@@ -611,7 +611,6 @@ export default function RetomaRequestsTable() {
             </tr>
           </thead>
           <tbody>
-            {console.log("retima", requests.requests)}
             {requests.requests.map((tdata, index) =>
               tdata.requestType === "Retoma" ? (
                 <tr key={index} className="border-top">
@@ -619,7 +618,7 @@ export default function RetomaRequestsTable() {
                   {JSON.parse(localStorage.getItem("user")).role !=
                     "tecnico" && (
                     <td>
-                      {tdata.userDto.names} {tdata.userDto.surnames}
+                      {tdata.names} {tdata.surnames}
                     </td>
                   )}
                   <td>{`${new Date(tdata.requestDate).getFullYear()}-${

@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import GoogleAuthentication from "../../components/GoogleAuthentication";
+import authLoginByEmail from "../../services/authLoginByEmail";
 
 const LoginFormik = () => {
   const navigate = useNavigate();
@@ -64,6 +65,46 @@ const LoginFormik = () => {
   //     { theme: "outline", size: "large" }
   //   )
   // }, [])
+
+  const handleSubmitGoogle = ({ data }) => {
+    console.log(data);
+    try {
+      authLoginByEmail({
+        email: data?.email
+      })
+        .then(response => {
+          // console.log("Response from sign in:", response);
+          if (response !== undefined) {
+            if (response === "Account disabled") {
+              setLoading(false);
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Cuenta inhabilitada, contacte con el número 315-808-0836 para soporte técnico"
+              });
+            } else {
+              const user = jwtDecode(response);
+              // console.log("user", user);
+              localStorage.setItem("user", JSON.stringify(user));
+              setAuth(true);
+              navigate("/home/dashboards/dashboard1");
+            }
+          }
+        })
+        .catch(error => {
+          setLoading(false);
+          console.log("error:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Usuario o contraseña incorrecto!"
+          });
+        });
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
 
   const handleSubmit = e => {
     setLoading(true);
@@ -233,9 +274,9 @@ const LoginFormik = () => {
                                     >
                                       Iniciar sesión
                                     </button>
-                                    <div className="jus">
-                                      <GoogleAuthentication />
-                                    </div>
+                                    <GoogleAuthentication
+                                      onAuthenticated={handleSubmitGoogle}
+                                    />
                                   </div>
 
                                   <div className="d-flex justify-content-center align-items-center mb-4">
