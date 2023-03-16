@@ -251,9 +251,7 @@ export default function RequestRetomaForm() {
       });
   }, []);
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-
+  const handleRetoma = e => {
     const MAX_FILE_SIZE = 1024; // 1MB
 
     if (!selectedFile) {
@@ -294,36 +292,6 @@ export default function RequestRetomaForm() {
       const deliveryAddress2 = isSameAddresses
         ? e.target.elements.pickUpAddress.value
         : e.target.elements.deliveryAddress.value;
-      // console.log('deliveryAddress: ', deliveryAddress2)
-
-      const userDtoInfo = userInfo;
-      delete userDtoInfo.requests;
-
-      if (isOwnRequest && !userInfo?.idNumber) {
-        try {
-          await putUserDto({
-            ...userDtoInfo,
-            names: username,
-            surnames: lastname,
-            phone,
-            alternativePhone,
-            idNumber: identificacionNumber,
-            idType: typeDocument
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      } else if (isOwnRequest) {
-        try {
-          await putUserDto({
-            ...userDtoInfo,
-            phone,
-            alternativePhone
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      }
 
       postEquipment(formData)
         .then(dataEquipment => {
@@ -460,6 +428,60 @@ export default function RequestRetomaForm() {
       }).then(response => {
         navigate("/home/user-retoma-requests");
       });
+    }
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const userDtoInfo = userInfo;
+    delete userDtoInfo.requests;
+
+    if (isOwnRequest && !userInfo?.idNumber) {
+      putUserDto({
+        idUser: userDtoInfo.idUser,
+        names: username,
+        surnames: lastname,
+        phone,
+        alternativePhone,
+        idNumber: identificacionNumber,
+        email: userDtoInfo.email,
+        idType: typeDocument,
+        accountStatus: userDtoInfo.accountStatus,
+        loginAttempts: userDtoInfo.loginAttempts
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(response => {
+          console.log(response);
+          handleRetoma(e);
+        })
+        .catch(() => {
+          Swal.fire({
+            icon: "error",
+            text: "Identificación no valida"
+          });
+        });
+    } else if (isOwnRequest) {
+      putUserDto({
+        ...userDtoInfo,
+        phone,
+        alternativePhone
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(response => {
+          console.log(response);
+          handleRetoma(e);
+        })
+        .catch(() => {
+          Swal.fire({
+            icon: "error",
+            text: "Identificación no valida"
+          });
+        });
     }
   };
 

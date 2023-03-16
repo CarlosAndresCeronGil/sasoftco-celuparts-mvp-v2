@@ -335,7 +335,7 @@ const RegisterFormik = () => {
                 </div>
 
                 <div className="col-lg-7">
-                  <div className="card-body p-md-5 mx-md-4 ">
+                  <div className="card-body p-md-3 p-md-1 mx-md-4 ">
                     <h4 className="mb-0 fw-bold text-center">Regístrate</h4>
                     <div className="d-flex align-items-center justify-content-center pb-4">
                       <p className="mb-0 me-2">¿Ya tienes una cuenta?</p>
@@ -626,14 +626,39 @@ const RegisterFormik = () => {
                         </Form>
                       )}
                     </Formik>
-                    <hr />
-                    <Row className="mt-2">
-                      <Col md="12" className="d-flex justify-content-center">
+
+                    <div className="d-flex mb-2">
+                      <div style={{ flex: 2 }}>
+                        <hr color="grey" style={{ width: "95%" }} />
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          fontSize: "0.8rem",
+                          color: "grey"
+                        }}
+                      >
+                        0
+                      </div>
+                      <div
+                        style={{
+                          flex: 2,
+                          display: "flex",
+                          justifyContent: "flex-end"
+                        }}
+                      >
+                        <hr color="grey" style={{ width: "95%" }} />
+                      </div>
+                    </div>
+                    <div className="mb-5">
+                      <div>
                         <GoogleAuthentication
                           onAuthenticated={handleSubmitGoogle}
+                          widthButton="70%"
                         />
-                      </Col>
-                    </Row>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import "./Error.scss";
-import errorBg from '../../assets/images/background/error-bg.jpg';
+import errorBg from "../../assets/images/background/error-bg.jpg";
 
 const Error = () => {
   return (
@@ -15,7 +15,7 @@ const Error = () => {
             <div className="my-3">
               <h4>PAGINA NO ENCONTRADA!</h4>
               <span className="text-muted d-block fs-5">
-              Parece que estás tratando de encontrar su camino a casa.{' '}
+                Parece que estás tratando de encontrar su camino a casa.{" "}
               </span>
             </div>
 

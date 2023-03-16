@@ -67,7 +67,6 @@ const LoginFormik = () => {
   // }, [])
 
   const handleSubmitGoogle = ({ data }) => {
-    console.log(data);
     try {
       authLoginByEmail({
         email: data?.email
@@ -158,14 +157,14 @@ const LoginFormik = () => {
                 <div className="card rounded-3 text-black shadow-lg">
                   <div className="row g-0">
                     <div className="col-lg-6 d-flex align-items-center justify-content-center ">
-                      <div className="card-body p-md-5 mx-md-4">
+                      <div className="card-body p-md-3 pb-md-1 mx-md-4">
                         <div className="text-center">
                           <img
                             src="/celuparts-transparent-2.png"
                             width="200"
                             alt="logo"
                           />
-                          <h4 className="mt-1 mb-5 pb-1">
+                          <h4 className="mt-1 mb-4 pb-1">
                             Tu móvil en nuestras manos
                           </h4>
                         </div>
@@ -183,7 +182,7 @@ const LoginFormik = () => {
                               <p className="text-center">
                                 Inicia sesión con tu cuenta
                               </p>
-                              <FormGroup className="form-outline mb-4">
+                              <FormGroup className="form-outline mb-3">
                                 <label className="form-label" htmlFor="email">
                                   Email
                                 </label>
@@ -267,19 +266,16 @@ const LoginFormik = () => {
                                 </div>
                               ) : (
                                 <>
-                                  <div className="text-center pt-1 mb-3 pb-1 d-flex flex-column align-items-center">
+                                  <div className="text-center pt-1 mb-1 pb-1 d-flex flex-column align-items-center">
                                     <button
                                       className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
                                       type="submit"
                                     >
                                       Iniciar sesión
                                     </button>
-                                    <GoogleAuthentication
-                                      onAuthenticated={handleSubmitGoogle}
-                                    />
                                   </div>
 
-                                  <div className="d-flex justify-content-center align-items-center mb-4">
+                                  <div className="d-flex justify-content-center align-items-center mb-2">
                                     <Link
                                       to="/recoverpassword"
                                       className="text-muted"
@@ -289,6 +285,38 @@ const LoginFormik = () => {
                                   </div>
                                 </>
                               )}
+                              <div className="d-flex mb-2">
+                                <div style={{ flex: 2 }}>
+                                  <hr color="grey" style={{ width: "95%" }} />
+                                </div>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    fontSize: "0.8rem",
+                                    color: "grey"
+                                  }}
+                                >
+                                  0
+                                </div>
+                                <div
+                                  style={{
+                                    flex: 2,
+                                    display: "flex",
+                                    justifyContent: "flex-end"
+                                  }}
+                                >
+                                  <hr color="grey" style={{ width: "95%" }} />
+                                </div>
+                              </div>
+
+                              <div className="mb-5">
+                                <div>
+                                  <GoogleAuthentication
+                                    onAuthenticated={handleSubmitGoogle}
+                                  />
+                                </div>
+                              </div>
 
                               <div className="d-flex align-items-center justify-content-center pb-4">
                                 <p className="mb-0 me-2">¿No tienes cuenta?</p>
@@ -314,9 +342,10 @@ const LoginFormik = () => {
                     <div className="col-lg-6 d-flex align-items-center gradient-custom-2 border">
                       <div className="img-fluid">
                         <img
-                          className="d-none d-lg-block rounded-end"
+                          className="d-none d-lg-block rounded-end img-fluid"
                           src="iniciodesesion.png"
-                          height="650"
+                          height="100%"
+                          style={{ width: "100% !important" }}
                           alt="logo"
                         />
                       </div>

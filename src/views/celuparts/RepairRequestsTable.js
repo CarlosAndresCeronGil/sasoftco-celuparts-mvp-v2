@@ -616,6 +616,7 @@ export default function RepairRequestsTable() {
                   {JSON.parse(localStorage.getItem("user")).role !=
                     "mensajero" && (
                     <td>
+                      {console.log(tdata)}
                       {tdata.repairs[0].repairTime != null
                         ? tdata.repairs[0].repairTime
                         : "Sin registrar"}

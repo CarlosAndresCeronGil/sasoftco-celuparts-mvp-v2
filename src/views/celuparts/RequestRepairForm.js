@@ -245,8 +245,7 @@ export default function RequestRepairForm() {
       });
   }, []);
 
-  const handleSubmit = async e => {
-    e.preventDefault();
+  const handleRepair = e => {
     setLoading(true);
 
     const formData = new FormData();
@@ -267,34 +266,6 @@ export default function RequestRepairForm() {
       ? e.target.elements.pickUpAddress.value
       : e.target.elements.deliveryAddress.value;
 
-    const userDtoInfo = userInfo;
-    delete userDtoInfo.requests;
-
-    if (isOwnRequest && !userInfo?.idNumber) {
-      try {
-        await putUserDto({
-          ...userDtoInfo,
-          names: username,
-          surnames: lastname,
-          phone,
-          alternativePhone,
-          idNumber: identificacionNumber,
-          idType: typeDocument
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (isOwnRequest) {
-      try {
-        await putUserDto({
-          ...userDtoInfo,
-          phone,
-          alternativePhone
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
     postEquipment(formData)
       .then(data => {
         postRequest({
@@ -413,6 +384,60 @@ export default function RequestRepairForm() {
         setLoading(false);
         console.log(error);
       });
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const userDtoInfo = userInfo;
+    delete userDtoInfo.requests;
+
+    if (isOwnRequest && !userInfo?.idNumber) {
+      putUserDto({
+        idUser: userDtoInfo.idUser,
+        names: username,
+        surnames: lastname,
+        phone,
+        alternativePhone,
+        idNumber: identificacionNumber,
+        idType: typeDocument,
+        email: userDtoInfo.email,
+        accountStatus: userDtoInfo.accountStatus,
+        loginAttempts: userDtoInfo.loginAttempts
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(response => {
+          console.log(response);
+          handleRepair(e);
+        })
+        .catch(() => {
+          Swal.fire({
+            icon: "error",
+            text: "Identificación no valida"
+          });
+        });
+    } else if (isOwnRequest && userInfo?.idNumber) {
+      putUserDto({
+        ...userDtoInfo,
+        phone,
+        alternativePhone
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(response => {
+          console.log(response);
+          handleRepair(e);
+        })
+        .catch(() => {
+          Swal.fire({
+            icon: "error",
+            text: "Identificación no valida"
+          });
+        });
+    }
   };
 
   useEffect(() => {
