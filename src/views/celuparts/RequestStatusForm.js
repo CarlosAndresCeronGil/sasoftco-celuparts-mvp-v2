@@ -77,6 +77,11 @@ export default function RequestStatusForm() {
     toShow: "",
     priority: 0
   });
+  const [opcionesMensajero, setOpcionesMensajero] = useState([]);
+
+  const [opcionesTecnico, setopcionesTecnico] = useState([]);
+
+  const [opcionesAdmin, setOpcionesAdmin] = useState([]);
 
   const options = [
     {
@@ -465,7 +470,155 @@ export default function RequestStatusForm() {
   const handleBackPage = e => {
     navigate(-1);
   };
+  const llenarOpcionesMensajero = () => {
+    const newOpcionesMensajero = [];
+    if (status.status) {
+      options.forEach((option, index) => {
+        if (
+          !option.showToCourier ||
+          (currentOption.priority != 4 &&
+            currentOption.priority != 5.1 &&
+            option.priority > currentOption.priority + 1 &&
+            currentOption.value != "En devolucion") ||
+          (currentOption.value != "En devolucion" &&
+            currentOption.priority != 5.1 &&
+            option.priority < currentOption.priority + 1 &&
+            !requestHistory.some(n => n.status === option.value)) ||
+          option.value == "Elija una opcion" ||
+          requestHistory.some(n => n.status === option.value) ||
+          (currentOption.priority == 2 &&
+            currentOption.value == "Anulado por IMEI" &&
+            option.priority >= 2) ||
+          (currentOption.priority == 4 &&
+            currentOption.value == "En reparacion" &&
+            option.priority >= 5.2) ||
+          (currentOption.priority == 4 &&
+            currentOption.value == "En devolucion" &&
+            (option.priority == 5.1 ||
+              option.priority <= 4 ||
+              option.priority > currentOption.priority + 1.2)) ||
+          (currentOption.priority == 4 && currentOption.value == "Retoma") ||
+          (currentOption.priority == 5.1 && option.priority != 6) ||
+          (option.value === "En camino" &&
+            dataRequestStatus.paymentStatus === "No pago") ||
+          (currentOption.value === "Revisado" &&
+            option.value === "En devolucion" &&
+            location.state.statusQuote != "Rechazada")
+        ) {
+        } else {
+          newOpcionesMensajero.push(option);
+        }
+      });
 
+      setOpcionesMensajero([
+        options.find(v => v.value === status.status),
+        ...newOpcionesMensajero
+      ]);
+    }
+  };
+
+  const llenarOpcionesTecnico = () => {
+    const newOpcionesTecnico = [];
+    if (status.status) {
+      options.forEach((option, index) => {
+        if (
+          !option.showToTechnician ||
+          (currentOption.priority != 4 &&
+            currentOption.priority != 5.1 &&
+            option.priority > currentOption.priority + 1 &&
+            currentOption.value != "En devolucion") ||
+          (currentOption.value != "En devolucion" &&
+            currentOption.priority != 5.1 &&
+            option.priority < currentOption.priority + 1 &&
+            !requestHistory.some(n => n.status === option.value)) ||
+          option.value == "Elija una opcion" ||
+          (requestHistory.some(n => n.status === option.value) &&
+            !(
+              !isRepair &&
+              requestHistory.some(n => n.status == "Revisado") &&
+              option.priority > 2
+            )) ||
+          (currentOption.priority == 2 &&
+            currentOption.value == "Anulado por IMEI" &&
+            option.priority >= 2) ||
+          (currentOption.priority == 4 &&
+            currentOption.value == "En reparacion" &&
+            option.priority >= 5.2) ||
+          (currentOption.priority == 4 &&
+            currentOption.value == "En devolucion" &&
+            (option.priority == 5.1 ||
+              option.priority <= 4 ||
+              option.priority > currentOption.priority + 1.2)) ||
+          (currentOption.priority == 4 && currentOption.value == "Retoma") ||
+          (currentOption.priority == 5.1 && option.priority != 6) ||
+          (!isRepair && option.priority > 3) ||
+          (location.state.statusQuote !== "Aceptada" &&
+            option.value === "En reparacion")
+        ) {
+          // No hagas nada
+        } else {
+          newOpcionesTecnico.push(option);
+        }
+      });
+      setopcionesTecnico([
+        options.find(v => v.value === status.status),
+        newOpcionesTecnico
+      ]);
+    }
+  };
+
+  const llenarOpcionesAdmin = () => {
+    const newOpcionesAdmin = [];
+    if (status.status) {
+      options.forEach((option, index) => {
+        if (
+          option.value == "Revisado" ||
+          (currentOption.priority != 4 &&
+            currentOption.priority != 5.1 &&
+            option.priority > currentOption.priority + 1 &&
+            currentOption.value != "En devolucion") ||
+          (currentOption.value != "En devolucion" &&
+            currentOption.priority != 5.1 &&
+            option.priority < currentOption.priority + 1 &&
+            !requestHistory.some(n => n.status === option.value)) ||
+          option.value == "Elija una opcion" ||
+          requestHistory.some(n => n.status === option.value) ||
+          (currentOption.priority == 2 &&
+            currentOption.value == "Anulado por IMEI" &&
+            option.priority >= 2) ||
+          (currentOption.priority == 4 &&
+            currentOption.value == "En reparacion" &&
+            option.priority >= 5.2) ||
+          (currentOption.priority == 4 &&
+            currentOption.value == "En devolucion" &&
+            (option.priority == 5.1 ||
+              option.priority <= 4 ||
+              option.priority > currentOption.priority + 1.2)) ||
+          (currentOption.priority == 4 && currentOption.value == "Retoma") ||
+          (currentOption.priority == 5.1 && option.priority != 6) ||
+          (!isRepair && option.value == "En reparacion") ||
+          (option.value === "En camino" &&
+            dataRequestStatus.paymentStatus === "No pago") ||
+          (location.state.statusQuote !== "Aceptada" &&
+            option.value === "En reparacion") ||
+          (location.state.statusQuote !== "Aceptada" &&
+            option.value === "Retoma") ||
+          (currentOption.value === "Revisado" &&
+            option.value === "En devolucion" &&
+            location.state.statusQuote != "Rechazada")
+        ) {
+        }
+        // No hagas nada
+        else {
+          newOpcionesAdmin.push(option);
+        }
+      });
+      setOpcionesAdmin([
+        options.find(v => v.value === status.status),
+        ...newOpcionesAdmin
+      ]);
+    }
+  };
   useEffect(
     function () {
       setLoading(true);
@@ -576,7 +729,12 @@ export default function RequestStatusForm() {
     }
   }, [status.status]);
 
-  console.log("dataRequestStatus", dataRequestStatus);
+  useEffect(() => {
+    llenarOpcionesMensajero();
+    llenarOpcionesTecnico();
+    llenarOpcionesAdmin();
+  }, [requestHistory]);
+
   return loading ? (
     <div>Cargando...</div>
   ) : (
@@ -603,53 +761,13 @@ export default function RequestStatusForm() {
                         value={status.status}
                         onChange={handleStatusChange}
                       >
-                        {options.map((option, index) => (
-                          <option
-                            hidden={
-                              !option.showToCourier ||
-                              (currentOption.priority != 4 &&
-                                currentOption.priority != 5.1 &&
-                                option.priority > currentOption.priority + 1 &&
-                                currentOption.value != "En devolucion") ||
-                              (currentOption.value != "En devolucion" &&
-                                currentOption.priority != 5.1 &&
-                                option.priority < currentOption.priority + 1 &&
-                                !requestHistory.some(
-                                  n => n.status === option.value
-                                )) ||
-                              option.value == "Elija una opcion" ||
-                              requestHistory.some(
-                                n => n.status === option.value
-                              ) ||
-                              (currentOption.priority == 2 &&
-                                currentOption.value == "Anulado por IMEI" &&
-                                option.priority >= 2) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "En reparacion" &&
-                                option.priority >= 5.2) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "En devolucion" &&
-                                (option.priority == 5.1 ||
-                                  option.priority <= 4 ||
-                                  option.priority >
-                                    currentOption.priority + 1.2)) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "Retoma") ||
-                              (currentOption.priority == 5.1 &&
-                                option.priority != 6) ||
-                              (option.value === "En camino" &&
-                                dataRequestStatus.paymentStatus ===
-                                  "No pago") ||
-                              (currentOption.value === "Revisado" &&
-                                option.value === "En devolucion" &&
-                                location.state.statusQuote != "Rechazada")
-                            }
-                            value={option.value}
-                            key={index}
-                          >
-                            {option.toShow}
-                          </option>
-                        ))}
+                        {opcionesMensajero.map((option, index) => {
+                          return (
+                            <option value={option.value} key={index}>
+                              {option.toShow}
+                            </option>
+                          );
+                        })}
                       </Input>
                     </FormGroup>
                   ) : JSON.parse(localStorage.getItem("user")).role ===
@@ -665,57 +783,13 @@ export default function RequestStatusForm() {
                         value={status.status}
                         onChange={handleStatusChange}
                       >
-                        {options.map((option, index) => (
-                          <option
-                            hidden={
-                              !option.showToTechnician ||
-                              (currentOption.priority != 4 &&
-                                currentOption.priority != 5.1 &&
-                                option.priority > currentOption.priority + 1 &&
-                                currentOption.value != "En devolucion") ||
-                              (currentOption.value != "En devolucion" &&
-                                currentOption.priority != 5.1 &&
-                                option.priority < currentOption.priority + 1 &&
-                                !requestHistory.some(
-                                  n => n.status === option.value
-                                )) ||
-                              option.value == "Elija una opcion" ||
-                              (requestHistory.some(
-                                n => n.status === option.value
-                              ) &&
-                                !(
-                                  !isRepair &&
-                                  requestHistory.some(
-                                    n => n.status == "Revisado"
-                                  ) &&
-                                  option.priority > 2
-                                )) ||
-                              (currentOption.priority == 2 &&
-                                currentOption.value == "Anulado por IMEI" &&
-                                option.priority >= 2) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "En reparacion" &&
-                                option.priority >= 5.2) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "En devolucion" &&
-                                (option.priority == 5.1 ||
-                                  option.priority <= 4 ||
-                                  option.priority >
-                                    currentOption.priority + 1.2)) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "Retoma") ||
-                              (currentOption.priority == 5.1 &&
-                                option.priority != 6) ||
-                              (!isRepair && option.priority > 3) ||
-                              (location.state.statusQuote !== "Aceptada" &&
-                                option.value === "En reparacion")
-                            }
-                            value={option.value}
-                            key={index}
-                          >
-                            {option.toShow}
-                          </option>
-                        ))}
+                        {opcionesTecnico.map((option, index) => {
+                          return (
+                            <option value={option.value} key={index}>
+                              {option.toShow}
+                            </option>
+                          );
+                        })}
                       </Input>
                     </FormGroup>
                   ) : (
@@ -728,58 +802,13 @@ export default function RequestStatusForm() {
                         value={status.status}
                         onChange={handleStatusChange}
                       >
-                        {options.map((option, index) => (
-                          <option
-                            hidden={
-                              option.value == "Revisado" ||
-                              (currentOption.priority != 4 &&
-                                currentOption.priority != 5.1 &&
-                                option.priority > currentOption.priority + 1 &&
-                                currentOption.value != "En devolucion") ||
-                              (currentOption.value != "En devolucion" &&
-                                currentOption.priority != 5.1 &&
-                                option.priority < currentOption.priority + 1 &&
-                                !requestHistory.some(
-                                  n => n.status === option.value
-                                )) ||
-                              option.value == "Elija una opcion" ||
-                              requestHistory.some(
-                                n => n.status === option.value
-                              ) ||
-                              (currentOption.priority == 2 &&
-                                currentOption.value == "Anulado por IMEI" &&
-                                option.priority >= 2) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "En reparacion" &&
-                                option.priority >= 5.2) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "En devolucion" &&
-                                (option.priority == 5.1 ||
-                                  option.priority <= 4 ||
-                                  option.priority >
-                                    currentOption.priority + 1.2)) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "Retoma") ||
-                              (currentOption.priority == 5.1 &&
-                                option.priority != 6) ||
-                              (!isRepair && option.value == "En reparacion") ||
-                              (option.value === "En camino" &&
-                                dataRequestStatus.paymentStatus ===
-                                  "No pago") ||
-                              (location.state.statusQuote !== "Aceptada" &&
-                                option.value === "En reparacion") ||
-                              (location.state.statusQuote !== "Aceptada" &&
-                                option.value === "Retoma") ||
-                              (currentOption.value === "Revisado" &&
-                                option.value === "En devolucion" &&
-                                location.state.statusQuote != "Rechazada")
-                            }
-                            value={option.value}
-                            key={index}
-                          >
-                            {option.toShow}
-                          </option>
-                        ))}
+                        {opcionesAdmin.map((option, index) => {
+                          return (
+                            <option value={option.value} key={index}>
+                              {option.toShow}
+                            </option>
+                          );
+                        })}
                         {/* <option>En proceso de recogida</option>
                                                         <option value="Recibida tecnico">Recibida técnico</option>
                                                         <option>Revisado</option>
