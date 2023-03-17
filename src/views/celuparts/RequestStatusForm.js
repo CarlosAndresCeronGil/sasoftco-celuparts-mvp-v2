@@ -77,7 +77,13 @@ export default function RequestStatusForm() {
     toShow: "",
     priority: 0
   });
+  const [opcionesMensajero, setOpcionesMensajero] = useState(
+    []
+  );
 
+  const [opcionesTecnico, setopcionesTecnico] = useState(
+    []
+  );
   const options = [
     {
       value: "Elija una opcion",
@@ -214,26 +220,26 @@ export default function RequestStatusForm() {
         });
         status.status === "En proceso de recogida"
           ? [
-              notifications.find(
-                tdata => tdata.idRequest === idRequest.idRequest
-              )
-            ].map(tdata =>
-              putRequestNotification({
-                idRequestNotification: tdata.idRequestNotification,
-                idRequest: tdata.idRequest,
-                message: "Tu dispositivo esta en proceso de recogida!",
-                wasReviewed: false,
-                notificationType: "to_customer"
-              })
-                .then(response => {
-                  // console.log("exito!", response)
-                })
-                .catch(error => {
-                  console.log(error);
-                })
+            notifications.find(
+              tdata => tdata.idRequest === idRequest.idRequest
             )
+          ].map(tdata =>
+            putRequestNotification({
+              idRequestNotification: tdata.idRequestNotification,
+              idRequest: tdata.idRequest,
+              message: "Tu dispositivo esta en proceso de recogida!",
+              wasReviewed: false,
+              notificationType: "to_customer"
+            })
+              .then(response => {
+                // console.log("exito!", response)
+              })
+              .catch(error => {
+                console.log(error);
+              })
+          )
           : status.status === "Recibida tecnico"
-          ? [
+            ? [
               notifications.find(tdata => {
                 return tdata.idRequest === idRequest.idRequest;
               })
@@ -271,152 +277,152 @@ export default function RequestStatusForm() {
                   console.log(error);
                 });
             })
-          : status.status === "En reparacion"
-          ? [
-              notifications.find(
-                tdata => tdata.idRequest === idRequest.idRequest
-              )
-            ].map(tdata =>
-              putRequestNotification({
-                idRequestNotification: tdata.idRequestNotification,
-                idRequest: tdata.idRequest,
-                message:
-                  "El técnico ha empezado con la reparación de tu producto",
-                wasReviewed: false,
-                notificationType: "to_customer"
-              })
-                .then(response => {
-                  // console.log("exito!", response)
-                  putRepairStartDateByIdRequest({
-                    id: tdata.idRequest
-                  });
+            : status.status === "En reparacion"
+              ? [
+                notifications.find(
+                  tdata => tdata.idRequest === idRequest.idRequest
+                )
+              ].map(tdata =>
+                putRequestNotification({
+                  idRequestNotification: tdata.idRequestNotification,
+                  idRequest: tdata.idRequest,
+                  message:
+                    "El técnico ha empezado con la reparación de tu producto",
+                  wasReviewed: false,
+                  notificationType: "to_customer"
                 })
-                .catch(error => {
-                  console.log(error);
-                })
-            )
-          : status.status === "En camino"
-          ? [
-              notifications.find(
-                tdata => tdata.idRequest === idRequest.idRequest
+                  .then(response => {
+                    // console.log("exito!", response)
+                    putRepairStartDateByIdRequest({
+                      id: tdata.idRequest
+                    });
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  })
               )
-            ].map(tdata =>
-              putRequestNotification({
-                idRequestNotification: tdata.idRequestNotification,
-                idRequest: tdata.idRequest,
-                // message: "Producto " + equipmentData.equipmentBrand + " " + equipmentData.modelOrReference + " para devolución el día " + deliveryDate.deliveryDate.toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }) + " al barrio " + deliveryAddress.deliveryAddress,
-                message:
-                  "Producto " +
-                  equipmentData.equipmentBrand +
-                  " " +
-                  equipmentData.modelOrReference +
-                  " para devolución el día " +
-                  addDays(new Date(), 1).toLocaleDateString("es", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric"
-                  }) +
-                  " al barrio " +
-                  deliveryAddress.deliveryAddress,
-                wasReviewed: false,
-                notificationType: "to_courier"
-              })
-                .then(response => {
-                  // console.log("exito!", response)
-                  putHomeServiceByIdRequest({
+              : status.status === "En camino"
+                ? [
+                  notifications.find(
+                    tdata => tdata.idRequest === idRequest.idRequest
+                  )
+                ].map(tdata =>
+                  putRequestNotification({
+                    idRequestNotification: tdata.idRequestNotification,
                     idRequest: tdata.idRequest,
-                    deliveryDate: addDays(new Date(), 1)
-                  });
-                })
-                .catch(error => {
-                  console.log(error);
-                })
-            )
-          : status.status === "Terminada"
-          ? [
-              notifications.find(
-                tdata => tdata.idRequest === idRequest.idRequest
-              )
-            ].map(tdata =>
-              putRequestNotification({
-                idRequestNotification: tdata.idRequestNotification,
-                idRequest: tdata.idRequest,
-                message: "",
-                wasReviewed: false,
-                notificationType: "to_none"
-              })
-                .then(response => {
-                  // console.log("exito!", response)
-                })
-                .catch(error => {
-                  console.log(error);
-                })
-            )
-          : status.status === "Devuelto sin reparacion"
-          ? [
-              notifications.find(
-                tdata => tdata.idRequest === idRequest.idRequest
-              )
-            ].map(tdata =>
-              putRequestNotification({
-                idRequestNotification: tdata.idRequestNotification,
-                idRequest: tdata.idRequest,
-                message: "",
-                wasReviewed: false,
-                notificationType: "to_none"
-              })
-                .then(response => {
-                  // console.log("exito!", response)
-                })
-                .catch(error => {
-                  console.log(error);
-                })
-            )
-          : status.status === "Retoma"
-          ? [
-              notifications.find(
-                tdata => tdata.idRequest === idRequest.idRequest
-              )
-            ].map(tdata =>
-              putRequestNotification({
-                idRequestNotification: tdata.idRequestNotification,
-                idRequest: tdata.idRequest,
-                message:
-                  "Tu pago sobre tu retoma se realizara pronto! Revisa tu medio de pago registrado a celuparts para confirmarlo.",
-                wasReviewed: false,
-                notificationType: "to_customer"
-              })
-                .then(response => {
-                  // console.log("exito!", response)
-                })
-                .catch(error => {
-                  console.log(error);
-                })
-            )
-          : status.status === "Anulado por IMEI"
-          ? [
-              notifications.find(
-                tdata => tdata.idRequest === idRequest.idRequest
-              )
-            ].map(tdata =>
-              putRequestNotification({
-                idRequestNotification: tdata.idRequestNotification,
-                idRequest: tdata.idRequest,
-                message: "Anulado por IMEI",
-                wasReviewed: false,
-                notificationType: "to_none"
-              })
-                .then(response => {
-                  // console.log("exito!", response)
-                })
-                .catch(error => {
-                  console.log(error);
-                })
-            )
-          : console.log("do nothing");
+                    // message: "Producto " + equipmentData.equipmentBrand + " " + equipmentData.modelOrReference + " para devolución el día " + deliveryDate.deliveryDate.toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }) + " al barrio " + deliveryAddress.deliveryAddress,
+                    message:
+                      "Producto " +
+                      equipmentData.equipmentBrand +
+                      " " +
+                      equipmentData.modelOrReference +
+                      " para devolución el día " +
+                      addDays(new Date(), 1).toLocaleDateString("es", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric"
+                      }) +
+                      " al barrio " +
+                      deliveryAddress.deliveryAddress,
+                    wasReviewed: false,
+                    notificationType: "to_courier"
+                  })
+                    .then(response => {
+                      // console.log("exito!", response)
+                      putHomeServiceByIdRequest({
+                        idRequest: tdata.idRequest,
+                        deliveryDate: addDays(new Date(), 1)
+                      });
+                    })
+                    .catch(error => {
+                      console.log(error);
+                    })
+                )
+                : status.status === "Terminada"
+                  ? [
+                    notifications.find(
+                      tdata => tdata.idRequest === idRequest.idRequest
+                    )
+                  ].map(tdata =>
+                    putRequestNotification({
+                      idRequestNotification: tdata.idRequestNotification,
+                      idRequest: tdata.idRequest,
+                      message: "",
+                      wasReviewed: false,
+                      notificationType: "to_none"
+                    })
+                      .then(response => {
+                        // console.log("exito!", response)
+                      })
+                      .catch(error => {
+                        console.log(error);
+                      })
+                  )
+                  : status.status === "Devuelto sin reparacion"
+                    ? [
+                      notifications.find(
+                        tdata => tdata.idRequest === idRequest.idRequest
+                      )
+                    ].map(tdata =>
+                      putRequestNotification({
+                        idRequestNotification: tdata.idRequestNotification,
+                        idRequest: tdata.idRequest,
+                        message: "",
+                        wasReviewed: false,
+                        notificationType: "to_none"
+                      })
+                        .then(response => {
+                          // console.log("exito!", response)
+                        })
+                        .catch(error => {
+                          console.log(error);
+                        })
+                    )
+                    : status.status === "Retoma"
+                      ? [
+                        notifications.find(
+                          tdata => tdata.idRequest === idRequest.idRequest
+                        )
+                      ].map(tdata =>
+                        putRequestNotification({
+                          idRequestNotification: tdata.idRequestNotification,
+                          idRequest: tdata.idRequest,
+                          message:
+                            "Tu pago sobre tu retoma se realizara pronto! Revisa tu medio de pago registrado a celuparts para confirmarlo.",
+                          wasReviewed: false,
+                          notificationType: "to_customer"
+                        })
+                          .then(response => {
+                            // console.log("exito!", response)
+                          })
+                          .catch(error => {
+                            console.log(error);
+                          })
+                      )
+                      : status.status === "Anulado por IMEI"
+                        ? [
+                          notifications.find(
+                            tdata => tdata.idRequest === idRequest.idRequest
+                          )
+                        ].map(tdata =>
+                          putRequestNotification({
+                            idRequestNotification: tdata.idRequestNotification,
+                            idRequest: tdata.idRequest,
+                            message: "Anulado por IMEI",
+                            wasReviewed: false,
+                            notificationType: "to_none"
+                          })
+                            .then(response => {
+                              // console.log("exito!", response)
+                            })
+                            .catch(error => {
+                              console.log(error);
+                            })
+                        )
+                        : console.log("do nothing");
         setLoadingPut(false);
       })
       .then(finalResponse => {
@@ -465,6 +471,137 @@ export default function RequestStatusForm() {
   const handleBackPage = e => {
     navigate(-1);
   };
+  const llenarOpcionesMensajero = () => {
+    const newOpcionesMensajero = [];
+    options.forEach((option, index) => {
+      console.log(index,
+        !option.showToCourier ||
+        (currentOption.priority != 4 &&
+          currentOption.priority != 5.1 &&
+          option.priority > currentOption.priority + 1 &&
+          currentOption.value != "En devolucion") ||
+        (currentOption.value != "En devolucion" &&
+          currentOption.priority != 5.1 &&
+          option.priority < currentOption.priority + 1 &&
+          !requestHistory.some(n => n.status === option.value)) ||
+        option.value == "Elija una opcion" ||
+        requestHistory.some(n => n.status === option.value) ||
+        (currentOption.priority == 2 &&
+          currentOption.value == "Anulado por IMEI" &&
+          option.priority >= 2) ||
+        (currentOption.priority == 4 &&
+          currentOption.value == "En reparacion" &&
+          option.priority >= 5.2) ||
+        (currentOption.priority == 4 &&
+          currentOption.value == "En devolucion" &&
+          (option.priority == 5.1 ||
+            option.priority <= 4 ||
+            option.priority > currentOption.priority + 1.2)) ||
+        (currentOption.priority == 4 &&
+          currentOption.value == "Retoma") ||
+        (currentOption.priority == 5.1 && option.priority != 6) ||
+        (option.value === "En camino" &&
+          dataRequestStatus.paymentStatus === "No pago") ||
+        (currentOption.value === "Revisado" &&
+          option.value === "En devolucion" &&
+          location.state.statusQuote != "Rechazada"));
+      if (
+
+        !option.showToCourier ||
+        (currentOption.priority != 4 &&
+          currentOption.priority != 5.1 &&
+          option.priority > currentOption.priority + 1 &&
+          currentOption.value != "En devolucion") ||
+        (currentOption.value != "En devolucion" &&
+          currentOption.priority != 5.1 &&
+          option.priority < currentOption.priority + 1 &&
+          !requestHistory.some(n => n.status === option.value)) ||
+        option.value == "Elija una opcion" ||
+        requestHistory.some(n => n.status === option.value) ||
+        (currentOption.priority == 2 &&
+          currentOption.value == "Anulado por IMEI" &&
+          option.priority >= 2) ||
+        (currentOption.priority == 4 &&
+          currentOption.value == "En reparacion" &&
+          option.priority >= 5.2) ||
+        (currentOption.priority == 4 &&
+          currentOption.value == "En devolucion" &&
+          (option.priority == 5.1 ||
+            option.priority <= 4 ||
+            option.priority > currentOption.priority + 1.2)) ||
+        (currentOption.priority == 4 &&
+          currentOption.value == "Retoma") ||
+        (currentOption.priority == 5.1 && option.priority != 6) ||
+        (option.value === "En camino" &&
+          dataRequestStatus.paymentStatus === "No pago") ||
+        (currentOption.value === "Revisado" &&
+          option.value === "En devolucion" &&
+          location.state.statusQuote != "Rechazada")
+      ) {
+        console.log("ejem",option);
+      } else {
+        newOpcionesMensajero.push(option);
+      }
+    });
+    console.log("f en el chat",newOpcionesMensajero);
+    setOpcionesMensajero(newOpcionesMensajero);
+    console.log("Arreglo Mensajero", opcionesMensajero);
+  }
+
+  const llenarOpcionesTecnico = () => {
+    const newOpcionesTecnico = [...opcionesTecnico];
+    options.forEach((option, index) => {
+      if (
+        !option.showToTechnician ||
+        (currentOption.priority != 4 &&
+          currentOption.priority != 5.1 &&
+          option.priority > currentOption.priority + 1 &&
+          currentOption.value != "En devolucion") ||
+        (currentOption.value != "En devolucion" &&
+          currentOption.priority != 5.1 &&
+          option.priority < currentOption.priority + 1 &&
+          !requestHistory.some(
+            n => n.status === option.value
+          )) ||
+        option.value == "Elija una opcion" ||
+        (requestHistory.some(
+          n => n.status === option.value
+        ) &&
+          !(
+            !isRepair &&
+            requestHistory.some(
+              n => n.status == "Revisado"
+            ) &&
+            option.priority > 2
+          )) ||
+        (currentOption.priority == 2 &&
+          currentOption.value == "Anulado por IMEI" &&
+          option.priority >= 2) ||
+        (currentOption.priority == 4 &&
+          currentOption.value == "En reparacion" &&
+          option.priority >= 5.2) ||
+        (currentOption.priority == 4 &&
+          currentOption.value == "En devolucion" &&
+          (option.priority == 5.1 ||
+            option.priority <= 4 ||
+            option.priority >
+            currentOption.priority + 1.2)) ||
+        (currentOption.priority == 4 &&
+          currentOption.value == "Retoma") ||
+        (currentOption.priority == 5.1 &&
+          option.priority != 6) ||
+        (!isRepair && option.priority > 3) ||
+        (location.state.statusQuote !== "Aceptada" &&
+          option.value === "En reparacion")
+      ) {
+        // No hagas nada
+      } else {
+        newOpcionesTecnico.push(option);
+      }
+    });
+    setopcionesTecnico(newOpcionesTecnico);
+    console.log("Arreglo Tecnico", opcionesTecnico);
+  }
 
   useEffect(
     function () {
@@ -575,6 +712,13 @@ export default function RequestStatusForm() {
       });
     }
   }, [status.status]);
+ 
+  useEffect(()=>{
+      console.log("se repite");
+      llenarOpcionesMensajero();
+      llenarOpcionesTecnico();
+
+  },[]);
 
   console.log("dataRequestStatus", dataRequestStatus);
   return loading ? (
@@ -593,7 +737,7 @@ export default function RequestStatusForm() {
                   </CardSubtitle>
 
                   {JSON.parse(localStorage.getItem("user")).role ===
-                  "mensajero" ? (
+                    "mensajero" ? (
                     <FormGroup>
                       <Label for="status">Estado solicitud</Label>
                       <Input
@@ -602,56 +746,18 @@ export default function RequestStatusForm() {
                         id="status"
                         value={status.status}
                         onChange={handleStatusChange}
-                      >
-                        {options.map((option, index) => (
-                          <option
-                            hidden={
-                              !option.showToCourier ||
-                              (currentOption.priority != 4 &&
-                                currentOption.priority != 5.1 &&
-                                option.priority > currentOption.priority + 1 &&
-                                currentOption.value != "En devolucion") ||
-                              (currentOption.value != "En devolucion" &&
-                                currentOption.priority != 5.1 &&
-                                option.priority < currentOption.priority + 1 &&
-                                !requestHistory.some(
-                                  n => n.status === option.value
-                                )) ||
-                              option.value == "Elija una opcion" ||
-                              requestHistory.some(
-                                n => n.status === option.value
-                              ) ||
-                              (currentOption.priority == 2 &&
-                                currentOption.value == "Anulado por IMEI" &&
-                                option.priority >= 2) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "En reparacion" &&
-                                option.priority >= 5.2) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "En devolucion" &&
-                                (option.priority == 5.1 ||
-                                  option.priority <= 4 ||
-                                  option.priority >
-                                    currentOption.priority + 1.2)) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "Retoma") ||
-                              (currentOption.priority == 5.1 &&
-                                option.priority != 6) ||
-                              (option.value === "En camino" &&
-                                dataRequestStatus.paymentStatus ===
-                                  "No pago") ||
-                              (currentOption.value === "Revisado" &&
-                                option.value === "En devolucion" &&
-                                location.state.statusQuote != "Rechazada")
-                            }
-                            value={option.value}
-                            key={index}
-                          >
+                      > 
+                        <option value={status.status}>{status.status}</option>
+                        {opcionesMensajero.map((option, index) => {
+                        
+                          return <option value={option.value} key={index}>
                             {option.toShow}
                           </option>
-                        ))}
+                        })}
+
                       </Input>
                     </FormGroup>
+
                   ) : JSON.parse(localStorage.getItem("user")).role ===
                     "tecnico" ? (
                     <FormGroup>
@@ -665,57 +771,19 @@ export default function RequestStatusForm() {
                         value={status.status}
                         onChange={handleStatusChange}
                       >
-                        {options.map((option, index) => (
-                          <option
-                            hidden={
-                              !option.showToTechnician ||
-                              (currentOption.priority != 4 &&
-                                currentOption.priority != 5.1 &&
-                                option.priority > currentOption.priority + 1 &&
-                                currentOption.value != "En devolucion") ||
-                              (currentOption.value != "En devolucion" &&
-                                currentOption.priority != 5.1 &&
-                                option.priority < currentOption.priority + 1 &&
-                                !requestHistory.some(
-                                  n => n.status === option.value
-                                )) ||
-                              option.value == "Elija una opcion" ||
-                              (requestHistory.some(
-                                n => n.status === option.value
-                              ) &&
-                                !(
-                                  !isRepair &&
-                                  requestHistory.some(
-                                    n => n.status == "Revisado"
-                                  ) &&
-                                  option.priority > 2
-                                )) ||
-                              (currentOption.priority == 2 &&
-                                currentOption.value == "Anulado por IMEI" &&
-                                option.priority >= 2) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "En reparacion" &&
-                                option.priority >= 5.2) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "En devolucion" &&
-                                (option.priority == 5.1 ||
-                                  option.priority <= 4 ||
-                                  option.priority >
-                                    currentOption.priority + 1.2)) ||
-                              (currentOption.priority == 4 &&
-                                currentOption.value == "Retoma") ||
-                              (currentOption.priority == 5.1 &&
-                                option.priority != 6) ||
-                              (!isRepair && option.priority > 3) ||
-                              (location.state.statusQuote !== "Aceptada" &&
-                                option.value === "En reparacion")
-                            }
-                            value={option.value}
-                            key={index}
-                          >
-                            {option.toShow}
-                          </option>
-                        ))}
+                        {(() => {
+                          const result = [];
+
+                          for (let i = 0; i < opcionesTecnico.length; i++) {
+                            result.push(
+                              <option value={opcionesTecnico[i].value} key={i}>
+                                {opcionesTecnico[i].value}
+                              </option>
+                            );
+                          }
+
+                          return result;
+                        })()}
                       </Input>
                     </FormGroup>
                   ) : (
@@ -757,7 +825,7 @@ export default function RequestStatusForm() {
                                 (option.priority == 5.1 ||
                                   option.priority <= 4 ||
                                   option.priority >
-                                    currentOption.priority + 1.2)) ||
+                                  currentOption.priority + 1.2)) ||
                               (currentOption.priority == 4 &&
                                 currentOption.value == "Retoma") ||
                               (currentOption.priority == 5.1 &&
@@ -765,7 +833,7 @@ export default function RequestStatusForm() {
                               (!isRepair && option.value == "En reparacion") ||
                               (option.value === "En camino" &&
                                 dataRequestStatus.paymentStatus ===
-                                  "No pago") ||
+                                "No pago") ||
                               (location.state.statusQuote !== "Aceptada" &&
                                 option.value === "En reparacion") ||
                               (location.state.statusQuote !== "Aceptada" &&
@@ -797,17 +865,17 @@ export default function RequestStatusForm() {
                   )}
                   {JSON.parse(localStorage.getItem("user")).role ===
                     "mensajero" ||
-                  JSON.parse(localStorage.getItem("user")).role ===
+                    JSON.parse(localStorage.getItem("user")).role ===
                     "tecnico" ? null : status.status == "Iniciada" ||
-                    status.status == "En proceso de recogida" ||
-                    status.status == "Recibida tecnico" ||
-                    status.status == "En camino" ||
-                    status.status == "Revisado" ||
-                    status.status == "Anulado por IMEI" ||
-                    status.status == "En devolucion" ||
-                    status.status == "Devuelto sin reparacion" ||
-                    status.status == "Terminada" ||
-                    status.status == "En reparacion" ? null : (
+                      status.status == "En proceso de recogida" ||
+                      status.status == "Recibida tecnico" ||
+                      status.status == "En camino" ||
+                      status.status == "Revisado" ||
+                      status.status == "Anulado por IMEI" ||
+                      status.status == "En devolucion" ||
+                      status.status == "Devuelto sin reparacion" ||
+                      status.status == "Terminada" ||
+                      status.status == "En reparacion" ? null : (
                     <FormGroup>
                       <Label for="paymentStatus">Estado de pago</Label>
                       <Input
@@ -827,18 +895,18 @@ export default function RequestStatusForm() {
                     </FormGroup>
                   )}
                   {JSON.parse(localStorage.getItem("user")).role ===
-                  "tecnico" ? null : status.status == "Iniciada" ||
-                    status.status == "Recibida tecnico" ||
-                    status.status == "En proceso de recogida" ||
-                    status.status == "Revisado" ||
-                    status.status == "Anulado por IMEI" ||
-                    status.status == "En reparacion" ||
-                    status.status == "En devolucion" ||
-                    status.status == "Devuelto sin reparacion" ||
-                    status.status == "Reparado pendiente de pago" ||
-                    status.status == "En camino" ||
-                    status.status == "Terminada" ||
-                    status.status == "Retoma" ? null : (
+                    "tecnico" ? null : status.status == "Iniciada" ||
+                      status.status == "Recibida tecnico" ||
+                      status.status == "En proceso de recogida" ||
+                      status.status == "Revisado" ||
+                      status.status == "Anulado por IMEI" ||
+                      status.status == "En reparacion" ||
+                      status.status == "En devolucion" ||
+                      status.status == "Devuelto sin reparacion" ||
+                      status.status == "Reparado pendiente de pago" ||
+                      status.status == "En camino" ||
+                      status.status == "Terminada" ||
+                      status.status == "Retoma" ? null : (
                     <FormGroup>
                       <Label for="productReturned">Producto devuelto</Label>
                       <Input
@@ -856,7 +924,7 @@ export default function RequestStatusForm() {
                   {(JSON.parse(localStorage.getItem("user")).role ===
                     "aux_admin" ||
                     JSON.parse(localStorage.getItem("user")).role ===
-                      "admin") &&
+                    "admin") &&
                     status.status == "Recibida tecnico" && (
                       <FormGroup>
                         <Label for="productReturned">Técnico Asociado</Label>
