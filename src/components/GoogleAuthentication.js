@@ -14,7 +14,7 @@ const StyledGoogleButton = styled(GoogleButton)`
   }
 `;
 
-const GoogleAuthentication = ({ onAuthenticated, widthButton }) => {
+const GoogleAuthentication = ({ onAuthenticated, widthButton, textButton }) => {
   const [user, setUser] = useState();
 
   const login = useGoogleLogin({
@@ -45,7 +45,7 @@ const GoogleAuthentication = ({ onAuthenticated, widthButton }) => {
     <div style={{ display: "flex", justifyContent: "center" }}>
       <StyledGoogleButton
         onClick={() => login()}
-        label="Continuar con Google"
+        label={textButton}
         type="light" // puede ser "light" o "dark"
         disabled={false}
         style={{

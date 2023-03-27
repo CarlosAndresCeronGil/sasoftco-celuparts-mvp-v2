@@ -220,7 +220,7 @@ export default function UpdateRepairForm(props) {
               !isUserAdmin &&
                 postRequestNotification({
                   idRequest: idRequest.idRequest,
-                  message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData}`,
+                  message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData} , por favor registre la cotización`,
                   wasReviewed: false,
                   notificationType: "to_admin"
                 }).catch(error => {
@@ -229,7 +229,7 @@ export default function UpdateRepairForm(props) {
               !isUserAdmin &&
                 postRequestNotification({
                   idRequest: idRequest.idRequest,
-                  message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData}`,
+                  message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData} , por favor registre la cotización`,
                   wasReviewed: false,
                   notificationType: "to_aux_admin"
                 }).catch(error => {
@@ -239,7 +239,7 @@ export default function UpdateRepairForm(props) {
                 Swal.fire({
                   icon: "success",
                   title: "Exito!",
-                  text: "Estado de reparación actualizadisimo!"
+                  text: "Estado de reparación actualizado!"
                 });
 
               !isUserAdmin
@@ -288,7 +288,7 @@ export default function UpdateRepairForm(props) {
           Swal.fire({
             icon: "success",
             title: "Exito!",
-            text: "Estado de reparación actualizadisimo!"
+            text: "Estado de reparación actualizado!"
           }).then(response => {
             navigate(-1);
           });
@@ -338,7 +338,7 @@ export default function UpdateRepairForm(props) {
             Swal.fire({
               icon: "success",
               title: "Exito!",
-              text: "Estado de reparación actualizadisimo!"
+              text: "Estado de reparación actualizado!"
             }).then(response => {
               navigate(-1);
             });
@@ -387,7 +387,7 @@ export default function UpdateRepairForm(props) {
               Swal.fire({
                 icon: "success",
                 title: "Exito!",
-                text: "Estado de reparación actualizadisimo!"
+                text: "Estado de reparación actualizado!"
               }).then(response => {
                 navigate(-1);
               });
@@ -458,7 +458,7 @@ export default function UpdateRepairForm(props) {
               Swal.fire({
                 icon: "success",
                 title: "Exito!",
-                text: "Estado de reparación actualizadisimo!"
+                text: "Estado de reparación actualizado!"
               }).then(response => {
                 navigate(-1);
               });

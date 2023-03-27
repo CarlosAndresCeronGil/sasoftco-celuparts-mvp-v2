@@ -258,7 +258,6 @@ export default function RequestStatusForm() {
                   });
                 }
               }
-              console.log("s", tdata.idRequestNotification);
               putRequestNotification({
                 idRequestNotification: tdata.idRequestNotification,
                 idRequest: tdata.idRequest,

@@ -394,11 +394,10 @@ const RegisterFormik = () => {
                                   id="idNumber"
                                   name="idNumber"
                                   type="number"
-                                  className={`form-control ${
-                                    errors.idNumber && touched.idNumber
+                                  className={`form-control ${errors.idNumber && touched.idNumber
                                       ? " is-invalid"
                                       : ""
-                                  }`}
+                                    }`}
                                   required
                                 />
                                 <ErrorMessage
@@ -419,11 +418,10 @@ const RegisterFormik = () => {
                                   name="userName"
                                   type="text"
                                   placeholder="Nombres"
-                                  className={`form-control ${
-                                    errors.userName && touched.userName
+                                  className={`form-control ${errors.userName && touched.userName
                                       ? " is-invalid"
                                       : ""
-                                  }`}
+                                    }`}
                                   required
                                 />
                                 <ErrorMessage
@@ -441,11 +439,10 @@ const RegisterFormik = () => {
                                   name="lastName"
                                   type="text"
                                   placeholder="Apellidos"
-                                  className={`form-control ${
-                                    errors.lastName && touched.lastName
+                                  className={`form-control ${errors.lastName && touched.lastName
                                       ? " is-invalid"
                                       : ""
-                                  }`}
+                                    }`}
                                   required
                                 />
                                 <ErrorMessage
@@ -467,11 +464,10 @@ const RegisterFormik = () => {
                               // onChange={(e) => setEmail(e.target.value)}
                               placeholder="Email"
                               // className="form-control"
-                              className={`form-control ${
-                                errors.email && touched.email
+                              className={`form-control ${errors.email && touched.email
                                   ? " is-invalid"
                                   : ""
-                              }`}
+                                }`}
                               required
                             />
                             <ErrorMessage
@@ -490,11 +486,10 @@ const RegisterFormik = () => {
                                   name="phone"
                                   type="tel"
                                   placeholder="Número de teléfono"
-                                  className={`form-control ${
-                                    errors.phone && touched.phone
+                                  className={`form-control ${errors.phone && touched.phone
                                       ? " is-invalid"
                                       : ""
-                                  }`}
+                                    }`}
                                   required
                                 />
                                 <ErrorMessage
@@ -529,11 +524,10 @@ const RegisterFormik = () => {
                                   type={passwordType}
                                   placeholder="Contraseña"
                                   // className="form-control"
-                                  className={`form-control ${
-                                    errors.password && touched.password
+                                  className={`form-control ${errors.password && touched.password
                                       ? " is-invalid"
                                       : ""
-                                  }`}
+                                    }`}
                                   required
                                 />
                                 <Button
@@ -564,12 +558,11 @@ const RegisterFormik = () => {
                                   type={passwordType}
                                   placeholder="Confirmar contraseña"
                                   // className="form-control"
-                                  className={`form-control ${
-                                    errors.confirmPassword &&
-                                    touched.confirmPassword
+                                  className={`form-control ${errors.confirmPassword &&
+                                      touched.confirmPassword
                                       ? " is-invalid"
                                       : ""
-                                  }`}
+                                    }`}
                                   required
                                 />
                                 <Button
@@ -654,6 +647,7 @@ const RegisterFormik = () => {
                     <div className="mb-5">
                       <div>
                         <GoogleAuthentication
+                          textButton="Registrarse con Google"
                           onAuthenticated={handleSubmitGoogle}
                           widthButton="70%"
                         />

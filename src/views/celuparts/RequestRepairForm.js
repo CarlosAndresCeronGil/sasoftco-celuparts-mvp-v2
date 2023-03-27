@@ -437,6 +437,8 @@ export default function RequestRepairForm() {
             text: "Identificación no valida"
           });
         });
+    } else {
+      handleRepair(e)
     }
   };
 

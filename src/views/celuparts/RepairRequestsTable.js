@@ -116,15 +116,13 @@ export default function RepairRequestsTable() {
         page,
         initialDate:
           initialDateString != null
-            ? `${initialDateAux.getFullYear()}-${
-                initialDateAux.getMonth() + 1
-              }-${initialDateAux.getDate()}`
+            ? `${initialDateAux.getFullYear()}-${initialDateAux.getMonth() + 1
+            }-${initialDateAux.getDate()}`
             : "1900-1-1",
         finalDate:
           finalDateString != null
-            ? `${finalDateAux.getFullYear()}-${
-                finalDateAux.getMonth() + 1
-              }-${finalDateAux.getDate()}`
+            ? `${finalDateAux.getFullYear()}-${finalDateAux.getMonth() + 1
+            }-${finalDateAux.getDate()}`
             : "2099-01-01",
         requestStatus: localStorage.getItem("requestStatus") || "",
         userDtoIdNumber: localStorage.getItem("userDtoIdNumber") || "",
@@ -190,15 +188,13 @@ export default function RepairRequestsTable() {
       page: 1,
       initialDate:
         initialDateSubmit.initialDate != null
-          ? `${initialDateSubmit.initialDate.getFullYear()}-${
-              initialDateSubmit.initialDate.getMonth() + 1
-            }-${initialDateSubmit.initialDate.getDate()}`
+          ? `${initialDateSubmit.initialDate.getFullYear()}-${initialDateSubmit.initialDate.getMonth() + 1
+          }-${initialDateSubmit.initialDate.getDate()}`
           : "1900-01-01",
       finalDate:
         finalDateSubmit.finalDate != null
-          ? `${finalDateSubmit.finalDate.getFullYear()}-${
-              finalDateSubmit.finalDate.getMonth() + 1
-            }-${finalDateSubmit.finalDate.getDate()}`
+          ? `${finalDateSubmit.finalDate.getFullYear()}-${finalDateSubmit.finalDate.getMonth() + 1
+          }-${finalDateSubmit.finalDate.getDate()}`
           : "2099-01-01",
       requestStatus: requestStatus,
       userDtoIdNumber: userDtoIdNumber,
@@ -560,7 +556,7 @@ export default function RepairRequestsTable() {
               )}
               {JSON.parse(localStorage.getItem("user")).role != "tecnico" &&
                 JSON.parse(localStorage.getItem("user")).role !=
-                  "mensajero" && <th>Cuota de reparación</th>}
+                "mensajero" && <th>Cuota de reparación</th>}
               {JSON.parse(localStorage.getItem("user")).role != "mensajero" && (
                 <th>Tiempo de servicio de reparación</th>
               )}
@@ -584,13 +580,12 @@ export default function RepairRequestsTable() {
                   <td>{tdata.repairs[0].idRepair}</td>
                   {JSON.parse(localStorage.getItem("user")).role !=
                     "tecnico" && (
-                    <td>
-                      {tdata.names} {tdata.surnames}
-                    </td>
-                  )}
-                  <td>{`${new Date(tdata.requestDate).getFullYear()}-${
-                    new Date(tdata.requestDate).getMonth() + 1
-                  }-${new Date(tdata.requestDate).getDate()}`}</td>
+                      <td>
+                        {tdata.names} {tdata.surnames}
+                      </td>
+                    )}
+                  <td>{`${new Date(tdata.requestDate).getFullYear()}-${new Date(tdata.requestDate).getMonth() + 1
+                    }-${new Date(tdata.requestDate).getDate()}`}</td>
                   <td>
                     {tdata.equipment.equipmentBrand}{" "}
                     {tdata.equipment.modelOrReference}
@@ -602,38 +597,38 @@ export default function RepairRequestsTable() {
                   <td>{tdata.requestStatus[0].status}</td>
                   {JSON.parse(localStorage.getItem("user")).role !=
                     "mensajero" && (
-                    <td>
-                      {tdata.repairs[0].technician != null
-                        ? tdata.repairs[0].technician.names +
+                      <td>
+                        {tdata.repairs[0].technician != null
+                          ? tdata.repairs[0].technician.names +
                           " " +
                           tdata.repairs[0].technician.surnames
-                        : "Sin técnico asociado"}
-                    </td>
-                  )}
+                          : "Sin técnico asociado"}
+                      </td>
+                    )}
                   {JSON.parse(localStorage.getItem("user")).role != "tecnico" &&
                     JSON.parse(localStorage.getItem("user")).role !=
-                      "mensajero" && <td>{tdata.repairs[0].repairQuote}</td>}
+                    "mensajero" && <td>{tdata.repairs[0].repairQuote}</td>}
                   {JSON.parse(localStorage.getItem("user")).role !=
                     "mensajero" && (
-                    <td>
-                      {console.log(tdata)}
-                      {tdata.repairs[0].repairTime != null
-                        ? tdata.repairs[0].repairTime
-                        : "Sin registrar"}
-                    </td>
-                  )}
+                      <td>
+                        {console.log(tdata)}
+                        {tdata.repairs[0].repairTime != null
+                          ? tdata.repairs[0].repairTime
+                          : "Sin registrar"}
+                      </td>
+                    )}
                   <td>
                     {tdata.homeServices[0]?.deliveryDate != null
                       ? new Date(
-                          tdata.homeServices[0].deliveryDate
-                        ).toLocaleDateString("es", {
-                          weekday: "long",
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "numeric"
-                        })
+                        tdata.homeServices[0].deliveryDate
+                      ).toLocaleDateString("es", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric"
+                      })
                       : "Sin definir"}
                   </td>
 
@@ -774,7 +769,7 @@ export default function RepairRequestsTable() {
             </Button>
           )}
           {requests.currentPage === requests.pages ||
-          requests.currentPage === requests.pages + 1 ? (
+            requests.currentPage === requests.pages + 1 ? (
             <button className="btn btn-celuparts-dark-blue" disabled>
               Siguiente
             </button>
@@ -822,13 +817,13 @@ export default function RepairRequestsTable() {
             </div>
             {currentDeliveryDate != "Sin definir"
               ? new Date(currentDeliveryDate).toLocaleDateString("es", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric"
-                })
+                weekday: "long",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric"
+              })
               : "Sin definir"}
             <hr />
             {JSON.parse(localStorage.getItem("user")).role != "tecnico" && (

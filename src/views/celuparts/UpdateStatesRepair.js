@@ -108,7 +108,6 @@ export default function UpdateStateRepair() {
               {...a11yProps(1)}
             />
           )}
-          {console.log('ss', location.state.status)}
           {(JSON.parse(localStorage.getItem("user")).role === "admin" ||
             JSON.parse(localStorage.getItem("user")).role === "aux_admin") && location?.state.statusQuote === 'Aceptada' &&
             !(location.state.status === "Iniciada" ||

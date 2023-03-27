@@ -68,7 +68,7 @@ export default function UpdateStateRetoma() {
         </Box>
         <strong>Equipo</strong> : {location.state.data.equipmentData}
       </Box>
-      <AppBar position="static">
+      <AppBar position="relative" sx={{ paddingRight: 0, paddingLeft: 0 }}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -83,6 +83,7 @@ export default function UpdateStateRetoma() {
             label="Actualizar Estado de solicitud"
             {...a11yProps(0)}
           />
+
           {JSON.parse(localStorage.getItem("user")).role ===
             "mensajero" ? null : location.state.status === "Iniciada" ||
               location.state.status === "En proceso de recogida" ||
@@ -101,12 +102,12 @@ export default function UpdateStateRetoma() {
           ) : (
             <Tab
               sx={{ textTransform: "capitalize" }}
-              label="Actualizar Diagnostico de Retoma"
+              label="Actualizar Estado de Retoma"
               {...a11yProps(1)}
             />
           )}
           {(JSON.parse(localStorage.getItem("user")).role === "admin" ||
-            JSON.parse(localStorage.getItem("user")).role === "aux_admin") && location?.state.statuaQuote === 'Aceptada' &&
+            JSON.parse(localStorage.getItem("user")).role === "aux_admin") && location?.state.statusQuote === 'Aceptada' &&
             !(location.state.status === "Iniciada" ||
               location.state.status === "En proceso de recogida" ||
               location.state.status === "Recibida tecnico" ||
@@ -122,14 +123,12 @@ export default function UpdateStateRetoma() {
               {...a11yProps(2)}
             />
           ) : (
-            <>
-              <Tab
-                disabled
-                sx={{ textTransform: "capitalize" }}
-                label="Actualizar Pago Retoma"
-                {...a11yProps(2)}
-              />
-            </>
+            <Tab
+              disabled
+              sx={{ textTransform: "capitalize" }}
+              label="Actualizar Pago Retoma"
+              {...a11yProps(2)}
+            />
           )}
         </Tabs>
       </AppBar>
@@ -137,6 +136,7 @@ export default function UpdateStateRetoma() {
         axis={theme.direction === "rtl" ? "x-reverse" : "x"}
         index={value}
         onChangeIndex={handleChangeIndex}
+        sx={{ paddingRight: 0, paddingLeft: 0 }}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
           <RequestStatusForm />

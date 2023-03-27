@@ -195,11 +195,10 @@ const LoginFormik = () => {
                                     type="email"
                                     name="email"
                                     placeholder="ejemplo@celuparts.com"
-                                    className={`form-control${
-                                      errors.email && touched.email
+                                    className={`form-control${errors.email && touched.email
                                         ? " is-invalid"
                                         : ""
-                                    }`}
+                                      }`}
                                   />
                                   <ErrorMessage
                                     name="email"
@@ -225,11 +224,10 @@ const LoginFormik = () => {
                                     type={passwordType}
                                     name="password"
                                     placeholder="********"
-                                    className={`form-control${
-                                      errors.password && touched.password
+                                    className={`form-control${errors.password && touched.password
                                         ? " is-invalid"
                                         : ""
-                                    }`}
+                                      }`}
                                   />
                                   <Button
                                     color="primary"
@@ -313,6 +311,7 @@ const LoginFormik = () => {
                               <div className="mb-5">
                                 <div>
                                   <GoogleAuthentication
+                                    textButton="Iniciar Sesión Con Google"
                                     onAuthenticated={handleSubmitGoogle}
                                   />
                                 </div>

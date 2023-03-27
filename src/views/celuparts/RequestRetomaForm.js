@@ -436,7 +436,7 @@ export default function RequestRetomaForm() {
 
     const userDtoInfo = userInfo;
     delete userDtoInfo.requests;
-
+    console.log(isOwnRequest, userInfo.idNumber)
     if (isOwnRequest && !userInfo?.idNumber) {
       putUserDto({
         idUser: userDtoInfo.idUser,
@@ -482,6 +482,8 @@ export default function RequestRetomaForm() {
             text: "Identificación no valida"
           });
         });
+    } else {
+      handleRetoma(e)
     }
   };
 

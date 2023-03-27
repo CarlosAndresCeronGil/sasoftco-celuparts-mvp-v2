@@ -73,9 +73,9 @@ export default function RetomaPaymentsTable() {
                                                         </button>
                                                     </a>
                                                 )
-                                                :
-                                                <button type='button' className="btn btn-outline-info" disabled>Sin factura</button>
-                                        }
+                                                    :
+                                                    <button type='button' className="btn btn-outline-info" disabled>Sin factura</button>
+                                            }
                                         </td>
                                     </tr>
                                 ))}

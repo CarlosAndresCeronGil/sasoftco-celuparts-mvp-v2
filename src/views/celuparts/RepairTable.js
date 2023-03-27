@@ -49,12 +49,12 @@ export default function RepairTable() {
                                             <span className="text-muted">{tdata.idRepair}</span>
                                         </td>
                                         <td>
-                                            { tdata.technician ? tdata.technician.names + " " + tdata.technician.surnames : 'Sin técnico asociado' }
+                                            {tdata.technician ? tdata.technician.names + " " + tdata.technician.surnames : 'Sin técnico asociado'}
                                         </td>
                                         {
                                             tdata.repairDate ? (
                                                 <td>
-                                                    {new Date(tdata.repairDate).toLocaleDateString('es', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric" })}
+                                                    {new Date(tdata.repairDate).toLocaleDateString('es', { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" })}
                                                 </td>
                                             ) : (
                                                 <td>
