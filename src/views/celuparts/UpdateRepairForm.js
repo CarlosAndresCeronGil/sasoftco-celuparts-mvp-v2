@@ -183,90 +183,67 @@ export default function UpdateRepairForm(props) {
 
     nullFinishDateArrived && nullStartDateArrived
       ? //PRODUCTO REVISADO SIN SER ACEPTADA LA COTIZACION
-        putRepair({
-          idRepair: location.state.idRepair,
-          idRequest: idRequest.idRequest,
-          idTechnician: idTechnician.idTechnician,
-          repairDate: null,
-          repairStartDate: null,
-          deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
-          repairQuote: repairQuote.repairQuote,
-          priceReviewedByAdmin:
-            (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
+      putRepair({
+        idRepair: location.state.idRepair,
+        idRequest: idRequest.idRequest,
+        idTechnician: idTechnician.idTechnician,
+        repairDate: null,
+        repairStartDate: null,
+        deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
+        repairQuote: repairQuote.repairQuote,
+        priceReviewedByAdmin:
+          (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
             Number(repairQuote.repairQuote) > 0
-              ? true
-              : false
-        })
-          .then(data => {
-            postListOfRepairCheckedParts();
-            postListOfReplaceCheckedParts();
-            postUnCheckedParts();
-            putRequestStatus({
-              idRequestStatus: location.state.idStatus,
-              idRequest: idRequest.idRequest,
-              status: "Revisado",
-              paymentStatus: "No pago"
-            })
-              .then(data => {
-                // console.log("DATA", data);
-                /*Aqui se mira el estado de la solicitud, para asi, enviar un mensaje en la 
-                    notificacion a quien corresponda*/
-                postRequestHistory({
-                  idRequest: data.idRequest,
-                  status: "Revisado",
-                  date: new Date()
-                });
-                setStatus("Revisado");
-                !isUserAdmin &&
-                  postRequestNotification({
-                    idRequest: idRequest.idRequest,
-                    message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData}`,
-                    wasReviewed: false,
-                    notificationType: "to_admin"
-                  }).catch(error => {
-                    console.log(error);
-                  });
-                !isUserAdmin &&
-                  postRequestNotification({
-                    idRequest: idRequest.idRequest,
-                    message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData}`,
-                    wasReviewed: false,
-                    notificationType: "to_aux_admin"
-                  }).catch(error => {
-                    console.log(error);
-                  });
-                !sUserAdmin &&
-                  Swal.fire({
-                    icon: "success",
-                    title: "Exito!",
-                    text: "Estado de reparación actualizadisimo!"
-                  });
-
-                !isUserAdmin
-                  ? [
-                      notifications.find(
-                        tdata => tdata.idRequest === idRequest.idRequest
-                      )
-                    ].map(tdata =>
-                      putRequestNotification({
-                        idRequestNotification: tdata.idRequestNotification,
-                        idRequest: tdata.idRequest,
-                        message:
-                          "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
-                        wasReviewed: false,
-                        notificationType: "to_customer"
-                      }).catch(error => {
-                        console.log(error);
-                      })
-                    )
-                  : null;
-              })
-              .catch(error => {
-                console.log(error);
+            ? true
+            : false
+      })
+        .then(data => {
+          postListOfRepairCheckedParts();
+          postListOfReplaceCheckedParts();
+          postUnCheckedParts();
+          putRequestStatus({
+            idRequestStatus: location.state.idStatus,
+            idRequest: idRequest.idRequest,
+            status: "Revisado",
+            paymentStatus: "No pago"
+          })
+            .then(data => {
+              // console.log("DATA", data);
+              /*Aqui se mira el estado de la solicitud, para asi, enviar un mensaje en la 
+                  notificacion a quien corresponda*/
+              postRequestHistory({
+                idRequest: data.idRequest,
+                status: "Revisado",
+                date: new Date()
               });
+              setStatus("Revisado");
+              !isUserAdmin &&
+                postRequestNotification({
+                  idRequest: idRequest.idRequest,
+                  message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData}`,
+                  wasReviewed: false,
+                  notificationType: "to_admin"
+                }).catch(error => {
+                  console.log(error);
+                });
+              !isUserAdmin &&
+                postRequestNotification({
+                  idRequest: idRequest.idRequest,
+                  message: `Un técnico ha realizado la revisión del producto ${location.state.data.equipmentData}`,
+                  wasReviewed: false,
+                  notificationType: "to_aux_admin"
+                }).catch(error => {
+                  console.log(error);
+                });
+              !sUserAdmin &&
+                Swal.fire({
+                  icon: "success",
+                  title: "Exito!",
+                  text: "Estado de reparación actualizadisimo!"
+                });
 
-            isUserAdmin
-              ? [
+              !isUserAdmin
+                ? [
                   notifications.find(
                     tdata => tdata.idRequest === idRequest.idRequest
                   )
@@ -275,31 +252,55 @@ export default function UpdateRepairForm(props) {
                     idRequestNotification: tdata.idRequestNotification,
                     idRequest: tdata.idRequest,
                     message:
-                      'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
+                      "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
                     wasReviewed: false,
                     notificationType: "to_customer"
                   }).catch(error => {
                     console.log(error);
                   })
                 )
-              : null;
-
-            Swal.fire({
-              icon: "success",
-              title: "Exito!",
-              text: "Estado de reparación actualizadisimo!"
-            }).then(response => {
-              navigate(-1);
+                : null;
+            })
+            .catch(error => {
+              console.log(error);
             });
 
-            setLoadingPut(false);
-          })
-          .catch(error => {
-            console.log(error);
-            setLoadingPut(false);
-          })
-      : nullFinishDateArrived && !nullStartDateArrived
-      ? putRepair({
+          isUserAdmin && Number(repairQuote.repairQuote) > 0
+
+            ? [
+              notifications.find(
+                tdata => tdata.idRequest === idRequest.idRequest
+              )
+            ].map(tdata =>
+              putRequestNotification({
+                idRequestNotification: tdata.idRequestNotification,
+                idRequest: tdata.idRequest,
+                message:
+                  'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
+                wasReviewed: false,
+                notificationType: "to_customer"
+              }).catch(error => {
+                console.log(error);
+              })
+            )
+            : null;
+
+          Swal.fire({
+            icon: "success",
+            title: "Exito!",
+            text: "Estado de reparación actualizadisimo!"
+          }).then(response => {
+            navigate(-1);
+          });
+
+          setLoadingPut(false);
+        })
+        .catch(error => {
+          console.log(error);
+          setLoadingPut(false);
+        })
+      : nullFinishDateArrived && !nullStartDateArrived && Number(repairQuote.repairQuote) > 0
+        ? putRepair({
           idRepair: location.state.idRepair,
           idRequest: idRequest.idRequest,
           idTechnician: idTechnician.idTechnician,
@@ -309,7 +310,7 @@ export default function UpdateRepairForm(props) {
           repairQuote: repairQuote.repairQuote,
           priceReviewedByAdmin:
             (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
-            Number(repairQuote.repairQuote) > 0
+              Number(repairQuote.repairQuote) > 0
               ? true
               : false
         })
@@ -347,83 +348,26 @@ export default function UpdateRepairForm(props) {
             console.log(error);
             setLoadingPut(false);
           })
-      : nullStartDateArrived && !nullFinishDateArrived
-      ? putRepair({
-          idRepair: location.state.idRepair,
-          idRequest: idRequest.idRequest,
-          idTechnician: idTechnician.idTechnician,
-          repairDate: repairDate.repairDate,
-          repairStartDate: null,
-          deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
-          repairQuote: repairQuote.repairQuote,
-          priceReviewedByAdmin:
-            (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
-            Number(repairQuote.repairQuote) > 0
-              ? true
-              : false
-        })
-          .then(data => {
-            // console.log(data)
-            postListOfRepairCheckedParts();
-            postListOfReplaceCheckedParts();
-            postUnCheckedParts();
-            [
-              notifications.find(
-                tdata => tdata.idRequest === idRequest.idRequest
-              )
-            ].map(tdata =>
-              putRequestNotification({
-                idRequestNotification: tdata.idRequestNotification,
-                idRequest: tdata.idRequest,
-                message:
-                  'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
-                wasReviewed: false,
-                notificationType: "to_customer"
-              }).catch(error => {
-                console.log(error);
-              })
-            );
-            Swal.fire({
-              icon: "success",
-              title: "Exito!",
-              text: "Estado de reparación actualizadisimo!"
-            }).then(response => {
-              navigate(-1);
-            });
-            setLoadingPut(false);
+        : nullStartDateArrived && !nullFinishDateArrived && Number(repairQuote.repairQuote) > 0
+          ? putRepair({
+            idRepair: location.state.idRepair,
+            idRequest: idRequest.idRequest,
+            idTechnician: idTechnician.idTechnician,
+            repairDate: repairDate.repairDate,
+            repairStartDate: null,
+            deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
+            repairQuote: repairQuote.repairQuote,
+            priceReviewedByAdmin:
+              (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
+                Number(repairQuote.repairQuote) > 0
+                ? true
+                : false
           })
-          .catch(error => {
-            console.log(error);
-            setLoadingPut(false);
-          })
-      : putRepair({
-          idRepair: location.state.idRepair,
-          idRequest: idRequest.idRequest,
-          idTechnician: idTechnician.idTechnician,
-          repairDate: repairDate.repairDate,
-          repairStartDate: repairStartDate.repairStartDate,
-          deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
-          repairDiagnostic: repairDiagnostic.repairDiagnostic,
-          repairQuote: repairQuote.repairQuote,
-          priceReviewedByAdmin:
-            (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
-            Number(repairQuote.repairQuote) > 0
-              ? true
-              : false
-        })
-          .then(data => {
-            putRequestStatus({
-              idRequestStatus: location.state.idStatus,
-              idRequest: idRequest.idRequest,
-              status: "Reparado pendiente de pago",
-              paymentStatus: "No pago"
-            }).then(data => {
-              postRequestHistory({
-                idRequest: data.idRequest,
-                status: "Reparado pendiente de pago",
-                date: new Date()
-              }).then(() => setStatus("Reparado pendiente de pago"));
-
+            .then(data => {
+              // console.log(data)
+              postListOfRepairCheckedParts();
+              postListOfReplaceCheckedParts();
+              postUnCheckedParts();
               [
                 notifications.find(
                   tdata => tdata.idRequest === idRequest.idRequest
@@ -433,38 +377,96 @@ export default function UpdateRepairForm(props) {
                   idRequestNotification: tdata.idRequestNotification,
                   idRequest: tdata.idRequest,
                   message:
-                    "Tú dispositivo ha sido reparado, contactate con el administrador al siguiente número: " +
-                    celupartsContactPhone +
-                    " o al siguiente correo " +
-                    celupartsContactEmail +
-                    " para confirmar pago",
+                    'Tu dispositivo ya tiene precio de reparación! haz click en "Mis reparaciones" para revisar',
                   wasReviewed: false,
                   notificationType: "to_customer"
                 }).catch(error => {
-                  si;
                   console.log(error);
                 })
               );
-            });
+              Swal.fire({
+                icon: "success",
+                title: "Exito!",
+                text: "Estado de reparación actualizadisimo!"
+              }).then(response => {
+                navigate(-1);
+              });
+              setLoadingPut(false);
+            })
+            .catch(error => {
+              console.log(error);
+              setLoadingPut(false);
+            })
 
-            postListOfRepairCheckedParts();
-            postListOfReplaceCheckedParts();
-            postUnCheckedParts();
-            setLoadingPut(false);
+          : putRepair({
+            idRepair: location.state.idRepair,
+            idRequest: idRequest.idRequest,
+            idTechnician: idTechnician.idTechnician,
+            repairDate: repairDate.repairDate,
+            repairStartDate: repairStartDate.repairStartDate,
+            deviceDiagnostic: deviceDiagnostic.deviceDiagnostic,
+            repairDiagnostic: repairDiagnostic.repairDiagnostic,
+            repairQuote: repairQuote.repairQuote,
+            priceReviewedByAdmin:
+              (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
+                Number(repairQuote.repairQuote) > 0
+                ? true
+                : false
           })
-          .finally(finalResponse => {
-            Swal.fire({
-              icon: "success",
-              title: "Exito!",
-              text: "Estado de reparación actualizadisimo!"
-            }).then(response => {
-              navigate(-1);
+            .then(data => {
+              putRequestStatus({
+                idRequestStatus: location.state.idStatus,
+                idRequest: idRequest.idRequest,
+                status: "Reparado pendiente de pago",
+                paymentStatus: "No pago"
+              }).then(data => {
+                postRequestHistory({
+                  idRequest: data.idRequest,
+                  status: "Reparado pendiente de pago",
+                  date: new Date()
+                }).then(() => setStatus("Reparado pendiente de pago"));
+
+                [
+                  notifications.find(
+                    tdata => tdata.idRequest === idRequest.idRequest
+                  )
+                ].map(tdata =>
+                  putRequestNotification({
+                    idRequestNotification: tdata.idRequestNotification,
+                    idRequest: tdata.idRequest,
+                    message:
+                      "Tú dispositivo ha sido reparado, contactate con el administrador al siguiente número: " +
+                      celupartsContactPhone +
+                      " o al siguiente correo " +
+                      celupartsContactEmail +
+                      " para confirmar pago",
+                    wasReviewed: false,
+                    notificationType: "to_customer"
+                  }).catch(error => {
+                    si;
+                    console.log(error);
+                  })
+                );
+              });
+
+              postListOfRepairCheckedParts();
+              postListOfReplaceCheckedParts();
+              postUnCheckedParts();
+              setLoadingPut(false);
+            })
+            .finally(finalResponse => {
+              Swal.fire({
+                icon: "success",
+                title: "Exito!",
+                text: "Estado de reparación actualizadisimo!"
+              }).then(response => {
+                navigate(-1);
+              });
+            })
+            .catch(error => {
+              console.log(error);
+              setLoadingPut(false);
             });
-          })
-          .catch(error => {
-            console.log(error);
-            setLoadingPut(false);
-          });
   };
 
   const handleSubmit = e => {
@@ -500,7 +502,7 @@ export default function UpdateRepairForm(props) {
       setLoading(true);
       //admin aux_admin
       JSON.parse(localStorage.getItem("user")).role === "admin" ||
-      JSON.parse(localStorage.getItem("user")).role === "aux_admin"
+        JSON.parse(localStorage.getItem("user")).role === "aux_admin"
         ? setIsUserAdmin(true)
         : setIsUserAdmin(false);
       getSingleRepair({ id: location.state.idRepair })
@@ -566,13 +568,13 @@ export default function UpdateRepairForm(props) {
                       responsePartsToRepairByIdRepair.map(part =>
                         part.toRepair == true
                           ? setListOfRepairCheckedParts(array => [
-                              ...array,
-                              part.part
-                            ])
+                            ...array,
+                            part.part
+                          ])
                           : setListOfReplaceCheckedParts(array => [
-                              ...array,
-                              part.part
-                            ])
+                            ...array,
+                            part.part
+                          ])
                       );
                       setLoading(false);
                     })
@@ -721,7 +723,7 @@ export default function UpdateRepairForm(props) {
                       />
                       {(location.state.statusQuote === "Aceptada" &&
                         location.state.status == "En reparacion") ||
-                      !isRepairDateNull.isRepairDateNull ? (
+                        !isRepairDateNull.isRepairDateNull ? (
                         <Tab wrapped fullwidth label="Reparación" value="2" />
                       ) : (
                         <Tab
@@ -818,7 +820,7 @@ export default function UpdateRepairForm(props) {
 
                         {JSON.parse(localStorage.getItem("user")).role ==
                           "admin" ||
-                        JSON.parse(localStorage.getItem("user")).role ==
+                          JSON.parse(localStorage.getItem("user")).role ==
                           "aux_admin" ? (
                           <FormGroup>
                             <Label
@@ -856,8 +858,8 @@ export default function UpdateRepairForm(props) {
                             {(JSON.parse(localStorage.getItem("user")).role ===
                               "admin" ||
                               JSON.parse(localStorage.getItem("user")).role ===
-                                "aux_admin") &&
-                            location.state.statusQuote == "Pendiente" ? (
+                              "aux_admin") &&
+                              location.state.statusQuote == "Pendiente" ? (
                               <Button color="primary">Guardar</Button>
                             ) : priceReviewedByAdmin.priceReviewedByAdmin ? (
                               <Button color="primary" disabled>
@@ -926,8 +928,8 @@ export default function UpdateRepairForm(props) {
                             {(JSON.parse(localStorage.getItem("user")).role ===
                               "admin" ||
                               JSON.parse(localStorage.getItem("user")).role ===
-                                "aux_admin") &&
-                            location.state.statusQuote != "Aceptada" ? (
+                              "aux_admin") &&
+                              location.state.statusQuote != "Aceptada" ? (
                               <Button color="primary">Guardar</Button>
                             ) : checkRepair == "off" ? (
                               <Button color="primary" disabled>

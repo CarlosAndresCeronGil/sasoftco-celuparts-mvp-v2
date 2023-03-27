@@ -57,7 +57,7 @@ export default function UpdateRetomaForm() {
     function () {
       setLoading(true);
       JSON.parse(localStorage.getItem("user")).role === "admin" ||
-      JSON.parse(localStorage.getItem("user")).role === "aux_admin"
+        JSON.parse(localStorage.getItem("user")).role === "aux_admin"
         ? setIsUserAdmin(true)
         : setIsUserAdmin(false);
       getSingleRetoma({ id: location.state.idRetoma })
@@ -114,7 +114,7 @@ export default function UpdateRetomaForm() {
       retomaQuote: retomaQuote.retomaQuote,
       priceReviewedByAdmin:
         (isUserAdmin || priceReviewedByAdmin.priceReviewedByAdmin) &&
-        Number(retomaQuote.retomaQuote) > 0
+          Number(retomaQuote.retomaQuote) > 0
           ? true
           : false
     })
@@ -151,51 +151,51 @@ export default function UpdateRetomaForm() {
 
             !isUserAdmin
               ? [
-                  notifications.find(
-                    tdata => tdata.idRequest === idRequest.idRequest
-                  )
-                ].map(tdata => {
-                  putRequestNotification({
-                    idRequestNotification: tdata.idRequestNotification,
-                    idRequest: tdata.idRequest,
-                    message:
-                      "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
-                    wasReviewed: false,
-                    notificationType: "to_customer"
-                  })
-                    .then(response => {
-                      navigate(-1);
-                    })
-                    .catch(error => {
-                      console.log(error);
-                    });
+                notifications.find(
+                  tdata => tdata.idRequest === idRequest.idRequest
+                )
+              ].map(tdata => {
+                putRequestNotification({
+                  idRequestNotification: tdata.idRequestNotification,
+                  idRequest: tdata.idRequest,
+                  message:
+                    "Tu dispositivo ya ha sido revisado por uno de nuestros técnicos",
+                  wasReviewed: false,
+                  notificationType: "to_customer"
                 })
+                  .then(response => {
+                    navigate(-1);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+              })
               : null;
           });
         });
 
         isUserAdmin
           ? [
-              notifications.find(
-                tdata => tdata.idRequest === idRequest.idRequest
-              )
-            ].map(tdata => {
-              putRequestNotification({
-                idRequestNotification: tdata.idRequestNotification,
-                idRequest: tdata.idRequest,
-                message:
-                  'Tu dispositivo ya tiene precio de retoma! haz click en "Mis retomas" para revisar',
-                wasReviewed: false,
-                notificationType: "to_customer"
-              })
-                .then(response => {
-                  console.log("Exito!", response);
-                  navigate(-1);
-                })
-                .catch(error => {
-                  console.log(error);
-                });
+            notifications.find(
+              tdata => tdata.idRequest === idRequest.idRequest
+            )
+          ].map(tdata => {
+            putRequestNotification({
+              idRequestNotification: tdata.idRequestNotification,
+              idRequest: tdata.idRequest,
+              message:
+                'Tu dispositivo ya tiene precio de retoma! haz click en "Mis retomas" para revisar',
+              wasReviewed: false,
+              notificationType: "to_customer"
             })
+              .then(response => {
+                console.log("Exito!", response);
+                navigate(-1);
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          })
           : null;
         setLoadingPut(false);
       })
@@ -286,8 +286,8 @@ export default function UpdateRetomaForm() {
                       {(JSON.parse(localStorage.getItem("user")).role ===
                         "admin" ||
                         JSON.parse(localStorage.getItem("user")).role ===
-                          "aux_admin") &&
-                      location.state.statusQuote == "Pendiente" ? (
+                        "aux_admin") &&
+                        location.state.statusQuote == "Pendiente" ? (
                         <Button color="primary">Guardar</Button>
                       ) : priceReviewedByAdmin.priceReviewedByAdmin ? (
                         <Button color="primary" disabled>

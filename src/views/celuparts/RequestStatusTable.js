@@ -6,14 +6,14 @@ import getRequestStatus from '../../services/getRequestStatus';
 export default function RequestStatusTable() {
     const [requestStates, setRequestStates] = useState([]);
 
-    useEffect(function() {
+    useEffect(function () {
         getRequestStatus()
             .then((response) => {
                 // console.log(response)
                 setRequestStates(response)
             }
-        )
-    },[setRequestStates])
+            )
+    }, [setRequestStates])
 
     return (
         <div>

@@ -85,15 +85,16 @@ export default function UpdateStateRepair() {
             label="Actualizar Estado de solicitud"
             {...a11yProps(0)}
           />
+
           {JSON.parse(localStorage.getItem("user")).role ===
-          "mensajero" ? null : location.state.status === "Iniciada" ||
-            location.state.status === "En proceso de recogida" ||
-            location.state.status === "En devolucion" ||
-            location.state.status === "Devuelto sin reparacion" ||
-            location.state.status === "Abandonada" ||
-            location.state.status === "Terminada" ||
-            location.state.status === "Anulado por IMEI" ||
-            location.state.status === "En camino" ? (
+            "mensajero" ? null : location.state.status === "Iniciada" ||
+              location.state.status === "En proceso de recogida" ||
+              location.state.status === "En devolucion" ||
+              location.state.status === "Devuelto sin reparacion" ||
+              location.state.status === "Abandonada" ||
+              location.state.status === "Terminada" ||
+              location.state.status === "Anulado por IMEI" ||
+              location.state.status === "En camino" ? (
             <Tab
               disabled
               sx={{ textTransform: "capitalize" }}
@@ -107,30 +108,31 @@ export default function UpdateStateRepair() {
               {...a11yProps(1)}
             />
           )}
+          {console.log('ss', location.state.status)}
           {(JSON.parse(localStorage.getItem("user")).role === "admin" ||
-            JSON.parse(localStorage.getItem("user")).role === "aux_admin") &&
-            (location.state.status === "Iniciada" ||
-            location.state.status === "En proceso de recogida" ||
-            location.state.status === "En devolucion" ||
-            location.state.status === "Recibida tecnico" ||
-            location.state.status === "Devuelto sin reparacion" ||
-            location.state.status === "Abandonada" ||
-            location.state.status === "Terminada" ||
-            location.state.status === "Anulado por IMEI" ||
-            location.state.status === "En camino" ? (
-              <Tab
-                disabled
-                sx={{ textTransform: "capitalize" }}
-                label="Actualizar Pago Reparación"
-                {...a11yProps(2)}
-              />
-            ) : (
-              <Tab
-                sx={{ textTransform: "capitalize" }}
-                label="Actualizar Pago Reparación"
-                {...a11yProps(2)}
-              />
-            ))}
+            JSON.parse(localStorage.getItem("user")).role === "aux_admin") && location?.state.statusQuote === 'Aceptada' &&
+            !(location.state.status === "Iniciada" ||
+              location.state.status === "En proceso de recogida" ||
+              location.state.status === "Recibida tecnico" ||
+              location.state.status === "En devolucion" ||
+              location.state.status === "Devuelto sin reparacion" ||
+              location.state.status === "Abandonada" ||
+              location.state.status === "Terminada" ||
+              location.state.status === "Anulado por IMEI" ||
+              location.state.status === "En camino") ? (
+            <Tab
+              sx={{ textTransform: "capitalize" }}
+              label="Actualizar Pago Reparación"
+              {...a11yProps(2)}
+            />
+          ) : (
+            <Tab
+              disabled
+              sx={{ textTransform: "capitalize" }}
+              label="Actualizar Pago Reparación"
+              {...a11yProps(2)}
+            />
+          )}
         </Tabs>
       </AppBar>
       <SwipeableViews

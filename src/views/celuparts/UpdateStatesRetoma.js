@@ -84,14 +84,14 @@ export default function UpdateStateRetoma() {
             {...a11yProps(0)}
           />
           {JSON.parse(localStorage.getItem("user")).role ===
-          "mensajero" ? null : location.state.status === "Iniciada" ||
-            location.state.status === "En proceso de recogida" ||
-            location.state.status === "En devolucion" ||
-            location.state.status === "Devuelto sin reparacion" ||
-            location.state.status === "Abandonada" ||
-            location.state.status === "Terminada" ||
-            location.state.status === "Anulado por IMEI" ||
-            location.state.status === "En camino" ? (
+            "mensajero" ? null : location.state.status === "Iniciada" ||
+              location.state.status === "En proceso de recogida" ||
+              location.state.status === "En devolucion" ||
+              location.state.status === "Devuelto sin reparacion" ||
+              location.state.status === "Abandonada" ||
+              location.state.status === "Terminada" ||
+              location.state.status === "Anulado por IMEI" ||
+              location.state.status === "En camino" ? (
             <Tab
               disabled
               sx={{ textTransform: "capitalize" }}
@@ -106,30 +106,31 @@ export default function UpdateStateRetoma() {
             />
           )}
           {(JSON.parse(localStorage.getItem("user")).role === "admin" ||
-            JSON.parse(localStorage.getItem("user")).role === "aux_admin") &&
-            (location.state.status === "Iniciada" ||
-            location.state.status === "En proceso de recogida" ||
-            location.state.status === "Recibida tecnico" ||
-            location.state.status === "Revisado" ||
-            location.state.status === "En devolucion" ||
-            location.state.status === "Devuelto sin reparacion" ||
-            location.state.status === "Abandonada" ||
-            location.state.status === "Terminada" ||
-            location.state.status === "Anulado por IMEI" ||
-            location.state.status === "En camino" ? (
+            JSON.parse(localStorage.getItem("user")).role === "aux_admin") && location?.state.statuaQuote === 'Aceptada' &&
+            !(location.state.status === "Iniciada" ||
+              location.state.status === "En proceso de recogida" ||
+              location.state.status === "Recibida tecnico" ||
+              location.state.status === "En devolucion" ||
+              location.state.status === "Devuelto sin reparacion" ||
+              location.state.status === "Abandonada" ||
+              location.state.status === "Terminada" ||
+              location.state.status === "Anulado por IMEI" ||
+              location.state.status === "En camino") ? (
+            <Tab
+              sx={{ textTransform: "capitalize" }}
+              label="Actualizar Pago Retoma"
+              {...a11yProps(2)}
+            />
+          ) : (
+            <>
               <Tab
                 disabled
                 sx={{ textTransform: "capitalize" }}
                 label="Actualizar Pago Retoma"
                 {...a11yProps(2)}
               />
-            ) : (
-              <Tab
-                sx={{ textTransform: "capitalize" }}
-                label="Actualizar Pago Retoma"
-                {...a11yProps(2)}
-              />
-            ))}
+            </>
+          )}
         </Tabs>
       </AppBar>
       <SwipeableViews

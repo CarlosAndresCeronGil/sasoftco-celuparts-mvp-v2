@@ -18,6 +18,7 @@ import putRequest from "../../services/putRequest";
 import postRetoma from "../../services/postRetoma";
 import postRetomaPayment from "../../services/postRetomaPayment";
 import putRequestNotification from "../../services/putRequestNotification";
+import postRequestNotification from "../../services/postRequestNotification";
 import getSingleEquipment from "../../services/getSingleEquipment";
 import putRequestStatus from "../../services/putRequestStatus";
 import BreadCrumbsCeluparts from "../../layouts/breadcrumbs/BreadCrumbsCeluparts";
@@ -81,9 +82,9 @@ export default function UserRepairRequests() {
           response[0].requests.map(tdata =>
             tdata.requestNotifications.length !== 0
               ? setNotifications(prev => [
-                  ...prev,
-                  tdata.requestNotifications[0]
-                ])
+                ...prev,
+                tdata.requestNotifications[0]
+              ])
               : console.log("nothing")
           );
           setLoading(false);
@@ -119,26 +120,38 @@ export default function UserRepairRequests() {
         getSingleEquipment({ id: response[0].idEquipment }).then(response => {
           /*El cliente acepta la cuota, por lo tanto se envia una notificacion al tecnico
                         para que empiece con la reparacion */
-          [notifications.find(tdata => tdata.idRequest === id)].map(tdata => {
-            putRequestNotification({
-              idRequestNotification: tdata.idRequestNotification,
-              idRequest: id,
-              message:
-                "El cliente del producto " +
-                response.equipmentBrand +
-                " " +
-                response.modelOrReference +
-                " aceptó la cuota de reparación.",
-              wasReviewed: false,
-              notificationType: "to_technician"
+          postRequestNotification({
+            idRequest: id,
+            message:
+              "El cliente del producto " +
+              response.equipmentBrand +
+              " " +
+              response.modelOrReference +
+              " aceptó la cuota de reparación.", wasReviewed: false,
+            notificationType: "to_admin"
+          })
+            .then(response2 => {
+              console.log("exito post request notification", response2);
             })
-              .then(response2 => {
-                console.log("exito put request notification", response2);
-              })
-              .catch(error => {
-                console.log(error);
-              });
-          });
+            .catch(error => {
+              console.log(error);
+            });
+          postRequestNotification({
+            idRequest: id,
+            message:
+              "El cliente del producto " +
+              response.equipmentBrand +
+              " " +
+              response.modelOrReference +
+              " aceptó la cuota de reparación.", wasReviewed: false,
+            notificationType: "to_aux_admin"
+          })
+            .then(response2 => {
+              console.log("exito post request notification", response2);
+            })
+            .catch(error => {
+              console.log(error);
+            });
         });
       })
       .catch(error => {
@@ -229,7 +242,7 @@ export default function UserRepairRequests() {
                         responseE.modelOrReference +
                         " decidio cambiar reparación por retoma, realizar cotización del producto a vender",
                       wasReviewed: false,
-                      notificationType: "to_technician"
+                      notificationType: "to_aux_admin"
                     })
                       .then(response3 => {
                         console.log(
@@ -387,14 +400,14 @@ export default function UserRepairRequests() {
                     <td>{tdata.requestStatus[0].status}</td>
                     <td>
                       {tdata.repairs[0].repairQuote == "0" &&
-                      tdata.repairs[0].priceReviewedByAdmin == false
+                        tdata.repairs[0].priceReviewedByAdmin == false
                         ? "Pendiente"
                         : tdata.repairs[0].repairQuote}
                     </td>
                     <td>
                       {tdata.statusQuote === "Pendiente" &&
-                      tdata.repairs[0].priceReviewedByAdmin === true &&
-                      showButtons ? (
+                        tdata.repairs[0].priceReviewedByAdmin === true &&
+                        showButtons ? (
                         <div className="text-danger">
                           <button
                             type="button"
@@ -417,9 +430,8 @@ export default function UserRepairRequests() {
                     </td>
                     {tdata.homeServices[0]?.deliveryDate ? (
                       // <td>{tdata.homeServices[0].deliveryDate}</td> ${new Date(tdata.requestDate).getHours()}:${new Date(tdata.requestDate).getMinutes()}
-                      <td>{`${new Date(tdata.requestDate).getFullYear()}-${
-                        new Date(tdata.requestDate).getMonth() + 1
-                      }-${new Date(tdata.requestDate).getDate()}`}</td>
+                      <td>{`${new Date(tdata.requestDate).getFullYear()}-${new Date(tdata.requestDate).getMonth() + 1
+                        }-${new Date(tdata.requestDate).getDate()}`}</td>
                     ) : (
                       <td>Fecha sin definir</td>
                     )}
@@ -487,13 +499,13 @@ export default function UserRepairRequests() {
               </div>
               {currentDeliveryDate != "Sin definir"
                 ? new Date(viewDetails.deliveryDate).toLocaleDateString("es", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric"
-                  })
+                  weekday: "long",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric"
+                })
                 : "Sin definir"}
             </ModalBody>
             <ModalFooter>

@@ -1671,7 +1671,7 @@ export default function RequestRetomaForm() {
                         multiline
                         fullWidth
                         rows={2}
-                        label="Describe brevemente en qué falla tu equipo"
+                        label="Describe el estado de tu equipo"
                         required
                       />
                     </Col>
