@@ -179,12 +179,15 @@ export default function RepairRequestsTable() {
 
     if (initialDateSubmit.initialDate) {
       localStorage.setItem("initialDate", initialDateSubmit.initialDate);
-
       initialDateSubmit.initialDate = new Date(initialDateSubmit.initialDate);
+    } else {
+      localStorage.setItem("initialDate", "");
     }
     if (finalDateSubmit.finalDate) {
       localStorage.setItem("finalDate", finalDateSubmit.finalDate);
       finalDateSubmit.finalDate = new Date(finalDateSubmit.finalDate);
+    } else {
+      localStorage.setItem("finalDate", "");
     }
 
     getRequestRepairs({

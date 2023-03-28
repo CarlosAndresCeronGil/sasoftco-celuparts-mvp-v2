@@ -175,19 +175,17 @@ export default function RetomaRequestsTable() {
       e.target.elements.equipmentModel.value
     );
 
-    const initialDateSubmit = {
-      initialDate: initialDate.initialDate
-    };
-    const finalDateSubmit = { finalDate: finalDate.finalDate };
-
     if (initialDateSubmit.initialDate) {
       localStorage.setItem("initialDateRetoma", initialDateSubmit.initialDate);
-
       initialDateSubmit.initialDate = new Date(initialDateSubmit.initialDate);
+    } else {
+      localStorage.setItem("initialDateRetoma", "");
     }
     if (finalDateSubmit.finalDate) {
       localStorage.setItem("finalDateRetoma", finalDateSubmit.finalDate);
       finalDateSubmit.finalDate = new Date(finalDateSubmit.finalDate);
+    } else {
+      localStorage.setItem("finalDateRetoma", "");
     }
 
     getRequestRetomas({
