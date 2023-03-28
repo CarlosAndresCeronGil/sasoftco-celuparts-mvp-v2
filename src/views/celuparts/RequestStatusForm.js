@@ -548,6 +548,8 @@ export default function RequestStatusForm() {
               option.priority > currentOption.priority + 1.2)) ||
           (currentOption.priority == 4 && currentOption.value == 'Retoma') ||
           (currentOption.priority == 5.1 && option.priority != 6) ||
+          (location.state.statusQuote !== "Aceptada" &&
+            option.value === "En reparacion") ||
           (!isRepair && option.priority > 3)
         ) {
           // No hagas nada

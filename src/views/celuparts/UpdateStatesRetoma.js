@@ -106,17 +106,18 @@ export default function UpdateStateRetoma() {
               {...a11yProps(1)}
             />
           )}
-          {(JSON.parse(localStorage.getItem("user")).role === "admin" ||
-            JSON.parse(localStorage.getItem("user")).role === "aux_admin") && location?.state.statusQuote === 'Aceptada' &&
-            !(location.state.status === "Iniciada" ||
-              location.state.status === "En proceso de recogida" ||
-              location.state.status === "Recibida tecnico" ||
-              location.state.status === "En devolucion" ||
-              location.state.status === "Devuelto sin reparacion" ||
-              location.state.status === "Abandonada" ||
-              location.state.status === "Terminada" ||
-              location.state.status === "Anulado por IMEI" ||
-              location.state.status === "En camino") ? (
+          {JSON.parse(localStorage.getItem("user")).role ===
+            "mensajero" ? null : (JSON.parse(localStorage.getItem("user")).role === "admin" ||
+              JSON.parse(localStorage.getItem("user")).role === "aux_admin") && location?.state.statusQuote === 'Aceptada' &&
+              !(location.state.status === "Iniciada" ||
+                location.state.status === "En proceso de recogida" ||
+                location.state.status === "Recibida tecnico" ||
+                location.state.status === "En devolucion" ||
+                location.state.status === "Devuelto sin reparacion" ||
+                location.state.status === "Abandonada" ||
+                location.state.status === "Terminada" ||
+                location.state.status === "Anulado por IMEI" ||
+                location.state.status === "En camino") ? (
             <Tab
               sx={{ textTransform: "capitalize" }}
               label="Actualizar Pago Retoma"
