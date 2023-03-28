@@ -110,15 +110,13 @@ export default function RetomaRequestsTable() {
         page,
         initialDate:
           initialDateString != null
-            ? `${initialDateAux.getFullYear()}-${
-                initialDateAux.getMonth() + 1
-              }-${initialDateAux.getDate()}`
+            ? `${initialDateAux.getFullYear()}-${initialDateAux.getMonth() + 1
+            }-${initialDateAux.getDate()}`
             : "0001-1-1",
         finalDate:
           finalDateString != null
-            ? `${finalDateAux.getFullYear()}-${
-                finalDateAux.getMonth() + 1
-              }-${finalDateAux.getDate()}`
+            ? `${finalDateAux.getFullYear()}-${finalDateAux.getMonth() + 1
+            }-${finalDateAux.getDate()}`
             : "0001-1-1",
         requestStatus: localStorage.getItem("requestStatusRetoma") || "",
         userDtoIdNumber: localStorage.getItem("userDtoIdNumberRetoma") || "",
@@ -156,6 +154,8 @@ export default function RetomaRequestsTable() {
 
   const handleSubmit = e => {
     e.preventDefault();
+
+    setPage(1)
     //Se consulta desde una fecha inicial hasta una fecha final
     setLoading(true);
     localStorage.setItem(
@@ -194,15 +194,13 @@ export default function RetomaRequestsTable() {
       page: 1,
       initialDate:
         initialDate.initialDate != null
-          ? `${initialDate.initialDate.getFullYear()}-${
-              initialDate.initialDate.getMonth() + 1
-            }-${initialDate.initialDate.getDate()}`
+          ? `${initialDate.initialDate.getFullYear()}-${initialDate.initialDate.getMonth() + 1
+          }-${initialDate.initialDate.getDate()}`
           : formattedInitialDate,
       finalDate:
         finalDate.finalDate != null
-          ? `${finalDate.finalDate.getFullYear()}-${
-              finalDate.finalDate.getMonth() + 1
-            }-${finalDate.finalDate.getDate()}`
+          ? `${finalDate.finalDate.getFullYear()}-${finalDate.finalDate.getMonth() + 1
+          }-${finalDate.finalDate.getDate()}`
           : formattedFinallDate,
       requestStatus: requestStatus,
       userDtoIdNumber: userDtoIdNumber,
@@ -617,13 +615,12 @@ export default function RetomaRequestsTable() {
                   <td>{tdata.retoma[0].idRetoma}</td>
                   {JSON.parse(localStorage.getItem("user")).role !=
                     "tecnico" && (
-                    <td>
-                      {tdata.names} {tdata.surnames}
-                    </td>
-                  )}
-                  <td>{`${new Date(tdata.requestDate).getFullYear()}-${
-                    new Date(tdata.requestDate).getMonth() + 1
-                  }-${new Date(tdata.requestDate).getDate()}`}</td>
+                      <td>
+                        {tdata.names} {tdata.surnames}
+                      </td>
+                    )}
+                  <td>{`${new Date(tdata.requestDate).getFullYear()}-${new Date(tdata.requestDate).getMonth() + 1
+                    }-${new Date(tdata.requestDate).getDate()}`}</td>
                   <td>
                     {tdata.equipment.equipmentBrand}{" "}
                     {tdata.equipment.modelOrReference}
@@ -634,14 +631,14 @@ export default function RetomaRequestsTable() {
                   <td>{tdata.requestStatus[0].status}</td>
                   {JSON.parse(localStorage.getItem("user")).role !=
                     "mensajero" && (
-                    <td>
-                      {tdata.retoma[0].technician != null
-                        ? tdata.retoma[0].technician.names +
+                      <td>
+                        {tdata.retoma[0].technician != null
+                          ? tdata.retoma[0].technician.names +
                           " " +
                           tdata.retoma[0].technician.surnames
-                        : "Sin técnico asociado"}
-                    </td>
-                  )}
+                          : "Sin técnico asociado"}
+                      </td>
+                    )}
                   {JSON.parse(localStorage.getItem("user")).role !=
                     "tecnico" && <td>{tdata.retoma[0].retomaQuote}</td>}
                   {/* <td>
@@ -766,23 +763,23 @@ export default function RetomaRequestsTable() {
                   </td>
                   {JSON.parse(localStorage.getItem("user")).role !=
                     "tecnico" && (
-                    <td>
-                      <a href="#">
-                        <button
-                          type="button"
-                          title={`Ver factura de ${tdata.equipment.equipmentBrand} ${tdata.equipment.modelOrReference}`}
-                          className="btn btn-outline-info"
-                          onClick={e =>
-                            handleViewEquipmentInvoice(e, {
-                              idEquipment: tdata.equipment.idEquipment
-                            })
-                          }
-                        >
-                          Ver Factura
-                        </button>
-                      </a>
-                    </td>
-                  )}
+                      <td>
+                        <a href="#">
+                          <button
+                            type="button"
+                            title={`Ver factura de ${tdata.equipment.equipmentBrand} ${tdata.equipment.modelOrReference}`}
+                            className="btn btn-outline-info"
+                            onClick={e =>
+                              handleViewEquipmentInvoice(e, {
+                                idEquipment: tdata.equipment.idEquipment
+                              })
+                            }
+                          >
+                            Ver Factura
+                          </button>
+                        </a>
+                      </td>
+                    )}
                 </tr>
               ) : null
             )}
@@ -805,7 +802,7 @@ export default function RetomaRequestsTable() {
             </Button>
           )}
           {requests.currentPage === requests.pages ||
-          requests.currentPage === requests.pages + 1 ? (
+            requests.currentPage === requests.pages + 1 ? (
             <button className="btn btn-celuparts-dark-blue" disabled>
               Siguiente
             </button>
@@ -845,13 +842,13 @@ export default function RetomaRequestsTable() {
             </div>
             {currentDeliveryDate != "Sin definir"
               ? new Date(currentDeliveryDate).toLocaleDateString("es", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric"
-                })
+                weekday: "long",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric"
+              })
               : "Sin definir"}
             <hr />
             <div>

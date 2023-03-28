@@ -153,6 +153,9 @@ export default function RepairRequestsTable() {
 
   const handleSubmit = e => {
     e.preventDefault();
+
+    setPage(1)
+
     //Se consulta desde una fecha inicial hasta una fecha final
     setLoading(true);
     localStorage.setItem(
