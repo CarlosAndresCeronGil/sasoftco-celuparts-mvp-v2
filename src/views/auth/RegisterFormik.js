@@ -133,7 +133,7 @@ const RegisterFormik = () => {
       } else {
         Swal.fire({
           icon: "error",
-          text: "El email o número de identificación que estas intentando ingresar ya esta registrado"
+          text: "El email con el que estas intentando ingresar ya esta registrado"
         }).then(responseError => {
           setLoading(false);
         });
@@ -395,8 +395,8 @@ const RegisterFormik = () => {
                                   name="idNumber"
                                   type="number"
                                   className={`form-control ${errors.idNumber && touched.idNumber
-                                      ? " is-invalid"
-                                      : ""
+                                    ? " is-invalid"
+                                    : ""
                                     }`}
                                   required
                                 />
@@ -419,8 +419,8 @@ const RegisterFormik = () => {
                                   type="text"
                                   placeholder="Nombres"
                                   className={`form-control ${errors.userName && touched.userName
-                                      ? " is-invalid"
-                                      : ""
+                                    ? " is-invalid"
+                                    : ""
                                     }`}
                                   required
                                 />
@@ -440,8 +440,8 @@ const RegisterFormik = () => {
                                   type="text"
                                   placeholder="Apellidos"
                                   className={`form-control ${errors.lastName && touched.lastName
-                                      ? " is-invalid"
-                                      : ""
+                                    ? " is-invalid"
+                                    : ""
                                     }`}
                                   required
                                 />
@@ -465,8 +465,8 @@ const RegisterFormik = () => {
                               placeholder="Email"
                               // className="form-control"
                               className={`form-control ${errors.email && touched.email
-                                  ? " is-invalid"
-                                  : ""
+                                ? " is-invalid"
+                                : ""
                                 }`}
                               required
                             />
@@ -487,8 +487,8 @@ const RegisterFormik = () => {
                                   type="tel"
                                   placeholder="Número de teléfono"
                                   className={`form-control ${errors.phone && touched.phone
-                                      ? " is-invalid"
-                                      : ""
+                                    ? " is-invalid"
+                                    : ""
                                     }`}
                                   required
                                 />
@@ -525,8 +525,8 @@ const RegisterFormik = () => {
                                   placeholder="Contraseña"
                                   // className="form-control"
                                   className={`form-control ${errors.password && touched.password
-                                      ? " is-invalid"
-                                      : ""
+                                    ? " is-invalid"
+                                    : ""
                                     }`}
                                   required
                                 />
@@ -559,9 +559,9 @@ const RegisterFormik = () => {
                                   placeholder="Confirmar contraseña"
                                   // className="form-control"
                                   className={`form-control ${errors.confirmPassword &&
-                                      touched.confirmPassword
-                                      ? " is-invalid"
-                                      : ""
+                                    touched.confirmPassword
+                                    ? " is-invalid"
+                                    : ""
                                     }`}
                                   required
                                 />

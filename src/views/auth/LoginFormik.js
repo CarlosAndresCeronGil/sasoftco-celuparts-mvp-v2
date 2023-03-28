@@ -92,11 +92,10 @@ const LoginFormik = () => {
         })
         .catch(error => {
           setLoading(false);
-          console.log("error:", error);
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "Usuario o contraseña incorrecto!"
+            text: "El correo ingresado no existe!"
           });
         });
     } catch (error) {
@@ -196,8 +195,8 @@ const LoginFormik = () => {
                                     name="email"
                                     placeholder="ejemplo@celuparts.com"
                                     className={`form-control${errors.email && touched.email
-                                        ? " is-invalid"
-                                        : ""
+                                      ? " is-invalid"
+                                      : ""
                                       }`}
                                   />
                                   <ErrorMessage
@@ -225,8 +224,8 @@ const LoginFormik = () => {
                                     name="password"
                                     placeholder="********"
                                     className={`form-control${errors.password && touched.password
-                                        ? " is-invalid"
-                                        : ""
+                                      ? " is-invalid"
+                                      : ""
                                       }`}
                                   />
                                   <Button
