@@ -743,7 +743,7 @@ export default function RepairRequestsTable() {
                             " " +
                             tdata.equipment.modelOrReference,
                           imeiOrSerial: tdata.equipment.imeiOrSerial,
-                          clientPhone: tdata.userDto.phone,
+                          clientPhone: tdata.phone,
                           repairQuote: tdata.repairs[0].repairQuote,
                           deliveryDate: tdata.homeServices[0]?.deliveryDate
                         })

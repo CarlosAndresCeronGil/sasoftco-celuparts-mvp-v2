@@ -71,9 +71,9 @@ export default function UserRetomaRequests() {
           response[0].requests.map(tdata =>
             tdata.requestNotifications.length !== 0
               ? setNotifications(prev => [
-                  ...prev,
-                  tdata.requestNotifications[0]
-                ])
+                ...prev,
+                tdata.requestNotifications[0]
+              ])
               : console.log("nothing")
           );
           setLoading(false);
@@ -247,14 +247,14 @@ export default function UserRetomaRequests() {
                     <td>{tdata.requestStatus[0].status}</td>
                     <td>
                       {tdata.retoma[0].retomaQuote == "0" &&
-                      tdata.retoma[0].priceReviewedByAdmin == false
+                        tdata.retoma[0].priceReviewedByAdmin == false
                         ? "Pendiente"
                         : tdata.retoma[0].retomaQuote}
                     </td>
                     <td>
                       {tdata.statusQuote === "Pendiente" &&
-                      tdata.retoma[0].priceReviewedByAdmin === true &&
-                      showButtons ? (
+                        tdata.retoma[0].priceReviewedByAdmin === true &&
+                        showButtons ? (
                         <div className="text-danger">
                           <button
                             type="button"
@@ -275,7 +275,8 @@ export default function UserRetomaRequests() {
                         <i>{tdata.statusQuote}</i>
                       )}
                     </td>
-                    <td>{userInfo[0].phone}</td>
+                    {console.log('tdatA', tdata)}
+                    <td>{tdata.phone}</td>
                     <td>
                       <Button
                         className="btn"
@@ -330,13 +331,13 @@ export default function UserRetomaRequests() {
               </div>
               {currentDeliveryDate != "Sin definir"
                 ? new Date(viewDetails.deliveryDate).toLocaleDateString("es", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric"
-                  })
+                  weekday: "long",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric"
+                })
                 : "Sin definir"}
             </ModalBody>
             <ModalFooter>

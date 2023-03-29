@@ -435,7 +435,7 @@ export default function UserRepairRequests() {
                     ) : (
                       <td>Fecha sin definir</td>
                     )}
-                    <td>{userInfo[0].phone}</td>
+                    <td>{tdata.phone}</td>
                     <td>
                       {/* <Button className='btn' color='info' type='button' onClick={() => handleViewDetails(tdata)} > */}
                       <Button

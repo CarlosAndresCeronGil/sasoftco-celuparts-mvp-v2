@@ -311,7 +311,7 @@ export default function RequestRepairForm() {
                   " " +
                   data.surnames +
                   ", número de teléfono de contácto: " +
-                  userInfo[0].userDto.phone +
+                  data.phone +
                   ", el usuario decidió pagar por medio de " +
                   e.target.elements.paymentMethod.value,
                 wasReviewed: false,

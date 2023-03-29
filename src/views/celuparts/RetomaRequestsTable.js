@@ -751,7 +751,7 @@ export default function RetomaRequestsTable() {
                             " " +
                             tdata.equipment.modelOrReference,
                           imeiOrSerial: tdata.equipment.imeiOrSerial,
-                          clientPhone: tdata.userDto.phone,
+                          clientPhone: tdata.phone,
                           deliveryDate: tdata.homeServices[0].deliveryDate
                         })
                       }

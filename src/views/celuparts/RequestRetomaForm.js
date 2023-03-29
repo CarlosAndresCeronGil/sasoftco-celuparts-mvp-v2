@@ -339,7 +339,7 @@ export default function RequestRetomaForm() {
                       " " +
                       dataRequest.surnames +
                       ", número de teléfono de contácto: " +
-                      userInfo[0].userDto.phone +
+                      dataRequest.phone +
                       ", el usuario decidió pagar por medio de " +
                       e.target.elements.paymentMethod.value,
                     wasReviewed: false,
