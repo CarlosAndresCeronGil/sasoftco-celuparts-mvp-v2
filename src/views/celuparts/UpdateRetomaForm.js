@@ -174,7 +174,7 @@ export default function UpdateRetomaForm() {
           });
         });
 
-        isUserAdmin && Number(repairQuote.repairQuote) > 0
+        isUserAdmin && Number(retomaQuote?.retomaQuote) > 0
           ? [
             notifications.find(
               tdata => tdata.idRequest === idRequest.idRequest
@@ -222,12 +222,13 @@ export default function UpdateRetomaForm() {
   const handleRepairQuoteChange = ({ value }, sourceInfo) => {
     const { event } = sourceInfo;
     if (!event) return;
-    console.log(value);
-    if (value == "0") return;
+    if (value == "0") return
+
     setRetomaQuote(prev => ({
       ...prev,
       [event.target.name]: value
     }));
+
   };
 
   return loading ? (

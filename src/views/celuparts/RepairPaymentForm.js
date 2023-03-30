@@ -20,11 +20,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import putRepairPayment from "../../services/putRepairPayment";
 import getSingleRepairPayment from "../../services/getSingleRepairPayment";
 import putRequestStatus from "../../services/putRequestStatus";
+import moment from "moment";
 
 export default function RepairPaymentForm() {
   const [paymentMethod, setPaymentMethod] = useState({ paymentMethod: "" });
   const [billPayment, setBillPayment] = useState({ billPayment: "" });
-  const [paymentDate, setPaymentDate] = useState({ paymentDate: new Date() });
+  const [paymentDate, setPaymentDate] = useState(new Date());
   const [isPaymentDateNull, setIsPaymentDateNull] = useState({
     isPaymentDateNull: false
   });
@@ -47,10 +48,10 @@ export default function RepairPaymentForm() {
           setIdRpeair({ idRpeair: response.idRepair });
           if (response.paymentDate === null) {
             setIsPaymentDateNull({ isPaymentDateNull: true });
-            setPaymentDate({ paymentDate: new Date() });
+            setPaymentDate(new Date());
           } else {
             setIsPaymentDateNull({ isPaymentDateNull: false });
-            setPaymentDate({ paymentDate: new Date(response.paymentDate) });
+            setPaymentDate(new Date(response.paymentDate));
           }
           setLoading(false);
         })
@@ -70,7 +71,8 @@ export default function RepairPaymentForm() {
       idRepair: idRpeair.idRpeair,
       paymentMethod: paymentMethod.paymentMethod,
       billPayment: billPayment.billPayment,
-      paymentDate: paymentDate.paymentDate
+      paymentDate: moment(paymentDate).format("YYYY-MM-DD HH:mm:ss")
+
     };
     putRepairPayment(data)
       .then(response => {
@@ -164,8 +166,9 @@ export default function RepairPaymentForm() {
                       id="paymentDate"
                       dateFormat="yyyy-MM-dd h:mm aa"
                       showTimeSelect
-                      selected={new Date()}
-                      onChange={date => setPaymentDate({ paymentDate: date })}
+                      value={paymentDate}
+                      selected={paymentDate}
+                      onChange={date => setPaymentDate(date)}
                       timeFormat="HH:mm"
                       withPortal
                       portalId="root-portal"
@@ -180,9 +183,9 @@ export default function RepairPaymentForm() {
                       id="paymentDate"
                       dateFormat="yyyy-MM-dd h:mm aa"
                       showTimeSelect
-                      value={paymentDate.paymentDate}
-                      selected={paymentDate.paymentDate}
-                      onChange={date => setPaymentDate({ paymentDate: date })}
+                      value={paymentDate}
+                      selected={paymentDate}
+                      onChange={date => setPaymentDate(date)}
                       required
                       timeFormat="HH:mm"
                       withPortal

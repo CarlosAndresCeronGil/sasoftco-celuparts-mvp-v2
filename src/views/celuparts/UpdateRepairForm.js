@@ -641,7 +641,6 @@ export default function UpdateRepairForm(props) {
   const handleRepairQuoteChange = ({ value }, sourceInfo) => {
     const { event } = sourceInfo;
     if (!event) return;
-    console.log(value);
     if (value == "0") return;
     setRepairQuote(prev => ({
       ...prev,
