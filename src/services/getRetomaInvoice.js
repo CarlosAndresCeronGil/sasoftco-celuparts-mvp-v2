@@ -8,9 +8,10 @@ export default function getRetomaInvoice({ id }) {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = "factura.pdf";
+            console.log(blob.type)
+            a.download = `factura.${blob.type.slice(blob.type.indexOf('/') + 1)}`;
             document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-            a.click();    
-            a.remove();  //afterwards we remove the element again         
+            a.click();
+            a.remove(); //afterwards we remove the element again
         });
 }

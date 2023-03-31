@@ -721,6 +721,7 @@ export default function RetomaRequestsTable() {
                         status: tdata.requestStatus[0].status,
                         statusQuote: tdata.statusQuote,
                         data: {
+                          idEquipment: tdata.equipment.idEquipment,
                           equipmentData:
                             tdata.equipment.equipmentBrand +
                             " " +

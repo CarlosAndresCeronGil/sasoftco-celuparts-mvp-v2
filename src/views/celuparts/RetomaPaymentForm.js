@@ -26,6 +26,7 @@ import putRequestNotification from "../../services/putRequestNotification";
 import moment from "moment";
 import postRequestNotification from "../../services/postRequestNotification";
 import putRequestStatus from "../../services/putRequestStatus";
+import getRetomaInvoice from "../../services/getRetomaInvoice";
 
 export default function RetomaPaymentForm() {
   const [paymentMethod, setPaymentMethod] = useState({ paymentMethod: "" });
@@ -55,6 +56,7 @@ export default function RetomaPaymentForm() {
         .then(response => {
           setPaymentMethod({ paymentMethod: response.paymentMethod });
           setIdRetoma({ idRetoma: response.idRetoma });
+          setVoucherNumber({ voucherNumber: response.voucherNumber })
           if (response.paymentDate === null) {
             setIsPaymentDateNull({ isPaymentDateNull: true });
             setPaymentDate(new Date());
@@ -64,6 +66,7 @@ export default function RetomaPaymentForm() {
           }
           getSingleRetoma({ id: response.idRetoma }).then(response2 => {
             // console.log(response2.idRequest)
+            console.log(response2)
             setIdRequest({ idRequest: response2.idRequest });
             getRequestNotification()
               .then(response3 => {
@@ -83,6 +86,14 @@ export default function RetomaPaymentForm() {
     },
     [location.state?.idRetomaPayment]
   );
+
+  const handleViewEquipmentInvoice = (e) => {
+    e.preventDefault()
+    getRetomaInvoice({ id: location.state.idRetomaPayment })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -266,6 +277,20 @@ export default function RetomaPaymentForm() {
                     required
                   />
                 </FormGroup>
+                {!isPaymentDateNull.isPaymentDateNull && (
+                  <div className="mb-4">
+                    <a href="#" >
+                      <button
+                        type="button"
+                        className="btn btn-outline-info"
+                        onClick={(e) => handleViewEquipmentInvoice(e)}
+                      >
+                        Ver Factura
+                      </button>
+                    </a>
+                  </div>
+                )}
+
                 {loadingPut ? (
                   <button className="btn btn-primary" type="button" disabled>
                     <span
